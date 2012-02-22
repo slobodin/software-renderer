@@ -1,0 +1,8 @@
+client-debug/*.*
+client-release/*.*
+renderer-debug/*.*
+renderer-release/*.*
+client/*.pro.user
+renderer/*.pro.user
+client-debug/*
+client-release/*
