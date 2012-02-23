@@ -1,19 +1,35 @@
 #include "application.h"
 
-Application::Application()
-    : m_controller(new Controller("conf.yaml"))
+Application::Application(int , char *argv[])
+    : m_controller(new Controller(argv, "conf.yaml"))
 {
 }
 
-int main()
+void Application::run()
+{
+    m_controller->run();
+}
+
+int main(int argc, char *argv[])
 try
 {
-    Application app;
+    Application app(argc, argv);
+
+    app.run();
 
     return 0;
 }
-catch(...)
+catch(common::Exception &e)
 {
 
+    return 1;
+}
+catch (std::exception &e)
+{
+
+    return 1;
+}
+catch(...)
+{
     return 1;
 }

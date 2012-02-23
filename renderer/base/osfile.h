@@ -23,10 +23,11 @@ public:
 class TextFile : public OsFile
 {
     stringstream m_fileData;
+
 public:
     TextFile(const OsPath &path);
 
-    string getLine();
+    string getLine(const char delim = '\n');
 };
 
 class BinaryFile : public OsFile

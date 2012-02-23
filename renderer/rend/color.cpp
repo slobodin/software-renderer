@@ -1,4 +1,4 @@
-#include "color4.h"
+#include "color.h"
 
 namespace rend
 {
@@ -33,6 +33,34 @@ void Color4::reset()
     m_g = 0xFF;
     m_b = 0xFF;
     m_a = 0xFF;
+}
+
+Color3::Color3()
+    : m_r(0xFF),
+      m_g(0xFF),
+      m_b(0xFF)
+{
+}
+
+Color3::Color3(const uint8_t red,
+               const uint8_t green,
+               const uint8_t blue)
+    : m_r(red),
+      m_g(green),
+      m_b(blue)
+{
+}
+
+
+Color3::~Color3()
+{
+}
+
+void Color3::reset()
+{
+    m_r = 0xFF;
+    m_g = 0xFF;
+    m_b = 0xFF;
 }
 
 }

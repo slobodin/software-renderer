@@ -38,6 +38,7 @@ Mesh::MeshType Mesh::type() const
 
 void Mesh::setPosition(const math::vec3 &pos)
 {
+    m_worldTransformation.setv(pos);
 }
 
 void Mesh::setRotation(const math::vec3 &angles)

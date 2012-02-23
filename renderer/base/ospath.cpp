@@ -29,6 +29,11 @@ string OsPath::filePath() const
     return m_path;
 }
 
+bool OsPath::empty() const
+{
+    return m_path.empty();
+}
+
 void OsPath::parse()
 {
     string::reverse_iterator it = m_path.rbegin();

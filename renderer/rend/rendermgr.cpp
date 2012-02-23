@@ -4,10 +4,10 @@ namespace rend
 {
 
 RenderMgr::RenderMgr(const int width, const int height)
-    : m_camera(new Camera(math::vec3(), width, height)),
-      m_resourceMgr(new base::ResourceMgr)
+    : m_rasterizer(new Rasterizer(width, height)),
+      m_camera(new Camera(math::vec3(), width, height))
 {
-    m_camera->setPosition(math::vec3(0.0, 0.0, -150.0));
+    m_camera->setPosition(math::vec3(0.0, 0.0, -50.0));
     m_camera->buildCamMatrix(0.0, 0.0, 0.0);
     //m_camera->buildCamMatrix(math::vec3(0.0, 0.0, -10.0), math::vec3(10.0, 5.0, 10.0));
 }
@@ -19,36 +19,36 @@ RenderMgr::~RenderMgr()
 
 void RenderMgr::update()
 {
-//    m_driver->beginFrame();
+    m_rasterizer->beginFrame();
 
-//    RenderObjectsIterator it = m_objects.begin();
-//    while(it != m_objects.end())
-//    {
-//        (*it)->draw(m_driver, m_camera);
+    MeshIterator mit = m_meshes.begin();
+    while (mit != m_meshes.end())
+    {
+        m_rasterizer->draw(*mit, m_camera);
+        mit++;
+    }
 
-//        it++;
-//    }
-
-//    m_driver->endFrame();
+    m_rasterizer->endFrame();
 }
 
-void RenderMgr::addRenderable(const base::OsPath &path)
+// test
+void RenderMgr::rotate(const double dx, const double dy)
 {
-    // load resource
-    SPTR(base::Resource) gettedResource = m_resourceMgr->getResource(path);
-    if (!gettedResource)
-        return;
+    static double yaw, pitch;
+    yaw += dx;
+    pitch += dy;
+    m_camera->buildCamMatrix(yaw, pitch, 0);
+}
 
-    // check: is it rendering item?
-    SPTR(rend::Mesh) renderItem = dynamic_pointer_cast<rend::Mesh>(gettedResource);
-    if (!renderItem)
+void RenderMgr::addMesh(SPTR(rend::Mesh) mesh)
+{
+    if (!mesh)
     {
-        *syslog << "Can't render" << path.filePath() << logerr;
+        *syslog << "Trying to add empty mesh" << logerr;
         return;
     }
 
-    // save it
-    m_meshes.push_back(renderItem);
+    m_meshes.push_back(mesh);
 }
 
 }

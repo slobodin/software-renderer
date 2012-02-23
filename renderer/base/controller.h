@@ -6,6 +6,7 @@
 
 #include "singleton.h"
 #include "rendermgr.h"
+#include "resourcemgr.h"
 
 namespace base
 {
@@ -14,12 +15,19 @@ DECLARE_EXCEPTION(ControllerException)
 
 class DLL_PUBLIC Controller : public common::Singleton<Controller>
 {
-    APTR(rend::RenderMgr) m_rendmgr;
+    NONCOPYABLE(Controller)
 
-    string m_modelName; // test
+    SPTR(rend::RenderMgr) m_rendmgr;
+    SPTR(base::ResourceMgr) m_resourceMgr;
+
+    string m_updateCallback;
+    static void update();
+    static void processMouse(int x, int y);
 
 public:
-    Controller(const string &conf);
+    Controller(char *argv[], const string &conf);
+
+    void run();
 };
 
 }

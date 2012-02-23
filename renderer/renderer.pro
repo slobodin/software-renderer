@@ -34,12 +34,15 @@ HEADERS += \
     math/m33.h \
     rend/boundingsphere.h \
     rend/camera.h \
-    rend/color4.h \
     rend/mesh.h \
     math/plane.h \
     rend/rendermgr.h \
     dll.h \
-    rend/rasterizer.h
+    rend/rasterizer.h \
+    third-party/cpptk-1.0.2/cpptk.h \
+    third-party/cpptk-1.0.2/base/cpptkbase.h \
+    rend/framebuffer.h \
+    rend/color.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -54,12 +57,21 @@ SOURCES += \
     math/plane.cpp \
     rend/boundingsphere.cpp \
     rend/camera.cpp \
-    rend/color4.cpp \
     rend/mesh.cpp \
     rend/rendermgr.cpp \
-    rend/rasterizer.cpp
+    rend/rasterizer.cpp \
+    third-party/cpptk-1.0.2/cpptk.cc \
+    third-party/cpptk-1.0.2/base/cpptkbase.cc \
+    rend/framebuffer.cpp \
+    rend/color.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \
                 ./math \
-                ./rend
+                ./rend \
+                /usr/include/tcl \
+                /usr/include
+
+LIBS += -ltcl8.5
+LIBS += -ltk8.5
+LIBS += -lyaml-cpp

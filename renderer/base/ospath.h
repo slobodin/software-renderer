@@ -19,6 +19,7 @@ public:
 
     string fileExtention() const;
     string filePath() const;
+    bool empty() const;
 };
 
 }

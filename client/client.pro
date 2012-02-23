@@ -13,4 +13,3 @@ INCLUDEPATH += ../renderer/base \
                ../renderer/
 
 LIBS += -L../renderer-debug/ -lrenderer
-LIBS += -lyaml-cpp

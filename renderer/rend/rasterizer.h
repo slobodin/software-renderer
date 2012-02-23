@@ -5,16 +5,36 @@
 
 #include "mesh.h"
 #include "camera.h"
+#include "color.h"
+#include "framebuffer.h"
 
 namespace rend
 {
 
 class Rasterizer
 {
+    FrameBuffer m_fb;
+
+    // helpers
+    void drawTriangle(const math::vec3 &p1,
+                      const math::vec3 &p2,
+                      const math::vec3 &p3,
+                      const Color3 &color);
+    void drawBottomTriangle(int x1, int y1,
+                            int x2, int y2,
+                            int x3, int y3,
+                            const Color3 &color);
+    void drawTopTriangle(int x1, int y1,
+                         int x2, int y2,
+                         int x3, int y3,
+                         const Color3 &color);
 public:
-    Rasterizer();
+    Rasterizer(const int width, const int height);
 
     void draw(const SPTR(Mesh) mesh, const SPTR(Camera) cam);
+
+    void beginFrame();
+    void endFrame();
 };
 
 }

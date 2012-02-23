@@ -4,6 +4,9 @@
 #include <exception>
 #include <string>
 
+namespace common
+{
+
 class Exception : public std::exception
 {
     std::string m_what;
@@ -28,7 +31,9 @@ public:
     }
 };
 
-#define DECLARE_EXCEPTION(TYPE) class TYPE : public Exception \
+}
+
+#define DECLARE_EXCEPTION(TYPE) class TYPE : public common::Exception \
 { \
 public: \
     TYPE(const char *text) \

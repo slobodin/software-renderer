@@ -17,13 +17,13 @@ TextFile::TextFile(const OsPath &path)
     m_fileData.str(fileDataStr);
 }
 
-string TextFile::getLine()
+string TextFile::getLine(const char delim)
 {
     string token;
 
     while(m_fileData)
     {
-        std::getline(m_fileData, token);
+        std::getline(m_fileData, token, delim);
 
         if (token.empty())
             continue;
@@ -36,5 +36,6 @@ string TextFile::getLine()
 
     return string("");
 }
+
 
 }

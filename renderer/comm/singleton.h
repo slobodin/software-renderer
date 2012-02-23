@@ -9,7 +9,9 @@ namespace common
 template <class T>
 class Singleton
 {
+protected:
     static T *m_instance;
+
 public:
 
     Singleton()

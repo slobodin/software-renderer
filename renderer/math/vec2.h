@@ -4,6 +4,7 @@
 #include "comm_pch.h"
 
 #include "common_math.h"
+#include "vec3.h"
 
 namespace math
 {
@@ -23,6 +24,7 @@ struct vec2
 
     bool operator== (const vec2 &other) const;
     bool operator!= (const vec2 &other) const;
+    vec2 &operator= (const vec3 &v3);
 
     operator const double* () const;
 
@@ -91,6 +93,14 @@ inline bool vec2::operator!= (const vec2 &other) const
     if (fabs(y - other.y) > EPSILON_E3)
         return true;
     return false;
+}
+
+inline vec2 &vec2::operator= (const vec3 &v3)
+{
+    x = v3.x;
+    y = v3.y;
+
+    return *this;
 }
 
 inline vec2::operator const double* () const

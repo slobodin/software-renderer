@@ -14,7 +14,9 @@ class Application
 {
     std::auto_ptr<Controller> m_controller;
 public:
-    Application();
+    Application(int , char *argv[]);
+
+    void run();
 };
 
 #endif // APPLICATION_H

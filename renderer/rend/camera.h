@@ -64,7 +64,8 @@ public:
     //! 
     void buildCamMatrix(const math::vec3 &lookFrom, const math::vec3 &lookTo);
 
-    void apply(list<math::vec3> vlist) const;
+    void apply(list<math::vec3> &vlist) const;
+    void apply(vector<math::vec3> &vlist) const;
 };
 
 }
