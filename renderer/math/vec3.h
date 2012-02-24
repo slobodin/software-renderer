@@ -39,6 +39,8 @@ struct vec3
     friend vec3 operator* (const vec3 &a, const double b);
     friend vec3 operator* (const double a, const vec3 &b);
     friend vec3 operator/ (const vec3 &a, const double b);
+
+    friend std::ostream &operator<< (std::ostream &os, const vec3 &v);
 };
 
 
@@ -182,6 +184,12 @@ inline vec3 operator/ (const vec3 &a, const double b)
 {
     assert(b != 0.0);
     return vec3(a.x / b, a.y / b, a.z / b);
+}
+
+inline std::ostream &operator<< (std::ostream &os, const vec3 &v)
+{
+    os << "[x: " << v.x << " y: " << v.y << " z: " << v.z << "]";
+    return os;
 }
 
 }

@@ -41,11 +41,11 @@ void Mesh::setPosition(const math::vec3 &pos)
     m_worldTransformation.setv(pos);
 }
 
-void Mesh::setRotation(const math::vec3 &angles)
+void Mesh::setRotation(const math::vec3 &/*angles*/)
 {
 }
 
-void Mesh::setTransformation(const math::AffineTransform &tr)
+void Mesh::setTransformation(const math::AffineTransform &/*tr*/)
 {
 }
 

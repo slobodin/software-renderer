@@ -16,17 +16,17 @@ class RenderMgr
     NONCOPYABLE(RenderMgr)
 
     SPTR(rend::Rasterizer) m_rasterizer;
+    string m_tkCanvasName;
     SPTR(Camera) m_camera;
 
     vector<SPTR(rend::Mesh) > m_meshes;
 
 public:
-    RenderMgr(const int width, const int height);
+    RenderMgr(const SPTR(Camera) cam);
     ~RenderMgr();
 
+    void renderTo(const string &tkCanvas);
     void update();
-    // test func
-    void rotate(const double dx, const double dy);
 
     void addMesh(SPTR(rend::Mesh) mesh);
 

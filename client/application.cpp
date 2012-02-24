@@ -1,7 +1,7 @@
 #include "application.h"
 
 Application::Application(int , char *argv[])
-    : m_controller(new Controller(argv, "conf.yaml"))
+    : m_controller(new ClientController(argv, "conf.yaml"))
 {
 }
 

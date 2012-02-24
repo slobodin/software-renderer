@@ -34,6 +34,28 @@ Camera::~Camera()
 {
 }
 
+int Camera::width() const
+{
+    return m_viewPort.width;
+}
+
+int Camera::height() const
+{
+    return m_viewPort.height;
+}
+
+string Camera::state() const
+{
+    std::ostringstream out;
+    out << "Camera:\n";
+    out << "    -position: " << m_position << "\n";
+    out << "    -dir: " << m_dir << "\n";
+    out << "    -up: " << m_up << "\n";
+    out << "    -right: " << m_right << "\n";
+
+    return out.str();
+}
+
 void Camera::setPosition(const math::vec3 &pos)
 {
     m_position = pos;
@@ -43,6 +65,11 @@ void Camera::setPosition(const math::vec3 &pos)
 math::vec3 Camera::getPosition() const
 {
     return m_position;
+}
+
+math::vec3 Camera::getDirection() const
+{
+    return m_dir;
 }
 
 void Camera::buildCamMatrix(const double yaw, const double pitch, const double roll)
@@ -95,8 +122,8 @@ void Camera::buildCamMatrix(const math::vec3 &lookAtPoint)
 
     // create matrix
     math::M33 resM(m_right.x, m_up.x, m_dir.x,
-                    m_right.y, m_up.y, m_dir.y,
-                    m_right.z, m_up.z, m_dir.z);
+                   m_right.y, m_up.y, m_dir.y,
+                   m_right.z, m_up.z, m_dir.z);
 
     m_worldToCamera.setm(resM);
     m_worldToCamera.setv(-m_position);

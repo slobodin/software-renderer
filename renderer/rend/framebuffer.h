@@ -23,11 +23,14 @@ class FrameBuffer
     ~FrameBuffer();
 
     void clear();
-    void flush_tk();
+    void flush_tk(const string &to);
     void flush_win();
     void flush_gl();
-    void scanline(const int x1, const int x2,
-                  const int y, const Color3 &color);
+    void wscanline(const int x1, const int x2,
+                   const int y, const Color3 &color);
+    void wpixel(const int x, const int y,
+                const Color3 &color);
+    void wpixel(const int pos, const Color3 &color);
 };
 
 }

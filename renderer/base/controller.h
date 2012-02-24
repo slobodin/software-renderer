@@ -17,15 +17,19 @@ class DLL_PUBLIC Controller : public common::Singleton<Controller>
 {
     NONCOPYABLE(Controller)
 
+protected:
     SPTR(rend::RenderMgr) m_rendmgr;
-    SPTR(base::ResourceMgr) m_resourceMgr;
+    SPTR(rend::Camera) m_mainCam;
+    SPTR(ResourceMgr) m_resourceMgr;
 
     string m_updateCallback;
     static void update();
-    static void processMouse(int x, int y);
 
 public:
     Controller(char *argv[], const string &conf);
+    virtual ~Controller();
+
+    SPTR(rend::Camera) camera();
 
     void run();
 };

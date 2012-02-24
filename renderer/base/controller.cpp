@@ -2,7 +2,6 @@
 
 #include <yaml-cpp/yaml.h>
 #include <third-party/cpptk-1.0.2/cpptk.h>
-#include <tcl/tk.h>
 #include "vec3.h"
 
 namespace base
@@ -13,6 +12,7 @@ struct ModelData
     string modelpath;
     math::vec3 pos;
     rend::Color3 color;
+    bool wireframe;
 };
 
 void operator>> (const YAML::Node &node, math::vec3 &v)
@@ -33,6 +33,7 @@ void operator>> (const YAML::Node &node, ModelData &data)
 {
     node["model"] >> data.modelpath;
     node["position"] >> data.pos;
+    node["wireframe"] >> data.wireframe;
 }
 
 using namespace Tk;
@@ -41,35 +42,7 @@ void Controller::update()
 {
     m_instance->m_rendmgr->update();
 
-    Tk::after(50, m_instance->m_updateCallback);
-}
-
-void Controller::processMouse(int x, int y)
-{
-    *syslog << "Mouse x:" << x << "y:" << y << logmess;
-
-    static int dx;
-    static int dy;
-
-    m_instance->m_rendmgr->rotate(dx, dy);
-
-    dx++;
-    dy++;
-
-
-//    dx = m_targetWindow->currMouseState().x - m_targetWindow->prevMouseState().x;
-//    dy = m_targetWindow->currMouseState().y - m_targetWindow->prevMouseState().y;
-
-//    if (m_targetWindow->currMouseState().isLeftPressed())
-//    {
-//        rotate(dx, dy);
-//        windowState |= RenderWindow::ET_REDRAW_RASTERIZE;
-//    }
-//    if (m_targetWindow->currMouseState().isRightPressed())
-//    {
-//        move(dx, dy);
-//        windowState |= RenderWindow::ET_REDRAW_RASTERIZE;
-//    }
+    Tk::after(30, m_instance->m_updateCallback);
 }
 
 Controller::Controller(char *argv[], const string &conf)
@@ -102,7 +75,8 @@ Controller::Controller(char *argv[], const string &conf)
                 << e.what() << logerr;
     }
 
-    m_rendmgr.reset(new rend::RenderMgr(640, 480));
+    m_mainCam = SPTR(rend::Camera)(new rend::Camera(math::vec3(), 640, 480));
+    m_rendmgr.reset(new rend::RenderMgr(m_mainCam));
 
     for (unsigned i = 0; i < modelData.size(); i++)
     {
@@ -128,6 +102,7 @@ Controller::Controller(char *argv[], const string &conf)
 
         // save it
         renderItem->setPosition(modelData[i].pos);
+        renderItem->wireframe() = modelData[i].wireframe;
         m_rendmgr->addMesh(renderItem);
     }
 
@@ -135,6 +110,7 @@ Controller::Controller(char *argv[], const string &conf)
 
     Tk::wm(Tk::title, ".", "Result");
 
+    // create rendering canvas
     Tk::images(Tk::create, Tk::photo, "canvas_photo")
             -Tk::width(640)
             -Tk::height(480);
@@ -143,12 +119,20 @@ Controller::Controller(char *argv[], const string &conf)
             -Tk::height(480);
     Tk::pack(".c") -Tk::fill(Tk::both) -Tk::expand(true);
     (".c" << Tk::create(Tk::image, 0, 0)) -Tk::image("canvas_photo") -Tk::anchor(nw);
+    m_rendmgr->renderTo("canvas_photo");
 
-    Tk::bind(".", "<Button-1>", &Controller::processMouse, event_x, event_y);
-
+    // setup update event
     m_updateCallback = Tk::callback(&Controller::update);
     Tk::after(500, m_updateCallback);
+}
 
+Controller::~Controller()
+{
+}
+
+SPTR(rend::Camera) Controller::camera()
+{
+    return m_mainCam;
 }
 
 void Controller::run()

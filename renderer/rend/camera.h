@@ -55,9 +55,14 @@ public:
            const double farZ = 500.0);
     ~Camera();
 
+    int width() const;
+    int height() const;
+    string state() const;
+
     void setPosition(const math::vec3 &pos);
     math::vec3 getPosition() const;
-    //! build matrix with 3 Euler angles
+    math::vec3 getDirection() const;
+    //! build matrix with 3 Euler angles (degrees)
     void buildCamMatrix(const double yaw, const double pitch, const double roll);
     //! build matrix using right, up and direction vector
     void buildCamMatrix(const math::vec3 &lookAtPoint);

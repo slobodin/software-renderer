@@ -40,8 +40,9 @@ struct vec2
     friend vec2 operator* (const vec2 &a, const double b);
     friend vec2 operator* (const double a, const vec2 &b);
     friend vec2 operator/ (const vec2 &a, const double b);
-};
 
+    friend std::ostream &operator<< (std::ostream &os, const vec2 &v);
+};
 
 inline vec2 &vec2::operator+= (const vec2 &other)
 {
@@ -173,6 +174,12 @@ inline vec2 operator/ (const vec2 &a, const double b)
 {
     assert(b != 0.0);
     return vec2(a.x / b, a.y / b);
+}
+
+inline std::ostream &operator<< (std::ostream &os, const vec2 &v)
+{
+    os << "[x: " << v.x << " y: " << v.y << "]";
+    return os;
 }
 
 }

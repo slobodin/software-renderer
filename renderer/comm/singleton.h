@@ -20,10 +20,10 @@ public:
         m_instance = static_cast<T *>(this);
     }
 
-    ~Singleton()
+    virtual ~Singleton()
     {
         assert(m_instance);
-        m_instance = nullptr;
+        m_instance = 0;
     }
 
     static T &instance()
@@ -40,12 +40,12 @@ public:
 
     static bool initialized()
     {
-        return m_instance != nullptr;;
+        return m_instance != 0;
     }
 };
 
 template <class T>
-T *Singleton<T>::m_instance = nullptr;
+T *Singleton<T>::m_instance = 0;
 
 }
 

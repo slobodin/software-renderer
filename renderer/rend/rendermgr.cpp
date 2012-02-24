@@ -3,9 +3,9 @@
 namespace rend
 {
 
-RenderMgr::RenderMgr(const int width, const int height)
-    : m_rasterizer(new Rasterizer(width, height)),
-      m_camera(new Camera(math::vec3(), width, height))
+RenderMgr::RenderMgr(const SPTR(Camera) cam)
+    : m_rasterizer(new Rasterizer(cam->width(), cam->height())),
+      m_camera(cam)
 {
     m_camera->setPosition(math::vec3(0.0, 0.0, -50.0));
     m_camera->buildCamMatrix(0.0, 0.0, 0.0);
@@ -17,8 +17,16 @@ RenderMgr::~RenderMgr()
 
 }
 
+void RenderMgr::renderTo(const string &tkCanvas)
+{
+    m_tkCanvasName = tkCanvas;
+}
+
 void RenderMgr::update()
 {
+    if (m_tkCanvasName.empty())
+        return;
+
     m_rasterizer->beginFrame();
 
     MeshIterator mit = m_meshes.begin();
@@ -28,16 +36,7 @@ void RenderMgr::update()
         mit++;
     }
 
-    m_rasterizer->endFrame();
-}
-
-// test
-void RenderMgr::rotate(const double dx, const double dy)
-{
-    static double yaw, pitch;
-    yaw += dx;
-    pitch += dy;
-    m_camera->buildCamMatrix(yaw, pitch, 0);
+    m_rasterizer->endFrame(m_tkCanvasName);
 }
 
 void RenderMgr::addMesh(SPTR(rend::Mesh) mesh)
