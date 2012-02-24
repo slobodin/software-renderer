@@ -31,7 +31,7 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
     }
     else
     {
-        iy1 = ceil(y1);
+        iy1 = y1;
 
         xs = xs + dxLeft * (iy1 - y1);
         xe = xe + dxRight * (iy1 - y1);
@@ -43,14 +43,14 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
     }
     else
     {
-        iy3 = ceil(y3) - 1;
+        iy3 = y3 - 1;
     }
 
     if (x1 >= m_fb.m_xOrigin && x1 <= m_fb.m_width &&
         x2 >= m_fb.m_xOrigin && x2 <= m_fb.m_width &&
         x3 >= m_fb.m_xOrigin && x3 <= m_fb.m_width)
     {
-        for (int y = y1; y < y3; y++)
+        for (int y = y1; y <= iy3; y++)
         {
             m_fb.wscanline(xs, xe, y, color);
 
@@ -60,7 +60,7 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
     }
     else
     {
-        for (int y = y1; y < y3; y++)
+        for (int y = y1; y <= iy3; y++)
         {
             double left = xs, right = xe;
 
@@ -118,7 +118,7 @@ void Rasterizer::drawTopTriangle(int x1, int y1,
     }
     else
     {
-        iy1 = ceil(y1);
+        iy1 = y1;
 
         xs = xs + dx_left * (iy1 - y1);
         xe = xe + dx_right * (iy1 - y1);
@@ -132,14 +132,14 @@ void Rasterizer::drawTopTriangle(int x1, int y1,
     }
     else
     {
-        iy3 = ceil(y3) - 1;
+        iy3 = y3 - 1;
     }
 
     if (x1 >= m_fb.m_xOrigin && x1 <= m_fb.m_width &&
         x2 >= m_fb.m_xOrigin && x2 <= m_fb.m_width &&
         x3 >= m_fb.m_xOrigin && x3 <= m_fb.m_width)
     {
-        for (int y = iy1; y < iy3; y++)
+        for (int y = iy1; y <= iy3; y++)
         {
 
             m_fb.wscanline(xs, xe, y, color);
@@ -151,7 +151,7 @@ void Rasterizer::drawTopTriangle(int x1, int y1,
     }
     else
     {
-        for (int y = iy1; y < iy3; y++)
+        for (int y = iy1; y <= iy3; y++)
         {
             double left = xs;
             double right = xe;

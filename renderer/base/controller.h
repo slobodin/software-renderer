@@ -29,8 +29,6 @@ public:
     Controller(char *argv[], const string &conf);
     virtual ~Controller();
 
-    SPTR(rend::Camera) camera();
-
     void run();
 };
 

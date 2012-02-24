@@ -69,9 +69,38 @@ public:
     //! 
     void buildCamMatrix(const math::vec3 &lookFrom, const math::vec3 &lookTo);
 
-    void apply(list<math::vec3> &vlist) const;
-    void apply(vector<math::vec3> &vlist) const;
+    template<typename T>
+    void apply(T &container) const;
 };
+
+template<typename T>
+void Camera::apply(T &container) const
+{
+    typename T::iterator v = container.begin();
+
+    while (v != container.end())
+    {
+        // world to cam transformation
+        m_worldToCamera.transformPoint(*v);
+
+        // perspective transformation
+        double z = v->z;
+
+        assert(z != 0.0);
+
+        v->x = m_distance * v->x / z;
+        v->y = m_distance * v->y * m_aspect / z;
+
+        // screen transformation
+        double alpha = 0.5 * m_viewPort.width - 0.5;
+        double beta = 0.5 * m_viewPort.height - 0.5;
+
+        v->x = alpha + alpha * v->x;
+        v->y = beta - beta * v->y;
+
+        v++;
+    }
+}
 
 }
 

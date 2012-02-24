@@ -10,6 +10,7 @@ void ClientController::onMouseMotion(int x, int y)
 {
     static int yaw, pitch;
     static int prevX, prevY;
+    ClientController *m_this = dynamic_cast<ClientController *>(ptr());
 
     int dx = prevX - x;
     int dy = prevY - y;
@@ -17,28 +18,24 @@ void ClientController::onMouseMotion(int x, int y)
     pitch += dy;
     if (abs(yaw) > 360) yaw %= 360;
     if (abs(pitch) > 360) pitch %= 360;
-    m_instance->camera()->buildCamMatrix(yaw, pitch, 0);
+    m_this->m_mainCam->buildCamMatrix(yaw, pitch, 0);
 
     prevX = x;
     prevY = y;
 
-    (".info_frame.camera" << Tk::configure()) -text(m_instance->camera()->state());
-//    std::stringstream ss;
-//    ss << "yaw: " << yaw;
-//    ss << "\npitch: " << pitch;
-//    (".info_frame.camera" << Tk::configure()) -text(ss.str());
+    (".info_frame.camera" << Tk::configure()) -text(m_this->m_mainCam->state());
 }
 
 void ClientController::onKeyW()
 {
-    *syslog << "w" << logmess;
-    vec3 pos = m_instance->camera()->getPosition();
-    vec3 dir = m_instance->camera()->getDirection();
+    ClientController *m_this = dynamic_cast<ClientController *>(ptr());
+    vec3 pos = m_this->m_mainCam->getPosition();
+    vec3 dir = m_this->m_mainCam->getDirection();
 
     pos.z += 5;
-    m_instance->camera()->setPosition(pos);
+    m_this->m_mainCam->setPosition(pos);
 
-    (".info_frame.camera" << Tk::configure()) -text(m_instance->camera()->state());
+    (".info_frame.camera" << Tk::configure()) -text(m_this->m_mainCam->state());
 }
 
 void ClientController::onKeyA()
@@ -47,12 +44,12 @@ void ClientController::onKeyA()
 
 void ClientController::onKeyS()
 {
-    *syslog << "s" << logmess;
-    vec3 pos = m_instance->camera()->getPosition();
+    ClientController *m_this = dynamic_cast<ClientController *>(ptr());
+    vec3 pos = m_this->m_mainCam->getPosition();
     pos.z += -5;
-    m_instance->camera()->setPosition(pos);
+    m_this->m_mainCam->setPosition(pos);
 
-    (".info_frame.camera" << Tk::configure()) -text(m_instance->camera()->state());
+    (".info_frame.camera" << Tk::configure()) -text(m_this->m_mainCam->state());
 }
 
 void ClientController::onKeyD()
@@ -66,6 +63,7 @@ void ClientController::exit()
 
 void ClientController::printCam()
 {
+
 }
 
 ClientController::ClientController(char *argv[], const string &conf)

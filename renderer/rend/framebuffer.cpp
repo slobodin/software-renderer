@@ -63,7 +63,7 @@ void FrameBuffer::flush_gl()
 
 void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color3 &color)
 {
-    for (int x = x1; x < x2; x++)
+    for (int x = x1; x <= x2; x++)
     {
         wpixel(x, y, color);
     }

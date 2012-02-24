@@ -7,7 +7,7 @@ RenderMgr::RenderMgr(const SPTR(Camera) cam)
     : m_rasterizer(new Rasterizer(cam->width(), cam->height())),
       m_camera(cam)
 {
-    m_camera->setPosition(math::vec3(0.0, 0.0, -50.0));
+    m_camera->setPosition(math::vec3(0.0, 0.0, -150.0));
     m_camera->buildCamMatrix(0.0, 0.0, 0.0);
     //m_camera->buildCamMatrix(math::vec3(0.0, 0.0, -10.0), math::vec3(10.0, 5.0, 10.0));
 }

@@ -74,13 +74,6 @@ math::vec3 Camera::getDirection() const
 
 void Camera::buildCamMatrix(const double yaw, const double pitch, const double roll)
 {
-/*    // find rotation matrix 
-    math::M33 rot = math::M33::getRotateYawPitchRollMatrix(-yaw, -pitch, -roll);
-
-    // note: we don't recalculate right, up and dir vectors
-    m_worldToCamera.setm(rot);
-    m_worldToCamera.setv(-m_position); */
-
     m_dir = math::vec3(0.0, 0.0, 1.0);
     m_right = math::vec3(1.0, 0.0, 0.0);
     m_up = math::vec3(0.0, 1.0, 0.0);
@@ -133,62 +126,6 @@ void Camera::buildCamMatrix(const math::vec3 &lookFrom, const math::vec3 &lookTo
 {
     m_position = lookFrom;
     buildCamMatrix(lookTo);
-}
-
-void Camera::apply(list<math::vec3> &vlist) const
-{
-    list<math::vec3>::iterator v = vlist.begin();
-
-    while (v != vlist.end())
-    {
-        // world to cam
-        m_worldToCamera.transformPoint(*v);
-
-        // perspective transformation
-        double z = v->z;
-
-        assert(z != 0.0);
-
-        v->x = m_distance * v->x / z;
-        v->y = m_distance * v->y * m_aspect / z;
-
-        // screen transformation
-        double alpha = 0.5 * m_viewPort.width - 0.5;
-        double beta = 0.5 * m_viewPort.height - 0.5;
-
-        v->x = alpha + alpha * v->x;
-        v->y = beta - beta * v->y;
-
-        v++;
-    }
-}
-
-void Camera::apply(vector<math::vec3> &vlist) const
-{
-    vector<math::vec3>::iterator v = vlist.begin();
-
-    while (v != vlist.end())
-    {
-        // world to cam
-        m_worldToCamera.transformPoint(*v);
-
-        // perspective transformation
-        double z = v->z;
-
-        assert(z != 0.0);
-
-        v->x = m_distance * v->x / z;
-        v->y = m_distance * v->y * m_aspect / z;
-
-        // screen transformation
-        double alpha = 0.5 * m_viewPort.width - 0.5;
-        double beta = 0.5 * m_viewPort.height - 0.5;
-
-        v->x = alpha + alpha * v->x;
-        v->y = beta - beta * v->y;
-
-        v++;
-    }
 }
 
 }

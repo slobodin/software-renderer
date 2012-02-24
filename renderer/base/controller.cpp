@@ -130,11 +130,6 @@ Controller::~Controller()
 {
 }
 
-SPTR(rend::Camera) Controller::camera()
-{
-    return m_mainCam;
-}
-
 void Controller::run()
 {
     Tk::runEventLoop();
