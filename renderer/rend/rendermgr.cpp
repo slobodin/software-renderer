@@ -9,7 +9,7 @@ RenderMgr::RenderMgr(const SPTR(Camera) cam)
     : m_rasterizer(new Rasterizer(cam->width(), cam->height())),
       m_camera(cam)
 {
-    m_camera->setPosition(math::vec3(0.0, 0.0, -150.0));
+    m_camera->setPosition(math::vec3(0.0, 0.0, -450.0));
     m_camera->buildCamMatrix(0.0, 0.0, 0.0);
     //m_camera->buildCamMatrix(math::vec3(0.0, 0.0, -10.0), math::vec3(10.0, 5.0, 10.0));
 }
@@ -38,13 +38,27 @@ void RenderMgr::update()
         std::copy((*mit)->vertices().begin(), (*mit)->vertices().end(), std::back_inserter(vertList));
         m_camera->apply(vertList);
 
-        RasterizerList list = { vertList, (*mit)->indices(), (*mit)->type(), (*mit)->wireframe() };
+        RasterizerList list = { vertList, (*mit)->indices(), (*mit)->type(), (*mit)->materials() };
         m_rasterizer->rasterize(list);
 
         mit++;
     }
 
     m_rasterizer->endFrame(m_tkCanvasName);
+}
+
+void rend::RenderMgr::addLight(const Light::LightType &type, const math::vec3 pos, const math::vec3 &dir)
+{
+    SPTR(Light) newLight;
+    try
+    {
+        newLight = SPTR(Light)(new Light(type, pos, dir));
+        m_lights.push_back(newLight);
+    }
+    catch(LightException)
+    {
+        *syslog << "Light limit is reached" << logerr;
+    }
 }
 
 void RenderMgr::addMesh(SPTR(rend::Mesh) mesh)

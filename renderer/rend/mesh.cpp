@@ -7,9 +7,11 @@ namespace rend
 
 Mesh::Mesh(const vector<math::vec3> &vertices,
            const vector<size_t> &indices,
+           const vector<Material> &materials,
            const MeshType type)
     : m_vertices(vertices),
       m_indices(indices),
+      m_materials(materials),
       m_type(type)
 {
 }
@@ -31,6 +33,11 @@ const vector<math::vec3> &Mesh::vertices() const
 const vector<size_t> &Mesh::indices() const
 {
     return m_indices;
+}
+
+const vector<Material> &Mesh::materials() const
+{
+    return m_materials;
 }
 
 Mesh::MeshType Mesh::type() const

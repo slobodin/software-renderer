@@ -2,6 +2,7 @@
 
 #include "osfile.h"
 #include "mesh.h"
+#include "material.h"
 
 namespace base
 {
@@ -69,6 +70,7 @@ SPTR(Resource) DecoderPLG::decode(const OsPath &path)
 
     // now load polygons and save it into mesh
     vector<size_t> indices;
+    vector<rend::Material> materials;
     for (unsigned poly = 0; poly < numPolys; poly++)
     {
         token.str("");
@@ -98,9 +100,15 @@ SPTR(Resource) DecoderPLG::decode(const OsPath &path)
             token >> index;
             indices.push_back(index);
         }
+
+        rend::Color3 col(polyDescriptor);
+        materials.push_back(rend::Material(col, rend::Material::SM_FLAT));
     }
 
-    SPTR(rend::Mesh) newMesh(new rend::Mesh(vertexList, indices, rend::Mesh::MT_MESH_INDEXEDTRIANGLELIST));
+    SPTR(rend::Mesh) newMesh(new rend::Mesh(vertexList,
+                                            indices,
+                                            materials,
+                                            rend::Mesh::MT_MESH_INDEXEDTRIANGLELIST));
     newMesh->setName(resourceName);
 
     *syslog << "Decoded plg-model \"" << newMesh->name() << "\". Number of vertices:" << newMesh->numVertices() << logmess;

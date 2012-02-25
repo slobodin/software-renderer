@@ -582,7 +582,7 @@ void Rasterizer::rasterize(const RasterizerList &list)
     {
         math::Triangle triangle;
 
-        for(size_t ind = 0; ind < list.indices.size(); ind += 3)
+        for(size_t ind = 0, poly = 0; ind < list.indices.size(); ind += 3, poly++)
         {
             if ((ind + 2) == list.indices.size())
                 break;
@@ -591,10 +591,18 @@ void Rasterizer::rasterize(const RasterizerList &list)
             triangle.v(1) = list.vertices[list.indices[ind + 1]];
             triangle.v(2) = list.vertices[list.indices[ind + 2]];
 
-            if (!list.wireframe)
-                drawFillTriangle(triangle, Color3(255, 0, 0));
-            else
-                drawTriangle(triangle, Color3(255, 0, 0));
+            switch (list.materials[poly].shadeMode())
+            {
+            case Material::SM_WIRE:
+                drawTriangle(triangle, list.materials[poly].color());
+                break;
+
+            case Material::SM_FLAT:
+                drawFillTriangle(triangle, list.materials[poly].color());
+                break;
+            default:
+                break;
+            }
         }
     }
     break;

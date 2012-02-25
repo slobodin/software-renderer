@@ -32,6 +32,9 @@ void ClientController::onKeyW()
     vec3 pos = m_this->m_mainCam->getPosition();
     vec3 dir = m_this->m_mainCam->getDirection();
 
+    vec3 delta = 5 * dir;
+
+//    pos += delta;
     pos.z += 5;
     m_this->m_mainCam->setPosition(pos);
 
@@ -46,7 +49,12 @@ void ClientController::onKeyS()
 {
     ClientController *m_this = dynamic_cast<ClientController *>(ptr());
     vec3 pos = m_this->m_mainCam->getPosition();
-    pos.z += -5;
+    vec3 dir = m_this->m_mainCam->getDirection();
+
+    vec3 delta = 5 * dir;
+
+//    pos -= delta;
+    pos.z -= 5;
     m_this->m_mainCam->setPosition(pos);
 
     (".info_frame.camera" << Tk::configure()) -text(m_this->m_mainCam->state());

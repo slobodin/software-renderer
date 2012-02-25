@@ -44,7 +44,9 @@ HEADERS += \
     rend/framebuffer.h \
     rend/color.h \
     math/poly.h \
-    base/config.h
+    base/config.h \
+    rend/material.h \
+    rend/light.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -67,7 +69,9 @@ SOURCES += \
     rend/framebuffer.cpp \
     rend/color.cpp \
     math/poly.cpp \
-    base/config.cpp
+    base/config.cpp \
+    rend/material.cpp \
+    rend/light.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

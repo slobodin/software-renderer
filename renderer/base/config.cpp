@@ -6,7 +6,6 @@ struct ModelData
 {
     string modelpath;
     math::vec3 pos;
-    bool wireframe;
 };
 
 static void operator>> (const YAML::Node &node, math::vec3 &v)
@@ -20,7 +19,6 @@ static void operator>> (const YAML::Node &node, ModelData &data)
 {
     node["model"] >> data.modelpath;
     node["position"] >> data.pos;
-    node["wireframe"] >> data.wireframe;
 }
 
 namespace base
@@ -88,7 +86,6 @@ void Config::configure(const OsPath &path, Controller *controller)
 
         // save it
         renderItem->setPosition(modelData[i].pos);
-        renderItem->wireframe() = modelData[i].wireframe;
         controller->m_rendmgr->addMesh(renderItem);
     }
 }

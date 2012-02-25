@@ -51,6 +51,10 @@ Color3::Color3(const uint8_t red,
 {
 }
 
+Color3::Color3(const uint32_t color)
+{
+    IntToRgb(color, m_r, m_g, m_b);
+}
 
 Color3::~Color3()
 {

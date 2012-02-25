@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "color.h"
 #include "framebuffer.h"
+#include "material.h"
 #include "poly.h"
 
 namespace rend
@@ -17,8 +18,7 @@ struct RasterizerList
     const vector<math::vec3> &vertices;
     const vector<size_t> &indices;
     const Mesh::MeshType type;
-
-    const bool wireframe;
+    const vector<Material> &materials;
 };
 
 class Rasterizer

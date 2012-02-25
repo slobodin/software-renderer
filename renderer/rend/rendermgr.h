@@ -7,6 +7,7 @@
 #include "rasterizer.h"
 #include "mesh.h"
 #include "ospath.h"
+#include "light.h"
 
 namespace rend
 {
@@ -15,11 +16,12 @@ class RenderMgr
 {
     NONCOPYABLE(RenderMgr)
 
-    SPTR(rend::Rasterizer) m_rasterizer;
+    SPTR(Rasterizer) m_rasterizer;
     string m_tkCanvasName;
     SPTR(Camera) m_camera;
 
-    vector<SPTR(rend::Mesh) > m_meshes;
+    vector<SPTR(Mesh) > m_meshes;
+    vector<SPTR(Light) > m_lights;
 
 public:
     RenderMgr(const SPTR(Camera) cam);
@@ -29,6 +31,9 @@ public:
     void update();
 
     void addMesh(SPTR(rend::Mesh) mesh);
+    void addLight(const Light::LightType &type,
+                  const math::vec3 pos,
+                  const math::vec3 &dir);
 
 private:
     typedef vector<SPTR(rend::Mesh) >::iterator MeshIterator;
