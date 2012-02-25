@@ -7,9 +7,19 @@
 #include "camera.h"
 #include "color.h"
 #include "framebuffer.h"
+#include "poly.h"
 
 namespace rend
 {
+
+struct RasterizerList
+{
+    const vector<math::vec3> &vertices;
+    const vector<size_t> &indices;
+    const Mesh::MeshType type;
+
+    const bool wireframe;
+};
 
 class Rasterizer
 {
@@ -20,10 +30,15 @@ class Rasterizer
                           const math::vec3 &p2,
                           const math::vec3 &p3,
                           const Color3 &color);
+    void drawFillTriangle(const math::Triangle &tr,
+                          const Color3 &color);
     void drawTriangle(const math::vec3 &p1,
                       const math::vec3 &p2,
                       const math::vec3 &p3,
                       const Color3 &color);
+    void drawTriangle(const math::Triangle &tr,
+                          const Color3 &color);
+
     void drawBottomTriangle(int x1, int y1,
                             int x2, int y2,
                             int x3, int y3,
@@ -40,7 +55,7 @@ class Rasterizer
 public:
     Rasterizer(const int width, const int height);
 
-    void draw(const SPTR(Mesh) mesh, const SPTR(Camera) cam);
+    void rasterize(const RasterizerList &list);
 
     void beginFrame();
     void endFrame(const string &to);

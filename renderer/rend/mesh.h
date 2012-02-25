@@ -6,6 +6,7 @@
 #include "affinetransform.h"
 #include "resource.h"
 #include "boundingsphere.h"
+#include "color.h"
 
 namespace rend
 {
@@ -26,7 +27,8 @@ public:
 
 private:
     vector<math::vec3> m_vertices;
-    vector<int> m_indices;
+    vector<size_t> m_indices;
+    vector<Color3> m_colors;
     MeshType m_type;
 
     // TODO: make it in material-class
@@ -37,13 +39,13 @@ private:
 
 public:
     Mesh(const vector<math::vec3> &vertices,
-         const vector<int> &indices,
+         const vector<size_t> &indices,
          const MeshType type);
     ~Mesh();
 
     size_t numVertices() const;
     const vector<math::vec3> &vertices() const;
-    const vector<int> &indices() const;
+    const vector<size_t> &indices() const;
     MeshType type() const;
 
     bool &wireframe() { return m_wireframe; }

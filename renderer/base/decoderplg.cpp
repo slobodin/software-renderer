@@ -68,7 +68,7 @@ SPTR(Resource) DecoderPLG::decode(const OsPath &path)
     }
 
     // now load polygons and save it into mesh
-    vector<int> indices;
+    vector<size_t> indices;
     for (unsigned poly = 0; poly < numPolys; poly++)
     {
         token.str("");

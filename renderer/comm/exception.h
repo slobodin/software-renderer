@@ -41,4 +41,11 @@ public: \
 {} \
 };
 
+namespace common
+{
+
+DECLARE_EXCEPTION(OutOfRangeException)
+
+}
+
 #endif // EXCEPTION_H

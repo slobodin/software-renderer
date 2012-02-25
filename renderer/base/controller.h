@@ -15,6 +15,8 @@ DECLARE_EXCEPTION(ControllerException)
 
 class DLL_PUBLIC Controller : public common::Singleton<Controller>
 {
+    friend class Config;
+
     NONCOPYABLE(Controller)
 
 protected:

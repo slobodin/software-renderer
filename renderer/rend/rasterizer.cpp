@@ -1,6 +1,7 @@
 #include "rasterizer.h"
 
 #include "vec2.h"
+#include "poly.h"
 
 namespace rend
 {
@@ -551,6 +552,11 @@ void Rasterizer::drawFillTriangle(const math::vec3 &p1,
     }
 }
 
+void Rasterizer::drawFillTriangle(const math::Triangle &tr, const Color3 &color)
+{
+    drawFillTriangle(tr.v(0), tr.v(1), tr.v(2), color);
+}
+
 void Rasterizer::drawTriangle(const math::vec3 &p1, const math::vec3 &p2, const math::vec3 &p3, const Color3 &color)
 {
     drawLine(p1, p2, color);
@@ -558,40 +564,37 @@ void Rasterizer::drawTriangle(const math::vec3 &p1, const math::vec3 &p2, const 
     drawLine(p3, p1, color);
 }
 
+void Rasterizer::drawTriangle(const math::Triangle &tr, const Color3 &color)
+{
+    drawTriangle(tr.v(0), tr.v(1), tr.v(2), color);
+}
+
 Rasterizer::Rasterizer(const int width, const int height)
     : m_fb(width, height)
 {
 }
 
-void Rasterizer::draw(const SPTR(Mesh) mesh, const SPTR(Camera) cam)
+void Rasterizer::rasterize(const RasterizerList &list)
 {
-//    const vector<math::vec3> &vertices = mesh->vertices();
-//    list<math::vec3> vertList;
-
-//    std::copy(vertices.begin(), vertices.end(), std::back_inserter(vertList));
-//    cam->apply(vertList);
-
-    vector<math::vec3> vertList;
-    std::copy(mesh->vertices().begin(), mesh->vertices().end(), std::back_inserter(vertList));
-    cam->apply(vertList);
-
-    math::vec3 p1, p2, p3;
-    switch(mesh->type())
+    switch(list.type)
     {
     case Mesh::MT_MESH_INDEXEDTRIANGLELIST:
     {
-        const vector<int> &indices = mesh->indices();
+        math::Triangle triangle;
 
-        for(size_t ind = 0; ind < indices.size(); ind += 3)
+        for(size_t ind = 0; ind < list.indices.size(); ind += 3)
         {
-            p1 = vertList[indices[ind]];
-            p2 = vertList[indices[ind + 1]];
-            p3 = vertList[indices[ind + 2]];
+            if ((ind + 2) == list.indices.size())
+                break;
 
-            if (!mesh->wireframe())
-                drawFillTriangle(p1, p2, p3, Color3(255, 0, 0));
+            triangle.v(0) = list.vertices[list.indices[ind]];
+            triangle.v(1) = list.vertices[list.indices[ind + 1]];
+            triangle.v(2) = list.vertices[list.indices[ind + 2]];
+
+            if (!list.wireframe)
+                drawFillTriangle(triangle, Color3(255, 0, 0));
             else
-                drawTriangle(p1, p2, p3, Color3(255, 0, 0));
+                drawTriangle(triangle, Color3(255, 0, 0));
         }
     }
     break;
@@ -604,12 +607,13 @@ void Rasterizer::draw(const SPTR(Mesh) mesh, const SPTR(Camera) cam)
 
     case Mesh::MT_MESH_LINELIST:
     {
-        for(size_t v = 0; v < vertList.size(); v += 2)
+        math::vec3 p1, p2;
+        for(size_t v = 0; v < list.vertices.size(); v += 2)
         {
-            if ((v + 1) == vertList.size())
+            if ((v + 1) == list.vertices.size())
                 break;
-            p1 = vertList[v];
-            p2 = vertList[v + 1];
+            p1 = list.vertices[v];
+            p2 = list.vertices[v + 1];
 
             drawLine(p1, p2, Color3(255, 0, 0));
         }

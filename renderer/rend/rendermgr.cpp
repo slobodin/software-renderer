@@ -1,5 +1,7 @@
 #include "rendermgr.h"
 
+#include "vec3.h"
+
 namespace rend
 {
 
@@ -32,7 +34,13 @@ void RenderMgr::update()
     MeshIterator mit = m_meshes.begin();
     while (mit != m_meshes.end())
     {
-        m_rasterizer->draw(*mit, m_camera);
+        vector<math::vec3> vertList;
+        std::copy((*mit)->vertices().begin(), (*mit)->vertices().end(), std::back_inserter(vertList));
+        m_camera->apply(vertList);
+
+        RasterizerList list = { vertList, (*mit)->indices(), (*mit)->type(), (*mit)->wireframe() };
+        m_rasterizer->rasterize(list);
+
         mit++;
     }
 

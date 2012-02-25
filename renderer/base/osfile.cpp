@@ -4,15 +4,24 @@
 namespace base
 {
 
-TextFile::TextFile(const OsPath &path)
+OsFile::OsFile(const OsPath &path)
 {
-    m_file.open(path.filePath().c_str());
+    m_file.open(path.filePath());
     if (!m_file)
     {
         *syslog << "Can't locate file" << path.filePath() << logerr;
         throw FileException("Can't locate file");
     }
+}
 
+OsFile::~OsFile()
+{
+    m_file.close();
+}
+
+TextFile::TextFile(const OsPath &path)
+    : OsFile(path)
+{
     istreambuf_iterator<char> dataBegin(m_file);
     istreambuf_iterator<char> dataEnd;
 
@@ -39,6 +48,5 @@ string TextFile::getLine(const char delim)
 
     return string("");
 }
-
 
 }

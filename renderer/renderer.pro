@@ -42,7 +42,9 @@ HEADERS += \
     third-party/cpptk-1.0.2/cpptk.h \
     third-party/cpptk-1.0.2/base/cpptkbase.h \
     rend/framebuffer.h \
-    rend/color.h
+    rend/color.h \
+    math/poly.h \
+    base/config.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -63,7 +65,9 @@ SOURCES += \
     third-party/cpptk-1.0.2/cpptk.cc \
     third-party/cpptk-1.0.2/base/cpptkbase.cc \
     rend/framebuffer.cpp \
-    rend/color.cpp
+    rend/color.cpp \
+    math/poly.cpp \
+    base/config.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

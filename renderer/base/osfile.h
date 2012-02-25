@@ -13,11 +13,11 @@ DECLARE_EXCEPTION(FileException)
 class OsFile
 {
 protected:
-    ifstream m_file;
+    std::ifstream m_file;
 
 public:
-    OsFile() { }
-    virtual ~OsFile() { }
+    OsFile(const OsPath &path);
+    virtual ~OsFile();
 };
 
 class TextFile : public OsFile
