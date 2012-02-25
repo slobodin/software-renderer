@@ -21,9 +21,7 @@ public:
         // Mesh is vertex and index list. Index triplets define the triangles.
         MT_MESH_INDEXEDTRIANGLELIST,
         // Mesh is vertex list. Vertex triplets define the triangles.
-        MT_MESH_TRIANGLELIST,
-        // Two vertexs describes the line.
-        MT_MESH_LINELIST
+        MT_MESH_TRIANGLELIST
     };
 
 private:

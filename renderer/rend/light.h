@@ -2,6 +2,7 @@
 #define LIGHT_H
 
 #include "vec3.h"
+#include "color.h"
 
 namespace rend
 {
@@ -24,18 +25,27 @@ public:
 private:
     static size_t NumLights;
 
-    LightType m_type;
     bool m_isEnabled;   // on\off
 
-    math::vec3 m_pos;
-    math::vec3 m_dir;
+protected:
+    Color3 m_intensity;
 
 public:
-    Light(const LightType &type, const math::vec3 pos, const math::vec3 &dir);
-    ~Light();
+    Light(const Color3 &intensity);
+    virtual ~Light();
 
     void turnon() { m_isEnabled = true; }
     void turnoff() { m_isEnabled = false; }
+
+    virtual void illuminate() const = 0;
+};
+
+class AmbientLight : public Light
+{
+public:
+    AmbientLight(const Color3 &intensity);
+
+    void illuminate() const;
 };
 
 }

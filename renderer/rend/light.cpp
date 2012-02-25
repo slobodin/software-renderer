@@ -6,11 +6,9 @@ namespace rend
 const size_t Light::MAX_LIGHTS = 8;
 size_t Light::NumLights = 0;
 
-Light::Light(const LightType &type, const math::vec3 pos, const math::vec3 &dir)
-    : m_type(type),
-      m_isEnabled(true),
-      m_pos(pos),
-      m_dir(dir)
+Light::Light(const Color3 &intensity)
+    : m_isEnabled(true),
+      m_intensity(intensity)
 {
     if (NumLights >= MAX_LIGHTS)
     {
@@ -18,12 +16,20 @@ Light::Light(const LightType &type, const math::vec3 pos, const math::vec3 &dir)
     }
 
     NumLights++;
-    m_dir.normalize();
 }
 
 Light::~Light()
 {
     NumLights--;
+}
+
+AmbientLight::AmbientLight(const Color3 &intensity)
+    : Light(intensity)
+{
+}
+
+void AmbientLight::illuminate() const
+{
 }
 
 }

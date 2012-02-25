@@ -6,6 +6,45 @@
 namespace rend
 {
 
+RenderList::RenderList(const vector<math::vec3> &vertices,
+                       const vector<size_t> &indices,
+                       const vector<Material> &mater,
+                       Mesh::MeshType type)
+    : materials(mater)
+{
+    switch(type)
+    {
+    case Mesh::MT_MESH_INDEXEDTRIANGLELIST:
+    {
+        math::Triangle triangle;
+
+        for(size_t ind = 0; ind < indices.size(); ind += 3)
+        {
+            if ((ind + 2) == indices.size())
+                break;
+
+            triangle.v(0) = vertices[indices[ind]];
+            triangle.v(1) = vertices[indices[ind + 1]];
+            triangle.v(2) = vertices[indices[ind + 2]];
+
+            triangles.push_back(triangle);
+        }
+    }
+    break;
+
+    case Mesh::MT_MESH_TRIANGLELIST:
+    {
+
+    }
+    break;
+
+    case Mesh::MT_MESH_UNDEFINED:
+    default:
+        *syslog << "Can't draw this mesh" << logwarn;
+    break;
+    }
+}
+
 void Rasterizer::drawBottomTriangle(int x1, int y1,
                                     int x2, int /*y2*/,
                                     int x3, int y3,
@@ -574,64 +613,24 @@ Rasterizer::Rasterizer(const int width, const int height)
 {
 }
 
-void Rasterizer::rasterize(const RasterizerList &list)
+void Rasterizer::rasterize(const RenderList &list)
 {
-    switch(list.type)
-    {
-    case Mesh::MT_MESH_INDEXEDTRIANGLELIST:
-    {
-        math::Triangle triangle;
+    assert(list.materials.size() == list.triangles.size());
 
-        for(size_t ind = 0, poly = 0; ind < list.indices.size(); ind += 3, poly++)
+    for(size_t poly = 0; poly < list.triangles.size(); poly++)
+    {
+        switch (list.materials[poly].shadeMode())
         {
-            if ((ind + 2) == list.indices.size())
-                break;
+        case Material::SM_WIRE:
+            drawTriangle(list.triangles[poly], list.materials[poly].color());
+            break;
 
-            triangle.v(0) = list.vertices[list.indices[ind]];
-            triangle.v(1) = list.vertices[list.indices[ind + 1]];
-            triangle.v(2) = list.vertices[list.indices[ind + 2]];
-
-            switch (list.materials[poly].shadeMode())
-            {
-            case Material::SM_WIRE:
-                drawTriangle(triangle, list.materials[poly].color());
-                break;
-
-            case Material::SM_FLAT:
-                drawFillTriangle(triangle, list.materials[poly].color());
-                break;
-            default:
-                break;
-            }
+        case Material::SM_FLAT:
+            drawFillTriangle(list.triangles[poly], list.materials[poly].color());
+            break;
+        default:
+            break;
         }
-    }
-    break;
-
-    case Mesh::MT_MESH_TRIANGLELIST:
-    {
-
-    }
-    break;
-
-    case Mesh::MT_MESH_LINELIST:
-    {
-        math::vec3 p1, p2;
-        for(size_t v = 0; v < list.vertices.size(); v += 2)
-        {
-            if ((v + 1) == list.vertices.size())
-                break;
-            p1 = list.vertices[v];
-            p2 = list.vertices[v + 1];
-
-            drawLine(p1, p2, Color3(255, 0, 0));
-        }
-    }
-    break;
-
-    case Mesh::MT_MESH_UNDEFINED:
-    default:
-        *syslog << "Can't draw this mesh" << logwarn;
-    break;
     }
 }
 

@@ -14,6 +14,17 @@ RenderMgr::RenderMgr(const SPTR(Camera) cam)
     //m_camera->buildCamMatrix(math::vec3(0.0, 0.0, -10.0), math::vec3(10.0, 5.0, 10.0));
 }
 
+void rend::RenderMgr::makeLight()
+{
+    LightIterator_Const l = m_lights.begin();
+    while (l != m_lights.end())
+    {
+        (*l)->illuminate();
+
+        l++;
+    }
+}
+
 RenderMgr::~RenderMgr()
 {
 
@@ -34,11 +45,16 @@ void RenderMgr::update()
     MeshIterator mit = m_meshes.begin();
     while (mit != m_meshes.end())
     {
+        // 1. Cull object
+        // 2. Cull backfaces
+        // 3. Lighting
+        // 4. Camera->perspective->screen->rasterize
+        // FIXME: too many memory coping
         vector<math::vec3> vertList;
         std::copy((*mit)->vertices().begin(), (*mit)->vertices().end(), std::back_inserter(vertList));
         m_camera->apply(vertList);
 
-        RasterizerList list = { vertList, (*mit)->indices(), (*mit)->type(), (*mit)->materials() };
+        RenderList list(vertList, (*mit)->indices(), (*mit)->materials(), (*mit)->type());
         m_rasterizer->rasterize(list);
 
         mit++;
@@ -47,12 +63,22 @@ void RenderMgr::update()
     m_rasterizer->endFrame(m_tkCanvasName);
 }
 
-void rend::RenderMgr::addLight(const Light::LightType &type, const math::vec3 pos, const math::vec3 &dir)
+void RenderMgr::addLight(const Light::LightType &type, const math::vec3 pos, const math::vec3 &dir)
 {
     SPTR(Light) newLight;
     try
     {
-        newLight = SPTR(Light)(new Light(type, pos, dir));
+        switch (type)
+        {
+        case Light::LT_AMBIENT_LIGHT:
+            newLight = SPTR(Light)(new AmbientLight(Color3(0, 0, 255)));
+
+            break;
+
+        default:
+            return;
+        }
+
         m_lights.push_back(newLight);
     }
     catch(LightException)

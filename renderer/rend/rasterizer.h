@@ -13,12 +13,15 @@
 namespace rend
 {
 
-struct RasterizerList
+struct RenderList
 {
-    const vector<math::vec3> &vertices;
-    const vector<size_t> &indices;
-    const Mesh::MeshType type;
+    vector<math::Triangle> triangles;   // FIXME: here must be LIST!
     const vector<Material> &materials;
+
+    RenderList(const vector<math::vec3> &vertices,
+               const vector<size_t> &indices,
+               const vector<Material> &mater,
+               Mesh::MeshType type);
 };
 
 class Rasterizer
@@ -55,7 +58,7 @@ class Rasterizer
 public:
     Rasterizer(const int width, const int height);
 
-    void rasterize(const RasterizerList &list);
+    void rasterize(const RenderList &list);
 
     void beginFrame();
     void endFrame(const string &to);
