@@ -8,7 +8,10 @@ TextFile::TextFile(const OsPath &path)
 {
     m_file.open(path.filePath().c_str());
     if (!m_file)
+    {
+        *syslog << "Can't locate file" << path.filePath() << logerr;
         throw FileException("Can't locate file");
+    }
 
     istreambuf_iterator<char> dataBegin(m_file);
     istreambuf_iterator<char> dataEnd;

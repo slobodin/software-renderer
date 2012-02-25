@@ -1,5 +1,6 @@
 #include "resourcemgr.h"
 #include "ospath.h"
+#include "osfile.h"
 #include "decoderplg.h"
 
 namespace base
@@ -44,7 +45,15 @@ SPTR(Resource) ResourceMgr::getResource(const OsPath &path)
     // decode resource if need
     if (rit == m_resources.end())
     {
-        SPTR(Resource) newResource = dit->second->decode(path);
+        SPTR(Resource) newResource;
+        try
+        {
+            newResource = dit->second->decode(path);
+        }
+        catch(FileException)
+        {
+            return SPTR(Resource)();
+        }
 
         if (newResource.get())
             m_resources[path.filePath()] = newResource;

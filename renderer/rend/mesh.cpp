@@ -1,5 +1,7 @@
 #include "mesh.h"
 
+#include "m33.h"
+
 namespace rend
 {
 
@@ -39,14 +41,22 @@ Mesh::MeshType Mesh::type() const
 void Mesh::setPosition(const math::vec3 &pos)
 {
     m_worldTransformation.setv(pos);
+    setTransformation(m_worldTransformation);
 }
 
-void Mesh::setRotation(const math::vec3 &/*angles*/)
+void Mesh::setRotation(const math::vec3 &angles)
 {
+    math::M33 resM = math::M33::getRotateYawPitchRollMatrix(angles.y,
+                                                            angles.x,
+                                                            angles.z);
+    m_worldTransformation.setm(resM);
+    setTransformation(m_worldTransformation);
 }
 
-void Mesh::setTransformation(const math::AffineTransform &/*tr*/)
+void Mesh::setTransformation(const math::AffineTransform &tr)
 {
+    for (unsigned i = 0; i < m_vertices.size(); i++)
+        tr.transformPoint(m_vertices[i]);
 }
 
 }

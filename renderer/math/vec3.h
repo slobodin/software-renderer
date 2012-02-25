@@ -123,8 +123,6 @@ inline vec3 &vec3::normalize()
         (fabs(z - 0.0) < EPSILON_E6))
         return (*this);
 
-    double temp = length();
-    assert(temp != 0.0);
     return (*this) /= length();
 }
 
