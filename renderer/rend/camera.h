@@ -86,23 +86,6 @@ void Camera::apply(T &container) const
     while (v != container.end())
     {
         apply(*v);
-        // world to cam transformation
-        m_worldToCamera.transformPoint(*v);
-
-        // perspective transformation
-        double z = v->z;
-
-        assert(z != 0.0);
-
-        v->x = m_distance * v->x / z;
-        v->y = m_distance * v->y * m_aspect / z;
-
-        // screen transformation
-        double alpha = 0.5 * m_viewPort.width - 0.5;
-        double beta = 0.5 * m_viewPort.height - 0.5;
-
-        v->x = alpha + alpha * v->x;
-        v->y = beta - beta * v->y;
 
         v++;
     }
