@@ -9,20 +9,10 @@
 #include "framebuffer.h"
 #include "material.h"
 #include "poly.h"
+#include "renderlist.h"
 
 namespace rend
 {
-
-struct RenderList
-{
-    vector<math::Triangle> triangles;   // FIXME: here must be LIST!
-    const vector<Material> &materials;
-
-    RenderList(const vector<math::vec3> &vertices,
-               const vector<size_t> &indices,
-               const vector<Material> &mater,
-               Mesh::MeshType type);
-};
 
 class Rasterizer
 {
@@ -58,10 +48,12 @@ class Rasterizer
 public:
     Rasterizer(const int width, const int height);
 
-    void rasterize(const RenderList &list);
+    void rasterize(const RenderList &rendlist);
 
     void beginFrame();
     void endFrame(const string &to);
+
+    void resize(int w, int h);
 };
 
 }

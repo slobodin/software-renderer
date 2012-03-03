@@ -60,6 +60,11 @@ Color3::~Color3()
 {
 }
 
+Color3::operator uint32_t() const
+{
+    return RgbToInt(m_r, m_g, m_b);
+}
+
 void Color3::reset()
 {
     m_r = 0xFF;

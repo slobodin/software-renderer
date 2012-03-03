@@ -1,1 +1,8 @@
 Here will be simple software renderer.
+
+TODO:
+1) Frustum-culling, cull objects with negative Z
+2) Lighting
+3) Z-checking with z-buffer
+4) simple camera-control bug
+5) Implement scene graph

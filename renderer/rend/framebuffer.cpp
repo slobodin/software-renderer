@@ -7,6 +7,26 @@
 namespace rend
 {
 
+// this function fills or sets unsigned 32-bit aligned memory
+// count is number of quads
+static inline void Memset_QUAD(void *dest, const uint32_t data, int count)
+{
+    __asm__ ("mov %%edi, %0\n\t" ::"d"(dest));
+    __asm__ ("mov %%ecx, %0\n\t" ::"d"(count));
+    __asm__ ("mov %%eax, %0\n\t" ::"d"(data));
+    __asm__ ("rep stosd");
+//             "mov %ecx, count\n\t"
+//             "mov %eax, data\n\t"
+//             "rep stosd");
+//    __asm
+//    {
+//        mov edi, dest   ; edi points to destination memory
+//        mov ecx, count  ; number of 32-bit words to move
+//        mov eax, data   ; 32-bit data
+//        rep stosd       ; move data
+//    }
+}
+
 FrameBuffer::FrameBuffer(const int witdh, const int height)
     : m_pixels(0),
       m_width(witdh),
@@ -63,6 +83,10 @@ void FrameBuffer::flush_gl()
 
 void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color3 &color)
 {
+    if (x1 > x2)
+        return;
+
+    // FIXME: quad memset
     for (int x = x1; x <= x2; x++)
     {
         wpixel(x, y, color);

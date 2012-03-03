@@ -46,7 +46,8 @@ HEADERS += \
     math/poly.h \
     base/config.h \
     rend/material.h \
-    rend/light.h
+    rend/light.h \
+    rend/renderlist.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -71,7 +72,8 @@ SOURCES += \
     math/poly.cpp \
     base/config.cpp \
     rend/material.cpp \
-    rend/light.cpp
+    rend/light.cpp \
+    rend/renderlist.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

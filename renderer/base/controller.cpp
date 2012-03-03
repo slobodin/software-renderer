@@ -16,6 +16,11 @@ void Controller::update()
     Tk::afteridle(m_instance->m_updateCallback);
 }
 
+void Controller::resize(int w, int h)
+{
+    m_rendmgr->resize(w, h);
+}
+
 Controller::Controller(char *argv[], const string &conf)
     : m_resourceMgr(new ResourceMgr)
 {
@@ -31,11 +36,11 @@ Controller::Controller(char *argv[], const string &conf)
 
     // create rendering canvas
     Tk::images(Tk::create, Tk::photo, "canvas_photo")
-            -Tk::width(640)
-            -Tk::height(480);
+            -Tk::width(m_mainCam->width())
+            -Tk::height(m_mainCam->height());
     Tk::canvas(".c") -Tk::highlightthickness(0)
-            -Tk::width(640)
-            -Tk::height(480);
+            -Tk::width(m_mainCam->width())
+            -Tk::height(m_mainCam->height());
     Tk::pack(".c") -Tk::fill(Tk::both) -Tk::expand(true);
     (".c" << Tk::create(Tk::image, 0, 0)) -Tk::image("canvas_photo") -Tk::anchor(nw);
     m_rendmgr->renderTo("canvas_photo");

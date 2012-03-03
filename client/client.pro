@@ -18,3 +18,6 @@ INCLUDEPATH += ../renderer/base \
                 /usr/include
 
 LIBS += -L../renderer-debug/ -lrenderer
+
+OTHER_FILES += \
+    ../README

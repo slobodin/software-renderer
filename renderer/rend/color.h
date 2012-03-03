@@ -91,6 +91,8 @@ public:
     uint8_t &green() { return m_g; }
     uint8_t &blue() { return m_b; }
 
+    operator uint32_t() const;
+
     void reset();
 };
 

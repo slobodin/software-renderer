@@ -25,6 +25,11 @@ size_t Mesh::numVertices() const
     return m_vertices.size();
 }
 
+size_t Mesh::numIndices() const
+{
+    return m_indices.size();
+}
+
 const vector<math::vec3> &Mesh::vertices() const
 {
     return m_vertices;

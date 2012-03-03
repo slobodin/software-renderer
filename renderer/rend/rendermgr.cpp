@@ -42,7 +42,8 @@ void RenderMgr::update()
 
     m_rasterizer->beginFrame();
 
-    MeshIterator mit = m_meshes.begin();
+    MeshIterator_Const mit = m_meshes.begin();
+    RenderList renderList;
     while (mit != m_meshes.end())
     {
         // 1. Cull object
@@ -50,15 +51,16 @@ void RenderMgr::update()
         // 3. Lighting
         // 4. Camera->perspective->screen->rasterize
         // FIXME: too many memory coping
-        vector<math::vec3> vertList;
-        std::copy((*mit)->vertices().begin(), (*mit)->vertices().end(), std::back_inserter(vertList));
-        m_camera->apply(vertList);
 
-        RenderList list(vertList, (*mit)->indices(), (*mit)->materials(), (*mit)->type());
-        m_rasterizer->rasterize(list);
+        // if !cull
+        renderList.append(*(*mit));
 
         mit++;
     }
+
+
+    m_camera->apply(renderList);
+    m_rasterizer->rasterize(renderList);
 
     m_rasterizer->endFrame(m_tkCanvasName);
 }
@@ -85,6 +87,12 @@ void RenderMgr::addLight(const Light::LightType &type, const math::vec3 pos, con
     {
         *syslog << "Light limit is reached" << logerr;
     }
+}
+
+void rend::RenderMgr::resize(int w, int h)
+{
+    m_camera->resize(w, h);
+    m_rasterizer->resize(w, h);
 }
 
 void RenderMgr::addMesh(SPTR(rend::Mesh) mesh)

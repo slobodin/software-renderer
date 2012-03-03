@@ -41,6 +41,7 @@ public:
     ~Mesh();
 
     size_t numVertices() const;
+    size_t numIndices() const;
     const vector<math::vec3> &vertices() const;
     const vector<size_t> &indices() const;
     const vector<Material> &materials() const;

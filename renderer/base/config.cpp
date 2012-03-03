@@ -48,12 +48,28 @@ void Config::configure(const OsPath &path, Controller *controller)
         YAML::Node doc;
 
         parser.GetNextDocument(doc);
-        for(unsigned i = 0;i < doc.size(); i++)
+        for (YAML::Iterator i = doc.begin(); i != doc.end(); ++i)
         {
-            ModelData currdata;
-            doc[i] >> currdata;
-            modelData.push_back(currdata);
+            const YAML::Node &value = i.second();
+
+            for(unsigned i = 0; i < value.size(); i++)
+            {
+                ModelData currdata;
+                value[i] >> currdata;
+                modelData.push_back(currdata);
+            }
         }
+
+        parser.GetNextDocument(doc);
+        math::vec3 vectCam;
+        int width, height;
+        doc["Campos"] >> vectCam;
+        controller->m_mainCam->setPosition(vectCam);
+
+        doc["Width"] >> width;
+        doc["Height"] >> height;
+
+        controller->resize(width, height);
     }
     catch(YAML::Exception &e)
     {

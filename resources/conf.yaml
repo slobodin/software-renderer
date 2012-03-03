@@ -1,4 +1,10 @@
-- model: ../resources/tank1.plg
-  position: [0, 0, 0]
-- model: ../resources/tower1.plg
-  position: [0, 0, -250]
+---
+Entities:
+  - model: ../resources/tank1.plg
+    position: [0, 0, 0]
+  - model: ../resources/tower1.plg
+    position: [0, 0, -250]
+---
+Campos: [0, 0, -500]
+Width: 1024
+Height: 768

@@ -37,8 +37,11 @@ public:
                   const math::vec3 pos,
                   const math::vec3 &dir);
 
+    void resize(int w, int h);
+
 private:
     typedef vector<SPTR(Mesh) >::iterator MeshIterator;
+    typedef vector<SPTR(Mesh) >::const_iterator MeshIterator_Const;
     typedef vector<SPTR(Light) >::iterator LightIterator;
     typedef vector<SPTR(Light) >::const_iterator LightIterator_Const;
 };

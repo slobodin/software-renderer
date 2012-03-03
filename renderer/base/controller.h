@@ -27,6 +27,8 @@ protected:
     string m_updateCallback;
     static void update();
 
+    void resize(int w, int h);
+
 public:
     Controller(char *argv[], const string &conf);
     virtual ~Controller();

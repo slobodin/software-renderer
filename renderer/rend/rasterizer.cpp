@@ -6,45 +6,6 @@
 namespace rend
 {
 
-RenderList::RenderList(const vector<math::vec3> &vertices,
-                       const vector<size_t> &indices,
-                       const vector<Material> &mater,
-                       Mesh::MeshType type)
-    : materials(mater)
-{
-    switch(type)
-    {
-    case Mesh::MT_MESH_INDEXEDTRIANGLELIST:
-    {
-        math::Triangle triangle;
-
-        for(size_t ind = 0; ind < indices.size(); ind += 3)
-        {
-            if ((ind + 2) == indices.size())
-                break;
-
-            triangle.v(0) = vertices[indices[ind]];
-            triangle.v(1) = vertices[indices[ind + 1]];
-            triangle.v(2) = vertices[indices[ind + 2]];
-
-            triangles.push_back(triangle);
-        }
-    }
-    break;
-
-    case Mesh::MT_MESH_TRIANGLELIST:
-    {
-
-    }
-    break;
-
-    case Mesh::MT_MESH_UNDEFINED:
-    default:
-        *syslog << "Can't draw this mesh" << logwarn;
-    break;
-    }
-}
-
 void Rasterizer::drawBottomTriangle(int x1, int y1,
                                     int x2, int /*y2*/,
                                     int x3, int y3,
@@ -613,25 +574,35 @@ Rasterizer::Rasterizer(const int width, const int height)
 {
 }
 
-void Rasterizer::rasterize(const RenderList &list)
+void Rasterizer::rasterize(const RenderList &rendlist)
 {
-    assert(list.materials.size() == list.triangles.size());
+//    assert(list.materials.size() == list.triangles.size());
 
-    for(size_t poly = 0; poly < list.triangles.size(); poly++)
+    const list<math::Triangle> &trias = rendlist.triangles();
+    list<math::Triangle>::const_iterator t = trias.begin();
+
+    while (t != trias.end())
     {
-        switch (list.materials[poly].shadeMode())
-        {
-        case Material::SM_WIRE:
-            drawTriangle(list.triangles[poly], list.materials[poly].color());
-            break;
+        drawTriangle(*t, Color3(255, 0, 0));
 
-        case Material::SM_FLAT:
-            drawFillTriangle(list.triangles[poly], list.materials[poly].color());
-            break;
-        default:
-            break;
-        }
+        t++;
     }
+
+//    for(size_t poly = 0; poly < rendlist.triangles.size(); poly++)
+//    {
+////        switch (list.materials[poly].shadeMode())
+////        {
+////        case Material::SM_WIRE:
+//            drawTriangle(list.triangles[poly], list.materials[poly].color());
+////            break;
+
+////        case Material::SM_FLAT:
+////            drawFillTriangle(list.triangles[poly], list.materials[poly].color());
+////            break;
+////        default:
+////            break;
+//        }
+//    }
 }
 
 void Rasterizer::beginFrame()
@@ -642,6 +613,18 @@ void Rasterizer::beginFrame()
 void Rasterizer::endFrame(const string &to)
 {
     m_fb.flush_tk(to);
+}
+
+void Rasterizer::resize(int w, int h)
+{
+    m_fb.m_width = w;
+    m_fb.m_height = h;
+
+    if (m_fb.m_pixels)
+        delete [] m_fb.m_pixels;
+
+    m_fb.m_pixels = new Color3[w * h];
+    memset(m_fb.m_pixels, 0xFF, sizeof(Color3) * w * h);
 }
 
 }

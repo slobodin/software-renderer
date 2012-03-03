@@ -17,17 +17,7 @@ Camera::Camera(const math::vec3 position,
       m_nearZ(nearZ),
       m_farZ(farZ)
 {
-    m_viewPort.width = width;
-    m_viewPort.height = height;
-    m_viewPort.centerX = (m_viewPort.width - 1) / 2;
-    m_viewPort.centerY = (m_viewPort.height - 1) / 2;
-
-    m_aspect = m_viewPort.width / m_viewPort.height;
-
-    m_viewPlaneWidth = 2.0;
-    m_viewPlaneHeight = 2.0 / m_aspect;
-
-    m_distance = 0.5 * m_viewPlaneWidth * tan(math::DegToRad(m_fov / 2));
+    resize(width, height);
 }
 
 Camera::~Camera()
@@ -42,6 +32,21 @@ int Camera::width() const
 int Camera::height() const
 {
     return m_viewPort.height;
+}
+
+void Camera::resize(int w, int h)
+{
+    m_viewPort.width = w;
+    m_viewPort.height = h;
+    m_viewPort.centerX = (m_viewPort.width - 1) / 2;
+    m_viewPort.centerY = (m_viewPort.height - 1) / 2;
+
+    m_aspect = m_viewPort.width / m_viewPort.height;
+
+    m_viewPlaneWidth = 2.0;
+    m_viewPlaneHeight = 2.0 / m_aspect;
+
+    m_distance = 0.5 * m_viewPlaneWidth * tan(math::DegToRad(m_fov / 2));
 }
 
 string Camera::state() const
@@ -126,6 +131,18 @@ void Camera::buildCamMatrix(const math::vec3 &lookFrom, const math::vec3 &lookTo
 {
     m_position = lookFrom;
     buildCamMatrix(lookTo);
+}
+
+void Camera::apply(RenderList &rendList) const
+{
+    list<math::Triangle> &trias = rendList.triangles();
+
+    for (list<math::Triangle>::iterator t = trias.begin(); t != trias.end(); t++)
+    {
+        apply(t->v(0));
+        apply(t->v(1));
+        apply(t->v(2));
+    }
 }
 
 }
