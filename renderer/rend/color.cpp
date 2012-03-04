@@ -4,10 +4,10 @@ namespace rend
 {
 
 Color4::Color4()
-    : m_r(0xFF),
-      m_g(0xFF),
-      m_b(0xFF),
-      m_a(0xFF)
+    : m_r(0x0),
+      m_g(0x0),
+      m_b(0x0),
+      m_a(0x0)
 {
 }
 
@@ -29,16 +29,16 @@ Color4::~Color4()
 
 void Color4::reset()
 {
-    m_r = 0xFF;
-    m_g = 0xFF;
-    m_b = 0xFF;
-    m_a = 0xFF;
+    m_r = 0x0;
+    m_g = 0x0;
+    m_b = 0x0;
+    m_a = 0x0;
 }
 
 Color3::Color3()
-    : m_r(0xFF),
-      m_g(0xFF),
-      m_b(0xFF)
+    : m_r(0x0),
+      m_g(0x0),
+      m_b(0x0)
 {
 }
 
@@ -67,9 +67,9 @@ Color3::operator uint32_t() const
 
 void Color3::reset()
 {
-    m_r = 0xFF;
-    m_g = 0xFF;
-    m_b = 0xFF;
+    m_r = 0x0;
+    m_g = 0x0;
+    m_b = 0x0;
 }
 
 }

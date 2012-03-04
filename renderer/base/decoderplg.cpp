@@ -21,7 +21,7 @@ SPTR(Resource) DecoderPLG::decode(const OsPath &path)
 
     // skip comments and find "header"
     string line;
-    string temp;    
+    string temp;
 
     do
     {

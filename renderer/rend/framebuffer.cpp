@@ -45,7 +45,7 @@ FrameBuffer::~FrameBuffer()
 
 void FrameBuffer::clear()
 {
-    memset(m_pixels, 0xFF, sizeof(Color3) * m_width * m_height);
+    memset(m_pixels, 0x00, sizeof(Color3) * m_width * m_height);
 }
 
 void FrameBuffer::flush_tk(const string &to)

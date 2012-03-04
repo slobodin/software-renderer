@@ -8,3 +8,4 @@ client-debug/*
 client-release/*
 renderer-debug/*
 renderer-release/*
+resources/*.bsp

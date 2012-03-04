@@ -1,6 +1,8 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
+#include "comm_pch.h"
+
 #include "color.h"
 
 namespace rend

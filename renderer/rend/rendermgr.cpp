@@ -16,13 +16,7 @@ RenderMgr::RenderMgr(const SPTR(Camera) cam)
 
 void rend::RenderMgr::makeLight()
 {
-    LightIterator_Const l = m_lights.begin();
-    while (l != m_lights.end())
-    {
-        (*l)->illuminate();
 
-        l++;
-    }
 }
 
 RenderMgr::~RenderMgr()
@@ -40,28 +34,47 @@ void RenderMgr::update()
     if (m_tkCanvasName.empty())
         return;
 
+    // 1. Clear buffer
     m_rasterizer->beginFrame();
 
     MeshIterator_Const mit = m_meshes.begin();
     RenderList renderList;
+
+    // 2. Cull full meshes and form triangles render list
     while (mit != m_meshes.end())
     {
-        // 1. Cull object
-        // 2. Cull backfaces
-        // 3. Lighting
-        // 4. Camera->perspective->screen->rasterize
-        // FIXME: too many memory coping
-
-        // if !cull
-        renderList.append(*(*mit));
+        if (!m_camera->culled(*(*mit)))
+            renderList.append(*(*mit));
 
         mit++;
     }
 
+    // 3. Cull backfaces
+    // TODO:
 
-    m_camera->apply(renderList);
+    // 4. Lighting
+    LightIterator_Const l = m_lights.begin();
+    while (l != m_lights.end())
+    {
+        (*l)->illuminate(renderList);
+
+        l++;
+    }
+
+    // 5. World -> Camera transformation. Cull triangles with negative Z.
+    // TODO: frustum culling here
+    m_camera->toCamera(renderList);
+
+    // 6. Sort triangles by painter algorithm
+    renderList.zsort();
+
+    // 7. Camera -> Perspective -> Screen transformation
+    m_camera->toScreen(renderList);
+
+    // 8. Rasterize triangles
     m_rasterizer->rasterize(renderList);
 
+    // 9. Flush buffer to the screen
     m_rasterizer->endFrame(m_tkCanvasName);
 }
 
@@ -73,7 +86,7 @@ void RenderMgr::addLight(const Light::LightType &type, const math::vec3 pos, con
         switch (type)
         {
         case Light::LT_AMBIENT_LIGHT:
-            newLight = SPTR(Light)(new AmbientLight(Color3(0, 0, 255)));
+            newLight = SPTR(Light)(new AmbientLight(Color3(255, 255, 255)));
 
             break;
 

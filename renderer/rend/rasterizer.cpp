@@ -576,33 +576,28 @@ Rasterizer::Rasterizer(const int width, const int height)
 
 void Rasterizer::rasterize(const RenderList &rendlist)
 {
-//    assert(list.materials.size() == list.triangles.size());
-
     const list<math::Triangle> &trias = rendlist.triangles();
-    list<math::Triangle>::const_iterator t = trias.begin();
+    list<math::Triangle>::const_reverse_iterator t = trias.rbegin();
 
-    while (t != trias.end())
+    while (t != trias.rend())
     {
-        drawTriangle(*t, Color3(255, 0, 0));
+        switch(t->material().shadeMode())
+        {
+        case Material::SM_WIRE:
+            drawTriangle(*t, t->material().color());
+            break;
+
+        case Material::SM_FLAT:
+            drawFillTriangle(*t, t->material().color());
+            break;
+
+        default:
+
+            break;
+        }
 
         t++;
     }
-
-//    for(size_t poly = 0; poly < rendlist.triangles.size(); poly++)
-//    {
-////        switch (list.materials[poly].shadeMode())
-////        {
-////        case Material::SM_WIRE:
-//            drawTriangle(list.triangles[poly], list.materials[poly].color());
-////            break;
-
-////        case Material::SM_FLAT:
-////            drawFillTriangle(list.triangles[poly], list.materials[poly].color());
-////            break;
-////        default:
-////            break;
-//        }
-//    }
 }
 
 void Rasterizer::beginFrame()

@@ -16,7 +16,7 @@ struct M22
     //! Identity matrix
     M22();
     M22(const double src[4]);
-    M22(const double xx, const double xy, const double yx, const double yy);
+    M22(double xx, double xy, double yx, double yy);
 
     M22 &operator+= (const M22 &a);
     M22 &operator-= (const M22 &a);
@@ -48,7 +48,7 @@ inline M22::M22()
     x[1] = x[2] = 0.0;
 }
 
-inline M22::M22(const double xx, const double xy, const double yx, const double yy)
+inline M22::M22(double xx, double xy, double yx, double yy)
 {
     x[0] = xx;
     x[1] = xy;

@@ -14,6 +14,14 @@ Mesh::Mesh(const vector<math::vec3> &vertices,
       m_materials(materials),
       m_type(type)
 {
+    m_boundingSphere.calculate(vertices);
+}
+
+Mesh::Mesh(const vector<math::vec3> &vertices,
+           const MeshType type)
+    : m_vertices(vertices),
+      m_type(type)
+{
 }
 
 Mesh::~Mesh()

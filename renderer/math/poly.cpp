@@ -40,4 +40,9 @@ vec3 &Triangle::v(const size_t ind)
     return m_verts[ind];
 }
 
+void Triangle::setMaterial(const rend::Material &material)
+{
+    m_material = material;
+}
+
 }

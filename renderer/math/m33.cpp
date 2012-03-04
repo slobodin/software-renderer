@@ -15,9 +15,9 @@ M33::M33(const double src[3][3])
     memcpy(x, src, 3 * 3 * sizeof(double));
 }
 
-M33::M33(const double xx, const double xy, const double xz,
-         const double yx, const double yy, const double yz,
-         const double zx, const double zy, const double zz)
+M33::M33(double xx, double xy, double xz,
+         double yx, double yy, double yz,
+         double zx, double zy, double zz)
 {
     x[0][0] = xx;
     x[0][1] = xy;

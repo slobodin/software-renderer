@@ -133,16 +133,81 @@ void Camera::buildCamMatrix(const math::vec3 &lookFrom, const math::vec3 &lookTo
     buildCamMatrix(lookTo);
 }
 
-void Camera::apply(RenderList &rendList) const
+void Camera::toCamera(RenderList &rendList) const
 {
     list<math::Triangle> &trias = rendList.triangles();
+    list<math::Triangle>::iterator t = trias.begin();
 
-    for (list<math::Triangle>::iterator t = trias.begin(); t != trias.end(); t++)
+    while (t != trias.end())
     {
-        apply(t->v(0));
-        apply(t->v(1));
-        apply(t->v(2));
+        math::vec3 &p1 = t->v(0);
+        math::vec3 &p2 = t->v(1);
+        math::vec3 &p3 = t->v(2);
+
+        m_worldToCamera.transformPoint(p1);
+        m_worldToCamera.transformPoint(p2);
+        m_worldToCamera.transformPoint(p3);
+
+        // FIXME:
+        if (p1.z < m_distance || p2.z < m_distance || p3.z < m_distance)
+        {
+            t = trias.erase(t);
+            continue;
+        }
+
+        t++;
     }
+}
+
+void Camera::toScreen(math::vec3 &v) const
+{
+    // perspective transformation
+    double z = v.z;
+
+    assert(z != 0.0);
+
+    v.x = m_distance * v.x / z;
+    v.y = m_distance * v.y * m_aspect / z;
+
+    // screen transformation
+    double alpha = 0.5 * m_viewPort.width - 0.5;
+    double beta = 0.5 * m_viewPort.height - 0.5;
+
+    v.x = alpha + alpha * v.x;
+    v.y = beta - beta * v.y;
+}
+
+void Camera::toScreen(RenderList &rendList) const
+{
+    list<math::Triangle> &trias = rendList.triangles();
+    list<math::Triangle>::iterator t = trias.begin();
+
+    while (t != trias.end())
+    {
+        math::vec3 &p1 = t->v(0);
+        math::vec3 &p2 = t->v(1);
+        math::vec3 &p3 = t->v(2);
+
+        toScreen(p1);
+        toScreen(p2);
+        toScreen(p3);
+
+        t++;
+    }
+}
+
+bool Camera::culled(const Mesh &obj) const
+{
+    math::vec3 spherePos = obj.position();
+    double radius = obj.bsphere().radius();
+    m_worldToCamera.transformPoint(spherePos);
+
+    // check Z plane
+    if (((spherePos.z - radius) > m_farZ) ||
+            ((spherePos.z + radius) < m_nearZ))
+        return true;
+
+    return false;
 }
 
 }

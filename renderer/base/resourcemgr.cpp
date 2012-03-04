@@ -2,6 +2,7 @@
 #include "ospath.h"
 #include "osfile.h"
 #include "decoderplg.h"
+#include "decoderbspq3.h"
 
 namespace base
 {
@@ -9,10 +10,12 @@ namespace base
 ResourceMgr::ResourceMgr()
 {
     SPTR(ResourceDecoder) plgDecoder(new DecoderPLG);
+    SPTR(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
     // other decoders
 
     // add all
     m_decoders[plgDecoder->extention()] = plgDecoder;
+    m_decoders[bspDecoder->extention()] = bspDecoder;
 }
 
 ResourceMgr::~ResourceMgr()

@@ -12,7 +12,7 @@ namespace math
 struct vec3
 {
     double x, y, z;
-    vec3(const double xx = 0.0, const double yy = 0.0, const double zz = 0.0) : x(xx), y(yy), z(zz) { }
+    vec3(double xx = 0.0, double yy = 0.0, double zz = 0.0) : x(xx), y(yy), z(zz) { }
 
     vec3 &operator+= (const vec3 &other);
     vec3 &operator-= (const vec3 &other);
@@ -31,8 +31,8 @@ struct vec3
     void set(const double xx, const double yy, const double zz);
     void set(const vec3 &other);
     void zero();
-    double dotProduct(const vec3 &other);
-    vec3 crossProduct(const vec3 &other);
+    double dotProduct(const vec3 &other) const;
+    vec3 crossProduct(const vec3 &other) const;
 
     friend vec3 operator+ (const vec3 &a, const vec3 &b);
     friend vec3 operator- (const vec3 &a, const vec3 &b);
@@ -147,12 +147,12 @@ inline void vec3::zero()
     z = 0.0;
 }
 
-inline double vec3::dotProduct(const vec3 &other)
+inline double vec3::dotProduct(const vec3 &other) const
 {
     return (x * other.x + y * other.y + z * other.z);
 }
 
-inline vec3 vec3::crossProduct(const vec3 &other)
+inline vec3 vec3::crossProduct(const vec3 &other) const
 {
     return vec3(y * other.z - z * other.y,
                 z * other.x - x * other.z,

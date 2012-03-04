@@ -47,7 +47,8 @@ HEADERS += \
     base/config.h \
     rend/material.h \
     rend/light.h \
-    rend/renderlist.h
+    rend/renderlist.h \
+    base/decoderbspq3.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -73,7 +74,8 @@ SOURCES += \
     base/config.cpp \
     rend/material.cpp \
     rend/light.cpp \
-    rend/renderlist.cpp
+    rend/renderlist.cpp \
+    base/decoderbspq3.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

@@ -4,9 +4,15 @@
 namespace base
 {
 
-OsFile::OsFile(const OsPath &path)
+OsFile::OsFile(const OsPath &path, FileType ft)
 {
-    m_file.open(path.filePath());
+    if (ft == FT_TEXT)
+        m_file.open(path.filePath());
+    else if (ft == FT_BINARY)
+        m_file.open(path.filePath(), std::ios::binary);
+    else
+        throw FileException("Bad file type");
+
     if (!m_file)
     {
         *syslog << "Can't locate file" << path.filePath() << logerr;
@@ -20,7 +26,7 @@ OsFile::~OsFile()
 }
 
 TextFile::TextFile(const OsPath &path)
-    : OsFile(path)
+    : OsFile(path, FT_TEXT)
 {
     istreambuf_iterator<char> dataBegin(m_file);
     istreambuf_iterator<char> dataEnd;
@@ -47,6 +53,21 @@ string TextFile::getLine(const char delim)
     }
 
     return string("");
+}
+
+BinaryFile::BinaryFile(const OsPath &path)
+    : OsFile(path, FT_BINARY)
+{
+    istreambuf_iterator<char> dataBegin(m_file);
+    istreambuf_iterator<char> dataEnd;
+
+    std::copy(dataBegin, dataEnd, std::back_inserter(m_fileData));
+}
+
+void *BinaryFile::getBytes(size_t offset)
+{
+    size_t i = offset / sizeof(uint8_t);
+    return &m_fileData[i];
 }
 
 }

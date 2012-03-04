@@ -1,6 +1,7 @@
 #include "clientcontroller.h"
 
 #include <third-party/cpptk-1.0.2/cpptk.h>
+#include "light.h"
 
 using namespace Tk;
 using namespace base;
@@ -94,4 +95,6 @@ ClientController::ClientController(char *argv[], const string &conf)
     Tk::bind(".", "<Key-a>", &ClientController::onKeyA);
     Tk::bind(".", "<Key-s>", &ClientController::onKeyS);
     Tk::bind(".", "<Key-d>", &ClientController::onKeyD);
+
+    m_rendmgr->addLight(rend::Light::LT_AMBIENT_LIGHT, math::vec3(), math::vec3());
 }

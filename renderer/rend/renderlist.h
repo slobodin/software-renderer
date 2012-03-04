@@ -1,6 +1,8 @@
 #ifndef RENDERLIST_H
 #define RENDERLIST_H
 
+#include "comm_pch.h"
+
 #include "mesh.h"
 #include "poly.h"
 
@@ -18,6 +20,8 @@ public:
 
     const list<math::Triangle> &triangles() const { return m_triangles; }
     list<math::Triangle> &triangles() { return m_triangles; }
+
+    void zsort();
 };
 
 }

@@ -16,9 +16,9 @@ struct M33
     //! Identity matrix
     M33();
     M33(const double src[3][3]);
-    M33(const double xx, const double xy, const double xz,
-        const double yx, const double yy, const double yz,
-        const double zx, const double zy, const double zz);
+    M33(double xx, double xy, double xz,
+        double yx, double yy, double yz,
+        double zx, double zy, double zz);
 
     M33 &operator= (const M33 &a);
     M33 &operator+= (const M33 &a);

@@ -38,6 +38,8 @@ public:
          const vector<size_t> &indices,
          const vector<Material> &materials,
          const MeshType type);
+    Mesh(const vector<math::vec3> &vertices,
+         const MeshType type);
     ~Mesh();
 
     size_t numVertices() const;
@@ -45,7 +47,10 @@ public:
     const vector<math::vec3> &vertices() const;
     const vector<size_t> &indices() const;
     const vector<Material> &materials() const;
+
     MeshType type() const;
+    math::vec3 position() const { return m_worldTransformation.getv(); }
+    const BoundingSphere &bsphere() const { return m_boundingSphere; }
 
     void setPosition(const math::vec3 &pos);
     void setRotation(const math::vec3 &angles);

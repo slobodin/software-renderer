@@ -1,8 +1,11 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+#include "comm_pch.h"
+
 #include "vec3.h"
 #include "color.h"
+#include "renderlist.h"
 
 namespace rend
 {
@@ -25,9 +28,8 @@ public:
 private:
     static size_t NumLights;
 
-    bool m_isEnabled;   // on\off
-
 protected:
+    bool m_isEnabled;   // on\off
     Color3 m_intensity;
 
 public:
@@ -37,7 +39,7 @@ public:
     void turnon() { m_isEnabled = true; }
     void turnoff() { m_isEnabled = false; }
 
-    virtual void illuminate() const = 0;
+    virtual void illuminate(RenderList &renderlist) const = 0;
 };
 
 class AmbientLight : public Light
@@ -45,7 +47,7 @@ class AmbientLight : public Light
 public:
     AmbientLight(const Color3 &intensity);
 
-    void illuminate() const;
+    void illuminate(RenderList &renderlist) const;
 };
 
 }

@@ -13,7 +13,7 @@ namespace math
 struct vec2
 {
     double x, y;
-    vec2(const double xx = 0.0, const double yy = 0.0) : x(xx), y(yy) { }
+    vec2(double xx = 0.0, double yy = 0.0) : x(xx), y(yy) { }
 
     vec2 &operator+= (const vec2 &other);
     vec2 &operator-= (const vec2 &other);
@@ -33,7 +33,7 @@ struct vec2
     void set(const double xx, const double yy);
     void set(const vec2 &other);
     void zero();
-    double dotProduct(const vec2 &other);
+    double dotProduct(const vec2 &other) const;
 
     friend vec2 operator+ (const vec2 &a, const vec2 &b);
     friend vec2 operator- (const vec2 &a, const vec2 &b);
@@ -145,7 +145,7 @@ inline void vec2::zero()
     y = 0.0;
 }
 
-inline double vec2::dotProduct(const vec2 &other)
+inline double vec2::dotProduct(const vec2 &other) const
 {
     return x * other.x + y * other.y;
 }

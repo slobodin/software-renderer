@@ -16,7 +16,8 @@ public:
         SM_FLAT,
         SM_GOURAUD,
         SM_PHONG,
-        SM_WIRE
+        SM_WIRE,
+        SM_UNDEFINED
     };
 
 private:
@@ -26,9 +27,11 @@ private:
     // active, cliped, backface
 
 public:
+    Material();
     Material(const Color3 &color, ShadeMode shadeMode);
 
     const Color3 &color() const { return m_color; }
+    Color3 &color() { return m_color; }
     ShadeMode shadeMode() const { return m_shadeMode; }
 };
 

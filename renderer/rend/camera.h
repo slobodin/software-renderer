@@ -53,7 +53,7 @@ public:
            const double height,
            const double fov = 90.0,
            const double nearZ = 5.0,
-           const double farZ = 500.0);
+           const double farZ = 15000.0);
     ~Camera();
 
     int width() const;
@@ -74,8 +74,13 @@ public:
 
     template<typename T>
     void apply(T &container) const;
-    void apply(RenderList &rendList) const;
     void apply(math::vec3 &v) const;
+
+    void toCamera(RenderList &rendList) const;
+    void toScreen(math::vec3 &v) const;
+    void toScreen(RenderList &rendList) const;
+
+    bool culled(const Mesh &obj) const;
 };
 
 template<typename T>
@@ -96,20 +101,7 @@ inline void Camera::apply(math::vec3 &v) const
     // world to cam transformation
     m_worldToCamera.transformPoint(v);
 
-    // perspective transformation
-    double z = v.z;
-
-    assert(z != 0.0);
-
-    v.x = m_distance * v.x / z;
-    v.y = m_distance * v.y * m_aspect / z;
-
-    // screen transformation
-    double alpha = 0.5 * m_viewPort.width - 0.5;
-    double beta = 0.5 * m_viewPort.height - 0.5;
-
-    v.x = alpha + alpha * v.x;
-    v.y = beta - beta * v.y;
+    toScreen(v);
 }
 
 }
