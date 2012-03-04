@@ -31,6 +31,7 @@ struct vec3
     void set(const double xx, const double yy, const double zz);
     void set(const vec3 &other);
     void zero();
+    bool isZero() const;
     double dotProduct(const vec3 &other) const;
     vec3 crossProduct(const vec3 &other) const;
 
@@ -145,6 +146,11 @@ inline void vec3::zero()
     x = 0.0;
     y = 0.0;
     z = 0.0;
+}
+
+inline bool vec3::isZero() const
+{
+    return (x == 0.0) && (y == 0.0) && (z == 0.0);
 }
 
 inline double vec3::dotProduct(const vec3 &other) const

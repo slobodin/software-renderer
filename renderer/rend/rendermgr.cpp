@@ -11,7 +11,6 @@ RenderMgr::RenderMgr(const SPTR(Camera) cam)
 {
     m_camera->setPosition(math::vec3(0.0, 0.0, -450.0));
     m_camera->buildCamMatrix(0.0, 0.0, 0.0);
-    //m_camera->buildCamMatrix(math::vec3(0.0, 0.0, -10.0), math::vec3(10.0, 5.0, 10.0));
 }
 
 void rend::RenderMgr::makeLight()
@@ -51,6 +50,7 @@ void RenderMgr::update()
 
     // 3. Cull backfaces
     // TODO:
+    renderList.removeBackfaces(m_camera);
 
     // 4. Lighting
     LightIterator_Const l = m_lights.begin();
@@ -78,22 +78,26 @@ void RenderMgr::update()
     m_rasterizer->endFrame(m_tkCanvasName);
 }
 
-void RenderMgr::addLight(const Light::LightType &type, const math::vec3 pos, const math::vec3 &dir)
+void rend::RenderMgr::addAmbientLight(Color3 intensity)
 {
     SPTR(Light) newLight;
     try
     {
-        switch (type)
-        {
-        case Light::LT_AMBIENT_LIGHT:
-            newLight = SPTR(Light)(new AmbientLight(Color3(255, 255, 255)));
+        newLight = SPTR(Light)(new AmbientLight(intensity));
+        m_lights.push_back(newLight);
+    }
+    catch(LightException)
+    {
+        *syslog << "Light limit is reached" << logerr;
+    }
+}
 
-            break;
-
-        default:
-            return;
-        }
-
+void rend::RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
+{
+    SPTR(Light) newLight;
+    try
+    {
+        newLight = SPTR(Light)(new DirectionalLight(intensity, direction));
         m_lights.push_back(newLight);
     }
     catch(LightException)

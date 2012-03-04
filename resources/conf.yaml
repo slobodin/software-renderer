@@ -7,6 +7,6 @@ Entities:
   - model: ../resources/q3ctf1.bsp
     position: [0, 0, 0]
 ---
-Campos: [0, 0, -1500]
+Campos: [0, 0, -500]
 Width: 1024
 Height: 768

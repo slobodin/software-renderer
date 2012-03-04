@@ -9,6 +9,8 @@
 namespace rend
 {
 
+class Camera;
+
 class RenderList
 {
     list<math::Triangle> m_triangles;
@@ -22,6 +24,7 @@ public:
     list<math::Triangle> &triangles() { return m_triangles; }
 
     void zsort();
+    void removeBackfaces(const SPTR(Camera) cam);
 };
 
 }

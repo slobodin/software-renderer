@@ -6,3 +6,5 @@ TODO:
 3) Z-checking with z-buffer
 4) fix simple camera-control bug
 5) Implement scene graph
+6) vec3 --> Vertex(vector, uv, normal)
+7) Global materials container and pointers from every triangle to it

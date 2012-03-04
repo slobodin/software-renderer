@@ -13,6 +13,7 @@ class Triangle
 {
     vec3 m_verts[3];
     rend::Material m_material;
+    vec3 m_normal;
 
 public:
     Triangle();
@@ -21,9 +22,11 @@ public:
     const vec3 &v(const size_t ind) const;
     vec3 &v(const size_t ind);
 
-    void setMaterial(const rend::Material &material);
     const rend::Material &material() const { return m_material; }
     rend::Material &material() { return m_material; }
+
+    void computeNormal();
+    vec3 normal() const { return m_normal; }
 
     friend bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2);
 };

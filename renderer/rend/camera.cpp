@@ -200,6 +200,10 @@ bool Camera::culled(const Mesh &obj) const
 {
     math::vec3 spherePos = obj.position();
     double radius = obj.bsphere().radius();
+
+    if (radius < 0)
+        return false;
+
     m_worldToCamera.transformPoint(spherePos);
 
     // check Z plane

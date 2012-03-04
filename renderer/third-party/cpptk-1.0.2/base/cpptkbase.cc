@@ -193,7 +193,7 @@ int callbackHandler(ClientData cd, Tcl_Interp *interp,
      if (it == callbacks.end())
      {
           Tcl_SetResult(interp,
-               "Trying to invoke non-existent callback", TCL_STATIC);
+               (char *)"Trying to invoke non-existent callback", TCL_STATIC);
           return TCL_ERROR;
      }
      

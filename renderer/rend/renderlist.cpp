@@ -1,4 +1,5 @@
 #include "renderlist.h"
+#include "camera.h"
 
 namespace rend
 {
@@ -27,9 +28,11 @@ void RenderList::append(const Mesh &mesh)
             triangle.v(2) = vertices[indices[ind + 2]];
 
             if (!mesh.materials().empty())
-                triangle.setMaterial(mesh.materials()[t]);
+                triangle.material() = mesh.materials()[t];
             else
-                triangle.setMaterial(Material(Color3(255, 0, 0), Material::SM_WIRE));
+                triangle.material() = Material(Color3(255, 0, 0), Material::SM_WIRE);
+
+            triangle.computeNormal();
 
             m_triangles.push_back(triangle);
         }
@@ -46,7 +49,9 @@ void RenderList::append(const Mesh &mesh)
             triangle.v(1) = vertices[v + 1];
             triangle.v(2) = vertices[v + 2];
 
-            triangle.setMaterial(Material(Color3(255, 0, 0), Material::SM_WIRE));
+            triangle.material() = Material(Color3(255, 0, 0), Material::SM_FLAT);
+
+            triangle.computeNormal();
 
             m_triangles.push_back(triangle);
         }
@@ -62,6 +67,27 @@ void RenderList::append(const Mesh &mesh)
 void RenderList::zsort()
 {
     m_triangles.sort(math::ZCompareAvg);
+}
+
+void RenderList::removeBackfaces(const SPTR(Camera) cam)
+{
+    list<math::Triangle>::iterator t = m_triangles.begin();
+
+    while (t != m_triangles.end())
+    {
+        if (t->normal().isZero())
+            continue;
+
+        double dp = t->normal().dotProduct(cam->getDirection());
+
+        if (dp < 0)
+        {
+            t = m_triangles.erase(t);
+            continue;
+        }
+
+        t++;
+    }
 }
 
 }

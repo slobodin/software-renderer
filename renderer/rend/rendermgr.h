@@ -33,9 +33,8 @@ public:
     void update();
 
     void addMesh(SPTR(rend::Mesh) mesh);
-    void addLight(const Light::LightType &type,
-                  const math::vec3 pos,
-                  const math::vec3 &dir);
+    void addAmbientLight(Color3 intensity);
+    void addDirectionalLight(Color3 intensity, math::vec3 direction);
 
     void resize(int w, int h);
 

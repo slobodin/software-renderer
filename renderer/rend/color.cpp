@@ -11,10 +11,10 @@ Color4::Color4()
 {
 }
 
-Color4::Color4(const uint8_t red,
-               const uint8_t green,
-               const uint8_t blue,
-               const uint8_t alpha)
+Color4::Color4(uint8_t red,
+               uint8_t green,
+               uint8_t blue,
+               uint8_t alpha)
     : m_r(red),
       m_g(green),
       m_b(blue),
@@ -42,22 +42,29 @@ Color3::Color3()
 {
 }
 
-Color3::Color3(const uint8_t red,
-               const uint8_t green,
-               const uint8_t blue)
+Color3::Color3(uint8_t red,
+               uint8_t green,
+               uint8_t blue)
     : m_r(red),
       m_g(green),
       m_b(blue)
 {
 }
 
-Color3::Color3(const uint32_t color)
+Color3::Color3(uint32_t color)
 {
     IntToRgb(color, m_r, m_g, m_b);
 }
 
 Color3::~Color3()
 {
+}
+
+Color3 &Color3::operator =(uint32_t color)
+{
+    IntToRgb(color, m_r, m_g, m_b);
+
+    return *this;
 }
 
 Color3::operator uint32_t() const

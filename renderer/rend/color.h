@@ -52,8 +52,8 @@ class Color4
 
 public:
     Color4();
-    Color4(const uint8_t red, const uint8_t green,
-            const uint8_t blue, const uint8_t alpha);
+    Color4(uint8_t red, uint8_t green,
+            uint8_t blue, uint8_t alpha);
     ~Color4();
 
     uint32_t color() const { return RgbaToInt((uint32_t)m_r, (uint32_t)m_g, (uint32_t)m_b, (uint32_t)m_a); }
@@ -78,9 +78,11 @@ class Color3
 
 public:
     Color3();
-    Color3(const uint8_t red, const uint8_t green, const uint8_t blue);
-    Color3(const uint32_t color);
+    Color3(uint8_t red, uint8_t green, uint8_t blue);
+    Color3(uint32_t color);
     ~Color3();
+
+    Color3 &operator= (uint32_t color);
 
     uint32_t color() const { return RgbToInt((uint32_t)m_r, (uint32_t)m_g, (uint32_t)m_b); }
     uint8_t red() const { return m_r; }

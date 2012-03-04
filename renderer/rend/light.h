@@ -18,7 +18,7 @@ public:
     enum LightType
     {
         LT_AMBIENT_LIGHT,
-        LT_DIRICTIONAL_LIGHT,
+        LT_DIRECTIONAL_LIGHT,
         LT_POINT_LIGHT,
         LT_SPOT_LIGHT
     };
@@ -46,6 +46,16 @@ class AmbientLight : public Light
 {
 public:
     AmbientLight(const Color3 &intensity);
+
+    void illuminate(RenderList &renderlist) const;
+};
+
+class DirectionalLight : public Light
+{
+    math::vec3 m_dir;
+
+public:
+    DirectionalLight(const Color3 &intensity, const math::vec3 &dir);
 
     void illuminate(RenderList &renderlist) const;
 };

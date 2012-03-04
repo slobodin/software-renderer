@@ -22,6 +22,7 @@ Mesh::Mesh(const vector<math::vec3> &vertices,
     : m_vertices(vertices),
       m_type(type)
 {
+    m_boundingSphere.calculate(vertices);
 }
 
 Mesh::~Mesh()

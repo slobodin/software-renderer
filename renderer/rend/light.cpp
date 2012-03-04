@@ -33,7 +33,7 @@ void AmbientLight::illuminate(RenderList &renderlist) const
     if (!m_isEnabled)
         return;
 
-    Color3 shadedColor(0, 0, 0);
+    int shadedColor_r = 0, shadedColor_g = 0, shadedColor_b = 0;
     list<math::Triangle> &trias = renderlist.triangles();
     list<math::Triangle>::iterator t = trias.begin();
 
@@ -48,13 +48,77 @@ void AmbientLight::illuminate(RenderList &renderlist) const
             continue;
         }
 
-        shadedColor.red() += m_intensity.red() * material.color().red() / 256;
-        shadedColor.green() += m_intensity.green() * material.color().green() / 256;
-        shadedColor.blue() += m_intensity.blue() * material.color().blue() / 256;
+        // FIXME: for all light sources
 
-        material.color() = shadedColor;
+        shadedColor_r += m_intensity.red() * material.color().red() / 256;
+        shadedColor_g += m_intensity.green() * material.color().green() / 256;
+        shadedColor_b += m_intensity.blue() * material.color().blue() / 256;
 
-        shadedColor.reset();
+        if (shadedColor_r > 255) shadedColor_r = 255;
+        if (shadedColor_g > 255) shadedColor_g = 255;
+        if (shadedColor_b > 255) shadedColor_b = 255;
+
+        material.color() = RgbToInt(shadedColor_r, shadedColor_g, shadedColor_b);
+
+        shadedColor_r = 0;
+        shadedColor_g = 0;
+        shadedColor_b = 0;
+
+        t++;
+    }
+}
+
+DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &dir)
+    : Light(intensity),
+      m_dir(dir)
+{
+    m_dir.normalize();
+}
+
+void DirectionalLight::illuminate(RenderList &renderlist) const
+{
+    if (!m_isEnabled)
+        return;
+
+    int shadedColor_r = 0, shadedColor_g = 0, shadedColor_b = 0;
+    list<math::Triangle> &trias = renderlist.triangles();
+    list<math::Triangle>::iterator t = trias.begin();
+
+    while (t != trias.end())
+    {
+        Material &material = t->material();
+
+        if (material.shadeMode() == Material::SM_UNDEFINED
+                || material.shadeMode() == Material::SM_WIRE)
+        {
+            t++;
+            continue;
+        }
+
+        if (t->normal().isZero())
+        {
+            t++;
+            continue;
+        }
+
+        double dp = t->normal().dotProduct(m_dir);
+        if (dp > 0)
+        {
+            shadedColor_r += m_intensity.red() * dp * material.color().red() / 256;
+            shadedColor_g += m_intensity.green() * dp * material.color().green() / 256;
+            shadedColor_b += m_intensity.blue() * dp * material.color().blue() / 256;
+
+            if (shadedColor_r > 255) shadedColor_r = 255;
+            if (shadedColor_g > 255) shadedColor_g = 255;
+            if (shadedColor_b > 255) shadedColor_b = 255;
+
+            material.color() = RgbToInt(shadedColor_r, shadedColor_g, shadedColor_b);
+        }
+
+        shadedColor_r = 0;
+        shadedColor_g = 0;
+        shadedColor_b = 0;
+
         t++;
     }
 }
