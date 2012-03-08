@@ -78,9 +78,11 @@ void RenderList::removeBackfaces(const SPTR(Camera) cam)
         if (t->normal().isZero())
             continue;
 
-        double dp = t->normal().dotProduct(cam->getDirection());
+        math::vec3 view = cam->getPosition() - t->v(0);
+        view.normalize();
+        double dp = t->normal().dotProduct(view);
 
-        if (dp < 0)
+        if (dp <= 0)
         {
             t = m_triangles.erase(t);
             continue;

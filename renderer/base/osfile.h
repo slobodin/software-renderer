@@ -10,6 +10,9 @@ namespace base
 
 DECLARE_EXCEPTION(FileException)
 
+/**
+  * File abstraction
+  */
 class OsFile
 {
 protected:
@@ -26,6 +29,9 @@ public:
     virtual ~OsFile();
 };
 
+/**
+  * Text file
+  */
 class TextFile : public OsFile
 {
     stringstream m_fileData;
@@ -36,6 +42,9 @@ public:
     string getLine(const char delim = '\n');
 };
 
+/**
+  * Binary file
+  */
 class BinaryFile : public OsFile
 {
     vector<uint8_t> m_fileData;
@@ -44,6 +53,7 @@ public:
     BinaryFile(const OsPath &path);
 
     void *getBytes(size_t offset);
+
     template <typename T>
     void copy(size_t offset, T *dest, size_t numElemets);
 };

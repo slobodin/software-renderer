@@ -65,6 +65,7 @@ public:
     void setPosition(const math::vec3 &pos);
     math::vec3 getPosition() const;
     math::vec3 getDirection() const;
+
     //! build matrix with 3 Euler angles (degrees)
     void buildCamMatrix(const double yaw, const double pitch, const double roll);
     //! build matrix using right, up and direction vector

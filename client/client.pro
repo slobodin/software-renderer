@@ -14,7 +14,7 @@ INCLUDEPATH += ../renderer/base \
                ../renderer/math \
                ../renderer/rend \
                ../renderer/ \
-                /usr/include/tcl \
+                /usr/include/tcl8.5 \
                 /usr/include
 
 LIBS += -L../renderer-debug/ -lrenderer

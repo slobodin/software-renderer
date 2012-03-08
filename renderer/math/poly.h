@@ -11,13 +11,22 @@ namespace math
 
 class Triangle
 {
+public:
+    enum WindingOrder
+    {
+        WO_CW,
+        WO_CCW
+    };
+
+private:
     vec3 m_verts[3];
     rend::Material m_material;
     vec3 m_normal;
+    WindingOrder m_windingOrder;
 
 public:
-    Triangle();
-    Triangle(const vec3 *arr);
+    Triangle(WindingOrder wo = WO_CW);
+    Triangle(const vec3 *arr, WindingOrder wo = WO_CW);
 
     const vec3 &v(const size_t ind) const;
     vec3 &v(const size_t ind);

@@ -14,6 +14,7 @@ void ClientController::onMouseMotion(int x, int y)
 
     int dx = m_this->m_prevMouseX - x;
     int dy = m_this->m_prevMouseY - y;
+
     yaw += dx;
     pitch += dy;
     if (abs(yaw) > 360) yaw %= 360;
@@ -49,12 +50,8 @@ void ClientController::onKeyW()
     vec3 dir = m_this->m_mainCam->getDirection();
 
     vec3 delta = 5 * dir;
+    pos += delta;
 
-    pos.x += 5*sin(dir.y);
-    pos.z += 5*cos(dir.y);
-
-//    pos += delta;
-//    pos.z += 5;
     m_this->m_mainCam->setPosition(pos);
 
     (".info_frame.camera" << Tk::configure()) -text(m_this->m_mainCam->state());
@@ -71,9 +68,8 @@ void ClientController::onKeyS()
     vec3 dir = m_this->m_mainCam->getDirection();
 
     vec3 delta = 5 * dir;
-
     pos -= delta;
-//    pos.z -= 5;
+
     m_this->m_mainCam->setPosition(pos);
 
     (".info_frame.camera" << Tk::configure()) -text(m_this->m_mainCam->state());
@@ -109,6 +105,13 @@ ClientController::ClientController(char *argv[], const string &conf)
     Tk::pack(".info_frame.camera") -side("left") -fill(both) -expand(true);
     Tk::pack(".info_frame") -side("top") -fill(both) -expand(true);
 
+    Tk::frame(".control_frame");
+
+    Tk::label(".control_frame.hello") -Tk::width(20) -Tk::height(1)
+            -anchor(nw) -justify(left) -text("Hello");
+    Tk::pack(".control_frame.hello") -side("left") -fill(both) -expand(true);
+    Tk::pack(".control_frame") -side("right") -fill(both) -expand(true);
+
     // setup events callbacks
     Tk::bind(".c", "<B1-Motion>", &ClientController::onMouseMotion, event_x, event_y);
     Tk::bind(".c", "<ButtonPress-1>", &ClientController::onMousePress, event_x, event_y);
@@ -118,6 +121,6 @@ ClientController::ClientController(char *argv[], const string &conf)
     Tk::bind(".", "<Key-s>", &ClientController::onKeyS);
     Tk::bind(".", "<Key-d>", &ClientController::onKeyD);
 
-    m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
-    m_rendmgr->addDirectionalLight(rend::Color3(255, 255, 255), math::vec3(-1, -1, 0));
+//    m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
+    m_rendmgr->addDirectionalLight(rend::Color3(255, 255, 255), math::vec3(-1, -1, -1));
 }

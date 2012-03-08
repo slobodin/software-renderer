@@ -1,7 +1,7 @@
 #include "framebuffer.h"
 
-#include <tcl/tk.h>
-#include <tcl/tcl.h>
+#include <tcl8.5/tk.h>
+#include <tcl8.5/tcl.h>
 #include <third-party/cpptk-1.0.2/base/cpptkbase.h>
 
 namespace rend

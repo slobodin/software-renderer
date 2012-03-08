@@ -81,7 +81,7 @@ INCLUDEPATH += ./base \
                 ./comm \
                 ./math \
                 ./rend \
-                /usr/include/tcl \
+                /usr/include/tcl8.5 \
                 /usr/include
 
 LIBS += -ltcl8.5

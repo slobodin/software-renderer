@@ -45,8 +45,8 @@ void AffineTransform::getHomogeneousMatrix() const
 
 void AffineTransform::transformPoint(vec3 &p) const
 {
-    p = m_M * p;
     p += m_v;
+    p = m_M * p;
 }
 
 }

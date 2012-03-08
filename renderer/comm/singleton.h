@@ -13,7 +13,6 @@ protected:
     static T *m_instance;
 
 public:
-
     Singleton()
     {
         assert(!m_instance);

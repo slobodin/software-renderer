@@ -42,7 +42,7 @@ void RenderMgr::update()
     // 2. Cull full meshes and form triangles render list
     while (mit != m_meshes.end())
     {
-        if (!m_camera->culled(*(*mit)))
+//        if (!m_camera->culled(*(*mit)))
             renderList.append(*(*mit));
 
         mit++;
@@ -92,7 +92,7 @@ void rend::RenderMgr::addAmbientLight(Color3 intensity)
     }
 }
 
-void rend::RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
+SPTR(DirectionalLight) rend::RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
 {
     SPTR(Light) newLight;
     try
@@ -103,7 +103,10 @@ void rend::RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 dir
     catch(LightException)
     {
         *syslog << "Light limit is reached" << logerr;
+        return dynamic_pointer_cast<DirectionalLight>(SPTR(Light)());
     }
+
+    return dynamic_pointer_cast<DirectionalLight>(newLight);
 }
 
 void rend::RenderMgr::resize(int w, int h)

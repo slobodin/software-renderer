@@ -83,7 +83,7 @@ void Camera::buildCamMatrix(const double yaw, const double pitch, const double r
     m_right = math::vec3(1.0, 0.0, 0.0);
     m_up = math::vec3(0.0, 1.0, 0.0);
 
-    math::M33 rot = math::M33::getRotateYawPitchRollMatrix(-yaw, -pitch, -roll);
+    math::M33 rot = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, roll);
     m_dir = rot * m_dir;
     m_right = rot * m_right;
     m_up = rot * m_up;
@@ -98,6 +98,7 @@ void Camera::buildCamMatrix(const double yaw, const double pitch, const double r
     m_up.normalize();
     m_right.normalize();
 
+    rot.invert();
     m_worldToCamera.setm(rot);
     m_worldToCamera.setv(-m_position);
 }
@@ -106,6 +107,7 @@ void Camera::buildCamMatrix(const math::vec3 &lookAtPoint)
 {
     // direction = target - camera_poition
     m_dir = lookAtPoint - m_position;
+    m_dir.normalize();
 
     // up is Y
     m_up.set(0.0, 1.0, 0.0);
@@ -207,8 +209,8 @@ bool Camera::culled(const Mesh &obj) const
     m_worldToCamera.transformPoint(spherePos);
 
     // check Z plane
-    if (((spherePos.z - radius) > m_farZ) ||
-            ((spherePos.z + radius) < m_nearZ))
+    if (((spherePos.z - radius) > m_farZ)
+            || ((spherePos.z + radius) < m_nearZ))
         return true;
 
     return false;

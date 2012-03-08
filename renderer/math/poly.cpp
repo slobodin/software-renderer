@@ -3,11 +3,13 @@
 namespace math
 {
 
-Triangle::Triangle()
+Triangle::Triangle(WindingOrder wo)
+    : m_windingOrder(wo)
 {
 }
 
-Triangle::Triangle(const vec3 *arr)
+Triangle::Triangle(const vec3 *arr, WindingOrder wo)
+    : m_windingOrder(wo)
 {
     if (!arr)
     {
@@ -47,7 +49,13 @@ void Triangle::computeNormal()
     vec3 p1 = (m_verts[1] - m_verts[0]).normalize();
     vec3 p2 = (m_verts[2] - m_verts[0]).normalize();
 
-    m_normal = p2.crossProduct(p1);
+    if (m_windingOrder == WO_CW)
+        m_normal = p1.crossProduct(p2);
+    else if (m_windingOrder == WO_CCW)
+        m_normal = p2.crossProduct(p1);
+    else
+        throw std::exception();
+
     m_normal.normalize();
 }
 

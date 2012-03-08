@@ -29,9 +29,10 @@ protected:
 
     void resize(int w, int h);
 
-public:
     Controller(char *argv[], const string &conf);
     virtual ~Controller();
+
+public:
 
     void run();
 };
