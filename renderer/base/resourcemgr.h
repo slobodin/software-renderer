@@ -11,10 +11,8 @@ namespace base
 
 DECLARE_EXCEPTION(UnsupportedResource)
 
-class ResourceMgr
+class ResourceMgr : boost::noncopyable
 {
-    NONCOPYABLE(ResourceMgr)
-
     map<string, SPTR(Resource) > m_resources;
     map<string, SPTR(ResourceDecoder) > m_decoders;
 

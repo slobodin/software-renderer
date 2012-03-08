@@ -182,19 +182,16 @@ void Camera::toScreen(math::vec3 &v) const
 void Camera::toScreen(RenderList &rendList) const
 {
     list<math::Triangle> &trias = rendList.triangles();
-    list<math::Triangle>::iterator t = trias.begin();
 
-    while (t != trias.end())
+    foreach (math::Triangle &t, trias)
     {
-        math::vec3 &p1 = t->v(0);
-        math::vec3 &p2 = t->v(1);
-        math::vec3 &p3 = t->v(2);
+        math::vec3 &p1 = t.v(0);
+        math::vec3 &p2 = t.v(1);
+        math::vec3 &p3 = t.v(2);
 
         toScreen(p1);
         toScreen(p2);
         toScreen(p3);
-
-        t++;
     }
 }
 

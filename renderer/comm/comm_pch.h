@@ -13,10 +13,12 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
 #include <string>
 #include <vector>
 #include <list>
+#include <map>
+#include <algorithm>
+#include <exception>
 
 #ifdef WIN32
 #include <memory>
@@ -25,9 +27,9 @@
 #include <tr1/memory>
 #endif
 
-#include <map>
-#include <algorithm>
-#include <exception>
+#include <boost/foreach.hpp>
+#include <boost/utility.hpp>
+#include <boost/date_time.hpp>
 
 using std::string;
 using std::wstring;
@@ -45,6 +47,9 @@ using std::stringstream;
 using std::ostringstream;
 using std::istringstream;
 using std::tr1::dynamic_pointer_cast;
+
+#define foreach BOOST_FOREACH
+#define reverse_foreach BOOST_REVERSE_FOREACH
 
 #define FORCEINLINE __attribute__((always_inline))
 

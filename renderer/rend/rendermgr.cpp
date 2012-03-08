@@ -36,16 +36,13 @@ void RenderMgr::update()
     // 1. Clear buffer
     m_rasterizer->beginFrame();
 
-    MeshIterator_Const mit = m_meshes.begin();
     RenderList renderList;
 
     // 2. Cull full meshes and form triangles render list
-    while (mit != m_meshes.end())
+    foreach (SPTR(Mesh) &m, m_meshes)
     {
-//        if (!m_camera->culled(*(*mit)))
-            renderList.append(*(*mit));
-
-        mit++;
+//        if (!m_camera->culled(*m))
+        renderList.append(*m);
     }
 
     // 3. Cull backfaces
@@ -53,12 +50,9 @@ void RenderMgr::update()
     renderList.removeBackfaces(m_camera);
 
     // 4. Lighting
-    LightIterator_Const l = m_lights.begin();
-    while (l != m_lights.end())
+    foreach (SPTR(Light) &l, m_lights)
     {
-        (*l)->illuminate(renderList);
-
-        l++;
+        l->illuminate(renderList);
     }
 
     // 5. World -> Camera transformation. Cull triangles with negative Z.

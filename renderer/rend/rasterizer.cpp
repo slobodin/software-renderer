@@ -577,26 +577,23 @@ Rasterizer::Rasterizer(const int width, const int height)
 void Rasterizer::rasterize(const RenderList &rendlist)
 {
     const list<math::Triangle> &trias = rendlist.triangles();
-    list<math::Triangle>::const_reverse_iterator t = trias.rbegin();
 
-    while (t != trias.rend())
+    reverse_foreach(const math::Triangle &t, trias)
     {
-        switch(t->material().shadeMode())
+        switch(t.material().shadeMode())
         {
         case Material::SM_WIRE:
-            drawTriangle(*t, t->material().color());
+            drawTriangle(t, t.material().color());
             break;
 
         case Material::SM_FLAT:
-            drawFillTriangle(*t, t->material().color());
+            drawFillTriangle(t, t.material().color());
             break;
 
         default:
 
             break;
         }
-
-        t++;
     }
 }
 

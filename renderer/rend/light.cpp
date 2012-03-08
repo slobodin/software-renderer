@@ -35,18 +35,14 @@ void AmbientLight::illuminate(RenderList &renderlist) const
 
     int shadedColor_r = 0, shadedColor_g = 0, shadedColor_b = 0;
     list<math::Triangle> &trias = renderlist.triangles();
-    list<math::Triangle>::iterator t = trias.begin();
 
-    while (t != trias.end())
+    foreach (math::Triangle &t, trias)
     {
-        Material &material = t->material();
+        Material &material = t.material();
 
         if (material.shadeMode() == Material::SM_UNDEFINED
                 || material.shadeMode() == Material::SM_WIRE)
-        {
-            t++;
             continue;
-        }
 
         // FIXME: for all light sources
 
@@ -63,8 +59,6 @@ void AmbientLight::illuminate(RenderList &renderlist) const
         shadedColor_r = 0;
         shadedColor_g = 0;
         shadedColor_b = 0;
-
-        t++;
     }
 }
 
@@ -82,26 +76,19 @@ void DirectionalLight::illuminate(RenderList &renderlist) const
 
     int shadedColor_r = 0, shadedColor_g = 0, shadedColor_b = 0;
     list<math::Triangle> &trias = renderlist.triangles();
-    list<math::Triangle>::iterator t = trias.begin();
 
-    while (t != trias.end())
+    foreach (math::Triangle &t, trias)
     {
-        Material &material = t->material();
+        Material &material = t.material();
 
         if (material.shadeMode() == Material::SM_UNDEFINED
                 || material.shadeMode() == Material::SM_WIRE)
-        {
-            t++;
             continue;
-        }
 
-        if (t->normal().isZero())
-        {
-            t++;
+        if (t.normal().isZero())
             continue;
-        }
 
-        double dp = t->normal().dotProduct(m_dir);
+        double dp = t.normal().dotProduct(m_dir);
         if (dp > 0)
         {
             shadedColor_r += m_intensity.red() * dp * material.color().red() / 256;
@@ -118,9 +105,10 @@ void DirectionalLight::illuminate(RenderList &renderlist) const
         shadedColor_r = 0;
         shadedColor_g = 0;
         shadedColor_b = 0;
-
-        t++;
     }
 }
+
+// FIXME: redo this boiler-plate ^
+//                               |
 
 }

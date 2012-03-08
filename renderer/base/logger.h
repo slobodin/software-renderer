@@ -29,14 +29,13 @@ public:
     }
 };
 
-class DLL_PUBLIC Logger
+class DLL_PUBLIC Logger : boost::noncopyable
 {
-    NONCOPYABLE(Logger)
-
     stringstream m_buffer;
 
     static Logger *m_instance;
     Logger();
+
 public:
     static Logger *instance();
 

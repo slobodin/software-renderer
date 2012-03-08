@@ -13,11 +13,9 @@ namespace base
 
 DECLARE_EXCEPTION(ControllerException)
 
-class DLL_PUBLIC Controller : public common::Singleton<Controller>
+class DLL_PUBLIC Controller : public common::Singleton<Controller>, boost::noncopyable
 {
     friend class Config;
-
-    NONCOPYABLE(Controller)
 
 protected:
     SPTR(rend::RenderMgr) m_rendmgr;

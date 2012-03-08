@@ -7,7 +7,14 @@ Logger *Logger::m_instance = 0;
 
 Logger::Logger()
 {
-    cerr << "Started\n";
+    std::ostringstream msg;
+    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+    boost::posix_time::time_facet *f = new boost::posix_time::time_facet("Started on %H:%M:%S");
+
+    msg.imbue(std::locale(msg.getloc(), f));
+    msg << now;
+
+    cerr << msg.str() << endl;
 }
 
 Logger *Logger::instance()

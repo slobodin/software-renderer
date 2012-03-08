@@ -87,13 +87,9 @@ public:
 template<typename T>
 void Camera::apply(T &container) const
 {
-    typename T::iterator v = container.begin();
-
-    while (v != container.end())
+    foreach (T &v, container)
     {
-        apply(*v);
-
-        v++;
+        apply(v);
     }
 }
 

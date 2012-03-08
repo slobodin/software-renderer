@@ -41,7 +41,7 @@ Controller::Controller(char *argv[], const string &conf)
     Tk::canvas(".c") -Tk::highlightthickness(0)
             -Tk::width(m_mainCam->width())
             -Tk::height(m_mainCam->height());
-    Tk::pack(".c") -Tk::fill(Tk::both) -Tk::expand(true);
+    Tk::pack(".c") -Tk::fill(Tk::both);
     (".c" << Tk::create(Tk::image, 0, 0)) -Tk::image("canvas_photo") -Tk::anchor(nw);
     m_rendmgr->renderTo("canvas_photo");
 

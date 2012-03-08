@@ -101,16 +101,16 @@ ClientController::ClientController(char *argv[], const string &conf)
             -anchor(nw) -justify(left);
     Tk::button(".info_frame.quit") -text("Quit") -command(&ClientController::exit);
 
-    Tk::pack(".info_frame.quit") -side("right") -fill("y");
-    Tk::pack(".info_frame.camera") -side("left") -fill(both) -expand(true);
-    Tk::pack(".info_frame") -side("top") -fill(both) -expand(true);
+    Tk::pack(".info_frame.quit") -side("right");
+    Tk::pack(".info_frame.camera") -side("left");
+    Tk::pack(".info_frame") -side("top");
 
     Tk::frame(".control_frame");
 
     Tk::label(".control_frame.hello") -Tk::width(20) -Tk::height(1)
             -anchor(nw) -justify(left) -text("Hello");
-    Tk::pack(".control_frame.hello") -side("left") -fill(both) -expand(true);
-    Tk::pack(".control_frame") -side("right") -fill(both) -expand(true);
+    Tk::pack(".control_frame.hello") -side("left");
+    Tk::pack(".control_frame") -side("right");
 
     // setup events callbacks
     Tk::bind(".c", "<B1-Motion>", &ClientController::onMouseMotion, event_x, event_y);

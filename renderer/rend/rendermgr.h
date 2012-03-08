@@ -11,10 +11,8 @@
 namespace rend
 {
 
-class RenderMgr
+class RenderMgr : boost::noncopyable
 {
-    NONCOPYABLE(RenderMgr)
-
     SPTR(Rasterizer) m_rasterizer;
     string m_tkCanvasName;
     SPTR(Camera) m_camera;
@@ -37,12 +35,6 @@ public:
     SPTR(DirectionalLight) addDirectionalLight(Color3 intensity, math::vec3 direction);
 
     void resize(int w, int h);
-
-private:
-    typedef vector<SPTR(Mesh) >::iterator MeshIterator;
-    typedef vector<SPTR(Mesh) >::const_iterator MeshIterator_Const;
-    typedef vector<SPTR(Light) >::iterator LightIterator;
-    typedef vector<SPTR(Light) >::const_iterator LightIterator_Const;
 };
 
 }
