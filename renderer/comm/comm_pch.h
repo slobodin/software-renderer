@@ -1,3 +1,10 @@
+/*
+ * comm_pch.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef COMM_PCH_H
 #define COMM_PCH_H
 
@@ -19,6 +26,7 @@
 #include <map>
 #include <algorithm>
 #include <exception>
+#include <functional>
 
 #ifdef WIN32
 #include <memory>
@@ -47,11 +55,7 @@ using std::stringstream;
 using std::ostringstream;
 using std::istringstream;
 using std::tr1::dynamic_pointer_cast;
-
-#define foreach BOOST_FOREACH
-#define reverse_foreach BOOST_REVERSE_FOREACH
-
-#define FORCEINLINE __attribute__((always_inline))
+using std::tr1::shared_ptr;
 
 #include "dll.h"
 #include "comm_macro.h"

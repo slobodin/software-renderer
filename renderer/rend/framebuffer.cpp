@@ -1,3 +1,10 @@
+/*
+ * framebuffer.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "framebuffer.h"
 
 #include <tcl8.5/tk.h>

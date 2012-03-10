@@ -1,3 +1,10 @@
+/*
+ * logger.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef LOGGER_H
 #define LOGGER_H
 

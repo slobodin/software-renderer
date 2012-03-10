@@ -1,3 +1,10 @@
+/*
+ * ospath.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef OSPATH_H
 #define OSPATH_H
 

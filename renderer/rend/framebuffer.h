@@ -1,3 +1,10 @@
+/*
+ * framebuffer.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 

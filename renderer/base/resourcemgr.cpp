@@ -1,3 +1,10 @@
+/*
+ * resourcemgr.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "resourcemgr.h"
 #include "ospath.h"
 #include "osfile.h"
@@ -9,8 +16,8 @@ namespace base
 
 ResourceMgr::ResourceMgr()
 {
-    SPTR(ResourceDecoder) plgDecoder(new DecoderPLG);
-    SPTR(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
+    sptr(ResourceDecoder) plgDecoder(new DecoderPLG);
+    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
     // other decoders
 
     // add all
@@ -22,7 +29,7 @@ ResourceMgr::~ResourceMgr()
 {
 }
 
-SPTR(Resource) ResourceMgr::getResource(const string &pathString)
+sptr(Resource) ResourceMgr::getResource(const string &pathString)
 {
     // TODO: create full path
     OsPath path(pathString);
@@ -30,7 +37,7 @@ SPTR(Resource) ResourceMgr::getResource(const string &pathString)
     return getResource(path);
 }
 
-SPTR(Resource) ResourceMgr::getResource(const OsPath &path)
+sptr(Resource) ResourceMgr::getResource(const OsPath &path)
 {
     // ensure that we have decoder for this resource
     DecoderIterator dit = m_decoders.find(path.fileExtention());
@@ -40,7 +47,7 @@ SPTR(Resource) ResourceMgr::getResource(const OsPath &path)
         *syslog << "Unsupported file format. File:" << path.filePath() << logerr;
         // no such decoder
         // unsupported file format
-        return SPTR(Resource)();
+        return sptr(Resource)();
     }
 
     ResourceIterator rit = m_resources.find(path.filePath());
@@ -48,14 +55,14 @@ SPTR(Resource) ResourceMgr::getResource(const OsPath &path)
     // decode resource if need
     if (rit == m_resources.end())
     {
-        SPTR(Resource) newResource;
+        sptr(Resource) newResource;
         try
         {
             newResource = dit->second->decode(path);
         }
         catch(FileException)
         {
-            return SPTR(Resource)();
+            return sptr(Resource)();
         }
 
         if (newResource.get())
@@ -63,7 +70,7 @@ SPTR(Resource) ResourceMgr::getResource(const OsPath &path)
         else
         {
             *syslog << "Can't decode resource. File:" << path.filePath() << logerr;
-            return SPTR(Resource)();
+            return sptr(Resource)();
         }
     }
 

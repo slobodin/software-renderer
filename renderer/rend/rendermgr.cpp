@@ -1,3 +1,10 @@
+/*
+ * rendermgr.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "rendermgr.h"
 
 #include "vec3.h"
@@ -5,7 +12,7 @@
 namespace rend
 {
 
-RenderMgr::RenderMgr(const SPTR(Camera) cam)
+RenderMgr::RenderMgr(const shared_ptr<Camera> cam)
     : m_rasterizer(new Rasterizer(cam->width(), cam->height())),
       m_camera(cam)
 {
@@ -39,10 +46,10 @@ void RenderMgr::update()
     RenderList renderList;
 
     // 2. Cull full meshes and form triangles render list
-    foreach (SPTR(Mesh) &m, m_meshes)
+    foreach (sptr(Mesh) &m, m_meshes)
     {
-//        if (!m_camera->culled(*m))
-        renderList.append(*m);
+        if (!m_camera->culled(*m))
+            renderList.append(*m);
     }
 
     // 3. Cull backfaces
@@ -50,7 +57,7 @@ void RenderMgr::update()
     renderList.removeBackfaces(m_camera);
 
     // 4. Lighting
-    foreach (SPTR(Light) &l, m_lights)
+    foreach (sptr(Light) &l, m_lights)
     {
         l->illuminate(renderList);
     }
@@ -72,35 +79,55 @@ void RenderMgr::update()
     m_rasterizer->endFrame(m_tkCanvasName);
 }
 
-void rend::RenderMgr::addAmbientLight(Color3 intensity)
+sptr(AmbientLight) rend::RenderMgr::addAmbientLight(Color3 intensity)
 {
-    SPTR(Light) newLight;
+    sptr(Light) newLight;
     try
     {
-        newLight = SPTR(Light)(new AmbientLight(intensity));
+        newLight = sptr(Light)(new AmbientLight(intensity));
         m_lights.push_back(newLight);
     }
     catch(LightException)
     {
         *syslog << "Light limit is reached" << logerr;
+        return dynamic_pointer_cast<AmbientLight>(sptr(Light)());
     }
+
+    return dynamic_pointer_cast<AmbientLight>(newLight);
 }
 
-SPTR(DirectionalLight) rend::RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
+sptr(DirectionalLight) rend::RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
 {
-    SPTR(Light) newLight;
+    sptr(Light) newLight;
     try
     {
-        newLight = SPTR(Light)(new DirectionalLight(intensity, direction));
+        newLight = sptr(Light)(new DirectionalLight(intensity, direction));
         m_lights.push_back(newLight);
     }
     catch(LightException)
     {
         *syslog << "Light limit is reached" << logerr;
-        return dynamic_pointer_cast<DirectionalLight>(SPTR(Light)());
+        return dynamic_pointer_cast<DirectionalLight>(sptr(Light)());
     }
 
     return dynamic_pointer_cast<DirectionalLight>(newLight);
+}
+
+sptr(PointLight) rend::RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 position)
+{
+    sptr(Light) newLight;
+    try
+    {
+        newLight = sptr(Light)(new PointLight(intensity, position, 0, 1, 0));
+        m_lights.push_back(newLight);
+    }
+    catch(LightException)
+    {
+        *syslog << "Light limit is reached" << logerr;
+        return dynamic_pointer_cast<PointLight>(sptr(Light)());
+    }
+
+    return dynamic_pointer_cast<PointLight>(newLight);
 }
 
 void rend::RenderMgr::resize(int w, int h)
@@ -109,7 +136,7 @@ void rend::RenderMgr::resize(int w, int h)
     m_rasterizer->resize(w, h);
 }
 
-void RenderMgr::addMesh(SPTR(rend::Mesh) mesh)
+void RenderMgr::addMesh(sptr(rend::Mesh) mesh)
 {
     if (!mesh)
     {

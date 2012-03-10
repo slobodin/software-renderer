@@ -1,5 +1,13 @@
+/*
+ * renderlist.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "renderlist.h"
 #include "camera.h"
+#include "vertex.h"
 
 namespace rend
 {
@@ -11,8 +19,12 @@ RenderList::RenderList()
 void RenderList::append(const Mesh &mesh)
 {
     math::Triangle triangle;
-    const vector<math::vec3> &vertices = mesh.vertices();
+    // all mesh vertices
+    const vector<math::vertex> &vertices = mesh.vertices();
+    // mesh indices
     const vector<size_t> &indices = mesh.indices();
+    // mesh world transformation
+    const math::AffineTransform &tr = mesh.transformation();
 
     switch(mesh.type())
     {
@@ -23,17 +35,27 @@ void RenderList::append(const Mesh &mesh)
             if ((ind + 2) == mesh.numIndices())
                 break;
 
+            // form the triangle
             triangle.v(0) = vertices[indices[ind]];
             triangle.v(1) = vertices[indices[ind + 1]];
             triangle.v(2) = vertices[indices[ind + 2]];
 
+            // translate and rotate the triangle
+            tr.transformPoint(triangle.v(0).p);
+            tr.transformPoint(triangle.v(1).p);
+            tr.transformPoint(triangle.v(2).p);
+
+            // set material
             if (!mesh.materials().empty())
                 triangle.material() = mesh.materials()[t];
             else
                 triangle.material() = Material(Color3(255, 0, 0), Material::SM_WIRE);
 
-            triangle.computeNormal();
+            // compute normals
+            triangle.setWindingOrder(mesh.getWindingOrder());
+            triangle.computeNormal();            
 
+            // save it
             m_triangles.push_back(triangle);
         }
         break;
@@ -51,7 +73,8 @@ void RenderList::append(const Mesh &mesh)
 
             triangle.material() = Material(Color3(255, 0, 0), Material::SM_FLAT);
 
-            triangle.computeNormal();
+            triangle.setWindingOrder(mesh.getWindingOrder());
+            triangle.computeNormal();            
 
             m_triangles.push_back(triangle);
         }
@@ -69,16 +92,25 @@ void RenderList::zsort()
     m_triangles.sort(math::ZCompareAvg);
 }
 
-void RenderList::removeBackfaces(const SPTR(Camera) cam)
+void RenderList::removeBackfaces(const sptr(Camera) cam)
 {
     list<math::Triangle>::iterator t = m_triangles.begin();
 
     while (t != m_triangles.end())
     {
         if (t->normal().isZero())
+        {
+            t++;
             continue;
+        }
 
-        math::vec3 view = cam->getPosition() - t->v(0);
+        if (t->getSideType() == math::Triangle::ST_2_SIDED)
+        {
+            t++;
+            continue;
+        }
+
+        math::vec3 view = cam->getPosition() - t->v(0).p;
         view.normalize();
         double dp = t->normal().dotProduct(view);
 

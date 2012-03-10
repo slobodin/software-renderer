@@ -1,3 +1,10 @@
+/*
+ * affinetransform.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "affinetransform.h"
 
 namespace math

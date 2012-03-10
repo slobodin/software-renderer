@@ -1,3 +1,10 @@
+/*
+ * decoderbspq3.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "decoderbspq3.h"
 
 #include "osfile.h"
@@ -16,7 +23,7 @@ DecoderBSPQ3::~DecoderBSPQ3()
 {
 }
 
-SPTR(Resource) DecoderBSPQ3::decode(const OsPath &path)
+sptr(Resource) DecoderBSPQ3::decode(const OsPath &path)
 {
     BinaryFile file(path);
 
@@ -25,7 +32,7 @@ SPTR(Resource) DecoderBSPQ3::decode(const OsPath &path)
     {
         *syslog << "Bad BSP header" << logerr;
 
-        return SPTR(Resource)();
+        return sptr(Resource)();
     }
 
     file.copy(sizeof(BSPHeader), lumps, MAX_LUMP);
@@ -45,8 +52,8 @@ SPTR(Resource) DecoderBSPQ3::decode(const OsPath &path)
     meshVerts = new int[numMeshVerts];
     file.copy(lumps[LUMP_MESH_VERTS].offset, meshVerts, numMeshVerts);
 
-    vector<math::vec3> vertexList;
-    math::vec3 v;
+    vector<math::vertex> vertexList;
+    math::vertex v;
 
     for (int i = 0; i < numFaces; i++)
     {
@@ -60,9 +67,16 @@ SPTR(Resource) DecoderBSPQ3::decode(const OsPath &path)
 
             for (int j = 0; j < numVerts; j++)
             {
-                v.x = vertices[faces[i].vertex + index[j]].position[0];
-                v.y = vertices[faces[i].vertex + index[j]].position[2];
-                v.z = vertices[faces[i].vertex + index[j]].position[1];
+                v.p.x = vertices[faces[i].vertex + index[j]].position[0];
+                v.p.y = vertices[faces[i].vertex + index[j]].position[2];
+                v.p.z = vertices[faces[i].vertex + index[j]].position[1];
+
+                v.n.x = vertices[faces[i].vertex + index[j]].normal[0];
+                v.n.y = vertices[faces[i].vertex + index[j]].normal[2];
+                v.n.z = vertices[faces[i].vertex + index[j]].normal[1];
+
+                v.t.x = vertices[faces[i].vertex + index[j]].textureCoord[0];
+                v.t.y = vertices[faces[i].vertex + index[j]].textureCoord[1];
 
                 vertexList.push_back(v);
             }
@@ -90,7 +104,7 @@ SPTR(Resource) DecoderBSPQ3::decode(const OsPath &path)
         }
     }
 
-    SPTR(rend::Mesh) newMesh(new rend::Mesh(vertexList,
+    sptr(rend::Mesh) newMesh(new rend::Mesh(vertexList,
                                             rend::Mesh::MT_MESH_TRIANGLELIST));
     newMesh->setName(path.filePath());
 
@@ -105,7 +119,7 @@ SPTR(Resource) DecoderBSPQ3::decode(const OsPath &path)
 
 string DecoderBSPQ3::extention() const
 {
-    return string("bsp");
+    return "bsp";
 }
 
 }

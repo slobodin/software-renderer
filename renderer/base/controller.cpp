@@ -1,3 +1,10 @@
+/*
+ * controller.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "controller.h"
 
 #include <third-party/cpptk-1.0.2/cpptk.h>
@@ -24,7 +31,7 @@ void Controller::resize(int w, int h)
 Controller::Controller(char *argv[], const string &conf)
     : m_resourceMgr(new ResourceMgr)
 {
-    m_mainCam = SPTR(rend::Camera)(new rend::Camera(math::vec3(), 640, 480));
+    m_mainCam = sptr(rend::Camera)(new rend::Camera(math::vec3(), 640, 480));
     m_rendmgr.reset(new rend::RenderMgr(m_mainCam));
 
     Config config;
@@ -38,11 +45,17 @@ Controller::Controller(char *argv[], const string &conf)
     Tk::images(Tk::create, Tk::photo, "canvas_photo")
             -Tk::width(m_mainCam->width())
             -Tk::height(m_mainCam->height());
-    Tk::canvas(".c") -Tk::highlightthickness(0)
+
+    Tk::frame(".canvas_frame");
+    Tk::canvas(".canvas_frame.c") -Tk::highlightthickness(0)
             -Tk::width(m_mainCam->width())
             -Tk::height(m_mainCam->height());
-    Tk::pack(".c") -Tk::fill(Tk::both);
-    (".c" << Tk::create(Tk::image, 0, 0)) -Tk::image("canvas_photo") -Tk::anchor(nw);
+
+    Tk::pack(".canvas_frame.c") -side("top");
+    Tk::pack(".canvas_frame") -side("left");
+
+    (".canvas_frame.c" << Tk::create(Tk::image, 0, 0)) -Tk::image("canvas_photo") -Tk::anchor(nw);
+
     m_rendmgr->renderTo("canvas_photo");
 
     // setup update event

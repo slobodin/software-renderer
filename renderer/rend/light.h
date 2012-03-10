@@ -1,3 +1,10 @@
+/*
+ * light.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef LIGHT_H
 #define LIGHT_H
 
@@ -11,6 +18,8 @@ namespace rend
 {
 
 DECLARE_EXCEPTION(LightException)
+
+// TODO: make virtual constructor and lights factory
 
 class Light
 {
@@ -56,6 +65,34 @@ class DirectionalLight : public Light
 
 public:
     DirectionalLight(const Color3 &intensity, const math::vec3 &dir);
+
+    void illuminate(RenderList &renderlist) const;
+};
+
+class PointLight : public Light
+{
+    math::vec3 m_pos;
+    double m_kc, m_kl, m_kq;
+
+public:
+    PointLight(const Color3 &intensity, const math::vec3 &pos,
+               double kc, double kl, double kq);
+
+    void illuminate(RenderList &renderlist) const;
+};
+
+class SpotLight : public Light
+{
+    math::vec3 m_pos;
+    math::vec3 m_dir;
+
+    double m_innerAngle;    // spot inner angle
+    double m_outerAngle;    // spot outer angle
+    double m_falloff;
+
+public:
+    SpotLight(const Color3 &intensity, const math::vec3 &pos, const math::vec3 &dir,
+              double umbra, double penumbra, double falloff);
 
     void illuminate(RenderList &renderlist) const;
 };

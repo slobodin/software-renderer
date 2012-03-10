@@ -86,7 +86,6 @@ void ClientController::exit()
 
 void ClientController::printCam()
 {
-
 }
 
 ClientController::ClientController(char *argv[], const string &conf)
@@ -97,30 +96,24 @@ ClientController::ClientController(char *argv[], const string &conf)
     // crete gui controls
     Tk::frame(".info_frame");
 
-    Tk::label(".info_frame.camera") -Tk::width(80) -Tk::height(5)
+    Tk::label(".info_frame.camera") -Tk::width(50) -Tk::height(5)
             -anchor(nw) -justify(left);
     Tk::button(".info_frame.quit") -text("Quit") -command(&ClientController::exit);
 
-    Tk::pack(".info_frame.quit") -side("right");
-    Tk::pack(".info_frame.camera") -side("left");
-    Tk::pack(".info_frame") -side("top");
-
-    Tk::frame(".control_frame");
-
-    Tk::label(".control_frame.hello") -Tk::width(20) -Tk::height(1)
-            -anchor(nw) -justify(left) -text("Hello");
-    Tk::pack(".control_frame.hello") -side("left");
-    Tk::pack(".control_frame") -side("right");
+    Tk::pack(".info_frame.quit") -side("bottom");
+    Tk::pack(".info_frame.camera") -side("top");
+    Tk::pack(".info_frame") -side("right");
 
     // setup events callbacks
-    Tk::bind(".c", "<B1-Motion>", &ClientController::onMouseMotion, event_x, event_y);
-    Tk::bind(".c", "<ButtonPress-1>", &ClientController::onMousePress, event_x, event_y);
-    Tk::bind(".c", "<ButtonRelease-1>", &ClientController::onMouseRelease, event_x, event_y);
+    Tk::bind(".canvas_frame.c", "<B1-Motion>", &ClientController::onMouseMotion, event_x, event_y);
+    Tk::bind(".canvas_frame.c", "<ButtonPress-1>", &ClientController::onMousePress, event_x, event_y);
+    Tk::bind(".canvas_frame.c", "<ButtonRelease-1>", &ClientController::onMouseRelease, event_x, event_y);
     Tk::bind(".", "<Key-w>", &ClientController::onKeyW);
     Tk::bind(".", "<Key-a>", &ClientController::onKeyA);
     Tk::bind(".", "<Key-s>", &ClientController::onKeyS);
     Tk::bind(".", "<Key-d>", &ClientController::onKeyD);
 
-//    m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
-    m_rendmgr->addDirectionalLight(rend::Color3(255, 255, 255), math::vec3(-1, -1, -1));
+    m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
+    m_rendmgr->addDirectionalLight(rend::Color3(0, 255, 0), math::vec3(-1, -1, -1));
+    m_rendmgr->addPointLight(rend::Color3(255, 255, 0), math::vec3(0, 5000, 0));
 }

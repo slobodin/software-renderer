@@ -1,3 +1,10 @@
+/*
+ * exception.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 

@@ -1,3 +1,10 @@
+/*
+ * decoderplg.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "decoderplg.h"
 
 #include "osfile.h"
@@ -7,6 +14,13 @@
 namespace base
 {
 
+static const int PLX_1SIDED_FLAG           = 0x0000;   // this poly is single sided
+static const int PLX_2SIDED_FLAG           = 0x1000;   // this poly is double sided
+static const int PLX_SHADE_MODE_FLAT       = 0x2000;   // this poly uses flat shading
+//static const int PLX_SHADE_MODE_GOURAUD    = 0x4000;   // this poly used gouraud shading
+static const int PLX_SHADE_MODE_PHONG      = 0x4000;   // this poly uses phong shading
+static const int PLX_SHADE_MODE_WIRE       = 0x8000;   // this poly is wireframe
+
 DecoderPLG::DecoderPLG()
 {
 }
@@ -15,7 +29,7 @@ DecoderPLG::~DecoderPLG()
 {
 }
 
-SPTR(Resource) DecoderPLG::decode(const OsPath &path)
+sptr(Resource) DecoderPLG::decode(const OsPath &path)
 {
     TextFile plgFile(path);
 
@@ -44,7 +58,7 @@ SPTR(Resource) DecoderPLG::decode(const OsPath &path)
     token >> temp >> numVertices >> numPolys;
     string resourceName = temp;
 
-    vector<math::vec3> vertexList(numVertices);
+    vector<math::vertex> vertexList(numVertices);
     for (unsigned vertex = 0; vertex < numVertices; vertex++)
     {
         token.str("");
@@ -65,7 +79,7 @@ SPTR(Resource) DecoderPLG::decode(const OsPath &path)
 
         math::vec3 pt;
         token >> pt.x >> pt.y >> pt.z;
-        vertexList[vertex] = pt;
+        vertexList[vertex].p = pt;
     }
 
     // now load polygons and save it into mesh
@@ -101,11 +115,53 @@ SPTR(Resource) DecoderPLG::decode(const OsPath &path)
             indices.push_back(index);
         }
 
-        rend::Color3 col(polyDescriptor);
-        materials.push_back(rend::Material(col, rend::Material::SM_FLAT));
+        int red = polyDescriptor & 0x0F00;
+        int green = polyDescriptor & 0x00F0;
+        int blue = polyDescriptor & 0x000F;
+
+        rend::Material::ShadeMode shadeMode;
+        int sm = polyDescriptor & 0xE000;   // mask to extract shading mode
+        switch (sm)
+        {
+        case PLX_SHADE_MODE_FLAT:
+            shadeMode = rend::Material::SM_FLAT;
+            break;
+
+        case PLX_SHADE_MODE_PHONG:
+            shadeMode = rend::Material::SM_PHONG;
+            break;
+
+        case PLX_SHADE_MODE_WIRE:
+            shadeMode = rend::Material::SM_WIRE;
+            break;
+
+        default:
+            *syslog << "Bad shade mode in plg-file" << path.filePath() << ". Setting to defaults." << logwarn;
+            shadeMode = rend::Material::SM_WIRE;
+        }
+
+        math::Triangle::SideType sideType;
+        int sides = polyDescriptor & 0x1000;
+        switch (sides)
+        {
+        case PLX_1SIDED_FLAG:
+            sideType = math::Triangle::ST_1_SIDED;
+            break;
+
+        case PLX_2SIDED_FLAG:
+            sideType = math::Triangle::ST_2_SIDED;
+            break;
+
+        default:
+            *syslog << "Bad side flag in plg-file" << path.filePath() << ". Setting to defaults." << logwarn;
+            sideType = math::Triangle::ST_2_SIDED;
+        }
+
+        rend::Color3 col(red, green, blue);
+        materials.push_back(rend::Material(col, shadeMode/*, sideType*/));
     }
 
-    SPTR(rend::Mesh) newMesh(new rend::Mesh(vertexList,
+    sptr(rend::Mesh) newMesh(new rend::Mesh(vertexList,
                                             indices,
                                             materials,
                                             rend::Mesh::MT_MESH_INDEXEDTRIANGLELIST));
@@ -118,7 +174,7 @@ SPTR(Resource) DecoderPLG::decode(const OsPath &path)
 
 string DecoderPLG::extention() const
 {
-    return string("plg");
+    return "plg";
 }
 
 }

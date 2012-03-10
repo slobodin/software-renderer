@@ -1,3 +1,10 @@
+/*
+ * resource.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
@@ -13,6 +20,7 @@ class Resource
 {
 protected:
     string m_name;
+
 public:
     Resource()
         : m_name("Unnamed")

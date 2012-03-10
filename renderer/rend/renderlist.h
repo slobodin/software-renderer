@@ -1,3 +1,10 @@
+/*
+ * renderlist.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef RENDERLIST_H
 #define RENDERLIST_H
 
@@ -24,7 +31,7 @@ public:
     list<math::Triangle> &triangles() { return m_triangles; }
 
     void zsort();
-    void removeBackfaces(const SPTR(Camera) cam);
+    void removeBackfaces(const sptr(Camera) cam);
 };
 
 }

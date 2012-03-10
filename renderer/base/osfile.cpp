@@ -1,3 +1,10 @@
+/*
+ * osfile.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "osfile.h"
 #include "string_utils.h"
 

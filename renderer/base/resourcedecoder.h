@@ -1,3 +1,10 @@
+/*
+ * resourcedecoder.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef RESOURCEDECODER_H
 #define RESOURCEDECODER_H
 
@@ -15,7 +22,7 @@ public:
     ResourceDecoder() { }
     virtual ~ResourceDecoder() { }
 
-    virtual SPTR(Resource) decode(const OsPath &path) = 0;
+    virtual sptr(Resource) decode(const OsPath &path) = 0;
     virtual string extention() const = 0;
 };
 

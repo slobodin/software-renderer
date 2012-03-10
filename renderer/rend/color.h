@@ -1,3 +1,10 @@
+/*
+ * color.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef COLOR4_H
 #define COLOR4_H
 

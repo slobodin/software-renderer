@@ -1,3 +1,10 @@
+/*
+ * logger.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "logger.h"
 
 namespace base

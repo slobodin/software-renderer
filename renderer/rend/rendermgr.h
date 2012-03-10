@@ -1,3 +1,10 @@
+/*
+ * rendermgr.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef RENDERMGR_H
 #define RENDERMGR_H
 
@@ -13,26 +20,27 @@ namespace rend
 
 class RenderMgr : boost::noncopyable
 {
-    SPTR(Rasterizer) m_rasterizer;
+    sptr(Rasterizer) m_rasterizer;
     string m_tkCanvasName;
-    SPTR(Camera) m_camera;
+    sptr(Camera) m_camera;
 
-    vector<SPTR(Mesh) > m_meshes;
-    vector<SPTR(Light) > m_lights;
+    vector<sptr(Mesh) > m_meshes;
+    vector<sptr(Light) > m_lights;
 
     // helpers
     void makeLight();
 
 public:
-    RenderMgr(const SPTR(Camera) cam);
+    RenderMgr(const shared_ptr<Camera> cam);
     ~RenderMgr();
 
     void renderTo(const string &tkCanvas);
     void update();
 
-    void addMesh(SPTR(rend::Mesh) mesh);
-    void addAmbientLight(Color3 intensity);
-    SPTR(DirectionalLight) addDirectionalLight(Color3 intensity, math::vec3 direction);
+    void addMesh(sptr(rend::Mesh) mesh);
+    sptr(AmbientLight) addAmbientLight(Color3 intensity);
+    sptr(DirectionalLight) addDirectionalLight(Color3 intensity, math::vec3 direction);
+    sptr(PointLight) addPointLight(Color3 intensity, math::vec3 position /* Coeffs */);
 
     void resize(int w, int h);
 };

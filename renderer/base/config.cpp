@@ -1,11 +1,23 @@
+/*
+ * config.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "config.h"
 
 #include <yaml-cpp/yaml.h>
+#include "poly.h"
+
+namespace base
+{
 
 struct ModelData
 {
     string modelpath;
     math::vec3 pos;
+    math::Triangle::WindingOrder wo;
 };
 
 static void operator>> (const YAML::Node &node, math::vec3 &v)
@@ -19,10 +31,19 @@ static void operator>> (const YAML::Node &node, ModelData &data)
 {
     node["model"] >> data.modelpath;
     node["position"] >> data.pos;
-}
+    string wo;
+    node["order"] >> wo;
 
-namespace base
-{
+    if (wo == "CW")
+        data.wo = math::Triangle::WO_CW;
+    else if (wo == "CCW")
+        data.wo = math::Triangle::WO_CCW;
+    else
+    {
+        *syslog << "Bad winding order in model" << data.modelpath << ". Setting to defaults" << logwarn;
+        data.wo = math::Triangle::WO_CW;
+    }
+}
 
 Config::Config()
 {
@@ -88,12 +109,12 @@ void Config::configure(const OsPath &path, Controller *controller)
         }
 
         // load resource
-        SPTR(base::Resource) gettedResource = controller->m_resourceMgr->getResource(modelpath);
+        sptr(base::Resource) gettedResource = controller->m_resourceMgr->getResource(modelpath);
         if (!gettedResource)
             continue;
 
         // check: is it rendering item?
-        SPTR(rend::Mesh) renderItem = dynamic_pointer_cast<rend::Mesh>(gettedResource);
+        sptr(rend::Mesh) renderItem = dynamic_pointer_cast<rend::Mesh>(gettedResource);
         if (!renderItem)
         {
             *syslog << "Can't render" << modelpath << logerr;
@@ -102,6 +123,7 @@ void Config::configure(const OsPath &path, Controller *controller)
 
         // save it
         renderItem->setPosition(modelData[i].pos);
+        renderItem->setWindingOrder(modelData[i].wo);
         controller->m_rendmgr->addMesh(renderItem);
     }
 }

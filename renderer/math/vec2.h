@@ -1,3 +1,10 @@
+/*
+ * vec2.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef VEC2_H
 #define VEC2_H
 

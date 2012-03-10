@@ -1,3 +1,10 @@
+/*
+ * vec3.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef VEC3_H
 #define VEC3_H
 

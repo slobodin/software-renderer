@@ -1,3 +1,10 @@
+/*
+ * plane.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef PLANE_H
 #define PLANE_H
 

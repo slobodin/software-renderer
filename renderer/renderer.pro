@@ -48,7 +48,11 @@ HEADERS += \
     rend/material.h \
     rend/light.h \
     rend/renderlist.h \
-    base/decoderbspq3.h
+    base/decoderbspq3.h \
+    base/decoderasc.h \
+    math/vertex.h \
+    rend/texture.h \
+    rend/model.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -75,7 +79,10 @@ SOURCES += \
     rend/material.cpp \
     rend/light.cpp \
     rend/renderlist.cpp \
-    base/decoderbspq3.cpp
+    base/decoderbspq3.cpp \
+    base/decoderasc.cpp \
+    math/vertex.cpp \
+    rend/texture.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

@@ -1,3 +1,10 @@
+/*
+ * controller.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
@@ -18,9 +25,9 @@ class DLL_PUBLIC Controller : public common::Singleton<Controller>, boost::nonco
     friend class Config;
 
 protected:
-    SPTR(rend::RenderMgr) m_rendmgr;
-    SPTR(rend::Camera) m_mainCam;
-    SPTR(ResourceMgr) m_resourceMgr;
+    sptr(rend::RenderMgr) m_rendmgr;
+    sptr(rend::Camera) m_mainCam;
+    sptr(ResourceMgr) m_resourceMgr;
 
     string m_updateCallback;
     static void update();
@@ -31,6 +38,14 @@ protected:
     virtual ~Controller();
 
 public:
+
+    /*
+    virtual void onKeyboardKeyPressed() = 0;
+    virtual void onKeyboardKeyReleased() = 0;
+    virtual void onMouseMotion() = 0;
+    virtual void onMouseButtonPressed() = 0;
+    virtual void onMouseButtonRelease() = 0;
+    */
 
     void run();
 };

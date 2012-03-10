@@ -1,3 +1,10 @@
+/*
+ * boundingsphere.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef BOUNDINGSPHERE_H
 #define BOUNDINGSPHERE_H
 

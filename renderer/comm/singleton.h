@@ -1,3 +1,10 @@
+/*
+ * singleton.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef SINGLETON_H
 #define SINGLETON_H
 

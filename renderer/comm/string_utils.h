@@ -1,3 +1,10 @@
+/*
+ * string_utils.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 

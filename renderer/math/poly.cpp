@@ -1,15 +1,24 @@
+/*
+ * poly.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "poly.h"
 
 namespace math
 {
 
-Triangle::Triangle(WindingOrder wo)
-    : m_windingOrder(wo)
+Triangle::Triangle(WindingOrder wo, SideType st)
+    : m_windingOrder(wo),
+      m_sideType(st)
 {
 }
 
-Triangle::Triangle(const vec3 *arr, WindingOrder wo)
-    : m_windingOrder(wo)
+Triangle::Triangle(const vertex *arr, WindingOrder wo, SideType st)
+    : m_windingOrder(wo),
+      m_sideType(st)
 {
     if (!arr)
     {
@@ -24,7 +33,7 @@ Triangle::Triangle(const vec3 *arr, WindingOrder wo)
     computeNormal();
 }
 
-const vec3 &Triangle::v(const size_t ind) const
+const vertex &Triangle::v(const size_t ind) const
 {
     if (ind > 2)
     {
@@ -34,7 +43,7 @@ const vec3 &Triangle::v(const size_t ind) const
     return m_verts[ind];
 }
 
-vec3 &Triangle::v(const size_t ind)
+vertex &Triangle::v(const size_t ind)
 {
     if (ind > 2)
     {
@@ -46,16 +55,22 @@ vec3 &Triangle::v(const size_t ind)
 
 void Triangle::computeNormal()
 {
-    vec3 p1 = (m_verts[1] - m_verts[0]).normalize();
-    vec3 p2 = (m_verts[2] - m_verts[0]).normalize();
+    vec3 p1, p2;
 
     if (m_windingOrder == WO_CW)
-        m_normal = p1.crossProduct(p2);
+    {
+        p1.set((m_verts[1].p - m_verts[0].p).normalize());
+        p2.set((m_verts[2].p - m_verts[0].p).normalize());
+    }
     else if (m_windingOrder == WO_CCW)
-        m_normal = p2.crossProduct(p1);
+    {
+        p1.set((m_verts[0].p - m_verts[1].p).normalize());
+        p2.set((m_verts[2].p - m_verts[1].p).normalize());
+    }
     else
         throw std::exception();
 
+    m_normal = p1.crossProduct(p2);
     m_normal.normalize();
 }
 

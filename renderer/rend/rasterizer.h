@@ -1,3 +1,10 @@
+/*
+ * rasterizer.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef RASTERIZER_H
 #define RASTERIZER_H
 

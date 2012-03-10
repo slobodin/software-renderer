@@ -1,3 +1,10 @@
+/*
+ * decoderbspq3.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef DECODERBSPQ3_H
 #define DECODERBSPQ3_H
 
@@ -177,7 +184,7 @@ public:
     DecoderBSPQ3();
     ~DecoderBSPQ3();
 
-    SPTR(Resource) decode(const OsPath &path);
+    sptr(Resource) decode(const OsPath &path);
     string extention() const;
 };
 

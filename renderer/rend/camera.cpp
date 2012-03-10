@@ -1,3 +1,10 @@
+/*
+ * camera.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "camera.h"
 
 namespace rend
@@ -142,9 +149,9 @@ void Camera::toCamera(RenderList &rendList) const
 
     while (t != trias.end())
     {
-        math::vec3 &p1 = t->v(0);
-        math::vec3 &p2 = t->v(1);
-        math::vec3 &p3 = t->v(2);
+        math::vec3 &p1 = t->v(0).p;
+        math::vec3 &p2 = t->v(1).p;
+        math::vec3 &p3 = t->v(2).p;
 
         m_worldToCamera.transformPoint(p1);
         m_worldToCamera.transformPoint(p2);
@@ -185,9 +192,9 @@ void Camera::toScreen(RenderList &rendList) const
 
     foreach (math::Triangle &t, trias)
     {
-        math::vec3 &p1 = t.v(0);
-        math::vec3 &p2 = t.v(1);
-        math::vec3 &p3 = t.v(2);
+        math::vec3 &p1 = t.v(0).p;
+        math::vec3 &p2 = t.v(1).p;
+        math::vec3 &p3 = t.v(2).p;
 
         toScreen(p1);
         toScreen(p2);

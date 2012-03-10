@@ -1,3 +1,10 @@
+/*
+ * dll.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef DLL_H
 #define DLL_H
 

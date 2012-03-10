@@ -1,3 +1,10 @@
+/*
+ * decoderplg.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef DECODERPLG_H
 #define DECODERPLG_H
 
@@ -14,7 +21,7 @@ public:
     DecoderPLG();
     ~DecoderPLG();
 
-    SPTR(Resource) decode(const OsPath &path);
+    sptr(Resource) decode(const OsPath &path);
     string extention() const;
 };
 

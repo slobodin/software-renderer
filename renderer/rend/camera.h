@@ -1,3 +1,10 @@
+/*
+ * camera.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef CAMERA_H
 #define CAMERA_H
 
@@ -10,21 +17,17 @@
 namespace rend
 {
 
-class Frustum
-{
-
-};
-
-struct ViewPort
-{
-    double width;
-    double height;
-    double centerX;
-    double centerY;
-};
-
 class Camera
 {
+    struct ViewPort
+    {
+        double width;
+        double height;
+        double centerX;
+        double centerY;
+    };
+
+private:
     math::vec3 m_position;
     math::vec3 m_right;
     math::vec3 m_up;

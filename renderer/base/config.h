@@ -1,3 +1,10 @@
+/*
+ * config.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef CONFIG_H
 #define CONFIG_H
 

@@ -1,3 +1,10 @@
+/*
+ * common_math.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef COMMON_MATH_H
 #define COMMON_MATH_H
 

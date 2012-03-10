@@ -1,3 +1,10 @@
+/*
+ * affinetransform.h
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #ifndef AFFINETRANSFORM_H
 #define AFFINETRANSFORM_H
 

@@ -1,3 +1,10 @@
+/*
+ * rasterizer.cpp
+ *
+ *  Created on: Mar 10, 2012
+ *      Author: flamingo
+ */
+
 #include "rasterizer.h"
 
 #include "vec2.h"
@@ -554,7 +561,7 @@ void Rasterizer::drawFillTriangle(const math::vec3 &p1,
 
 void Rasterizer::drawFillTriangle(const math::Triangle &tr, const Color3 &color)
 {
-    drawFillTriangle(tr.v(0), tr.v(1), tr.v(2), color);
+    drawFillTriangle(tr.v(0).p, tr.v(1).p, tr.v(2).p, color);
 }
 
 void Rasterizer::drawTriangle(const math::vec3 &p1, const math::vec3 &p2, const math::vec3 &p3, const Color3 &color)
@@ -566,7 +573,7 @@ void Rasterizer::drawTriangle(const math::vec3 &p1, const math::vec3 &p2, const 
 
 void Rasterizer::drawTriangle(const math::Triangle &tr, const Color3 &color)
 {
-    drawTriangle(tr.v(0), tr.v(1), tr.v(2), color);
+    drawTriangle(tr.v(0).p, tr.v(1).p, tr.v(2).p, color);
 }
 
 Rasterizer::Rasterizer(const int width, const int height)
@@ -591,7 +598,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
             break;
 
         default:
-
+            *syslog << "Unsupported shading mode." << logwarn;
             break;
         }
     }
