@@ -19,8 +19,13 @@ const double EPSILON_E4 = 1E-4;
 const double EPSILON_E5 = 1E-5;
 const double EPSILON_E6 = 1E-6;
 
-template <class T> inline T Max(T x, T y) { return (x > y) ? x : y; }
-template <class T> inline T Min(T x, T y) { return (x < y) ? x : y; }
+template <typename T> inline T Max(T x, T y) { return (x > y) ? x : y; }
+template <typename T> inline T Min(T x, T y) { return (x < y) ? x : y; }
+
+inline bool DCMP(double x, double y)
+{
+    return (fabs(x - y) < EPSILON_E3);
+}
 
 #ifdef PI
 #undef PI

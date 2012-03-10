@@ -23,6 +23,7 @@ void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
     const vector<math::vertex> &vertices = mesh.vertices();
     // mesh indices
     const vector<size_t> &indices = mesh.indices();
+    // FIXME: not here!
     // mesh world transformation
     const math::AffineTransform &tr = mesh.transformation();
 

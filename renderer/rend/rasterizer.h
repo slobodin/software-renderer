@@ -17,6 +17,7 @@
 #include "material.h"
 #include "poly.h"
 #include "renderlist.h"
+#include "vertex.h"
 
 namespace rend
 {
@@ -26,6 +27,13 @@ class Rasterizer
     FrameBuffer m_fb;
 
     // helpers
+    enum TriangleType
+    {
+        TT_FLAT_TOP,
+        TT_FLAT_BOTTOM,
+        TT_FLAT_GENERAL
+    };
+
     void drawFillTriangle(const math::vec3 &p1,
                           const math::vec3 &p2,
                           const math::vec3 &p3,
@@ -37,7 +45,11 @@ class Rasterizer
                       const math::vec3 &p3,
                       const Color3 &color);
     void drawTriangle(const math::Triangle &tr,
-                          const Color3 &color);
+                      const Color3 &color);
+    void drawGouraudTriangle(const math::vertex &v1,
+                             const math::vertex &v2,
+                             const math::vertex &v3);
+    void drawGouraudTriangle(const math::Triangle &tr);
 
     void drawBottomTriangle(int x1, int y1,
                             int x2, int y2,

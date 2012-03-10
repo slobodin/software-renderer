@@ -3,7 +3,7 @@
 # const int PLX_1SIDED_FLAG           = 0x0000;   // this poly is single sided
 # const int PLX_2SIDED_FLAG           = 0x1000;   // this poly is double sided
 # const int PLX_SHADE_MODE_FLAT       = 0x2000;   // this poly uses flat shading
-# const int PLX_SHADE_MODE_PHONG      = 0x4000;   // this poly uses phong shading
+# const int PLX_SHADE_MODE_GOURAUD    = 0x4000;   // this poly uses gouraud shading
 # const int PLX_SHADE_MODE_WIRE       = 0x8000;   // this poly is wireframe
 
 # name num_verts num_polys
@@ -38,20 +38,20 @@ slider 21 19
 
 #poly list
 
-0x30f0 3 1 9 2
-0x30f0 3 5 1 2
+0x50f0 3 1 9 2
+0x50f0 3 5 1 2
 
-0x30f0 3 4 0 1
-0x30f0 3 5 4 1
+0x50f0 3 4 0 1
+0x50f0 3 5 4 1
 
-0x30f0 3 3 8 0
-0x30f0 3 4 3 0
+0x50f0 3 3 8 0
+0x50f0 3 4 3 0
 
-0x30f0 3 8 3 2
-0x30f0 3 9 8 2
+0x50f0 3 8 3 2
+0x50f0 3 9 8 2
 
-0x30f0 3 9 7 6
-0x30f0 3 8 9 6
+0x50f0 3 9 7 6
+0x50f0 3 8 9 6
 
 0x30f0 3 7 1 0
 0x30f0 3 6 7 0
@@ -65,6 +65,6 @@ slider 21 19
 0x30f0 3 16 15 14
 0x30f0 3 17 16 14
 
-0x20f0 3 18 19 20
+0x90f0 3 18 19 20
 
 #end poly list

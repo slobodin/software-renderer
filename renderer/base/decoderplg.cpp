@@ -108,16 +108,20 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
 
         token >> std::hex >> polyDescriptor >> std::dec >> numVertsByPoly;
 
+        int red = polyDescriptor & 0x0F00;
+        int green = polyDescriptor & 0x00F0;
+        int blue = polyDescriptor & 0x000F;
+
+        rend::Color3 col(red, green, blue);
+
         for (unsigned i = 0; i < numVertsByPoly; i++)
         {
             int index;
             token >> index;
             indices.push_back(index);
-        }
 
-        int red = polyDescriptor & 0x0F00;
-        int green = polyDescriptor & 0x00F0;
-        int blue = polyDescriptor & 0x000F;
+            vertexList[index].color = col;
+        }
 
         rend::Material::ShadeMode shadeMode;
         int sm = polyDescriptor & 0xE000;   // mask to extract shading mode
@@ -157,7 +161,6 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
             sideType = math::Triangle::ST_2_SIDED;
         }
 
-        rend::Color3 col(red, green, blue);
         materials.push_back(rend::Material(col, shadeMode/*, sideType*/));
     }
 
