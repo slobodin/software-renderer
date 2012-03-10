@@ -17,8 +17,8 @@ namespace base
 static const int PLX_1SIDED_FLAG           = 0x0000;   // this poly is single sided
 static const int PLX_2SIDED_FLAG           = 0x1000;   // this poly is double sided
 static const int PLX_SHADE_MODE_FLAT       = 0x2000;   // this poly uses flat shading
-//static const int PLX_SHADE_MODE_GOURAUD    = 0x4000;   // this poly used gouraud shading
-static const int PLX_SHADE_MODE_PHONG      = 0x4000;   // this poly uses phong shading
+//static const int PLX_SHADE_MODE_PHONG    = 0x4000;   // this poly used phong shading
+static const int PLX_SHADE_MODE_GOURAUD    = 0x4000;   // this poly uses gouraud shading
 static const int PLX_SHADE_MODE_WIRE       = 0x8000;   // this poly is wireframe
 
 DecoderPLG::DecoderPLG()
@@ -127,8 +127,8 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
             shadeMode = rend::Material::SM_FLAT;
             break;
 
-        case PLX_SHADE_MODE_PHONG:
-            shadeMode = rend::Material::SM_PHONG;
+        case PLX_SHADE_MODE_GOURAUD:
+            shadeMode = rend::Material::SM_GOURAUD;
             break;
 
         case PLX_SHADE_MODE_WIRE:
@@ -166,6 +166,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
                                             materials,
                                             rend::Mesh::MT_MESH_INDEXEDTRIANGLELIST));
     newMesh->setName(resourceName);
+    newMesh->computeVertexNormals();
 
     *syslog << "Decoded plg-model \"" << newMesh->name() << "\". Number of vertices:" << newMesh->numVertices() << logmess;
     

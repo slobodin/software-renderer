@@ -16,7 +16,7 @@ RenderList::RenderList()
 {
 }
 
-void RenderList::append(const Mesh &mesh)
+void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
 {
     math::Triangle triangle;
     // all mesh vertices
@@ -32,7 +32,7 @@ void RenderList::append(const Mesh &mesh)
 
         for(size_t ind = 0, t = 0; ind < mesh.numIndices(); ind += 3, t++)
         {
-            if ((ind + 2) == mesh.numIndices())
+            if ((ind + 2) >= mesh.numIndices())
                 break;
 
             // form the triangle
@@ -53,10 +53,10 @@ void RenderList::append(const Mesh &mesh)
 
             // compute normals
             triangle.setWindingOrder(mesh.getWindingOrder());
-            triangle.computeNormal();            
+            triangle.computeNormal();
 
             // save it
-            m_triangles.push_back(triangle);
+            output.push_back(triangle);
         }
         break;
 
@@ -74,9 +74,9 @@ void RenderList::append(const Mesh &mesh)
             triangle.material() = Material(Color3(255, 0, 0), Material::SM_FLAT);
 
             triangle.setWindingOrder(mesh.getWindingOrder());
-            triangle.computeNormal();            
+            triangle.computeNormal();
 
-            m_triangles.push_back(triangle);
+            output.push_back(triangle);
         }
         break;
 
@@ -85,6 +85,11 @@ void RenderList::append(const Mesh &mesh)
         *syslog << "Can't draw this mesh" << logwarn;
         break;
     }
+}
+
+void RenderList::append(const Mesh &mesh)
+{
+    RenderList::createTriangles(mesh, m_triangles);
 }
 
 void RenderList::zsort()

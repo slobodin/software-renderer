@@ -1,12 +1,12 @@
 /*
- * vec3.h
+ * vector3.h
  *
  *  Created on: Mar 10, 2012
  *      Author: flamingo
  */
 
-#ifndef VEC3_H
-#define VEC3_H
+#ifndef vector3_H
+#define vector3_H
 
 #include "comm_pch.h"
 
@@ -16,43 +16,57 @@ namespace math
 {
 
 //! 3-vector
-struct vec3
+template<typename T>
+struct vector3
 {
-    double x, y, z;
-    vec3(double xx = 0.0, double yy = 0.0, double zz = 0.0) : x(xx), y(yy), z(zz) { }
+    T x, y, z;
+    vector3(T xx = 0.0, T yy = 0.0, T zz = 0.0) : x(xx), y(yy), z(zz) { }
 
-    vec3 &operator+= (const vec3 &other);
-    vec3 &operator-= (const vec3 &other);
-    vec3 &operator*= (const double s);
-    vec3 &operator/= (const double s);
+    vector3 &operator+= (const vector3 &other);
+    vector3 &operator-= (const vector3 &other);
+    vector3 &operator*= (T s);
+    vector3 &operator/= (T s);
 
-    vec3 operator-() const;
+    vector3 operator-() const;
 
-    bool operator== (const vec3 &other) const;
-    bool operator!= (const vec3 &other) const;
+    bool operator== (const vector3 &other) const;
+    bool operator!= (const vector3 &other) const;
 
-    operator const double* () const;
+    operator const T* () const;
 
-    double length() const;
-    vec3 &normalize();
-    void set(const double xx, const double yy, const double zz);
-    void set(const vec3 &other);
+    T length() const;
+    vector3 &normalize();
+    void set(T xx, T yy, T zz);
+    void set(const vector3 &other);
     void zero();
     bool isZero() const;
-    double dotProduct(const vec3 &other) const;
-    vec3 crossProduct(const vec3 &other) const;
+    T dotProduct(const vector3 &other) const;
+    vector3 crossProduct(const vector3 &other) const;
 
-    friend vec3 operator+ (const vec3 &a, const vec3 &b);
-    friend vec3 operator- (const vec3 &a, const vec3 &b);
-    friend vec3 operator* (const vec3 &a, const double b);
-    friend vec3 operator* (const double a, const vec3 &b);
-    friend vec3 operator/ (const vec3 &a, const double b);
+    template<typename T1>
+    friend vector3<T1> operator+ (const vector3<T1> &a, const vector3<T1> &b);
+    template<typename T1>
+    friend vector3<T1> operator- (const vector3<T1> &a, const vector3<T1> &b);
+    template<typename T1>
+    friend vector3<T1> operator* (const vector3<T1> &a, T1 b);
+    template<typename T1>
+    friend vector3<T1> operator* (T1 a, const vector3<T1> &b);
+    template<typename T1>
+    friend vector3<T1> operator/ (const vector3<T1> &a, T b);
 
-    friend std::ostream &operator<< (std::ostream &os, const vec3 &v);
+    template<typename T1>
+    friend std::ostream &operator<< (std::ostream &os, const vector3<T1> &v);
+
+    template<typename T1>
+    friend bool comparex(const vector3<T1> &a, const vector3<T1> &b);
+    template<typename T1>
+    friend bool comparey(const vector3<T1> &a, const vector3<T1> &b);
+    template<typename T1>
+    friend bool comparez(const vector3<T1> &a, const vector3<T1> &b);
 };
 
-
-inline vec3 &vec3::operator+= (const vec3 &other)
+template<typename T>
+inline vector3<T> &vector3<T>::operator+= (const vector3<T> &other)
 {
     x += other.x;
     y += other.y;
@@ -60,7 +74,8 @@ inline vec3 &vec3::operator+= (const vec3 &other)
     return *this;
 }
 
-inline vec3 &vec3::operator-= (const vec3 &other)
+template<typename T>
+inline vector3<T> &vector3<T>::operator-= (const vector3<T> &other)
 {
     x -= other.x;
     y -= other.y;
@@ -68,7 +83,8 @@ inline vec3 &vec3::operator-= (const vec3 &other)
     return *this;
 }
 
-inline vec3 &vec3::operator*= (const double s)
+template<typename T>
+inline vector3<T> &vector3<T>::operator*= (T s)
 {
     x *= s;
     y *= s;
@@ -76,7 +92,8 @@ inline vec3 &vec3::operator*= (const double s)
     return *this;
 }
 
-inline vec3 &vec3::operator/= (const double s)
+template<typename T>
+inline vector3<T> &vector3<T>::operator/= (T s)
 {
     assert(s != 0.0);
     x /= s;
@@ -85,12 +102,14 @@ inline vec3 &vec3::operator/= (const double s)
     return *this;
 }
 
-inline vec3 vec3::operator-() const
+template<typename T>
+inline vector3<T> vector3<T>::operator-() const
 {
-    return vec3(-x, -y, -z);
+    return vector3<T>(-x, -y, -z);
 }
 
-inline bool vec3::operator== (const vec3 &other) const
+template<typename T>
+inline bool vector3<T>::operator== (const vector3<T> &other) const
 {
     if (fabs(x - other.x) > EPSILON_E3)
         return false;
@@ -101,7 +120,8 @@ inline bool vec3::operator== (const vec3 &other) const
     return true;
 }
 
-inline bool vec3::operator!= (const vec3 &other) const
+template<typename T>
+inline bool vector3<T>::operator!= (const vector3<T> &other) const
 {
     if (fabs(x - other.x) > EPSILON_E3)
         return true;
@@ -112,19 +132,22 @@ inline bool vec3::operator!= (const vec3 &other) const
     return false;
 }
 
-inline vec3::operator const double* () const
+template<typename T>
+inline vector3<T>::operator const T* () const
 {
     return &x;
 }
 
-inline double vec3::length() const
+template<typename T>
+inline T vector3<T>::length() const
 {
-    double t = x * x + y * y + z * z;
+    T t = x * x + y * y + z * z;
     assert(t != 0.0);
     return sqrt(t);
 }
 
-inline vec3 &vec3::normalize()
+template<typename T>
+inline vector3<T> &vector3<T>::normalize()
 {
     if ((fabs(x - 0.0) < EPSILON_E6) &&
         (fabs(y - 0.0) < EPSILON_E6) &&
@@ -134,75 +157,109 @@ inline vec3 &vec3::normalize()
     return (*this) /= length();
 }
 
-inline void vec3::set(const double xx, const double yy, const double zz)
+template<typename T>
+inline void vector3<T>::set(T xx, T yy, T zz)
 {
     x = xx;
     y = yy;
     z = zz;
 }
 
-inline void vec3::set(const vec3 &other)
+template<typename T>
+inline void vector3<T>::set(const vector3 &other)
 {
     x = other.x;
     y = other.y;
     z = other.z;
 }
 
-inline void vec3::zero()
+template<typename T>
+inline void vector3<T>::zero()
 {
     x = 0.0;
     y = 0.0;
     z = 0.0;
 }
 
-inline bool vec3::isZero() const
+template<typename T>
+inline bool vector3<T>::isZero() const
 {
     return (x == 0.0) && (y == 0.0) && (z == 0.0);
 }
 
-inline double vec3::dotProduct(const vec3 &other) const
+template<typename T>
+inline T vector3<T>::dotProduct(const vector3<T> &other) const
 {
     return (x * other.x + y * other.y + z * other.z);
 }
 
-inline vec3 vec3::crossProduct(const vec3 &other) const
+template<typename T>
+inline vector3<T> vector3<T>::crossProduct(const vector3<T> &other) const
 {
-    return vec3(y * other.z - z * other.y,
-                -(x * other.z - z * other.x),
-                x * other.y - y * other.x);
+    return vector3<T>(y * other.z - z * other.y,
+                      -(x * other.z - z * other.x),
+                      x * other.y - y * other.x);
 }
 
-inline vec3 operator+ (const vec3 &a, const vec3 &b)
+template<typename T1>
+bool comparex(const vector3<T1> &a, const vector3<T1> &b)
 {
-    return vec3(a.x + b.x, a.y + b.y, a.z + b.z);
-}
-inline vec3 operator- (const vec3 &a, const vec3 &b)
-{
-    return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
+    return a.x < b.x;
 }
 
-inline vec3 operator* (const vec3 &a, const double b)
+template<typename T1>
+bool comparey(const vector3<T1> &a, const vector3<T1> &b)
 {
-    return vec3(a.x * b, a.y * b, a.z * b);
+    return a.y < b.y;
 }
 
-inline vec3 operator* (const double a, const vec3 &b)
+template<typename T1>
+bool comparez(const vector3<T1> &a, const vector3<T1> &b)
 {
-    return vec3(b.x * a, b.y * a, b.z * a);
+    return a.z < b.z;
 }
 
-inline vec3 operator/ (const vec3 &a, const double b)
+template<typename T1>
+inline vector3<T1> operator+ (const vector3<T1> &a, const vector3<T1> &b)
+{
+    return vector3<T1>(a.x + b.x, a.y + b.y, a.z + b.z);
+}
+
+template<typename T1>
+inline vector3<T1> operator- (const vector3<T1> &a, const vector3<T1> &b)
+{
+    return vector3<T1>(a.x - b.x, a.y - b.y, a.z - b.z);
+}
+
+template<typename T1>
+inline vector3<T1> operator* (const vector3<T1> &a, T1 b)
+{
+    return vector3<T1>(a.x * b, a.y * b, a.z * b);
+}
+
+template<typename T1>
+inline vector3<T1> operator* (T1 a, const vector3<T1> &b)
+{
+    return vector3<T1>(b.x * a, b.y * a, b.z * a);
+}
+
+template<typename T1>
+inline vector3<T1> operator/ (const vector3<T1> &a, T1 b)
 {
     assert(b != 0.0);
-    return vec3(a.x / b, a.y / b, a.z / b);
+    return vector3<T1>(a.x / b, a.y / b, a.z / b);
 }
 
-inline std::ostream &operator<< (std::ostream &os, const vec3 &v)
+template<typename T1>
+inline std::ostream &operator<< (std::ostream &os, const vector3<T1> &v)
 {
     os << "[x: " << v.x << " y: " << v.y << " z: " << v.z << "]";
     return os;
 }
 
+typedef vector3<double> vec3;
+typedef vector3<uint32_t> ivec3;
+
 }
 
-#endif // VEC3_H
+#endif // vector3_H

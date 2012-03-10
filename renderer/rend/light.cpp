@@ -13,6 +13,36 @@ namespace rend
 const size_t Light::MAX_LIGHTS = 8;
 size_t Light::NumLights = 0;
 
+void Light::performShading(ShaderFunction f) const
+{
+    /*if (!m_isEnabled)
+        return;
+
+    math::ivec3 shadedColor;
+    list<math::Triangle> &trias = renderlist.triangles();
+
+    foreach (math::Triangle &t, trias)
+    {
+        Material &material = t.material();
+
+        if (material.shadeMode() == Material::SM_UNDEFINED
+                || material.shadeMode() == Material::SM_WIRE)
+            continue;
+
+        // FIXME: for all light sources
+
+        shadedColor = shader(material.color(), 1.0);
+
+        if (shadedColor.x > 255) shadedColor.x = 255;
+        if (shadedColor.y > 255) shadedColor.y = 255;
+        if (shadedColor.z > 255) shadedColor.z = 255;
+
+        material.color() = RgbToInt(shadedColor);
+
+        shadedColor.zero();
+    }*/
+}
+
 Light::Light(const Color3 &intensity)
     : m_isEnabled(true),
       m_intensity(intensity)
@@ -23,11 +53,23 @@ Light::Light(const Color3 &intensity)
     }
 
     NumLights++;
+
+    m_shader = &Light::shader;
 }
 
 Light::~Light()
 {
     NumLights--;
+}
+
+math::ivec3 AmbientLight::shader(const Color3 &matColor, double coeff) const
+{
+    math::ivec3 res;
+    res.x = m_intensity.red() * matColor.red() / 256;
+    res.y = m_intensity.green() * matColor.green() / 256;
+    res.z = m_intensity.blue() * matColor.blue() / 256;
+
+    return res;
 }
 
 AmbientLight::AmbientLight(const Color3 &intensity)
@@ -67,6 +109,10 @@ void AmbientLight::illuminate(RenderList &renderlist) const
         shadedColor_g = 0;
         shadedColor_b = 0;
     }
+}
+
+math::ivec3 DirectionalLight::shader(const Color3 &matColor, double coeff) const
+{
 }
 
 DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &dir)
@@ -113,6 +159,10 @@ void DirectionalLight::illuminate(RenderList &renderlist) const
         shadedColor_g = 0;
         shadedColor_b = 0;
     }
+}
+
+math::ivec3 PointLight::shader(const Color3 &matColor, double coeff) const
+{
 }
 
 PointLight::PointLight(const Color3 &intensity, const math::vec3 &pos,
@@ -168,6 +218,10 @@ void PointLight::illuminate(RenderList &renderlist) const
         shadedColor_g = 0;
         shadedColor_b = 0;
     }
+}
+
+math::ivec3 SpotLight::shader(const Color3 &matColor, double coeff) const
+{
 }
 
 SpotLight::SpotLight(const Color3 &intensity, const math::vec3 &pos, const math::vec3 &dir,

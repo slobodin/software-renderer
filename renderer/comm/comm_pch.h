@@ -38,6 +38,7 @@
 #include <boost/foreach.hpp>
 #include <boost/utility.hpp>
 #include <boost/date_time.hpp>
+#include <boost/function.hpp>
 
 using std::string;
 using std::wstring;

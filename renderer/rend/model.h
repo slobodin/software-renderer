@@ -27,7 +27,7 @@ public:
     void setScale(const math::vec3 &coeff);
     void setTransformation(const math::AffineTransform &tr);
 
-    const math::vec3& position() const { return m_worldTransformation.getv(); }
+    math::vec3 position() const { return m_worldTransformation.getv(); }
     const math::AffineTransform& transformation() const { return m_worldTransformation; }
 };
 

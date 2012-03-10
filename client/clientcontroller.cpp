@@ -49,7 +49,7 @@ void ClientController::onKeyW()
     vec3 pos = m_this->m_mainCam->getPosition();
     vec3 dir = m_this->m_mainCam->getDirection();
 
-    vec3 delta = 5 * dir;
+    vec3 delta = 5.0 * dir;
     pos += delta;
 
     m_this->m_mainCam->setPosition(pos);
@@ -67,7 +67,7 @@ void ClientController::onKeyS()
     vec3 pos = m_this->m_mainCam->getPosition();
     vec3 dir = m_this->m_mainCam->getDirection();
 
-    vec3 delta = 5 * dir;
+    vec3 delta = 5.0 * dir;
     pos -= delta;
 
     m_this->m_mainCam->setPosition(pos);

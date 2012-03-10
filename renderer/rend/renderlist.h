@@ -25,6 +25,8 @@ class RenderList
 public:
     RenderList();
 
+    static void createTriangles(const Mesh &mesh, list<math::Triangle> &output);
+
     void append(const Mesh &mesh);
 
     const list<math::Triangle> &triangles() const { return m_triangles; }

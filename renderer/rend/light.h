@@ -41,6 +41,12 @@ protected:
     bool m_isEnabled;   // on\off
     Color3 m_intensity;
 
+    virtual math::ivec3 shader(const Color3 &matColor, double coeff) const = 0;
+    typedef boost::function<math::ivec3 (const Light*, const Color3 &, double)> ShaderFunction;
+    ShaderFunction m_shader;
+
+    void performShading(ShaderFunction f) const;
+
 public:
     Light(const Color3 &intensity);
     virtual ~Light();
@@ -53,6 +59,9 @@ public:
 
 class AmbientLight : public Light
 {
+protected:
+    virtual math::ivec3 shader(const Color3 &matColor, double coeff) const;
+
 public:
     AmbientLight(const Color3 &intensity);
 
@@ -62,6 +71,8 @@ public:
 class DirectionalLight : public Light
 {
     math::vec3 m_dir;
+
+    virtual math::ivec3 shader(const Color3 &matColor, double coeff) const;
 
 public:
     DirectionalLight(const Color3 &intensity, const math::vec3 &dir);
@@ -73,6 +84,8 @@ class PointLight : public Light
 {
     math::vec3 m_pos;
     double m_kc, m_kl, m_kq;
+
+    virtual math::ivec3 shader(const Color3 &matColor, double coeff) const;
 
 public:
     PointLight(const Color3 &intensity, const math::vec3 &pos,
@@ -89,6 +102,8 @@ class SpotLight : public Light
     double m_innerAngle;    // spot inner angle
     double m_outerAngle;    // spot outer angle
     double m_falloff;
+
+    virtual math::ivec3 shader(const Color3 &matColor, double coeff) const;
 
 public:
     SpotLight(const Color3 &intensity, const math::vec3 &pos, const math::vec3 &dir,

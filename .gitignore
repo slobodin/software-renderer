@@ -9,3 +9,5 @@ client-release/*
 renderer-debug/*
 renderer-release/*
 resources/*.bsp
+resources/*.*~
+*.*~

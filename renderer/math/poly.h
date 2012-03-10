@@ -47,6 +47,10 @@ public:
     const vertex &v(const size_t ind) const;
     vertex &v(const size_t ind);
 
+    vector<vec3> points() const;
+    vector<vec3> normals() const;
+    vector<vec2> uvs() const;
+
     const rend::Material &material() const { return m_material; }
     rend::Material &material() { return m_material; }
 
@@ -61,24 +65,12 @@ public:
 
     friend bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2);
     friend bool ZCompareMin(const math::Triangle &t1, const math::Triangle &t2);
+    friend bool ZCompareMax(const math::Triangle &t1, const math::Triangle &t2);
 };
 
-inline bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2)
-{
-    double avgz = 0.33333 * (t1.m_verts[0].p.z + t1.m_verts[1].p.z + t1.m_verts[2].p.z);
-    double avgotherz = 0.33333 * (t2.m_verts[0].p.z + t2.m_verts[1].p.z + t2.m_verts[2].p.z);
-
-    if (avgz < avgotherz)
-        return true;
-
-    return false;
-}
-
-inline bool ZCompareMin(const Triangle &t1, const Triangle &t2)
-{
-//    std::min()
-    return true;
-}
+bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2);
+bool ZCompareMin(const math::Triangle &t1, const math::Triangle &t2);
+bool ZCompareMax(const math::Triangle &t1, const math::Triangle &t2);
 
 }
 

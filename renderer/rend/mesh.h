@@ -42,6 +42,8 @@ private:
     BoundingSphere m_boundingSphere;
     math::Triangle::WindingOrder m_windingOrder;
 
+    void computeBoundingSphere();
+
 public:
     Mesh(const vector<math::vertex> &vertices,
          const vector<size_t> &indices,
@@ -65,6 +67,8 @@ public:
 
     void setWindingOrder(math::Triangle::WindingOrder wo) { m_windingOrder = wo; }
     math::Triangle::WindingOrder getWindingOrder() const { return m_windingOrder; }
+
+    void computeVertexNormals();
 };
 
 }
