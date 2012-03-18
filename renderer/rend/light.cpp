@@ -13,44 +13,12 @@ namespace rend
 const size_t Light::MAX_LIGHTS = 8;
 size_t Light::NumLights = 0;
 
-void Light::performShading(ShaderFunction f) const
-{
-    /*if (!m_isEnabled)
-        return;
-
-    math::ivec3 shadedColor;
-    list<math::Triangle> &trias = renderlist.triangles();
-
-    foreach (math::Triangle &t, trias)
-    {
-        Material &material = t.material();
-
-        if (material.shadeMode() == Material::SM_UNDEFINED
-                || material.shadeMode() == Material::SM_WIRE)
-            continue;
-
-        // FIXME: for all light sources
-
-        shadedColor = shader(material.color(), 1.0);
-
-        if (shadedColor.x > 255) shadedColor.x = 255;
-        if (shadedColor.y > 255) shadedColor.y = 255;
-        if (shadedColor.z > 255) shadedColor.z = 255;
-
-        material.color() = RgbToInt(shadedColor);
-
-        shadedColor.zero();
-    }*/
-}
-
 Light::Light(const Color3 &intensity)
     : m_isEnabled(true),
       m_intensity(intensity)
 {
     if (NumLights >= MAX_LIGHTS)
-    {
         throw LightException("Light limit is reached");
-    }
 
     NumLights++;
 
@@ -62,14 +30,45 @@ Light::~Light()
     NumLights--;
 }
 
-math::ivec3 AmbientLight::shader(const Color3 &matColor, double coeff) const
+void Light::illuminate(RenderList &renderlist) const
 {
-    math::ivec3 res;
-    res.x = m_intensity.red() * matColor.red() / 256;
-    res.y = m_intensity.green() * matColor.green() / 256;
-    res.z = m_intensity.blue() * matColor.blue() / 256;
+    if (!m_isEnabled)
+        return;
 
-    return res;
+    list<math::Triangle> &trias = renderlist.triangles();
+
+    foreach (math::Triangle &t, trias)
+    {
+        Material &material = t.material();
+
+        switch (material.shadeMode())
+        {
+        case Material::SM_FLAT:
+            material.color() = m_shader(this, material.color(), t.normal());
+            break;
+
+        case Material::SM_GOURAUD:
+            t.v(0).color = m_shader(this, t.v(0).color, t.v(0).n);
+            t.v(1).color = m_shader(this, t.v(1).color, t.v(1).n);
+            t.v(2).color = m_shader(this, t.v(2).color, t.v(2).n);
+            break;
+
+        case Material::SM_UNDEFINED:
+        case Material::SM_WIRE:
+        case Material::SW_TEXTURE:
+        default:
+            break;
+        }
+    }
+}
+
+Color3 AmbientLight::shader(const Color3 &matColor, const math::vec3 &/*normal*/) const
+{
+    Color3 shadedColor;
+    shadedColor = m_intensity * matColor;
+    shadedColor *= (1 / 256.0);
+
+    return shadedColor;
 }
 
 AmbientLight::AmbientLight(const Color3 &intensity)
@@ -77,42 +76,24 @@ AmbientLight::AmbientLight(const Color3 &intensity)
 {
 }
 
-void AmbientLight::illuminate(RenderList &renderlist) const
+Color3 DirectionalLight::shader(const Color3 &matColor, const math::vec3 &normal) const
 {
-    if (!m_isEnabled)
-        return;
+    Color3 shadedColor;
+    const Color3 &originalColor = matColor;
 
-    int shadedColor_r = 0, shadedColor_g = 0, shadedColor_b = 0;
-    list<math::Triangle> &trias = renderlist.triangles();
+    if (normal.isZero())
+        return originalColor;
 
-    foreach (math::Triangle &t, trias)
+    double dp = normal.dotProduct(m_dir);
+    if (dp > 0)
     {
-        Material &material = t.material();
-
-        if (material.shadeMode() == Material::SM_UNDEFINED
-                || material.shadeMode() == Material::SM_WIRE)
-            continue;
-
-        // FIXME: for all light sources
-
-        shadedColor_r += m_intensity.red() * material.color().red() / 256;
-        shadedColor_g += m_intensity.green() * material.color().green() / 256;
-        shadedColor_b += m_intensity.blue() * material.color().blue() / 256;
-
-        if (shadedColor_r > 255) shadedColor_r = 255;
-        if (shadedColor_g > 255) shadedColor_g = 255;
-        if (shadedColor_b > 255) shadedColor_b = 255;
-
-        material.color() = RgbToInt(shadedColor_r, shadedColor_g, shadedColor_b);
-
-        shadedColor_r = 0;
-        shadedColor_g = 0;
-        shadedColor_b = 0;
+        shadedColor = m_intensity * originalColor;
+        shadedColor *= (dp / 256.0);
     }
-}
+    else
+        return originalColor;
 
-math::ivec3 DirectionalLight::shader(const Color3 &matColor, double coeff) const
-{
+    return shadedColor;
 }
 
 DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &dir)
@@ -122,47 +103,30 @@ DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &di
     m_dir.normalize();
 }
 
-void DirectionalLight::illuminate(RenderList &renderlist) const
+Color3 PointLight::shader(const Color3 &matColor, const math::vec3 &normal) const
 {
-    if (!m_isEnabled)
-        return;
+    Color3 shadedColor;
+    /*const Color3 &originalColor = t.material().color();
 
-    int shadedColor_r = 0, shadedColor_g = 0, shadedColor_b = 0;
-    list<math::Triangle> &trias = renderlist.triangles();
+    if (t.normal().isZero())
+        return originalColor;
 
-    foreach (math::Triangle &t, trias)
+    math::vec3 l = m_pos - t.v(0).p;
+    double dist = l.length();
+
+    double dp = t.normal().dotProduct(l);
+    if (dp > 0)
     {
-        Material &material = t.material();
+        double atten = m_kc + m_kl * dist + m_kq * dist * dist;
+        double i = dp / (/*dist* atten);
 
-        if (material.shadeMode() == Material::SM_UNDEFINED
-                || material.shadeMode() == Material::SM_WIRE)
-            continue;
-
-        if (t.normal().isZero())
-            continue;
-
-        double dp = t.normal().dotProduct(m_dir);
-        if (dp > 0)
-        {
-            shadedColor_r += m_intensity.red() * dp * material.color().red() / 256;
-            shadedColor_g += m_intensity.green() * dp * material.color().green() / 256;
-            shadedColor_b += m_intensity.blue() * dp * material.color().blue() / 256;
-
-            if (shadedColor_r > 255) shadedColor_r = 255;
-            if (shadedColor_g > 255) shadedColor_g = 255;
-            if (shadedColor_b > 255) shadedColor_b = 255;
-
-            material.color() = RgbToInt(shadedColor_r, shadedColor_g, shadedColor_b);
-        }
-
-        shadedColor_r = 0;
-        shadedColor_g = 0;
-        shadedColor_b = 0;
+        shadedColor = m_intensity * originalColor;
+        shadedColor *= (i / 256.0);
     }
-}
+    else
+        return originalColor;*/
 
-math::ivec3 PointLight::shader(const Color3 &matColor, double coeff) const
-{
+    return shadedColor;
 }
 
 PointLight::PointLight(const Color3 &intensity, const math::vec3 &pos,
@@ -175,52 +139,7 @@ PointLight::PointLight(const Color3 &intensity, const math::vec3 &pos,
 {
 }
 
-void PointLight::illuminate(RenderList &renderlist) const
-{
-    if (!m_isEnabled)
-        return;
-
-    int shadedColor_r = 0, shadedColor_g = 0, shadedColor_b = 0;
-    list<math::Triangle> &trias = renderlist.triangles();
-
-    foreach (math::Triangle &t, trias)
-    {
-        Material &material = t.material();
-
-        if (material.shadeMode() == Material::SM_UNDEFINED
-                || material.shadeMode() == Material::SM_WIRE)
-            continue;
-
-        if (t.normal().isZero())
-            continue;
-
-        math::vec3 l = m_pos - t.v(0).p;
-        double dist = l.length();
-
-        double dp = t.normal().dotProduct(l);
-        if (dp > 0)
-        {
-            double atten = m_kc + m_kl * dist + m_kq * dist * dist;
-            double i = dp / (/*dist*/ atten);
-
-            shadedColor_r += m_intensity.red() * i * material.color().red() / 256;
-            shadedColor_g += m_intensity.green() * i * material.color().green() / 256;
-            shadedColor_b += m_intensity.blue() * i * material.color().blue() / 256;
-
-            if (shadedColor_r > 255) shadedColor_r = 255;
-            if (shadedColor_g > 255) shadedColor_g = 255;
-            if (shadedColor_b > 255) shadedColor_b = 255;
-
-            material.color() = RgbToInt(shadedColor_r, shadedColor_g, shadedColor_b);
-        }
-
-        shadedColor_r = 0;
-        shadedColor_g = 0;
-        shadedColor_b = 0;
-    }
-}
-
-math::ivec3 SpotLight::shader(const Color3 &matColor, double coeff) const
+Color3 SpotLight::shader(const Color3 &matColor, const math::vec3 &normal) const
 {
 }
 
@@ -234,12 +153,5 @@ SpotLight::SpotLight(const Color3 &intensity, const math::vec3 &pos, const math:
       m_falloff(falloff)
 {
 }
-
-void SpotLight::illuminate(RenderList &renderlist) const
-{
-}
-
-// FIXME: redo this boiler-plate ^
-//                               |
 
 }

@@ -3,9 +3,9 @@ Entities:
   - model: ../resources/tank1.plg
     position: [0, 0, 0]
     order: CCW
-  - model: ../resources/tower1.plg
-    position: [0, 0, -250]
-    order: CCW
+#  - model: ../resources/tower1.plg
+#    position: [0, 0, -250]
+#    order: CCW
 #  - model: ../resources/q3ctf1.bsp
 #    position: [0, 0, 0]
 #    order: CW

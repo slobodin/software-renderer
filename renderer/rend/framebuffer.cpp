@@ -41,7 +41,7 @@ FrameBuffer::FrameBuffer(const int witdh, const int height)
       m_xOrigin(0),
       m_yOrigin(0)
 {
-    m_pixels = new Color3[m_width * m_height];
+    m_pixels = new rgb[m_width * m_height];
 }
 
 FrameBuffer::~FrameBuffer()
@@ -52,7 +52,7 @@ FrameBuffer::~FrameBuffer()
 
 void FrameBuffer::clear()
 {
-    memset(m_pixels, 0x00, sizeof(Color3) * m_width * m_height);
+    memset(m_pixels, 0x00, sizeof(rgb) * m_width * m_height);
 }
 
 void FrameBuffer::flush_tk(const string &to)
@@ -105,8 +105,9 @@ void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
         return;
 
-    Color3 &currPix = m_pixels[m_width * y + x];
-    currPix = color;
+    m_pixels[m_width * y + x].r = color.red();
+    m_pixels[m_width * y + x].g = color.green();
+    m_pixels[m_width * y + x].b = color.blue();
 }
 
 void FrameBuffer::wpixel(const int pos, const Color3 &color)
@@ -114,7 +115,9 @@ void FrameBuffer::wpixel(const int pos, const Color3 &color)
     if (!(pos >= 0 && pos < (m_width * m_height)))
         return;
 
-    m_pixels[pos] = color;
+    m_pixels[pos].r = color.red();
+    m_pixels[pos].g = color.green();
+    m_pixels[pos].b = color.blue();
 }
 
 }

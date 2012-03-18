@@ -14,12 +14,11 @@
 namespace base
 {
 
-static const int PLX_1SIDED_FLAG           = 0x0000;   // this poly is single sided
-static const int PLX_2SIDED_FLAG           = 0x1000;   // this poly is double sided
-static const int PLX_SHADE_MODE_FLAT       = 0x2000;   // this poly uses flat shading
-//static const int PLX_SHADE_MODE_PHONG    = 0x4000;   // this poly used phong shading
-static const int PLX_SHADE_MODE_GOURAUD    = 0x4000;   // this poly uses gouraud shading
-static const int PLX_SHADE_MODE_WIRE       = 0x8000;   // this poly is wireframe
+static const int PLX_1SIDED_FLAG           = 0x00000000;   // this poly is single sided
+static const int PLX_2SIDED_FLAG           = 0x10000000;   // this poly is double sided
+static const int PLX_SHADE_MODE_FLAT       = 0x02000000;   // this poly uses flat shading
+static const int PLX_SHADE_MODE_GOURAUD    = 0x04000000;   // this poly uses gouraud shading
+static const int PLX_SHADE_MODE_WIRE       = 0x08000000;   // this poly is wireframe
 
 DecoderPLG::DecoderPLG()
 {
@@ -108,11 +107,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
 
         token >> std::hex >> polyDescriptor >> std::dec >> numVertsByPoly;
 
-        int red = polyDescriptor & 0x0F00;
-        int green = polyDescriptor & 0x00F0;
-        int blue = polyDescriptor & 0x000F;
-
-        rend::Color3 col(red, green, blue);
+        rend::Color3 col(polyDescriptor & 0x00FFFFFF);
 
         for (unsigned i = 0; i < numVertsByPoly; i++)
         {
@@ -124,7 +119,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
         }
 
         rend::Material::ShadeMode shadeMode;
-        int sm = polyDescriptor & 0xE000;   // mask to extract shading mode
+        int sm = polyDescriptor & 0x0F000000;   // mask to extract shading mode
         switch (sm)
         {
         case PLX_SHADE_MODE_FLAT:
@@ -145,7 +140,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
         }
 
         math::Triangle::SideType sideType;
-        int sides = polyDescriptor & 0x1000;
+        int sides = polyDescriptor & 0xF0000000;
         switch (sides)
         {
         case PLX_1SIDED_FLAG:

@@ -3,7 +3,7 @@
 # const int PLX_1SIDED_FLAG           = 0x0000;   // this poly is single sided
 # const int PLX_2SIDED_FLAG           = 0x1000;   // this poly is double sided
 # const int PLX_SHADE_MODE_FLAT       = 0x2000;   // this poly uses flat shading
-# const int PLX_SHADE_MODE_GOURAUD    = 0x4000;   // this poly uses phong shading
+# const int PLX_SHADE_MODE_GOURAUD    = 0x4000;   // this poly uses gouraud shading
 # const int PLX_SHADE_MODE_WIRE       = 0x8000;   // this poly is wireframe
 
 # name num_verts num_polys

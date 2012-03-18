@@ -1,10 +1,10 @@
 # begin plg/plx file
 
-# const int PLX_1SIDED_FLAG           = 0x0000;   // this poly is single sided
-# const int PLX_2SIDED_FLAG           = 0x1000;   // this poly is double sided
-# const int PLX_SHADE_MODE_FLAT       = 0x2000;   // this poly uses flat shading
-# const int PLX_SHADE_MODE_GOURAUD    = 0x4000;   // this poly uses gouraud shading
-# const int PLX_SHADE_MODE_WIRE       = 0x8000;   // this poly is wireframe
+# const int PLX_1SIDED_FLAG           = 0x00000000;   // this poly is single sided
+# const int PLX_2SIDED_FLAG           = 0x10000000;   // this poly is double sided
+# const int PLX_SHADE_MODE_FLAT       = 0x02000000;   // this poly uses flat shading
+# const int PLX_SHADE_MODE_GOURAUD    = 0x04000000;   // this poly uses gouraud shading
+# const int PLX_SHADE_MODE_WIRE       = 0x08000000;   // this poly is wireframe
 
 # name num_verts num_polys
 
@@ -38,33 +38,33 @@ slider 21 19
 
 #poly list
 
-0x50f0 3 1 9 2
-0x50f0 3 5 1 2
+0x0400ff00 3 1 9 2
+0x0400ff00 3 5 1 2
 
-0x50f0 3 4 0 1
-0x50f0 3 5 4 1
+0x0400ff00 3 4 0 1
+0x0400ff00 3 5 4 1
 
-0x50f0 3 3 8 0
-0x50f0 3 4 3 0
+0x0400ff00 3 3 8 0
+0x0400ff00 3 4 3 0
 
-0x50f0 3 8 3 2
-0x50f0 3 9 8 2
+0x0400ff00 3 8 3 2
+0x0400ff00 3 9 8 2
 
-0x50f0 3 9 7 6
-0x50f0 3 8 9 6
+0x0400ff00 3 9 7 6
+0x0400ff00 3 8 9 6
 
-0x50f0 3 7 1 0
-0x50f0 3 6 7 0
+0x0400ff00 3 7 1 0
+0x0400ff00 3 6 7 0
 
-0x50f0 3 8 6 0
-0x50f0 3 7 9 1
+0x0400ff00 3 8 6 0
+0x0400ff00 3 7 9 1
 
-0x50f0 3 12 11 10
-0x50f0 3 13 12 10
+0x0400ff00 3 12 11 10
+0x0400ff00 3 13 12 10
 
-0x50f0 3 16 15 14
-0x50f0 3 17 16 14
+0x0400ff00 3 16 15 14
+0x0400ff00 3 17 16 14
 
-0x90f0 3 18 19 20
+0x0400ff00 3 18 19 20
 
 #end poly list

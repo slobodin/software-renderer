@@ -113,7 +113,7 @@ ClientController::ClientController(char *argv[], const string &conf)
     Tk::bind(".", "<Key-s>", &ClientController::onKeyS);
     Tk::bind(".", "<Key-d>", &ClientController::onKeyD);
 
-    m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
+//    m_rendmgr->addAmbientLight(rend::Color3(255, 100, 255));
     m_rendmgr->addDirectionalLight(rend::Color3(0, 255, 0), math::vec3(-1, -1, -1));
-    m_rendmgr->addPointLight(rend::Color3(255, 255, 0), math::vec3(0, 5000, 0));
+//    m_rendmgr->addPointLight(rend::Color3(255, 255, 0), math::vec3(0, 5000, 0));
 }

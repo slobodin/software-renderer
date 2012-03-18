@@ -578,7 +578,6 @@ void Rasterizer::drawTriangle(const math::Triangle &tr, const Color3 &color)
 
 void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex &v2, const math::vertex &v3)
 {
-    math::vertex vv1(v1);
     math::vec3 p0(v1.p), p1(v2.p), p2(v3.p);
 
     if (((p0.y < m_fb.m_yOrigin) && (p1.y < m_fb.m_yOrigin) && (p2.y < m_fb.m_yOrigin))
@@ -594,11 +593,11 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
 
     // sort vertices
     if (p1.y < p0.y)
-        std::swap(p1, p0);
+        std::swap(p0, p1);
     if (p2.y < p0.y)
-        std::swap(p2, p0);
+        std::swap(p0, p2);
     if (p2.y < p1.y)
-        std::swap(p2, p1);
+        std::swap(p1, p2);
 
     TriangleType triangleType;
     if (p0.y == p1.y)
@@ -627,9 +626,10 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
 
     int yStart;
     int xl, xr, rl, gl, bl, rr, gr, br;
-    int dxdyl, drdyl, dgdyl, dbdyl;
-    int dxdyr, drdyr, dgdyr, dbdyr;
-    int dy, dyl, dyr;
+    // Maybe double???
+    double dxdyl, drdyl, dgdyl, dbdyl;
+    double dxdyr, drdyr, dgdyr, dbdyr;
+    double dy, dyl, dyr;
     int yEnd;
 
     const int INTERP_LHS = 0;
@@ -638,8 +638,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
     int irestart = INTERP_LHS;
     int yrestart = y1;
 
-    vv1.color = Color3(0, 0, 255);
-    int tr0 = vv1.color.red(), tg0 = vv1.color.green(), tb0 = vv1.color.blue();
+    int tr0 = v1.color.red(), tg0 = v1.color.green(), tb0 = v1.color.blue();
     int tr1 = v2.color.red(), tg1 = v2.color.green(), tb1 = v2.color.blue();
     int tr2 = v3.color.red(), tg2 = v3.color.green(), tb2 = v3.color.blue();
 
@@ -697,7 +696,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
         {
             dy = y1 - y0;
 
-            dxdyl = x1 - x0 / dy;
+            dxdyl = (x1 - x0) / dy;
             drdyl = (tr1 - tr0) / dy;
             dgdyl = (tg1 - tg0) / dy;
             dbdyl = (tb1 - tb0) / dy;
@@ -1318,11 +1317,8 @@ void Rasterizer::rasterize(const RenderList &rendlist)
 {
     const list<math::Triangle> &trias = rendlist.triangles();
 
-    int i = 0;
     reverse_foreach(const math::Triangle &t, trias)
     {
-        i++;
-
         switch(t.material().shadeMode())
         {
         case Material::SM_WIRE:
@@ -1334,9 +1330,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
             break;
 
         case Material::SM_GOURAUD:
-#if 0
             drawGouraudTriangle(t);
-#endif
             break;
 
         default:
@@ -1364,8 +1358,8 @@ void Rasterizer::resize(int w, int h)
     if (m_fb.m_pixels)
         delete [] m_fb.m_pixels;
 
-    m_fb.m_pixels = new Color3[w * h];
-    memset(m_fb.m_pixels, 0xFF, sizeof(Color3) * w * h);
+    m_fb.m_pixels = new FrameBuffer::rgb[w * h];
+    memset(m_fb.m_pixels, 0xFF, sizeof(FrameBuffer::rgb) * w * h);
 }
 
 }

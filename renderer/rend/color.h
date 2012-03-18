@@ -85,31 +85,32 @@ public:
 
 class Color3
 {
-    uint8_t m_r;
-    uint8_t m_g;
-    uint8_t m_b;
+    uint32_t m_r;
+    uint32_t m_g;
+    uint32_t m_b;
 
 public:
     Color3();
-    Color3(uint8_t red, uint8_t green, uint8_t blue);
+    Color3(uint32_t red, uint32_t green, uint32_t blue);
     Color3(uint32_t color);
     ~Color3();
 
-    Color3 &operator= (uint32_t color);
-
-    uint32_t color() const { return RgbToInt((uint32_t)m_r, (uint32_t)m_g, (uint32_t)m_b); }
-    uint8_t red() const { return m_r; }
-    uint8_t green() const { return m_g; }
-    uint8_t blue() const { return m_b; }
-
-    uint8_t &red() { return m_r; }
-    uint8_t &green() { return m_g; }
-    uint8_t &blue() { return m_b; }
+    uint32_t color() const { return RgbToInt(m_r, m_g, m_b); }
+    uint8_t red() const { return static_cast<uint8_t>(m_r); }
+    uint8_t green() const { return static_cast<uint8_t>(m_g); }
+    uint8_t blue() const { return static_cast<uint8_t>(m_b); }
 
     operator uint32_t() const;
+    Color3 &operator*= (double s);
+    Color3 &operator*= (const Color3 &other);
+    Color3 &operator+= (const Color3 &other);
+
+    friend Color3 operator* (const Color3 &a, const Color3 &b);
 
     void reset();
 };
+
+Color3 operator* (const Color3 &a, const Color3 &b);
 
 }
 

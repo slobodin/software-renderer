@@ -21,7 +21,7 @@ class FrameBuffer
 {
     friend class Rasterizer;
 
-    Color3 *m_pixels;
+    struct rgb { uint8_t r; uint8_t g; uint8_t b; } *m_pixels;
     int m_width;
     int m_height;
     int m_xOrigin;
