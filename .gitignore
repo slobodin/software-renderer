@@ -11,3 +11,5 @@ renderer-release/*
 resources/*.bsp
 resources/*.*~
 *.*~
+renderer/tests/math-tester/*.pro.user
+renderer/tests/math-tester/*.*~

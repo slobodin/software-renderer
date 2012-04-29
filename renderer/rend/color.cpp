@@ -11,22 +11,19 @@ namespace rend
 {
 
 Color4::Color4()
-    : m_r(0x0),
-      m_g(0x0),
-      m_b(0x0),
-      m_a(0x0)
 {
+    memset(m_color, 0, sizeof(m_color));
 }
 
-Color4::Color4(uint8_t red,
-               uint8_t green,
-               uint8_t blue,
-               uint8_t alpha)
-    : m_r(red),
-      m_g(green),
-      m_b(blue),
-      m_a(alpha)
+Color4::Color4(int red,
+               int green,
+               int blue,
+               int alpha)
 {
+    m_color[0] = red;
+    m_color[1] = green;
+    m_color[2] = blue;
+    m_color[3] = alpha;
 }
 
 
@@ -36,10 +33,7 @@ Color4::~Color4()
 
 void Color4::reset()
 {
-    m_r = 0x0;
-    m_g = 0x0;
-    m_b = 0x0;
-    m_a = 0x0;
+    memset(m_color, 0, sizeof(m_color));
 }
 
 Color3::Color3()

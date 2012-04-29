@@ -14,6 +14,27 @@
 namespace rend
 {
 
+#ifdef RED
+#undef RED
+#endif
+#ifdef GREEN
+#undef GREEN
+#endif
+#ifdef BLUE
+#undef BLUE
+#endif
+#ifdef ALPHA
+#undef ALPHA
+#endif
+
+enum ColorComp
+{
+    RED = 0,
+    GREEN,
+    BLUE,
+    ALPHA
+};
+
 inline uint32_t RgbaToInt(uint32_t red, uint32_t green, uint32_t blue, uint32_t alpha)
 {
     return blue | (green << 8) | (red << 16) | (alpha << 24);
@@ -58,27 +79,21 @@ inline void IntToRgb(uint32_t rgb, uint8_t &red, uint8_t &green, uint8_t &blue)
 
 class Color4
 {
-    uint8_t m_r;
-    uint8_t m_g;
-    uint8_t m_b;
-    uint8_t m_a;
+    uint8_t m_color[4];
 
 public:
     Color4();
-    Color4(uint8_t red, uint8_t green,
-            uint8_t blue, uint8_t alpha);
+    Color4(int red, int green,
+           int blue, int alpha = 0);
     ~Color4();
 
-    uint32_t color() const { return RgbaToInt((uint32_t)m_r, (uint32_t)m_g, (uint32_t)m_b, (uint32_t)m_a); }
-    uint8_t red() const { return m_r; }
-    uint8_t green() const { return m_g; }
-    uint8_t blue() const { return m_b; }
-    uint8_t alpha() const { return m_a; }
+    uint32_t color() const { return *((uint32_t *)this); }
+    uint8_t r() const { return m_color[0]; }
+    uint8_t g() const { return m_color[1]; }
+    uint8_t b() const { return m_color[2]; }
+    uint8_t a() const { return m_color[3]; }
 
-    uint8_t &red() { return m_r; }
-    uint8_t &green() { return m_g; }
-    uint8_t &blue() { return m_b; }
-    uint8_t &alpha() { return m_a; }
+    uint8_t &operator[](ColorComp ind) { return m_color[ind]; }
 
     void reset();
 };
