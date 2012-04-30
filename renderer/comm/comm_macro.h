@@ -8,18 +8,18 @@
 #ifndef COMM_MACRO_H
 #define COMM_MACRO_H
 
-#ifdef WIN32
-#include <memory>
+#ifdef _MSC_VER
+    #include <memory>
 #else
-#include <tr1/memory>
+#ifdef __GNUC__
+    #include <memory>
+    #include <tr1/memory>
+    #endif
 #endif
 
-#define NONCOPYABLE(CLASS) \
-    private: \
-    CLASS(const CLASS &); \
-    CLASS &operator= (const CLASS &);
-
-#ifdef WIN32
+// macro-helpers to create smart pointers
+// use this everywhere
+#ifdef _MSC_VER
 #define sptr(TYPE) std::shared_ptr<TYPE>
 #else
 #define sptr(TYPE) std::tr1::shared_ptr<TYPE>

@@ -6,7 +6,6 @@
  */
 
 #include <gtest/gtest.h>
-#include <cstdint>
 #include "m22.h"
 
 using namespace math;
