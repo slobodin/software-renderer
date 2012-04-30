@@ -7,6 +7,8 @@
 
 #include "m33.h"
 
+#include <boost/foreach.hpp>
+
 namespace math
 {
 
@@ -83,15 +85,10 @@ M33 &M33::operator*= (const M33 &a)
 
 M33 &M33::operator*= (double s)
 {
-    x[0][0] *= s;
-    x[0][1] *= s;
-    x[0][2] *= s;
-    x[1][0] *= s;
-    x[1][1] *= s;
-    x[1][2] *= s;
-    x[2][0] *= s;
-    x[2][1] *= s;
-    x[2][2] *= s;
+    BOOST_FOREACH (double (&row)[3], x)
+        BOOST_FOREACH (double &el, row)
+            el *= s;
+
     return *this;
 }
 
@@ -99,15 +96,10 @@ M33 &M33::operator/= (double s)
 {
     assert(!DCMP(s, 0.0));
 
-    x[0][0] /= s;
-    x[0][1] /= s;
-    x[0][2] /= s;
-    x[1][0] /= s;
-    x[1][1] /= s;
-    x[1][2] /= s;
-    x[2][0] /= s;
-    x[2][1] /= s;
-    x[2][2] /= s;
+    BOOST_FOREACH (double (&row)[3], x)
+        BOOST_FOREACH (double &el, row)
+            el /= s;
+
     return *this;
 }
 
