@@ -15,38 +15,65 @@
 namespace math
 {
 
-//! Matrix 2 x 2
+//! Row-column 2x2 Matrix.
+/*!
+  * (a00, a01)
+  * (a10, a11)
+  */
 struct M22
 {
     double x[4];
 
-    //! Identity matrix
+    //! Default ctor.
+    /*! Default identity matrix. */
     M22();
+    //! Array ctor.
     M22(const double src[4]);
-    M22(double xx, double xy, double yx, double yy);
+    //! Component ctor.
+    M22(double a00, double a01, double a10, double a11);
 
+    //! Matrix addition.
     M22 &operator+= (const M22 &a);
+    //! Matrix subtration.
     M22 &operator-= (const M22 &a);
+    //! Matrix multiplication.
     M22 &operator*= (const M22 &a);
-    M22 &operator*= (const double s);
-    M22 &operator/= (const double s);
-    double &operator[] (const int index) { return x[index]; }
-    double operator[] (const int index) const { return x[index]; }
+    //! Scalar multiplication.
+    M22 &operator*= (double s);
+    //! Scalar multiplication.
+    M22 &operator/= (double s);
 
+    //! Index operations.
+    double &operator[] (int index) { return x[index]; }
+    double operator[] (int index) const { return x[index]; }
+
+    //! Equality check.
+    bool operator== (const M22 &a) const;
+
+    //! Matrix inversion.
     M22 &invert();
+    //! Matrix transposition.
     M22 &transpose();
+    //! Determinant computing.
     double determinant() const;
+    //! Returns matrix memory address.
     double *getPointer() { return x; }
 
+    //! Addition of two matrices.
     friend M22 operator+ (const M22 &a, const M22 &b);
-    friend M22 operator- (const M22 &a, const M22&b);
+    //! Subtraction of tho matrices.
+    friend M22 operator- (const M22 &a, const M22 &b);
+    //! Multiplication of two matrices.
     friend M22 operator* (const M22 &a, const M22 &b);
+    //! Scalar multiplication.
     friend M22 operator* (const M22 &a, const double s);
-    friend M22 operator* (const double s, const M22 &);
+    friend M22 operator* (double s, const M22 &b);
 
-    /** |1 2| * ( 1 )
-        |3 4|   ( 2 ) */
-    friend vec2 operator* (const M22 &a, const vec2 &b);
+    //! 2-vector and 2x2 matrix multiplication.
+    /*! (1 2) * |1 2|
+      *         |3 4|
+      */
+    friend vec2 operator* (const vec2 &v, const M22 &m);
 };
 
 inline M22::M22()
@@ -55,12 +82,12 @@ inline M22::M22()
     x[1] = x[2] = 0.0;
 }
 
-inline M22::M22(double xx, double xy, double yx, double yy)
+inline M22::M22(double a00, double a01, double a10, double a11)
 {
-    x[0] = xx;
-    x[1] = xy;
-    x[2] = yx;
-    x[3] = yy;
+    x[0] = a00;
+    x[1] = a01;
+    x[2] = a10;
+    x[3] = a11;
 }
 
 inline M22::M22(const double src[4])
@@ -97,7 +124,7 @@ inline M22 &M22::operator*= (const M22 &a)
     return *this;
 }
 
-inline M22 &M22::operator*= (const double s)
+inline M22 &M22::operator*= (double s)
 {
     x[0] *= s;
     x[1] *= s;
@@ -106,9 +133,9 @@ inline M22 &M22::operator*= (const double s)
     return *this;
 }
 
-inline M22 &M22::operator/= (const double s)
+inline M22 &M22::operator/= (double s)
 {
-    assert(s != 0.0);
+    assert(!DCMP(s, 0.0));
 
     x[0] /= s;
     x[1] /= s;
@@ -117,10 +144,16 @@ inline M22 &M22::operator/= (const double s)
     return *this;
 }
 
+inline bool M22::operator== (const M22 &a) const
+{
+    return DCMP(x[0], a.x[0], EPSILON_E3) && DCMP(x[1], a.x[1], EPSILON_E3)
+            && DCMP(x[2], a.x[2], EPSILON_E3) && DCMP(x[3], a.x[3], EPSILON_E3);
+}
+
 inline M22 &M22::invert()
 {
     double d = determinant();
-    assert(d != 0.0);
+    assert(!DCMP(d, 0.0));
     M22 temp;
 
     temp.x[0] = x[3] / d;
@@ -175,22 +208,22 @@ inline M22 operator* (const M22 &a, const M22 &b)
     return res;
 }
 
-inline M22 operator* (const M22 &a, const double s)
+inline M22 operator* (const M22 &a, double s)
 {
     M22 res(a);
     return res *= s;
 }
 
-inline M22 operator* (const double s, const M22 &b)
+inline M22 operator* (double s, const M22 &b)
 {
     M22 res(b);
     return res *= s;
 }
 
-inline vec2 operator* (const M22 &a, const vec2 &b)
+inline vec2 operator* (const vec2 &v, const M22 &m)
 {
-    return vec2(a.x[0] * b.x + a.x [1] * b.y,
-                a.x[2] * b.x + a.x [3] * b.y );
+    return vec2(v.x * m.x[0] + v.y * m.x[2],
+                v.x * m.x[1] + v.y * m.x[3]);
 }
 
 }

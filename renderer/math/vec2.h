@@ -16,38 +16,63 @@
 namespace math
 {
 
-//! 2-vector
+//! Two-component row vector.
+/*! v = (x, y) */
 struct vec2
 {
     double x, y;
-    vec2(double xx = 0.0, double yy = 0.0) : x(xx), y(yy) { }
 
+    //! Default ctor.
+    /*! Default zero vector. */
+    vec2(double x = 0.0, double y = 0.0) { this->x = x; this->y = y; }
+
+    //! Addition assignment.
     vec2 &operator+= (const vec2 &other);
+    //! Subtraction assignment.
     vec2 &operator-= (const vec2 &other);
-    vec2 &operator*= (const double s);
-    vec2 &operator/= (const double s);
+    //! Scalar multiplication assignment.
+    vec2 &operator*= (double s);
+    //! 1/scalar multiplication.
+    vec2 &operator/= (double s);
 
+    //! Returns flipped vector.
     vec2 operator-() const;
 
+    //! Equality check.
     bool operator== (const vec2 &other) const;
+    //! Non-equality check.
     bool operator!= (const vec2 &other) const;
+    //! Assignment with 3-vector.
     vec2 &operator= (const vec3 &v3);
 
+    //! Convertion to pointer to double. Returns address of `this'.
     operator const double* () const;
 
+    //! Vector magnitude.
     double length() const;
+    //! Normalizes this vector and returns it.
     vec2 &normalize();
-    void set(const double xx, const double yy);
+    //! Some type of ctor.
+    void set(double x, double y);
+    //! Constructor from another vector.
     void set(const vec2 &other);
+    //! Resets vector.
     void zero();
+    //! Scalar product.
     double dotProduct(const vec2 &other) const;
 
+    //! Addition of two vectors.
     friend vec2 operator+ (const vec2 &a, const vec2 &b);
+    //! Subtraction of two vectors.
     friend vec2 operator- (const vec2 &a, const vec2 &b);
-    friend vec2 operator* (const vec2 &a, const double b);
-    friend vec2 operator* (const double a, const vec2 &b);
-    friend vec2 operator/ (const vec2 &a, const double b);
+    //! Multiplication of two vectors.
+    friend vec2 operator* (const vec2 &a, double b);
+    //! Scalar multiplication of two vectors.
+    friend vec2 operator* (double a, const vec2 &b);
+    //! 1/scalar multiplication.
+    friend vec2 operator/ (const vec2 &a, double b);
 
+    //! Logger helper. Writes `[x = , y = ]' in the stream
     friend std::ostream &operator<< (std::ostream &os, const vec2 &v);
 };
 
@@ -55,6 +80,7 @@ inline vec2 &vec2::operator+= (const vec2 &other)
 {
     x += other.x;
     y += other.y;
+
     return *this;
 }
 
@@ -62,21 +88,25 @@ inline vec2 &vec2::operator-= (const vec2 &other)
 {
     x -= other.x;
     y -= other.y;
+
     return *this;
 }
 
-inline vec2 &vec2::operator*= (const double s)
+inline vec2 &vec2::operator*= (double s)
 {
     x *= s;
     y *= s;
+
     return *this;
 }
 
-inline vec2 &vec2::operator/= (const double s)
+inline vec2 &vec2::operator/= (double s)
 {
-    assert(s != 0.0);
+    assert(!DCMP(s, 0.0));
+
     x /= s;
     y /= s;
+
     return *this;
 }
 
@@ -119,7 +149,9 @@ inline vec2::operator const double* () const
 inline double vec2::length() const
 {
     double t = x * x + y * y;
-    assert(t != 0.0);
+
+    assert(!DCMP(t, 0.0));
+
     return sqrt(t);
 }
 
@@ -130,14 +162,15 @@ inline vec2 &vec2::normalize()
         return (*this);
 
     double temp = length();
-    assert(temp != 0);
+    assert(!DCMP(temp, 0.0));
+
     return (*this) /= length();
 }
 
-inline void vec2::set(const double xx, const double yy)
+inline void vec2::set(double x, double y)
 {
-    x = xx;
-    y = yy;
+    this->x = x;
+    this->y = y;
 }
 
 inline void vec2::set(const vec2 &other)
@@ -167,17 +200,17 @@ inline vec2 operator- (const vec2 &a, const vec2 &b)
     return vec2(a.x - b.x, a.y - b.y);
 }
 
-inline vec2 operator* (const vec2 &a, const double b)
+inline vec2 operator* (const vec2 &a, double b)
 {
     return vec2(a.x * b, a.y * b);
 }
 
-inline vec2 operator* (const double a, const vec2 &b)
+inline vec2 operator* (double a, const vec2 &b)
 {
     return vec2(b.x * a, b.y * a);
 }
 
-inline vec2 operator/ (const vec2 &a, const double b)
+inline vec2 operator/ (const vec2 &a, double b)
 {
     assert(b != 0.0);
     return vec2(a.x / b, a.y / b);

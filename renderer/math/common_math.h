@@ -10,6 +10,9 @@
 
 #include "comm_pch.h"
 
+#include <cmath>
+#include <climits>
+
 namespace math
 {
 
@@ -22,9 +25,9 @@ const double EPSILON_E6 = 1E-6;
 template <typename T> inline T Max(T x, T y) { return (x > y) ? x : y; }
 template <typename T> inline T Min(T x, T y) { return (x < y) ? x : y; }
 
-inline bool DCMP(double x, double y)
+inline bool DCMP(double x, double y, double pres = EPSILON_E6)
 {
-    return (fabs(x - y) < EPSILON_E3);
+    return (fabs(x - y) < pres);
 }
 
 #ifdef PI
@@ -34,6 +37,10 @@ const double PI = 3.1415926535;
 
 inline double DegToRad(const double ang) { return ang * (PI / 180.0); }
 inline double RadToDeg(const double rad) { return rad * (180.0 / PI); }
+
+class DivideByZeroException
+{
+};
 
 }
 

@@ -8,6 +8,7 @@
 #ifndef COMM_PCH_H
 #define COMM_PCH_H
 
+// Common C-stuff.
 #include <cstdio>
 #include <cstring>
 #include <cassert>
@@ -17,6 +18,7 @@
 #include <cmath>
 #include <ctime>
 
+// Common C++ stuff.
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -27,19 +29,22 @@
 #include <algorithm>
 #include <exception>
 #include <functional>
-
-#ifdef WIN32
-#include <memory>
+#ifdef _MSC_VER
+    #include <memory>
 #else
-#include <memory>
-#include <tr1/memory>
+#ifdef __GNUC__
+    #include <memory>
+    #include <tr1/memory>
+    #endif
 #endif
 
+// Boost stuff.
 #include <boost/foreach.hpp>
 #include <boost/utility.hpp>
 #include <boost/date_time.hpp>
 #include <boost/function.hpp>
 
+// Some useful classes.
 using std::string;
 using std::wstring;
 using std::cerr;
@@ -58,9 +63,12 @@ using std::istringstream;
 using std::tr1::dynamic_pointer_cast;
 using std::tr1::shared_ptr;
 
+// This includes needs only in renderer library.
+#ifdef RENDERER_LIBRARY
 #include "dll.h"
 #include "comm_macro.h"
 #include "exception.h"
 #include "logger.h"
+#endif
 
 #endif // COMM_PCH_H
