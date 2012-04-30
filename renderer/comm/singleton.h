@@ -13,7 +13,7 @@
 namespace common
 {
 
-//! Singleton class
+//! Singleton class.
 template <class T>
 class Singleton
 {

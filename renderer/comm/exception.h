@@ -14,11 +14,11 @@
 namespace common
 {
 
-//! Base class for all renderer exceptions
+//! Base class for all renderer exceptions.
 class Exception : public std::exception
 {
-    //! "What"-string
-    /*! Contains error message */
+    //! "What"-string.
+    /*! Contains error message. */
     std::string m_what;
 
 public:
@@ -43,8 +43,8 @@ public:
 
 }
 
-//! Macro-helper for creating different exceptions
-/*! Using: DECLARE_EXCEPTION(SomethingWasWrongException) */
+//! Macro-helper for creating different exceptions.
+/*! Using: DECLARE_EXCEPTION(SomethingWasWrongException). */
 #define DECLARE_EXCEPTION(TYPE) class TYPE : public common::Exception \
 { \
 public: \
