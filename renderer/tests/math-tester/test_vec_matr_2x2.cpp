@@ -47,18 +47,6 @@ TEST(Vector2, Flip)
     EXPECT_TRUE(b == vec2(-6, -4));
 }
 
-/*
-//! Addition of two vectors.
-friend vec2 operator+ (const vec2 &a, const vec2 &b);
-//! Subtraction of two vectors.
-friend vec2 operator- (const vec2 &a, const vec2 &b);
-//! Multiplication of two vectors.
-friend vec2 operator* (const vec2 &a, double b);
-//! Scalar multiplication of two vectors.
-friend vec2 operator* (double a, const vec2 &b);
-//! 1/scalar multiplication.
-friend vec2 operator/ (const vec2 &a, double b);*/
-
 TEST(Vector2, VectorOperations)
 {
     vec2 a(6, 4), b(6, 4);
