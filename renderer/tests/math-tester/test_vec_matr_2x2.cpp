@@ -14,7 +14,86 @@ using namespace math;
 // Vectors
 TEST(Vector2, Constructors)
 {
+    vec2 a, b(1, 5);
 
+    EXPECT_TRUE(a == vec2(0, 0));
+    EXPECT_TRUE(b == vec2(1, 5));
+}
+
+TEST(Vector2, AssignOperations)
+{
+    vec2 a(6, 4), b(1, 5);
+
+    a += b;
+    EXPECT_TRUE(a == vec2(7, 9));
+
+    a -= b;
+    EXPECT_TRUE(a == vec2(6, 4));
+
+    a *= 2;
+    EXPECT_TRUE(a == vec2(12, 8));
+
+    a /= 2;
+    EXPECT_TRUE(a == vec2(6, 4));
+}
+
+TEST(Vector2, Flip)
+{
+    vec2 a(6, 4), b;
+
+    b = -a;
+
+    EXPECT_TRUE(a == vec2(6, 4));
+    EXPECT_TRUE(b == vec2(-6, -4));
+}
+
+/*
+//! Addition of two vectors.
+friend vec2 operator+ (const vec2 &a, const vec2 &b);
+//! Subtraction of two vectors.
+friend vec2 operator- (const vec2 &a, const vec2 &b);
+//! Multiplication of two vectors.
+friend vec2 operator* (const vec2 &a, double b);
+//! Scalar multiplication of two vectors.
+friend vec2 operator* (double a, const vec2 &b);
+//! 1/scalar multiplication.
+friend vec2 operator/ (const vec2 &a, double b);*/
+
+TEST(Vector2, VectorOperations)
+{
+    vec2 a(6, 4), b(6, 4);
+
+    // length
+    EXPECT_NEAR(7.2111, a.length(), EPSILON_E3);
+
+    // normalization
+    a.normalize();
+    EXPECT_TRUE(a == vec2(0.83205, 0.5547));
+
+    // scalar product
+    EXPECT_NEAR(7.2111, a.dotProduct(b), EPSILON_E3);
+
+    a.set(6, 4);
+    b.set(6, 4);
+    EXPECT_TRUE(a == vec2(6, 4));
+    EXPECT_TRUE(b == vec2(6, 4));
+
+    vec2 c;
+
+    c = a + b;
+    EXPECT_TRUE(c == vec2(12, 8));
+
+    c = a - b;
+    EXPECT_TRUE(c == vec2(0, 0));
+
+    c = 3 * a;
+    EXPECT_TRUE(c == vec2(18, 12));
+
+    c = b * 3;
+    EXPECT_TRUE(c == vec2(18, 12));
+
+    c = b / 2;
+    EXPECT_TRUE(c == vec2(3, 2));
 }
 
 // Matrices
@@ -49,7 +128,7 @@ TEST(Matrix2x2, StandartConstructor)
     EXPECT_EQ(0, m.x[3]);
 }
 
-TEST(Matrix2x2, AssingOperations)
+TEST(Matrix2x2, AssignOperations)
 {
     M22 a(1, 3, 4, 5), b(5, 8, 9, -3);
 

@@ -33,4 +33,9 @@ Plane::Plane(const vec3 &p0, const vec3 &p1, const vec3 &p2)
     m_d = t.dotProduct(m_normal);
 }
 
+PointPlaneRelation Plane::checkPoint(const vec3 &p) const
+{
+    // TODO
+}
+
 }

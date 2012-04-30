@@ -15,13 +15,23 @@
 namespace math
 {
 
+//! Vertex of the mesh.
+/*!
+  * Includes vertex point itself, point "normal",
+  * texture coordinates and color.
+  */
 struct vertex
 {
-    math::vec3 p;   // vertex point
-    math::vec3 n;   // vertex normal
-    math::vec2 t;   // texture coords
+    //! Vertex point.
+    vec3 p;
+    //! Vertex normal.
+    vec3 n;
+    //! Vertex texture coordinates.
+    vec2 t;
+    //! Vertex color.
     rend::Color3 color;
 
+    //! Default ctor.
     vertex();
 };
 

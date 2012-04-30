@@ -53,7 +53,8 @@ HEADERS += \
     base/decoderasc.h \
     math/vertex.h \
     rend/texture.h \
-    rend/model.h
+    rend/model.h \
+    math/math_utils.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -83,7 +84,8 @@ SOURCES += \
     base/decoderbspq3.cpp \
     base/decoderasc.cpp \
     math/vertex.cpp \
-    rend/texture.cpp
+    rend/texture.cpp \
+    math/math_utils.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

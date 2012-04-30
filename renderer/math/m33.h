@@ -15,7 +15,12 @@
 namespace math
 {
 
-//! Matrix 3 x 3
+//! Row-column 3x3 Matrix.
+/*!
+  * (a00, a01, a02)
+  * (a10, a11, a12)
+  * (a20, a21, a22)
+  */
 struct M33
 {
     double x[3][3];

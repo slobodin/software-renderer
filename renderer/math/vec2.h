@@ -212,7 +212,7 @@ inline vec2 operator* (double a, const vec2 &b)
 
 inline vec2 operator/ (const vec2 &a, double b)
 {
-    assert(b != 0.0);
+    assert(!DCMP(b, 0.0));
     return vec2(a.x / b, a.y / b);
 }
 

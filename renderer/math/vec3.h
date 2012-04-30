@@ -15,7 +15,8 @@
 namespace math
 {
 
-//! 3-vector
+//! Three-component row vector.
+/*! v = (x, y, z) */
 template<typename T>
 struct vector3
 {
