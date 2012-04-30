@@ -63,6 +63,8 @@ public:
     void computeNormal();
     vec3 normal() const { return m_normal; }
 
+    double square() const;
+
     friend bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2);
     friend bool ZCompareMin(const math::Triangle &t1, const math::Triangle &t2);
     friend bool ZCompareMax(const math::Triangle &t1, const math::Triangle &t2);

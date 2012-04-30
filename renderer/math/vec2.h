@@ -20,6 +20,7 @@ namespace math
 /*! v = (x, y) */
 struct vec2
 {
+    //! X and Y coordinates
     double x, y;
 
     //! Default ctor.
@@ -48,7 +49,7 @@ struct vec2
     //! Convertion to pointer to double. Returns address of `this'.
     operator const double* () const;
 
-    //! Vector magnitude.
+    //! Vector's magnitude.
     double length() const;
     //! Normalizes this vector and returns it.
     vec2 &normalize();
@@ -65,11 +66,11 @@ struct vec2
     friend vec2 operator+ (const vec2 &a, const vec2 &b);
     //! Subtraction of two vectors.
     friend vec2 operator- (const vec2 &a, const vec2 &b);
-    //! Multiplication of two vectors.
+    //! Multiplication of vector and scalar.
     friend vec2 operator* (const vec2 &a, double b);
-    //! Scalar multiplication of two vectors.
+    //! Multiplication of vector and scalar.
     friend vec2 operator* (double a, const vec2 &b);
-    //! 1/scalar multiplication.
+    //! Vector and 1/scalar multiplication.
     friend vec2 operator/ (const vec2 &a, double b);
 
     //! Logger helper. Writes `[x = , y = ]' in the stream

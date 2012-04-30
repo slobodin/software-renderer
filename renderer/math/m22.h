@@ -28,7 +28,7 @@ struct M22
     /*! Default identity matrix. */
     M22();
     //! Array ctor.
-    M22(const double src[4]);
+    M22(const double (&src)[4]);
     //! Component ctor.
     M22(double a00, double a01, double a10, double a11);
 
@@ -42,10 +42,6 @@ struct M22
     M22 &operator*= (double s);
     //! Scalar multiplication.
     M22 &operator/= (double s);
-
-    //! Index operations.
-    double &operator[] (int index) { return x[index]; }
-    double operator[] (int index) const { return x[index]; }
 
     //! Equality check.
     bool operator== (const M22 &a) const;
@@ -67,10 +63,12 @@ struct M22
     friend M22 operator* (const M22 &a, const M22 &b);
     //! Scalar multiplication.
     friend M22 operator* (const M22 &a, const double s);
+    //! Scalar multiplication.
     friend M22 operator* (double s, const M22 &b);
 
     //! 2-vector and 2x2 matrix multiplication.
-    /*! (1 2) * |1 2|
+    /*!
+      * (1 2) * |1 2|
       *         |3 4|
       */
     friend vec2 operator* (const vec2 &v, const M22 &m);
@@ -90,7 +88,7 @@ inline M22::M22(double a00, double a01, double a10, double a11)
     x[3] = a11;
 }
 
-inline M22::M22(const double src[4])
+inline M22::M22(const double (&src)[4])
 {
     memcpy(x, src, 4 * sizeof(double));
 }

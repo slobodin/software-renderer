@@ -45,15 +45,16 @@ void AffineTransform::setm(const M33 &m)
     m_M = m;
 }
 
-void AffineTransform::getHomogeneousMatrix() const
+M44 AffineTransform::getHomogeneousMatrix() const
 {
 
 }
 
 void AffineTransform::transformPoint(vec3 &p) const
 {
+    // FIXME: may be wrong.
     p += m_v;
-    p = m_M * p;
+    p = p * m_M;
 }
 
 }

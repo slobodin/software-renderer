@@ -54,7 +54,8 @@ HEADERS += \
     math/vertex.h \
     rend/texture.h \
     rend/model.h \
-    math/math_utils.h
+    math/math_utils.h \
+    math/m44.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -85,7 +86,8 @@ SOURCES += \
     base/decoderasc.cpp \
     math/vertex.cpp \
     rend/texture.cpp \
-    math/math_utils.cpp
+    math/math_utils.cpp \
+    math/m44.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

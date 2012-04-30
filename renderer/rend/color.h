@@ -45,9 +45,11 @@ inline uint32_t RgbToInt(uint32_t red, uint32_t green, uint32_t blue)
     return blue | (green << 8) | (red << 16);
 }
 
-inline uint32_t RgbToInt(math::ivec3 color)
+inline uint32_t RgbToInt(/*math::ivec3 color*/)
 {
-    return color.z | (color.y << 8) | (color.x << 16);
+    // FIXME:
+    return 0;
+//    return color.z | (color.y << 8) | (color.x << 16);
 }
 
 inline uint8_t RedFromInt (int val)

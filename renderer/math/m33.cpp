@@ -12,43 +12,28 @@ namespace math
 
 M33::M33()
 {
+    memset(&x[0], 0, sizeof(double) * 3 * 3);
     x[0][0] = x[1][1] = x[2][2] = 1.0;
-    x[0][1] = x[0][2] = x[1][0] =
-    x[1][2] = x[2][0] = x[2][1] = 0.0;
 }
 
-M33::M33(const double src[3][3])
+M33::M33(const double (&src)[3][3])
 {
     memcpy(x, src, 3 * 3 * sizeof(double));
 }
 
-M33::M33(double xx, double xy, double xz,
-         double yx, double yy, double yz,
-         double zx, double zy, double zz)
+M33::M33(double a00, double a01, double a02,
+         double a10, double a11, double a12,
+         double a20, double a21, double a22)
 {
-    x[0][0] = xx;
-    x[0][1] = xy;
-    x[0][2] = xz;
-    x[1][0] = yx;
-    x[1][1] = yy;
-    x[1][2] = yz;
-    x[2][0] = zx;
-    x[2][1] = zy;
-    x[2][2] = zz;
-}
-
-M33 &M33::operator= (const M33 &a)
-{
-    x[0][0] = a.x[0][0];
-    x[0][1] = a.x[0][1];
-    x[0][2] = a.x[0][2];
-    x[1][0] = a.x[1][0];
-    x[1][1] = a.x[1][1];
-    x[1][2] = a.x[1][2];
-    x[2][0] = a.x[2][0];
-    x[2][1] = a.x[2][1];
-    x[2][2] = a.x[2][2];
-    return *this;
+    x[0][0] = a00;
+    x[0][1] = a01;
+    x[0][2] = a02;
+    x[1][0] = a10;
+    x[1][1] = a11;
+    x[1][2] = a12;
+    x[2][0] = a20;
+    x[2][1] = a21;
+    x[2][2] = a22;
 }
 
 M33 &M33::operator+= (const M33 &a)
@@ -96,7 +81,7 @@ M33 &M33::operator*= (const M33 &a)
     return *this;
 }
 
-M33 &M33::operator*= (const double s)
+M33 &M33::operator*= (double s)
 {
     x[0][0] *= s;
     x[0][1] *= s;
@@ -110,9 +95,9 @@ M33 &M33::operator*= (const double s)
     return *this;
 }
 
-M33 &M33::operator/= (const double s)
+M33 &M33::operator/= (double s)
 {
-    assert(s != 0.0);
+    assert(!DCMP(s, 0.0));
 
     x[0][0] /= s;
     x[0][1] /= s;
@@ -126,15 +111,19 @@ M33 &M33::operator/= (const double s)
     return *this;
 }
 
+bool M33::operator== (const M33 &a) const
+{
+    return DCMP(x[0][0], a.x[0][0]) && DCMP(x[0][1], a.x[0][1]) && DCMP(x[0][2], a.x[0][2]) &&
+           DCMP(x[1][0], a.x[1][0]) && DCMP(x[1][1], a.x[1][1]) && DCMP(x[1][2], a.x[1][2]) &&
+           DCMP(x[2][0], a.x[2][0]) && DCMP(x[2][1], a.x[2][1]) && DCMP(x[2][2], a.x[2][2]);
+}
+
 M33 &M33::invert()
 {
-    double det;
+    double det = determinant();
+    assert(!DCMP(det, 0.0));
+
     M33 res;
-
-    det = determinant();
-
-    assert(det != 0.0);
-
     res.x[0][0] = (x[1][1] * x[2][2] - x[1][2] * x[2][1]) / det;
     res.x[0][1] = (x[0][2] * x[2][1] - x[0][1] * x[2][2]) / det;
     res.x[0][2] = (x[0][1] * x[1][2] - x[0][2] * x[1][1]) / det;
@@ -183,12 +172,12 @@ M33 M33::getScaleMatrix(const vec3 &vect)
     return A;
 }
 
-M33 M33::getRotateXMatrix(const double angle)
+M33 M33::getRotateXMatrix(double angle, bool rads)
 {
     M33 A;
 
-    double cosinus = cos(DegToRad(angle));
-    double sinus = sin(DegToRad(angle));
+    double cosinus = rads ? cos(angle) : cos(DegToRad(angle));
+    double sinus = rads ? sin(angle) : sin(DegToRad(angle));
 
     A.x[1][1] = cosinus;
     A.x[1][2] = sinus;
@@ -198,12 +187,12 @@ M33 M33::getRotateXMatrix(const double angle)
     return A;
 }
 
-M33 M33::getRotateYMatrix(const double angle)
+M33 M33::getRotateYMatrix(double angle, bool rads)
 {
     M33 A;
 
-    double cosinus = cos(DegToRad(angle));
-    double sinus = sin(DegToRad(angle));
+    double cosinus = rads ? cos(angle) : cos(DegToRad(angle));
+    double sinus = rads ? sin(angle) : sin(DegToRad(angle));
 
     A.x[0][0] = cosinus;
     A.x[0][2] = -sinus;
@@ -213,12 +202,12 @@ M33 M33::getRotateYMatrix(const double angle)
     return A;
 }
 
-M33 M33::getRotateZMatrix(const double angle)
+M33 M33::getRotateZMatrix(double angle, bool rads)
 {
     M33 A;
 
-    double cosinus = cos(DegToRad(angle));
-    double sinus = sin(DegToRad(angle));
+    double cosinus = rads ? cos(angle) : cos(DegToRad(angle));
+    double sinus = rads ? sin(angle) : sin(DegToRad(angle));
 
     A.x[0][0] = cosinus;
     A.x[0][1] = sinus;
@@ -228,9 +217,11 @@ M33 M33::getRotateZMatrix(const double angle)
     return A;
 }
 
-M33 M33::getRotateYawPitchRollMatrix(const double yaw, const double pitch, const double roll)
+M33 M33::getRotateYawPitchRollMatrix(double yaw, double pitch, double roll, bool rads)
 {
-    return getRotateYMatrix(yaw) * getRotateZMatrix(roll) * getRotateXMatrix(pitch);
+    return getRotateYMatrix(yaw, rads)
+            * getRotateZMatrix(roll, rads)
+            * getRotateXMatrix(pitch, rads);
 }
 
 M33 operator+ (const M33 &a, const M33 &b)
@@ -284,25 +275,25 @@ M33 operator* (const M33 &a, const M33 &b)
     return c;
 }
 
-M33 operator* (const M33 &a, const double s)
+M33 operator* (const M33 &a, double s)
 {
     M33 res = a;
 
     return res *= s;
 }
 
-M33 operator* (const double s, const M33 &b)
+M33 operator* (double s, const M33 &b)
 {
     M33 res = b;
 
     return res *= s;
 }
 
-vec3 operator* (const M33 &a, const vec3 &b)
+vec3 operator* (const vec3 &v, const M33 &a)
 {
-    return vec3(a.x[0][0] * b.x + a.x[0][1] * b.y + a.x[0][2] * b.z,
-                a.x[1][0] * b.x + a.x[1][1] * b.y + a.x[1][2] * b.z,
-                a.x[2][0] * b.x + a.x[2][1] * b.y + a.x[2][2] * b.z);
+    return vec3(a.x[0][0] * v.x + a.x[1][0] * v.y + a.x[2][0] * v.z,
+                a.x[0][1] * v.x + a.x[1][1] * v.y + a.x[2][1] * v.z,
+                a.x[0][2] * v.x + a.x[1][2] * v.y + a.x[2][2] * v.z);
 }
 
 }

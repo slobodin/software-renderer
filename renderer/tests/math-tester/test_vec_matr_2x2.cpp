@@ -6,6 +6,7 @@
  */
 
 #include <gtest/gtest.h>
+#include "vec2.h"
 #include "m22.h"
 
 using namespace math;
@@ -36,7 +37,7 @@ TEST(Vector2, AssignOperations)
     EXPECT_TRUE(a == vec2(6, 4));
 }
 
-TEST(Vector2, Flip)
+TEST(Vector2, FlipAndEquality)
 {
     vec2 a(6, 4), b;
 
@@ -44,6 +45,7 @@ TEST(Vector2, Flip)
 
     EXPECT_TRUE(a == vec2(6, 4));
     EXPECT_TRUE(b == vec2(-6, -4));
+    EXPECT_TRUE(a != b);
 }
 
 TEST(Vector2, VectorOperations)
@@ -56,6 +58,7 @@ TEST(Vector2, VectorOperations)
     // normalization
     a.normalize();
     EXPECT_TRUE(a == vec2(0.83205, 0.5547));
+    EXPECT_NEAR(1.0, a.length(), EPSILON_E3);
 
     // scalar product
     EXPECT_NEAR(7.2111, a.dotProduct(b), EPSILON_E3);

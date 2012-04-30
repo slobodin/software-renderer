@@ -10,5 +10,7 @@ SOURCES += main.cpp \
 INCLUDEPATH += ../../math/ \
                ../../comm/
 
+SOURCES += ../../math/m33.cpp
+
 LIBS += -lgtest -lgtest_main -lpthread
 

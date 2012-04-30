@@ -17,100 +17,122 @@ namespace math
 
 //! Three-component row vector.
 /*! v = (x, y, z) */
-template<typename T>
-struct vector3
+struct vec3
 {
-    T x, y, z;
-    vector3(T xx = 0.0, T yy = 0.0, T zz = 0.0) : x(xx), y(yy), z(zz) { }
+    //! X Y Z coordinates of this vector
+    double x, y, z;
 
-    vector3 &operator+= (const vector3 &other);
-    vector3 &operator-= (const vector3 &other);
-    vector3 &operator*= (T s);
-    vector3 &operator/= (T s);
+    //! Default ctor.
+    /*! Default zero vector. */
+    vec3(double x = 0.0, double y = 0.0, double z = 0.0) { this->x = x; this->y = y; this->z = z; }
 
-    vector3 operator-() const;
+    //! Addition assignment.
+    vec3 &operator+= (const vec3 &other);
+    //! Subtraction assignment.
+    vec3 &operator-= (const vec3 &other);
+    //! Scalar multiplication assignment.
+    vec3 &operator*= (double s);
+    //! 1/scalar multiplication.
+    vec3 &operator/= (double s);
 
-    bool operator== (const vector3 &other) const;
-    bool operator!= (const vector3 &other) const;
+    //! Returns flipped vector.
+    vec3 operator-() const;
 
-    operator const T* () const;
+    //! Equality check.
+    bool operator== (const vec3 &other) const;
+    //! Non-equality check.
+    bool operator!= (const vec3 &other) const;
 
-    T length() const;
-    vector3 &normalize();
-    void set(T xx, T yy, T zz);
-    void set(const vector3 &other);
+    //! Convertion to pointer to double. Returns address of `this'.
+    operator const double* () const;
+
+    //! Vector's magnitude.
+    double length() const;
+    //! Normalizes this vector and returns it.
+    vec3 &normalize();
+    //! Some type of ctor.
+    void set(double x, double y, double z);
+    //! Constructor from another vector.
+    void set(const vec3 &other);
+    //! Resets vector.
     void zero();
+    //! Check all components for zero equality.
     bool isZero() const;
-    T dotProduct(const vector3 &other) const;
-    vector3 crossProduct(const vector3 &other) const;
+    //! Scalar product.
+    double dotProduct(const vec3 &other) const;
+    //! Cross product.
+    vec3 crossProduct(const vec3 &other) const;
 
-    template<typename T1>
-    friend vector3<T1> operator+ (const vector3<T1> &a, const vector3<T1> &b);
-    template<typename T1>
-    friend vector3<T1> operator- (const vector3<T1> &a, const vector3<T1> &b);
-    template<typename T1>
-    friend vector3<T1> operator* (const vector3<T1> &a, T1 b);
-    template<typename T1>
-    friend vector3<T1> operator* (T1 a, const vector3<T1> &b);
-    template<typename T1>
-    friend vector3<T1> operator/ (const vector3<T1> &a, T b);
+    //! Addition of two vectors.
+    friend vec3 operator+ (const vec3 &a, const vec3 &b);
+    //! Subtraction of two vectors.
+    friend vec3 operator- (const vec3 &a, const vec3 &b);
+    //! Multiplication of vector and scalar.
+    friend vec3 operator* (const vec3 &a, double b);
+    //! Multiplication of vector and scalar.
+    friend vec3 operator* (double a, const vec3 &b);
+    //! Vector and 1/scalar multiplication.
+    friend vec3 operator/ (const vec3 &a, double b);
 
-    template<typename T1>
-    friend std::ostream &operator<< (std::ostream &os, const vector3<T1> &v);
+    //! Logger helper. Writes `[x = ?, y = ?, z = ?]' in the stream
+    friend std::ostream &operator<< (std::ostream &os, const vec3 &v);
 
-    template<typename T1>
-    friend bool comparex(const vector3<T1> &a, const vector3<T1> &b);
-    template<typename T1>
-    friend bool comparey(const vector3<T1> &a, const vector3<T1> &b);
-    template<typename T1>
-    friend bool comparez(const vector3<T1> &a, const vector3<T1> &b);
+    //! Vector comparator.
+    /*! \returns true if a.x < b.x. */
+    friend bool comparex(const vec3 &a, const vec3 &b);
+
+    //! Vector comparator.
+    /*! \returns true if a.y < b.y. */
+    friend bool comparey(const vec3 &a, const vec3 &b);
+
+    //! Vector comparator.
+    /*! \returns true if a.z < b.z. */
+    friend bool comparez(const vec3 &a, const vec3 &b);
 };
 
-template<typename T>
-inline vector3<T> &vector3<T>::operator+= (const vector3<T> &other)
+inline vec3 &vec3::operator+= (const vec3 &other)
 {
     x += other.x;
     y += other.y;
     z += other.z;
+
     return *this;
 }
 
-template<typename T>
-inline vector3<T> &vector3<T>::operator-= (const vector3<T> &other)
+inline vec3 &vec3::operator-= (const vec3 &other)
 {
     x -= other.x;
     y -= other.y;
     z -= other.z;
+
     return *this;
 }
 
-template<typename T>
-inline vector3<T> &vector3<T>::operator*= (T s)
+inline vec3 &vec3::operator*= (double s)
 {
     x *= s;
     y *= s;
     z *= s;
+
     return *this;
 }
 
-template<typename T>
-inline vector3<T> &vector3<T>::operator/= (T s)
+inline vec3 &vec3::operator/= (double s)
 {
-    assert(s != 0.0);
+    assert(!DCMP(s, 0.0));
     x /= s;
     y /= s;
     z /= s;
+
     return *this;
 }
 
-template<typename T>
-inline vector3<T> vector3<T>::operator-() const
+inline vec3 vec3::operator- () const
 {
-    return vector3<T>(-x, -y, -z);
+    return vec3(-x, -y, -z);
 }
 
-template<typename T>
-inline bool vector3<T>::operator== (const vector3<T> &other) const
+inline bool vec3::operator== (const vec3 &other) const
 {
     if (fabs(x - other.x) > EPSILON_E3)
         return false;
@@ -121,8 +143,7 @@ inline bool vector3<T>::operator== (const vector3<T> &other) const
     return true;
 }
 
-template<typename T>
-inline bool vector3<T>::operator!= (const vector3<T> &other) const
+inline bool vec3::operator!= (const vec3 &other) const
 {
     if (fabs(x - other.x) > EPSILON_E3)
         return true;
@@ -133,22 +154,20 @@ inline bool vector3<T>::operator!= (const vector3<T> &other) const
     return false;
 }
 
-template<typename T>
-inline vector3<T>::operator const T* () const
+inline vec3::operator const double* () const
 {
     return &x;
 }
 
-template<typename T>
-inline T vector3<T>::length() const
+inline double vec3::length() const
 {
-    T t = x * x + y * y + z * z;
-    assert(t != 0.0);
+    double t = x * x + y * y + z * z;
+    assert(!DCMP(t, 0.0));
+
     return sqrt(t);
 }
 
-template<typename T>
-inline vector3<T> &vector3<T>::normalize()
+inline vec3 &vec3::normalize()
 {
     if ((fabs(x - 0.0) < EPSILON_E6) &&
         (fabs(y - 0.0) < EPSILON_E6) &&
@@ -158,108 +177,90 @@ inline vector3<T> &vector3<T>::normalize()
     return (*this) /= length();
 }
 
-template<typename T>
-inline void vector3<T>::set(T xx, T yy, T zz)
+inline void vec3::set(double x, double y, double z)
 {
-    x = xx;
-    y = yy;
-    z = zz;
+    this->x = x;
+    this->y = y;
+    this->z = z;
 }
 
-template<typename T>
-inline void vector3<T>::set(const vector3 &other)
+inline void vec3::set(const vec3 &other)
 {
     x = other.x;
     y = other.y;
     z = other.z;
 }
 
-template<typename T>
-inline void vector3<T>::zero()
+inline void vec3::zero()
 {
     x = 0.0;
     y = 0.0;
     z = 0.0;
 }
 
-template<typename T>
-inline bool vector3<T>::isZero() const
+inline bool vec3::isZero() const
 {
-    return (x == 0.0) && (y == 0.0) && (z == 0.0);
+    return (DCMP(x, 0.0)) && (DCMP(y, 0.0)) && (DCMP(z, 0.0));
 }
 
-template<typename T>
-inline T vector3<T>::dotProduct(const vector3<T> &other) const
+inline double vec3::dotProduct(const vec3 &other) const
 {
     return (x * other.x + y * other.y + z * other.z);
 }
 
-template<typename T>
-inline vector3<T> vector3<T>::crossProduct(const vector3<T> &other) const
+inline vec3 vec3::crossProduct(const vec3 &other) const
 {
-    return vector3<T>(y * other.z - z * other.y,
-                      -(x * other.z - z * other.x),
-                      x * other.y - y * other.x);
+    return vec3(y * other.z - z * other.y,
+                z * other.x - x * other.z,
+                x * other.y - y * other.x);
 }
 
-template<typename T1>
-bool comparex(const vector3<T1> &a, const vector3<T1> &b)
+inline vec3 operator+ (const vec3 &a, const vec3 &b)
 {
-    return a.x < b.x;
+    return vec3(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
-template<typename T1>
-bool comparey(const vector3<T1> &a, const vector3<T1> &b)
+inline vec3 operator- (const vec3 &a, const vec3 &b)
 {
-    return a.y < b.y;
+    return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
-template<typename T1>
-bool comparez(const vector3<T1> &a, const vector3<T1> &b)
+inline vec3 operator* (const vec3 &a, double b)
 {
-    return a.z < b.z;
+    return vec3(a.x * b, a.y * b, a.z * b);
 }
 
-template<typename T1>
-inline vector3<T1> operator+ (const vector3<T1> &a, const vector3<T1> &b)
+inline vec3 operator* (double a, const vec3 &b)
 {
-    return vector3<T1>(a.x + b.x, a.y + b.y, a.z + b.z);
+    return vec3(b.x * a, b.y * a, b.z * a);
 }
 
-template<typename T1>
-inline vector3<T1> operator- (const vector3<T1> &a, const vector3<T1> &b)
+inline vec3 operator/ (const vec3 &a, double b)
 {
-    return vector3<T1>(a.x - b.x, a.y - b.y, a.z - b.z);
+    assert(!DCMP(b, 0.0));
+    return vec3(a.x / b, a.y / b, a.z / b);
 }
 
-template<typename T1>
-inline vector3<T1> operator* (const vector3<T1> &a, T1 b)
-{
-    return vector3<T1>(a.x * b, a.y * b, a.z * b);
-}
-
-template<typename T1>
-inline vector3<T1> operator* (T1 a, const vector3<T1> &b)
-{
-    return vector3<T1>(b.x * a, b.y * a, b.z * a);
-}
-
-template<typename T1>
-inline vector3<T1> operator/ (const vector3<T1> &a, T1 b)
-{
-    assert(b != 0.0);
-    return vector3<T1>(a.x / b, a.y / b, a.z / b);
-}
-
-template<typename T1>
-inline std::ostream &operator<< (std::ostream &os, const vector3<T1> &v)
+inline std::ostream &operator<< (std::ostream &os, const vec3 &v)
 {
     os << "[x: " << v.x << " y: " << v.y << " z: " << v.z << "]";
     return os;
 }
 
-typedef vector3<double> vec3;
-typedef vector3<uint32_t> ivec3;
+inline bool comparex(const vec3 &a, const vec3 &b)
+{
+    return a.x < b.x;
+}
+
+inline bool comparey(const vec3 &a, const vec3 &b)
+{
+    return a.y < b.y;
+}
+
+inline bool comparez(const vec3 &a, const vec3 &b)
+{
+    return a.z < b.z;
+}
 
 }
 

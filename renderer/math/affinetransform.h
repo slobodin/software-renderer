@@ -11,16 +11,27 @@
 #include "comm_pch.h"
 
 #include "m33.h"
+#include "m44.h"
 #include "vec3.h"
 
 namespace math
 {
 
-//! M * x + v
+//! Affine transformation.
+/*!
+  * M * x + v,
+  * where M is scale and\or rotation matrix,
+  * v - translation vector
+  */
 class AffineTransform
 {
+    //! Matrix.
     M33 m_M;
+    //! Vector
     vec3 m_v;
+
+    // TODO: maybe full 4x4 matrix?
+
 public:
     AffineTransform();
     AffineTransform(const M33 &M, const vec3 &v);
@@ -34,7 +45,7 @@ public:
     vec3 getv() const { return m_v; }
     M33 getm() const { return m_M; }
 
-    void getHomogeneousMatrix() const;
+    M44 getHomogeneousMatrix() const;
 
     void transformPoint(vec3 &p) const;
 };
