@@ -91,9 +91,9 @@ void Camera::buildCamMatrix(const double yaw, const double pitch, const double r
     m_up = math::vec3(0.0, 1.0, 0.0);
 
     math::M33 rot = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, roll);
-    m_dir = rot * m_dir;
-    m_right = rot * m_right;
-    m_up = rot * m_up;
+    m_dir = m_dir * rot;
+    m_right = m_right * rot;
+    m_up = m_up * rot;
 
     m_dir.normalize();
     double dot = m_up.dotProduct(m_dir);

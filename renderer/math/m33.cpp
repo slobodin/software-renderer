@@ -14,18 +14,31 @@ namespace math
 
 M33::M33()
 {
-    memset(&x[0], 0, sizeof(double) * 3 * 3);
-    x[0][0] = x[1][1] = x[2][2] = 1.0;
+    reset();
 }
 
 M33::M33(const double (&src)[3][3])
 {
-    memcpy(x, src, 3 * 3 * sizeof(double));
+    set(src);
 }
 
 M33::M33(double a00, double a01, double a02,
          double a10, double a11, double a12,
          double a20, double a21, double a22)
+{
+    set(a00, a01, a02,
+        a10, a11, a12,
+        a20, a21, a22);
+}
+
+void M33::set(const double (&src)[3][3])
+{
+    memcpy(x, src, 3 * 3 * sizeof(double));
+}
+
+void M33::set(double a00, double a01, double a02,
+              double a10, double a11, double a12,
+              double a20, double a21, double a22)
 {
     x[0][0] = a00;
     x[0][1] = a01;
@@ -38,31 +51,27 @@ M33::M33(double a00, double a01, double a02,
     x[2][2] = a22;
 }
 
+void M33::reset()
+{
+    memset(&x[0], 0, sizeof(double) * 3 * 3);
+    x[0][0] = x[1][1] = x[2][2] = 1.0;
+}
+
 M33 &M33::operator+= (const M33 &a)
 {
-    x[0][0] += a.x[0][0];
-    x[0][1] += a.x[0][1];
-    x[0][2] += a.x[0][2];
-    x[1][0] += a.x[1][0];
-    x[1][1] += a.x[1][1];
-    x[1][2] += a.x[1][2];
-    x[2][0] += a.x[2][0];
-    x[2][1] += a.x[2][1];
-    x[2][2] += a.x[2][2];
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            x[i][j] += a.x[i][j];
+
     return *this;
 }
 
 M33 &M33::operator-= (const M33 &a)
 {
-    x[0][0] -= a.x[0][0];
-    x[0][1] -= a.x[0][1];
-    x[0][2] -= a.x[0][2];
-    x[1][0] -= a.x[1][0];
-    x[1][1] -= a.x[1][1];
-    x[1][2] -= a.x[1][2];
-    x[2][0] -= a.x[2][0];
-    x[2][1] -= a.x[2][1];
-    x[2][2] -= a.x[2][2];
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            x[i][j] -= a.x[i][j];
+
     return *this;
 }
 
@@ -133,15 +142,9 @@ M33 &M33::transpose()
 {
     M33 res;
 
-    res.x[0][0] = x[0][0];
-    res.x[0][1] = x[1][0];
-    res.x[0][2] = x[2][0];
-    res.x[1][0] = x[0][1];
-    res.x[1][1] = x[1][1];
-    res.x[1][2] = x[2][1];
-    res.x[2][0] = x[0][2];
-    res.x[2][1] = x[1][2];
-    res.x[2][2] = x[2][2];
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            res.x[i][j] = x[j][i];
 
     return *this = res;
 }
@@ -211,24 +214,18 @@ M33 M33::getRotateZMatrix(double angle, bool rads)
 
 M33 M33::getRotateYawPitchRollMatrix(double yaw, double pitch, double roll, bool rads)
 {
-    return getRotateYMatrix(yaw, rads)
-            * getRotateZMatrix(roll, rads)
-            * getRotateXMatrix(pitch, rads);
+    return getRotateYMatrix(yaw, rads) *
+           getRotateZMatrix(roll, rads) *
+           getRotateXMatrix(pitch, rads);
 }
 
 M33 operator+ (const M33 &a, const M33 &b)
 {
     M33 res;
 
-    res.x[0][0] = a.x[0][0] + b.x[0][0];
-    res.x[0][1] = a.x[0][1] + b.x[0][1];
-    res.x[0][2] = a.x[0][2] + b.x[0][2];
-    res.x[1][0] = a.x[1][0] + b.x[1][0];
-    res.x[1][1] = a.x[1][1] + b.x[1][1];
-    res.x[1][2] = a.x[1][2] + b.x[1][2];
-    res.x[2][0] = a.x[2][0] + b.x[2][0];
-    res.x[2][1] = a.x[2][1] + b.x[2][1];
-    res.x[2][2] = a.x[2][2] + b.x[2][2];
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            res.x[i][j] = a.x[i][j] + b.x[i][j];
 
     return res;
 }
@@ -237,15 +234,9 @@ M33 operator- (const M33 &a, const M33 &b)
 {
     M33 res;
 
-    res.x[0][0] = a.x[0][0] - b.x[0][0];
-    res.x[0][1] = a.x[0][1] - b.x[0][1];
-    res.x[0][2] = a.x[0][2] - b.x[0][2];
-    res.x[1][0] = a.x[1][0] - b.x[1][0];
-    res.x[1][1] = a.x[1][1] - b.x[1][1];
-    res.x[1][2] = a.x[1][2] - b.x[1][2];
-    res.x[2][0] = a.x[2][0] - b.x[2][0];
-    res.x[2][1] = a.x[2][1] - b.x[2][1];
-    res.x[2][2] = a.x[2][2] - b.x[2][2];
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            res.x[i][j] = a.x[i][j] - b.x[i][j];
 
     return res;
 }

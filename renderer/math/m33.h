@@ -36,6 +36,15 @@ struct M33
         double a10, double a11, double a12,
         double a20, double a21, double a22);
 
+    //! Set elements with array.
+    void set(const double (&src)[3][3]);
+    //! Set elements.
+    void set(double a00, double a01, double a02,
+             double a10, double a11, double a12,
+             double a20, double a21, double a22);
+    //! Reset to identity matrix.
+    void reset();
+
     //! Matrix addition.
     M33 &operator+= (const M33 &a);
     //! Matrix subtraction.
@@ -123,8 +132,6 @@ struct M33
       *           |7 8 9|
       */
     friend vec3 operator* (const vec3 &v, const M33 &a);
-
-    // TODO: vec3 * 4x4 matrix (fake vector with 4th "w" component = 1)
 };
 
 }

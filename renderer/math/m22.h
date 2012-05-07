@@ -32,6 +32,13 @@ struct M22
     //! Component ctor.
     M22(double a00, double a01, double a10, double a11);
 
+    //! Set elements with array.
+    void set(const double (&src)[4]);
+    //! Set elements.
+    void set(double a00, double a01, double a10, double a11);
+    //! Reset to identity matrix.
+    void reset();
+
     //! Matrix addition.
     M22 &operator+= (const M22 &a);
     //! Matrix subtration.
@@ -76,11 +83,25 @@ struct M22
 
 inline M22::M22()
 {
-    x[0] = x[3] = 1.0;
-    x[1] = x[2] = 0.0;
+    reset();
 }
 
 inline M22::M22(double a00, double a01, double a10, double a11)
+{
+    set(a00, a01, a10, a11);
+}
+
+inline M22::M22(const double (&src)[4])
+{
+    set(src);
+}
+
+inline void M22::set(const double (&src)[4])
+{
+    memcpy(x, src, 4 * sizeof(double));
+}
+
+inline void M22::set(double a00, double a01, double a10, double a11)
 {
     x[0] = a00;
     x[1] = a01;
@@ -88,9 +109,10 @@ inline M22::M22(double a00, double a01, double a10, double a11)
     x[3] = a11;
 }
 
-inline M22::M22(const double (&src)[4])
+inline void M22::reset()
 {
-    memcpy(x, src, 4 * sizeof(double));
+    x[0] = x[3] = 1.0;
+    x[1] = x[2] = 0.0;
 }
 
 inline M22 &M22::operator+= (const M22 &a)
@@ -124,10 +146,8 @@ inline M22 &M22::operator*= (const M22 &a)
 
 inline M22 &M22::operator*= (double s)
 {
-    x[0] *= s;
-    x[1] *= s;
-    x[2] *= s;
-    x[3] *= s;
+    std::for_each(x, x + 4, [s](double &el) { el *= s; });
+
     return *this;
 }
 
@@ -135,11 +155,9 @@ inline M22 &M22::operator/= (double s)
 {
     assert(!DCMP(s, 0.0));
 
-    x[0] /= s;
-    x[1] /= s;
-    x[2] /= s;
-    x[3] /= s;
-    return *this;
+    std::for_each(x, x + 4, [s](double &el) { el /= s; });
+
+return *this;
 }
 
 inline bool M22::operator== (const M22 &a) const
