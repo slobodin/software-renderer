@@ -71,7 +71,7 @@ string Camera::state() const
 void Camera::setPosition(const math::vec3 &pos)
 {
     m_position = pos;
-    m_worldToCamera.setv(-m_position);
+//    m_worldToCamera.setv(-m_position);
 }
 
 math::vec3 Camera::getPosition() const
@@ -86,54 +86,54 @@ math::vec3 Camera::getDirection() const
 
 void Camera::buildCamMatrix(const double yaw, const double pitch, const double roll)
 {
-    m_dir = math::vec3(0.0, 0.0, 1.0);
-    m_right = math::vec3(1.0, 0.0, 0.0);
-    m_up = math::vec3(0.0, 1.0, 0.0);
+//    m_dir = math::vec3(0.0, 0.0, 1.0);
+//    m_right = math::vec3(1.0, 0.0, 0.0);
+//    m_up = math::vec3(0.0, 1.0, 0.0);
 
-    math::M33 rot = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, roll);
-    m_dir = m_dir * rot;
-    m_right = m_right * rot;
-    m_up = m_up * rot;
+//    math::M33 rot = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, roll);
+//    m_dir = m_dir * rot;
+//    m_right = m_right * rot;
+//    m_up = m_up * rot;
 
-    m_dir.normalize();
-    double dot = m_up.dotProduct(m_dir);
-    math::vec3 temp = dot * m_dir;
-    m_up -= temp;
+//    m_dir.normalize();
+//    double dot = m_up.dotProduct(m_dir);
+//    math::vec3 temp = dot * m_dir;
+//    m_up -= temp;
 
-    m_right = m_up.crossProduct(m_dir);
+//    m_right = m_up.crossProduct(m_dir);
 
-    m_up.normalize();
-    m_right.normalize();
+//    m_up.normalize();
+//    m_right.normalize();
 
-    rot.invert();
-    m_worldToCamera.setm(rot);
-    m_worldToCamera.setv(-m_position);
+//    rot.invert();
+//    m_worldToCamera.setm(rot);
+//    m_worldToCamera.setv(-m_position);
 }
 
 void Camera::buildCamMatrix(const math::vec3 &lookAtPoint)
 {
-    // direction = target - camera_poition
-    m_dir = lookAtPoint - m_position;
-    m_dir.normalize();
+//    // direction = target - camera_poition
+//    m_dir = lookAtPoint - m_position;
+//    m_dir.normalize();
 
-    // up is Y
-    m_up.set(0.0, 1.0, 0.0);
-    // find right vector
-    m_right = m_up.crossProduct(m_dir);
-    // find up vector
-    m_up = m_dir.crossProduct(m_right);
+//    // up is Y
+//    m_up.set(0.0, 1.0, 0.0);
+//    // find right vector
+//    m_right = m_up.crossProduct(m_dir);
+//    // find up vector
+//    m_up = m_dir.crossProduct(m_right);
 
-    m_right.normalize();
-    m_up.normalize();
-    m_dir.normalize();
+//    m_right.normalize();
+//    m_up.normalize();
+//    m_dir.normalize();
 
-    // create matrix
-    math::M33 resM(m_right.x, m_up.x, m_dir.x,
-                   m_right.y, m_up.y, m_dir.y,
-                   m_right.z, m_up.z, m_dir.z);
+//    // create matrix
+//    math::M33 resM(m_right.x, m_up.x, m_dir.x,
+//                   m_right.y, m_up.y, m_dir.y,
+//                   m_right.z, m_up.z, m_dir.z);
 
-    m_worldToCamera.setm(resM);
-    m_worldToCamera.setv(-m_position);
+//    m_worldToCamera.setm(resM);
+//    m_worldToCamera.setv(-m_position);
 }
 
 void Camera::buildCamMatrix(const math::vec3 &lookFrom, const math::vec3 &lookTo)
@@ -153,9 +153,9 @@ void Camera::toCamera(RenderList &rendList) const
         math::vec3 &p2 = t->v(1).p;
         math::vec3 &p3 = t->v(2).p;
 
-        m_worldToCamera.transformPoint(p1);
-        m_worldToCamera.transformPoint(p2);
-        m_worldToCamera.transformPoint(p3);
+//        m_worldToCamera.transformPoint(p1);
+//        m_worldToCamera.transformPoint(p2);
+//        m_worldToCamera.transformPoint(p3);
 
         // FIXME:
         if (p1.z < m_distance || p2.z < m_distance || p3.z < m_distance)
@@ -204,20 +204,20 @@ void Camera::toScreen(RenderList &rendList) const
 
 bool Camera::culled(const Mesh &obj) const
 {
-    math::vec3 spherePos = obj.position();
-    double radius = obj.bsphere().radius();
+//    math::vec3 spherePos = obj.position();
+//    double radius = obj.bsphere().radius();
 
-    if (radius < 0)
-        return false;
+//    if (radius < 0)
+//        return false;
 
-    m_worldToCamera.transformPoint(spherePos);
+//    m_worldToCamera.transformPoint(spherePos);
 
-    // check Z plane
-    if (((spherePos.z - radius) > m_farZ)
-            || ((spherePos.z + radius) < m_nearZ))
-        return true;
+//    // check Z plane
+//    if (((spherePos.z - radius) > m_farZ)
+//            || ((spherePos.z + radius) < m_nearZ))
+//        return true;
 
-    return false;
+//    return false;
 }
 
 }

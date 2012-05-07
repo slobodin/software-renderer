@@ -11,7 +11,6 @@
 #include "comm_pch.h"
 
 #include "vec3.h"
-#include "affinetransform.h"
 #include "renderlist.h"
 
 namespace rend
@@ -46,9 +45,9 @@ private:
 
     double m_distance;
 
-    math::AffineTransform m_worldToCamera;
-    math::AffineTransform m_projection;
-    math::AffineTransform m_screen;
+//    math::AffineTransform m_worldToCamera;
+//    math::AffineTransform m_projection;
+//    math::AffineTransform m_screen;
 
 public:
     Camera(const math::vec3 position,
@@ -99,7 +98,7 @@ void Camera::apply(T &container) const
 inline void Camera::apply(math::vec3 &v) const
 {
     // world to cam transformation
-    m_worldToCamera.transformPoint(v);
+//    m_worldToCamera.transformPoint(v);
 
     toScreen(v);
 }

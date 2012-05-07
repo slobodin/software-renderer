@@ -30,7 +30,6 @@ HEADERS += \
     base/resourcemgr.h \
     comm/exception.h \
     comm/singleton.h \
-    math/affinetransform.h \
     math/m22.h \
     math/m33.h \
     rend/boundingsphere.h \
@@ -65,7 +64,6 @@ SOURCES += \
     base/osfile.cpp \
     base/ospath.cpp \
     base/resourcemgr.cpp \
-    math/affinetransform.cpp \
     math/m33.cpp \
     math/plane.cpp \
     rend/boundingsphere.cpp \

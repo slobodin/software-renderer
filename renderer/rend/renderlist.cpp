@@ -25,7 +25,7 @@ void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
     const vector<size_t> &indices = mesh.indices();
     // FIXME: not here!
     // mesh world transformation
-    const math::AffineTransform &tr = mesh.transformation();
+//    const math::AffineTransform &tr = mesh.transformation();
 
     switch(mesh.type())
     {
@@ -42,9 +42,9 @@ void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
             triangle.v(2) = vertices[indices[ind + 2]];
 
             // translate and rotate the triangle
-            tr.transformPoint(triangle.v(0).p);
-            tr.transformPoint(triangle.v(1).p);
-            tr.transformPoint(triangle.v(2).p);
+//            tr.transformPoint(triangle.v(0).p);
+//            tr.transformPoint(triangle.v(1).p);
+//            tr.transformPoint(triangle.v(2).p);
 
             // set material
             if (!mesh.materials().empty())
