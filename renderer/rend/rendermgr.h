@@ -21,7 +21,6 @@ namespace rend
 
 class RenderMgr : boost::noncopyable
 {
-    ;
     sptr(Rasterizer) m_rasterizer;
     sptr(Camera) m_camera;
 
@@ -37,6 +36,7 @@ public:
 
     void update(sptr(RenderDevice) rendDevice);
 
+    // TODO: make uniform method `addSceneObject(Node *n);'
     void addMesh(sptr(rend::Mesh) mesh);
     sptr(AmbientLight) addAmbientLight(Color3 intensity);
     sptr(DirectionalLight) addDirectionalLight(Color3 intensity, math::vec3 direction);
