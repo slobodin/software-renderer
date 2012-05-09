@@ -13,12 +13,12 @@
 namespace base
 {
 
-/**
-  * Abstract base for resources, that can be loaded.
-  */
+//! Abstract base for resources, that can be loaded.
 class Resource
 {
 protected:
+
+    //! Name of the resource.
     string m_name;
 
 public:

@@ -13,6 +13,14 @@
 namespace rend
 {
 
+// helpers
+enum TriangleType
+{
+    TT_FLAT_TOP,
+    TT_FLAT_BOTTOM,
+    TT_FLAT_GENERAL
+};
+
 void Rasterizer::drawBottomTriangle(int x1, int y1,
                                     int x2, int /*y2*/,
                                     int x3, int y3,

@@ -56,8 +56,7 @@ public:
     virtual void illuminate(RenderList &renderlist) const;
 };
 
-/* Ambient light
-  */
+//! Ambient light
 class AmbientLight : public Light
 {
 protected:
@@ -65,12 +64,9 @@ protected:
 
 public:
     AmbientLight(const Color3 &intensity);
-
-//    void illuminate(RenderList &renderlist) const;
 };
 
-/* Directional light
-  */
+//! Directional light
 class DirectionalLight : public Light
 {
     math::vec3 m_dir;
@@ -79,12 +75,9 @@ class DirectionalLight : public Light
 
 public:
     DirectionalLight(const Color3 &intensity, const math::vec3 &dir);
-
-//    void illuminate(RenderList &renderlist) const;
 };
 
-/* Point light
-  */
+//! Point light
 class PointLight : public Light
 {
     math::vec3 m_pos;
@@ -95,12 +88,9 @@ class PointLight : public Light
 public:
     PointLight(const Color3 &intensity, const math::vec3 &pos,
                double kc, double kl, double kq);
-
-//    void illuminate(RenderList &renderlist) const;
 };
 
-/* Spot light
-  */
+//! Spot light
 class SpotLight : public Light
 {
     math::vec3 m_pos;
@@ -115,8 +105,6 @@ class SpotLight : public Light
 public:
     SpotLight(const Color3 &intensity, const math::vec3 &pos, const math::vec3 &dir,
               double umbra, double penumbra, double falloff);
-
-//    void illuminate(RenderList &renderlist) const;
 };
 
 }

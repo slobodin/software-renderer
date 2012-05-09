@@ -29,12 +29,6 @@ public:
     
     sptr(Resource) getResource(const string &pathString);
     sptr(Resource) getResource(const OsPath &path);
-
-private:
-    typedef map<string, sptr(ResourceDecoder) >::iterator DecoderIterator;
-    typedef map<string, sptr(ResourceDecoder) >::const_iterator ConstDecoderIterator;
-    typedef map<string, sptr(Resource) >::iterator ResourceIterator;
-    typedef map<string, sptr(Resource) >::const_iterator ConstResourceIterator;
 };
 
 }

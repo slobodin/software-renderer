@@ -26,14 +26,6 @@ class Rasterizer
 {
     FrameBuffer m_fb;
 
-    // helpers
-    enum TriangleType
-    {
-        TT_FLAT_TOP,
-        TT_FLAT_BOTTOM,
-        TT_FLAT_GENERAL
-    };
-
     void drawFillTriangle(const math::vec3 &p1,
                           const math::vec3 &p2,
                           const math::vec3 &p3,

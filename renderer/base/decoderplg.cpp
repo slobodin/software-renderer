@@ -159,10 +159,10 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
         materials.push_back(rend::Material(col, shadeMode/*, sideType*/));
     }
 
-    sptr(rend::Mesh) newMesh(new rend::Mesh(vertexList,
-                                            indices,
-                                            materials,
-                                            rend::Mesh::MT_MESH_INDEXEDTRIANGLELIST));
+    auto newMesh = make_shared<rend::Mesh>(vertexList,
+                                           indices,
+                                           materials,
+                                           rend::Mesh::MT_MESH_INDEXEDTRIANGLELIST);
     newMesh->setName(resourceName);
     newMesh->computeVertexNormals();
 

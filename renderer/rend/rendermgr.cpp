@@ -40,42 +40,42 @@ void RenderMgr::update()
     if (m_tkCanvasName.empty())
         return;
 
-    // 1. Clear buffer
+    // 1. Clear buffer.
     m_rasterizer->beginFrame();
 
     RenderList renderList;
 
-    // 2. Cull full meshes and form triangles render list
+    // 2. Cull full meshes and form triangles render list.
     foreach (sptr(Mesh) &m, m_meshes)
     {
         if (!m_camera->culled(*m))
             renderList.append(*m);
     }
 
-    // 3. Cull backfaces
+    // 3. Cull backfaces.
     // TODO:
     renderList.removeBackfaces(m_camera);
 
-    // 4. Lighting
+    // 4. Lighting.
     foreach (sptr(Light) &l, m_lights)
     {
         l->illuminate(renderList);
     }
 
     // 5. World -> Camera transformation. Cull triangles with negative Z.
-    // TODO: frustum culling here
+    // TODO: frustum culling here.
     m_camera->toCamera(renderList);
 
-    // 6. Sort triangles by painter algorithm
+    // 6. Sort triangles by painter algorithm.
     renderList.zsort();
 
-    // 7. Camera -> Perspective -> Screen transformation
+    // 7. Camera -> Perspective -> Screen transformation.
     m_camera->toScreen(renderList);
 
-    // 8. Rasterize triangles
+    // 8. Rasterize triangles.
     m_rasterizer->rasterize(renderList);
 
-    // 9. Flush buffer to the screen
+    // 9. Flush buffer to the screen.
     m_rasterizer->endFrame(m_tkCanvasName);
 }
 
@@ -84,7 +84,7 @@ sptr(AmbientLight) rend::RenderMgr::addAmbientLight(Color3 intensity)
     sptr(Light) newLight;
     try
     {
-        newLight = sptr(Light)(new AmbientLight(intensity));
+        newLight = make_shared<AmbientLight>(intensity);
         m_lights.push_back(newLight);
     }
     catch(LightException)
@@ -101,7 +101,7 @@ sptr(DirectionalLight) rend::RenderMgr::addDirectionalLight(rend::Color3 intensi
     sptr(Light) newLight;
     try
     {
-        newLight = sptr(Light)(new DirectionalLight(intensity, direction));
+        newLight = make_shared<DirectionalLight>(intensity, direction);
         m_lights.push_back(newLight);
     }
     catch(LightException)
@@ -118,7 +118,7 @@ sptr(PointLight) rend::RenderMgr::addPointLight(rend::Color3 intensity, math::ve
     sptr(Light) newLight;
     try
     {
-        newLight = sptr(Light)(new PointLight(intensity, position, 0, 1, 0));
+        newLight = make_shared<PointLight>(intensity, position, 0, 1, 0);
         m_lights.push_back(newLight);
     }
     catch(LightException)

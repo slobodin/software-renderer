@@ -31,8 +31,8 @@ void Controller::resize(int w, int h)
 Controller::Controller(char *argv[], const string &conf)
     : m_resourceMgr(new ResourceMgr)
 {
-    m_mainCam = sptr(rend::Camera)(new rend::Camera(math::vec3(), 640, 480));
-    m_rendmgr.reset(new rend::RenderMgr(m_mainCam));
+    m_mainCam = make_shared<rend::Camera>(math::vec3(), 640, 480);
+    m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam);
 
     Config config;
     config.configure(conf, this);

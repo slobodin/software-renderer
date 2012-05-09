@@ -104,8 +104,8 @@ sptr(Resource) DecoderBSPQ3::decode(const OsPath &path)
         }
     }
 
-    sptr(rend::Mesh) newMesh(new rend::Mesh(vertexList,
-                                            rend::Mesh::MT_MESH_TRIANGLELIST));
+    auto newMesh = make_shared<rend::Mesh>(vertexList,
+                                           rend::Mesh::MT_MESH_TRIANGLELIST);
     newMesh->setName(path.filePath());
 
     delete [] vertices;

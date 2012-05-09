@@ -40,7 +40,7 @@ sptr(Resource) ResourceMgr::getResource(const string &pathString)
 sptr(Resource) ResourceMgr::getResource(const OsPath &path)
 {
     // ensure that we have decoder for this resource
-    ConstDecoderIterator dit = m_decoders.find(path.fileExtention());
+    auto dit = m_decoders.find(path.fileExtention());
 
     if (dit == m_decoders.end())
     {
@@ -51,7 +51,7 @@ sptr(Resource) ResourceMgr::getResource(const OsPath &path)
     }
 
     // if we already have the resource
-    ConstResourceIterator rit = m_resources.find(path.filePath());
+    auto rit = m_resources.find(path.filePath());
 
     // decode resource if need
     if (rit == m_resources.end())

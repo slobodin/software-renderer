@@ -43,6 +43,8 @@
 #include <boost/utility.hpp>
 #include <boost/date_time.hpp>
 #include <boost/function.hpp>
+#include <boost/smart_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 // Some useful classes.
 using std::string;
@@ -60,8 +62,10 @@ using std::istreambuf_iterator;
 using std::stringstream;
 using std::ostringstream;
 using std::istringstream;
-using std::tr1::dynamic_pointer_cast;
-using std::tr1::shared_ptr;
+
+using boost::shared_ptr;
+using boost::make_shared;
+using boost::dynamic_pointer_cast;
 
 // This includes needs only in renderer library.
 #ifdef RENDERER_LIBRARY
