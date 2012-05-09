@@ -68,11 +68,11 @@ using boost::make_shared;
 using boost::dynamic_pointer_cast;
 
 // This includes needs only in renderer library.
-#ifdef RENDERER_LIBRARY
+//#ifdef RENDERER_LIBRARY
 #include "dll.h"
 #include "comm_macro.h"
 #include "exception.h"
 #include "logger.h"
-#endif
+//#endif
 
 #endif // COMM_PCH_H

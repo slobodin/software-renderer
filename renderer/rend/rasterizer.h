@@ -18,6 +18,7 @@
 #include "poly.h"
 #include "renderlist.h"
 #include "vertex.h"
+#include "renderdevice.h"
 
 namespace rend
 {
@@ -62,7 +63,7 @@ public:
     void rasterize(const RenderList &rendlist);
 
     void beginFrame();
-    void endFrame(const string &to);
+    void endFrame(sptr(RenderDevice) device);
 
     void resize(int w, int h);
 };

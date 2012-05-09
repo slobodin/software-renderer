@@ -30,16 +30,8 @@ RenderMgr::~RenderMgr()
 
 }
 
-void RenderMgr::renderTo(const string &tkCanvas)
+void RenderMgr::update(sptr(RenderDevice) rendDevice)
 {
-    m_tkCanvasName = tkCanvas;
-}
-
-void RenderMgr::update()
-{
-    if (m_tkCanvasName.empty())
-        return;
-
     // 1. Clear buffer.
     m_rasterizer->beginFrame();
 
@@ -76,10 +68,11 @@ void RenderMgr::update()
     m_rasterizer->rasterize(renderList);
 
     // 9. Flush buffer to the screen.
-    m_rasterizer->endFrame(m_tkCanvasName);
+    if (rendDevice)
+        m_rasterizer->endFrame(rendDevice);
 }
 
-sptr(AmbientLight) rend::RenderMgr::addAmbientLight(Color3 intensity)
+sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)
 {
     sptr(Light) newLight;
     try
@@ -96,7 +89,7 @@ sptr(AmbientLight) rend::RenderMgr::addAmbientLight(Color3 intensity)
     return dynamic_pointer_cast<AmbientLight>(newLight);
 }
 
-sptr(DirectionalLight) rend::RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
+sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
 {
     sptr(Light) newLight;
     try
@@ -113,7 +106,7 @@ sptr(DirectionalLight) rend::RenderMgr::addDirectionalLight(rend::Color3 intensi
     return dynamic_pointer_cast<DirectionalLight>(newLight);
 }
 
-sptr(PointLight) rend::RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 position)
+sptr(PointLight) RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 position)
 {
     sptr(Light) newLight;
     try
@@ -130,7 +123,7 @@ sptr(PointLight) rend::RenderMgr::addPointLight(rend::Color3 intensity, math::ve
     return dynamic_pointer_cast<PointLight>(newLight);
 }
 
-void rend::RenderMgr::resize(int w, int h)
+void RenderMgr::resize(int w, int h)
 {
     m_camera->resize(w, h);
     m_rasterizer->resize(w, h);

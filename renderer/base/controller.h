@@ -14,23 +14,22 @@
 #include "singleton.h"
 #include "rendermgr.h"
 #include "resourcemgr.h"
+#include "renderdevice.h"
 
 namespace base
 {
 
 DECLARE_EXCEPTION(ControllerException)
 
-class DLL_PUBLIC Controller : public common::Singleton<Controller>, boost::noncopyable
+class DLL_PUBLIC Controller : boost::noncopyable
 {
     friend class Config;
 
 protected:
     sptr(rend::RenderMgr) m_rendmgr;
+    sptr(rend::RenderDevice) m_rendDevice;
     sptr(rend::Camera) m_mainCam;
     sptr(ResourceMgr) m_resourceMgr;
-
-    string m_updateCallback;
-    static void update();
 
     void resize(int w, int h);
 
@@ -47,7 +46,11 @@ public:
     virtual void onMouseButtonRelease() = 0;
     */
 
-    void run();
+    void update();
+
+    void setDevice(sptr(rend::RenderDevice) rendDevice) { m_rendDevice = rendDevice; }
+    int deviceWidth() const { return m_mainCam->width(); }
+    int deviceHeight() const { return m_mainCam->height(); }
 };
 
 }

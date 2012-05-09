@@ -37,13 +37,13 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
 
     int iy1 = 0, iy3 = 0;
 
-    if (y1 < m_fb.m_yOrigin)
+    if (y1 < m_fb.yorig())
     {
-        xs = xs + dxLeft * (-y1 + m_fb.m_yOrigin);
-        xe = xe + dxRight * (-y1 + m_fb.m_yOrigin);
+        xs = xs + dxLeft * (-y1 + m_fb.yorig());
+        xe = xe + dxRight * (-y1 + m_fb.yorig());
 
-        y1 = m_fb.m_yOrigin;
-        iy1 = m_fb.m_yOrigin;
+        y1 = m_fb.yorig();
+        iy1 = m_fb.yorig();
     }
     else
     {
@@ -52,9 +52,9 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
         xs = xs + dxLeft * (iy1 - y1);
         xe = xe + dxRight * (iy1 - y1);
     }
-    if (y3 > m_fb.m_height)
+    if (y3 > m_fb.height())
     {
-        y3 = m_fb.m_height;
+        y3 = m_fb.height();
         iy3 = y3 - 1;
     }
     else
@@ -62,9 +62,9 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
         iy3 = y3 - 1;
     }
 
-    if (x1 >= m_fb.m_xOrigin && x1 <= m_fb.m_width &&
-        x2 >= m_fb.m_xOrigin && x2 <= m_fb.m_width &&
-        x3 >= m_fb.m_xOrigin && x3 <= m_fb.m_width)
+    if (x1 >= m_fb.xorig() && x1 <= m_fb.width() &&
+        x2 >= m_fb.xorig() && x2 <= m_fb.width() &&
+        x3 >= m_fb.xorig() && x3 <= m_fb.width())
     {
         for (int y = y1; y <= iy3; y++)
         {
@@ -83,19 +83,19 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
             xs += dxLeft;
             xe += dxRight;
 
-            if (left < m_fb.m_xOrigin)
+            if (left < m_fb.xorig())
             {
-                left = m_fb.m_xOrigin;
+                left = m_fb.xorig();
 
-                if (right < m_fb.m_xOrigin)
+                if (right < m_fb.xorig())
                     continue;
             }
 
-            if (right > m_fb.m_width)
+            if (right > m_fb.width())
             {
-                right = m_fb.m_width;
+                right = m_fb.width();
 
-                if (left > m_fb.m_width)
+                if (left > m_fb.width())
                     continue;
             }
 
@@ -123,12 +123,12 @@ void Rasterizer::drawTopTriangle(int x1, int y1,
 
     int iy1 = 0, iy3 = 0;
 
-    if (y1 < m_fb.m_yOrigin)
+    if (y1 < m_fb.yorig())
     {
-        xs = xs + dx_left * (-y1 + m_fb.m_yOrigin);
-        xe = xe + dx_right * (-y1 + m_fb.m_yOrigin);
+        xs = xs + dx_left * (-y1 + m_fb.yorig());
+        xe = xe + dx_right * (-y1 + m_fb.yorig());
 
-        y1 = m_fb.m_yOrigin;
+        y1 = m_fb.yorig();
 
         iy1 = y1;
     }
@@ -140,9 +140,9 @@ void Rasterizer::drawTopTriangle(int x1, int y1,
         xe = xe + dx_right * (iy1 - y1);
     }
 
-    if (y3 > m_fb.m_height)
+    if (y3 > m_fb.height())
     {
-        y3 = m_fb.m_height;
+        y3 = m_fb.height();
 
         iy3 = y3 - 1;
     }
@@ -151,9 +151,9 @@ void Rasterizer::drawTopTriangle(int x1, int y1,
         iy3 = y3 - 1;
     }
 
-    if (x1 >= m_fb.m_xOrigin && x1 <= m_fb.m_width &&
-        x2 >= m_fb.m_xOrigin && x2 <= m_fb.m_width &&
-        x3 >= m_fb.m_xOrigin && x3 <= m_fb.m_width)
+    if (x1 >= m_fb.xorig() && x1 <= m_fb.width() &&
+        x2 >= m_fb.xorig() && x2 <= m_fb.width() &&
+        x3 >= m_fb.xorig() && x3 <= m_fb.width())
     {
         for (int y = iy1; y <= iy3; y++)
         {
@@ -175,19 +175,19 @@ void Rasterizer::drawTopTriangle(int x1, int y1,
             xs += dx_left;
             xe += dx_right;
 
-            if (left < m_fb.m_xOrigin)
+            if (left < m_fb.xorig())
             {
-                left = m_fb.m_xOrigin;
+                left = m_fb.xorig();
 
-                if (right < m_fb.m_xOrigin)
+                if (right < m_fb.xorig())
                     continue;
             }
 
-            if (right > m_fb.m_width)
+            if (right > m_fb.width())
             {
-                right = m_fb.m_width;
+                right = m_fb.width();
 
-                if (left > m_fb.m_width)
+                if (left > m_fb.width())
                    continue;
             }
 
@@ -218,28 +218,28 @@ bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
     int p1_code = 0, p2_code = 0;
 
     // determine codes for p1 and p2
-    if (p1.y < m_fb.m_yOrigin)
+    if (p1.y < m_fb.yorig())
         p1_code |= CLIP_CODE_N;
     else
-        if (p1.y > m_fb.m_height)
+        if (p1.y > m_fb.height())
             p1_code |= CLIP_CODE_S;
 
-    if (p1.x < m_fb.m_xOrigin)
+    if (p1.x < m_fb.xorig())
         p1_code |= CLIP_CODE_W;
     else
-        if (p1.x > m_fb.m_width)
+        if (p1.x > m_fb.width())
             p1_code |= CLIP_CODE_E;
 
-    if (p2.y < m_fb.m_yOrigin)
+    if (p2.y < m_fb.yorig())
         p2_code |= CLIP_CODE_N;
     else
-        if (p2.y > m_fb.m_height)
+        if (p2.y > m_fb.height())
             p2_code |= CLIP_CODE_S;
 
-    if (p2.x < m_fb.m_xOrigin)
+    if (p2.x < m_fb.xorig())
         p2_code |= CLIP_CODE_W;
     else
-        if (p2.x > m_fb.m_width)
+        if (p2.x > m_fb.width())
             p2_code |= CLIP_CODE_E;
 
     // try and trivially reject
@@ -256,77 +256,77 @@ bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
     case CLIP_CODE_C: break;
 
     case CLIP_CODE_N:
-        yc1 = m_fb.m_yOrigin;
-        xc1 = p1.x + 0.5 + (m_fb.m_yOrigin - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+        yc1 = m_fb.yorig();
+        xc1 = p1.x + 0.5 + (m_fb.yorig() - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
 
         break;
     case CLIP_CODE_S:
-        yc1 = m_fb.m_height;
-        xc1 = p1.x + 0.5 + (m_fb.m_height - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+        yc1 = m_fb.height();
+        xc1 = p1.x + 0.5 + (m_fb.height() - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
 
         break;
     case CLIP_CODE_W:
-        xc1 = m_fb.m_xOrigin;
-        yc1 = p1.y + 0.5 + (m_fb.m_xOrigin - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
+        xc1 = m_fb.xorig();
+        yc1 = p1.y + 0.5 + (m_fb.xorig() - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
 
         break;
     case CLIP_CODE_E:
-        xc1 = m_fb.m_width;
-        yc1 = p1.y + 0.5 + (m_fb.m_width - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
+        xc1 = m_fb.width();
+        yc1 = p1.y + 0.5 + (m_fb.width() - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
 
         break;
     // these cases are more complex, must compute 2 intersections
     case CLIP_CODE_NE:
         // north hline intersection
-        yc1 = m_fb.m_yOrigin;
-        xc1 = p1.x + 0.5 + (m_fb.m_yOrigin - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+        yc1 = m_fb.yorig();
+        xc1 = p1.x + 0.5 + (m_fb.yorig() - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
 
         // test if intersection is valid, of so then done, else compute next
-        if (xc1 < m_fb.m_xOrigin || xc1 > m_fb.m_width)
+        if (xc1 < m_fb.xorig() || xc1 > m_fb.width())
         {
             // east vline intersection
-            xc1 = m_fb.m_width;
-            yc1 = p1.y + 0.5 + (m_fb.m_width - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
+            xc1 = m_fb.width();
+            yc1 = p1.y + 0.5 + (m_fb.width() - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
         }
 
         break;
     case CLIP_CODE_SE:
         // south hline intersection
-        yc1 = m_fb.m_height;
-        xc1 = p1.x + 0.5 + (m_fb.m_height - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+        yc1 = m_fb.height();
+        xc1 = p1.x + 0.5 + (m_fb.height() - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
 
         // test if intersection is valid, of so then done, else compute next
-        if (xc1 < m_fb.m_xOrigin || xc1 > m_fb.m_width)
+        if (xc1 < m_fb.xorig() || xc1 > m_fb.width())
         {
             // east vline intersection
-            xc1 = m_fb.m_width;
-            yc1 = p1.y + 0.5 + (m_fb.m_width - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
+            xc1 = m_fb.width();
+            yc1 = p1.y + 0.5 + (m_fb.width() - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
         } // end if
 
         break;
     case CLIP_CODE_NW:
         // north hline intersection
-        yc1 = m_fb.m_yOrigin;
-        xc1 = p1.x + 0.5 + (m_fb.m_yOrigin - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+        yc1 = m_fb.yorig();
+        xc1 = p1.x + 0.5 + (m_fb.yorig() - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
 
         // test if intersection is valid, of so then done, else compute next
-        if (xc1 < m_fb.m_xOrigin || xc1 > m_fb.m_width)
+        if (xc1 < m_fb.xorig() || xc1 > m_fb.width())
         {
-            xc1 = m_fb.m_xOrigin;
-            yc1 = p1.y + 0.5 + (m_fb.m_xOrigin - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
+            xc1 = m_fb.xorig();
+            yc1 = p1.y + 0.5 + (m_fb.xorig() - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
         } // end if
 
         break;
     case CLIP_CODE_SW:
         // south hline intersection
-        yc1 = m_fb.m_height;
-        xc1 = p1.x + 0.5 + (m_fb.m_height - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+        yc1 = m_fb.height();
+        xc1 = p1.x + 0.5 + (m_fb.height() - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
 
         // test if intersection is valid, of so then done, else compute next
-        if (xc1 < m_fb.m_xOrigin || xc1 > m_fb.m_width)
+        if (xc1 < m_fb.xorig() || xc1 > m_fb.width())
         {
-            xc1 = m_fb.m_xOrigin;
-            yc1 = p1.y + 0.5 + (m_fb.m_xOrigin - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
+            xc1 = m_fb.xorig();
+            yc1 = p1.y + 0.5 + (m_fb.xorig() - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
         }
 
         break;
@@ -342,77 +342,77 @@ bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
 
         break;
     case CLIP_CODE_N:
-        yc2 = m_fb.m_yOrigin;
-        xc2 = p2.x + (m_fb.m_yOrigin - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
+        yc2 = m_fb.yorig();
+        xc2 = p2.x + (m_fb.yorig() - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
 
         break;
     case CLIP_CODE_S:
-        yc2 = m_fb.m_height;
-        xc2 = p2.x + (m_fb.m_height - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
+        yc2 = m_fb.height();
+        xc2 = p2.x + (m_fb.height() - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
 
         break;
     case CLIP_CODE_W:
-        xc2 = m_fb.m_xOrigin;
-        yc2 = p2.y + (m_fb.m_xOrigin - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
+        xc2 = m_fb.xorig();
+        yc2 = p2.y + (m_fb.xorig() - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
 
         break;
     case CLIP_CODE_E:
-        xc2 = m_fb.m_width;
-        yc2 = p2.y + (m_fb.m_width - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
+        xc2 = m_fb.width();
+        yc2 = p2.y + (m_fb.width() - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
 
         break;
         // these cases are more complex, must compute 2 intersections
     case CLIP_CODE_NE:
         // north hline intersection
-        yc2 = m_fb.m_yOrigin;
-        xc2 = p2.x + 0.5 + (m_fb.m_yOrigin - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
+        yc2 = m_fb.yorig();
+        xc2 = p2.x + 0.5 + (m_fb.yorig() - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
 
         // test if intersection is valid, of so then done, else compute next
-        if (xc2 < m_fb.m_xOrigin || xc2 > m_fb.m_width)
+        if (xc2 < m_fb.xorig() || xc2 > m_fb.width())
         {
             // east vline intersection
-            xc2 = m_fb.m_width;
-            yc2 = p2.y + 0.5 + (m_fb.m_width - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
+            xc2 = m_fb.width();
+            yc2 = p2.y + 0.5 + (m_fb.width() - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
         }
 
         break;
     case CLIP_CODE_SE:
         // south hline intersection
-        yc2 = m_fb.m_height;
-        xc2 = p2.x + 0.5 + (m_fb.m_height - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
+        yc2 = m_fb.height();
+        xc2 = p2.x + 0.5 + (m_fb.height() - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
 
         // test if intersection is valid, of so then done, else compute next
-        if (xc2 < m_fb.m_xOrigin || xc2 > m_fb.m_width)
+        if (xc2 < m_fb.xorig() || xc2 > m_fb.width())
         {
             // east vline intersection
-            xc2 = m_fb.m_width;
-            yc2 = p2.y + 0.5 + (m_fb.m_width - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
+            xc2 = m_fb.width();
+            yc2 = p2.y + 0.5 + (m_fb.width() - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
         }
 
         break;
     case CLIP_CODE_NW:
         // north hline intersection
-        yc2 = m_fb.m_yOrigin;
-        xc2 = p2.x + 0.5 + (m_fb.m_yOrigin - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
+        yc2 = m_fb.yorig();
+        xc2 = p2.x + 0.5 + (m_fb.yorig() - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
 
         // test if intersection is valid, of so then done, else compute next
-        if (xc2 < m_fb.m_xOrigin || xc2 > m_fb.m_width)
+        if (xc2 < m_fb.xorig() || xc2 > m_fb.width())
         {
-            xc2 = m_fb.m_xOrigin;
-            yc2 = p2.y + 0.5 + (m_fb.m_xOrigin - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
+            xc2 = m_fb.xorig();
+            yc2 = p2.y + 0.5 + (m_fb.xorig() - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
         }
 
         break;
     case CLIP_CODE_SW:
         // south hline intersection
-        yc2 = m_fb.m_height;
-        xc2 = p2.x + 0.5 + (m_fb.m_height - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
+        yc2 = m_fb.height();
+        xc2 = p2.x + 0.5 + (m_fb.height() - p2.y) * (p1.x - p2.x) / (p1.y - p2.y);
 
         // test if intersection is valid, of so then done, else compute next
-        if (xc2 < m_fb.m_xOrigin || xc2 > m_fb.m_width)
+        if (xc2 < m_fb.xorig() || xc2 > m_fb.width())
         {
-            xc2 = m_fb.m_xOrigin;
-            yc2 = p2.y + 0.5 + (m_fb.m_xOrigin - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
+            xc2 = m_fb.xorig();
+            yc2 = p2.y + 0.5 + (m_fb.xorig() - p2.x) * (p1.y - p2.y) / (p1.x - p2.x);
         }
 
         break;
@@ -421,10 +421,10 @@ bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
     }
 
     // do bounds check
-    if ((xc1 < m_fb.m_xOrigin) || (xc1 > m_fb.m_width) ||
-        (yc1 < m_fb.m_yOrigin) || (yc1 > m_fb.m_height)||
-        (xc2 < m_fb.m_xOrigin) || (xc2 > m_fb.m_width) ||
-        (yc2 < m_fb.m_yOrigin) || (yc2 > m_fb.m_height))
+    if ((xc1 < m_fb.xorig()) || (xc1 > m_fb.width()) ||
+        (yc1 < m_fb.yorig()) || (yc1 > m_fb.height())||
+        (xc2 < m_fb.xorig()) || (xc2 > m_fb.width()) ||
+        (yc2 < m_fb.yorig()) || (yc2 > m_fb.height()))
     {
         return false;
     }
@@ -442,7 +442,7 @@ void Rasterizer::drawLine(const math::vec3 &p1, const math::vec3 &p2, const Colo
 {
     math::vec3 pc1(p1), pc2(p2);
 
-    int cols = m_fb.m_width;
+    int cols = m_fb.width();
 
     if (clipLine(pc1, pc2))
     {
@@ -545,9 +545,9 @@ void Rasterizer::drawFillTriangle(const math::vec3 &p1,
         std::swap(y2, y3);
     }
 
-    if (y3 < m_fb.m_yOrigin || y1 > m_fb.m_height
-            || (x1 < m_fb.m_xOrigin && x2 < m_fb.m_xOrigin && x3 < m_fb.m_xOrigin)
-            || (x1 > m_fb.m_width && x2 > m_fb.m_width && x3 > m_fb.m_width))
+    if (y3 < m_fb.yorig() || y1 > m_fb.height()
+            || (x1 < m_fb.xorig() && x2 < m_fb.xorig() && x3 < m_fb.xorig())
+            || (x1 > m_fb.width() && x2 > m_fb.width() && x3 > m_fb.width()))
         return;
 
     if (y1 == y2)
@@ -588,10 +588,10 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
 {
     math::vec3 p0(v1.p), p1(v2.p), p2(v3.p);
 
-    if (((p0.y < m_fb.m_yOrigin) && (p1.y < m_fb.m_yOrigin) && (p2.y < m_fb.m_yOrigin))
-            || ((p0.y > m_fb.m_height) && (p1.y > m_fb.m_height) && (p2.y > m_fb.m_height))
-            || ((p0.x < m_fb.m_xOrigin) && (p1.x < m_fb.m_xOrigin) && (p2.x < m_fb.m_xOrigin))
-            || ((p0.x > m_fb.m_width) && (p1.x > m_fb.m_width) && (p2.x > m_fb.m_width)))
+    if (((p0.y < m_fb.yorig()) && (p1.y < m_fb.yorig()) && (p2.y < m_fb.yorig()))
+            || ((p0.y > m_fb.height()) && (p1.y > m_fb.height()) && (p2.y > m_fb.height()))
+            || ((p0.x < m_fb.xorig()) && (p1.x < m_fb.xorig()) && (p2.x < m_fb.xorig()))
+            || ((p0.x > m_fb.width()) && (p1.x > m_fb.width()) && (p2.x > m_fb.width())))
         return;
 
     // degenerate triangle
@@ -667,9 +667,9 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             dbdyr = (tb2 - tb1) / dy;
 
             // test for y clipping
-            if (y0 < m_fb.m_yOrigin)
+            if (y0 < m_fb.yorig())
             {
-                dy = (m_fb.m_yOrigin - y0);
+                dy = (m_fb.yorig() - y0);
 
                 xl = dxdyl * dy + x0;
                 xr = dxdyr * dy + x1;
@@ -682,7 +682,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                 gr = dgdyr * dy + tg1;
                 br = dbdyr * dy + tb1;
 
-                yStart = m_fb.m_yOrigin;
+                yStart = m_fb.yorig();
             }
             else
             {
@@ -715,10 +715,10 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             dbdyr = (tb2 - tb0) / dy;
 
             // test for y clipping
-            if (y0 < m_fb.m_yOrigin)
+            if (y0 < m_fb.yorig())
             {
                 // compute overclip
-                dy = m_fb.m_yOrigin - y0;
+                dy = m_fb.yorig() - y0;
 
                 xl = dxdyl * dy + x0;
                 xr = dxdyr * dy + x0;
@@ -732,7 +732,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                 br = dbdyr * dy + tb0;
 
                 // compute new starting y
-                yStart = m_fb.m_yOrigin;
+                yStart = m_fb.yorig();
             }
             else // no clipping
             {
@@ -754,13 +754,13 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
         }
 
         // test for bottom clip, always
-        if ((yEnd = y2) > m_fb.m_height)
-            yEnd = m_fb.m_height;
+        if ((yEnd = y2) > m_fb.height())
+            yEnd = m_fb.height();
 
         // test for horizontal clipping
-        if ((x0 < m_fb.m_xOrigin) || (x0 > m_fb.m_width)
-                || (x1 < m_fb.m_xOrigin) || (x1 > m_fb.m_width)
-                || (x2 < m_fb.m_xOrigin) || (x2 > m_fb.m_width))
+        if ((x0 < m_fb.xorig()) || (x0 > m_fb.width())
+                || (x1 < m_fb.xorig()) || (x1 > m_fb.width())
+                || (x2 < m_fb.xorig()) || (x2 > m_fb.width()))
         {
             // clip version
             for (int yi = yStart; yi <= yEnd; yi++)
@@ -792,10 +792,10 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                 }
 
                 // test for x clipping, LHS
-                if (xStart < m_fb.m_xOrigin)
+                if (xStart < m_fb.xorig())
                 {
                     // compute x overlap
-                    dx = m_fb.m_xOrigin - xStart;
+                    dx = m_fb.xorig() - xStart;
 
                     // slide interpolants over
                     ri += dx * dr;
@@ -803,12 +803,12 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                     bi += dx * db;
 
                     // reset vars
-                    xStart = m_fb.m_xOrigin;
+                    xStart = m_fb.xorig();
                 }
 
                 // test for x clipping RHS
-                if (xEnd > m_fb.m_width)
-                    xEnd = m_fb.m_width;
+                if (xEnd > m_fb.width())
+                    xEnd = m_fb.width();
 
                 // draw span
                 for (int xi = xStart; xi <= xEnd; xi++)
@@ -892,11 +892,11 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
     else
     {
         // first test for bottom clip, always
-        if ((yEnd = y2) > m_fb.m_height)
-            yEnd = m_fb.m_height;
+        if ((yEnd = y2) > m_fb.height())
+            yEnd = m_fb.height();
 
         // pre-test y clipping status
-        if (y1 < m_fb.m_yOrigin)
+        if (y1 < m_fb.yorig())
         {
             // compute all deltas
             // LHS
@@ -916,8 +916,8 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             dbdyr = (tb2 - tb0) / dyr;
 
             // compute overclip
-            dyr = m_fb.m_yOrigin - y0;
-            dyl = m_fb.m_yOrigin - y1;
+            dyr = m_fb.yorig() - y0;
+            dyl = m_fb.yorig() - y1;
 
             // computer new LHS starting values
             xl = dxdyl * dyl + x1;
@@ -934,7 +934,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             br = dbdyr * dyr + tb0;
 
             // compute new starting y
-            yStart = m_fb.m_yOrigin;
+            yStart = m_fb.yorig();
 
             // test if we need swap to keep rendering left to right
             if (dxdyr > dxdyl)
@@ -957,7 +957,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                 irestart = INTERP_RHS;
             }
         }
-        else if (y0 < m_fb.m_yOrigin)
+        else if (y0 < m_fb.yorig())
         {
             // compute all deltas
             // LHS
@@ -977,7 +977,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             dbdyr = (tb2 - tb0) / dyr;
 
             // compute overclip
-            dy = (m_fb.m_yOrigin - y0);
+            dy = (m_fb.yorig() - y0);
 
             // computer new LHS starting values
             xl = dxdyl * dy + x0;
@@ -992,7 +992,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             br = dbdyr * dy + tb0;
 
             // compute new starting y
-            yStart = m_fb.m_yOrigin;
+            yStart = m_fb.yorig();
 
             // test if we need swap to keep rendering left to right
             if (dxdyr < dxdyl)
@@ -1076,9 +1076,9 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
         }
 
         // test for horizontal clipping
-        if ((x0 < m_fb.m_xOrigin) || (x0 > m_fb.m_width) ||
-            (x1 < m_fb.m_xOrigin) || (x1 > m_fb.m_width) ||
-            (x2 < m_fb.m_xOrigin) || (x2 > m_fb.m_width))
+        if ((x0 < m_fb.xorig()) || (x0 > m_fb.width()) ||
+            (x1 < m_fb.xorig()) || (x1 > m_fb.width()) ||
+            (x2 < m_fb.xorig()) || (x2 > m_fb.width()))
         {
             // clip version
             // x clipping
@@ -1111,10 +1111,10 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                 }
 
                 // test for x clipping, LHS
-                if (xStart < m_fb.m_xOrigin)
+                if (xStart < m_fb.xorig())
                 {
                     // compute x overlap
-                    dx = m_fb.m_xOrigin - xStart;
+                    dx = m_fb.xorig() - xStart;
 
                     // slide interpolants over
                     ri += dx * dr;
@@ -1122,12 +1122,12 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                     bi += dx * db;
 
                     // set x to left clip edge
-                    xStart = m_fb.m_xOrigin;
+                    xStart = m_fb.xorig();
                 }
 
                 // test for x clipping RHS
-                if (xEnd > m_fb.m_width)
-                    xEnd = m_fb.m_width;
+                if (xEnd > m_fb.width())
+                    xEnd = m_fb.width();
 
                 // draw span
                 for (int xi = xStart; xi <= xEnd; xi++)
@@ -1353,21 +1353,14 @@ void Rasterizer::beginFrame()
     m_fb.clear();
 }
 
-void Rasterizer::endFrame(const string &to)
+void Rasterizer::endFrame(sptr(RenderDevice) device)
 {
-    m_fb.flush_tk(to);
+    device->flush(m_fb);
 }
 
 void Rasterizer::resize(int w, int h)
 {
-    m_fb.m_width = w;
-    m_fb.m_height = h;
-
-    if (m_fb.m_pixels)
-        delete [] m_fb.m_pixels;
-
-    m_fb.m_pixels = new FrameBuffer::rgb[w * h];
-    memset(m_fb.m_pixels, 0xFF, sizeof(FrameBuffer::rgb) * w * h);
+    m_fb.resize(w, h);
 }
 
 }

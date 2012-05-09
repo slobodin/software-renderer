@@ -14,14 +14,15 @@
 #include "rasterizer.h"
 #include "mesh.h"
 #include "light.h"
+#include "renderdevice.h"
 
 namespace rend
 {
 
 class RenderMgr : boost::noncopyable
 {
+    ;
     sptr(Rasterizer) m_rasterizer;
-    string m_tkCanvasName;
     sptr(Camera) m_camera;
 
     vector<sptr(Mesh) > m_meshes;
@@ -34,8 +35,7 @@ public:
     RenderMgr(const shared_ptr<Camera> cam);
     ~RenderMgr();
 
-    void renderTo(const string &tkCanvas);
-    void update();
+    void update(sptr(RenderDevice) rendDevice);
 
     void addMesh(sptr(rend::Mesh) mesh);
     sptr(AmbientLight) addAmbientLight(Color3 intensity);

@@ -4,10 +4,13 @@ renderer-debug/*.*
 renderer-release/*.*
 client/*.pro.user
 renderer/*.pro.user
+client-tk/*.pro.user
 client-debug/*
 client-release/*
 renderer-debug/*
 renderer-release/*
+client-tk-debug/*
+client-tk-release/*
 resources/*.bsp
 resources/*.*~
 *.*~

@@ -7,9 +7,8 @@
 
 #include "framebuffer.h"
 
-#include <tcl8.5/tk.h>
-#include <tcl8.5/tcl.h>
-#include <third-party/cpptk-1.0.2/base/cpptkbase.h>
+#include <QImage>
+#include <QRgb>
 
 namespace rend
 {
@@ -55,39 +54,6 @@ void FrameBuffer::clear()
     memset(m_pixels, 0x00, sizeof(rgb) * m_width * m_height);
 }
 
-void FrameBuffer::flush_tk(const string &to)
-{
-    Tk_PhotoHandle fbphoto;
-    Tk_PhotoImageBlock block;
-    Tcl_Interp *fbinterp = Tk::globalTclInterpret;
-
-    if ((fbphoto = Tk_FindPhoto(fbinterp, to.c_str())) == NULL)
-    {
-        *syslog << "Image creation unsuccessful. Can't find" << to.c_str() << logerr;
-        return;
-    }
-
-    block.pixelPtr = (unsigned char *)m_pixels;
-    block.width = m_width;
-    block.height = m_height;
-    block.pitch = 3 * m_width;
-    block.pixelSize = 3;
-    block.offset[0] = 0;
-    block.offset[1] = 1;
-    block.offset[2] = 2;
-    block.offset[3] = 0;
-
-    Tk_PhotoPutBlock(fbinterp, fbphoto, &block, 0, 0, m_width, m_height, TK_PHOTO_COMPOSITE_SET);
-}
-
-void FrameBuffer::flush_win()
-{
-}
-
-void FrameBuffer::flush_gl()
-{
-}
-
 void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color3 &color)
 {
     if (x1 > x2)
@@ -118,6 +84,18 @@ void FrameBuffer::wpixel(const int pos, const Color3 &color)
     m_pixels[pos].r = color.red();
     m_pixels[pos].g = color.green();
     m_pixels[pos].b = color.blue();
+}
+
+void FrameBuffer::resize(int w, int h)
+{
+    m_width = w;
+    m_height = h;
+
+    if (m_pixels)
+        delete [] m_pixels;
+
+    m_pixels = new FrameBuffer::rgb[w * h];
+    memset(m_pixels, 0xFF, sizeof(FrameBuffer::rgb) * w * h);
 }
 
 }

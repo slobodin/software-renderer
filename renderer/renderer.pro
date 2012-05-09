@@ -1,3 +1,4 @@
+QT          += core
 TEMPLATE    = lib
 LANGUAGE    = C++
 CONFIG      += console precompile_header
@@ -39,8 +40,6 @@ HEADERS += \
     rend/rendermgr.h \
     dll.h \
     rend/rasterizer.h \
-    third-party/cpptk-1.0.2/cpptk.h \
-    third-party/cpptk-1.0.2/base/cpptkbase.h \
     rend/framebuffer.h \
     rend/color.h \
     math/poly.h \
@@ -54,7 +53,10 @@ HEADERS += \
     rend/texture.h \
     rend/model.h \
     math/math_utils.h \
-    math/m44.h
+    math/m44.h \
+    rend/renderdevice.h \
+    third-party/cpptk-1.0.2/base/cpptkbase.h \
+    third-party/cpptk-1.0.2/cpptk.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -71,8 +73,6 @@ SOURCES += \
     rend/mesh.cpp \
     rend/rendermgr.cpp \
     rend/rasterizer.cpp \
-    third-party/cpptk-1.0.2/cpptk.cc \
-    third-party/cpptk-1.0.2/base/cpptkbase.cc \
     rend/framebuffer.cpp \
     rend/color.cpp \
     math/poly.cpp \
@@ -85,7 +85,10 @@ SOURCES += \
     math/vertex.cpp \
     rend/texture.cpp \
     math/math_utils.cpp \
-    math/m44.cpp
+    math/m44.cpp \
+    rend/renderdevice.cpp \
+    third-party/cpptk-1.0.2/base/cpptkbase.cc \
+    third-party/cpptk-1.0.2/cpptk.cc
 
 INCLUDEPATH += ./base \
                 ./comm \
@@ -94,6 +97,10 @@ INCLUDEPATH += ./base \
                 /usr/include/tcl8.5 \
                 /usr/include
 
+LIBS += -lyaml-cpp
 LIBS += -ltcl8.5
 LIBS += -ltk8.5
-LIBS += -lyaml-cpp
+
+OTHER_FILES += \
+    third-party/cpptk-1.0.2/cpptkoptions.x \
+    third-party/cpptk-1.0.2/cpptkconstants.x

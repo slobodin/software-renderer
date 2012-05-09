@@ -1,23 +1,30 @@
+#-------------------------------------------------
+#
+# Project created by QtCreator 2012-05-09T15:46:59
+#
+#-------------------------------------------------
+
+QT       += core gui
+
+TARGET = client
+TEMPLATE = app
+
 QMAKE_CXXFLAGS += -std=c++0x
 DEFINES += CLIENT_MAIN
 
-HEADERS += \
-    application.h \
+SOURCES += main.cpp\
+        mainwindow.cpp \
+    clientcontroller.cpp
+
+HEADERS  += mainwindow.h \
     clientcontroller.h
 
-SOURCES += \
-    application.cpp \
-    clientcontroller.cpp
+FORMS    += mainwindow.ui
 
 INCLUDEPATH += ../renderer/base \
                ../renderer/comm \
                ../renderer/math \
                ../renderer/rend \
-               ../renderer/ \
-                /usr/include/tcl8.5 \
-                /usr/include
+               ../renderer/
 
 LIBS += -L../renderer-debug/ -lrenderer
-
-OTHER_FILES += \
-    ../README

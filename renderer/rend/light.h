@@ -13,15 +13,14 @@
 #include "vec3.h"
 #include "color.h"
 #include "renderlist.h"
+#include "model.h"
 
 namespace rend
 {
 
 DECLARE_EXCEPTION(LightException)
 
-// TODO: make virtual constructor and lights factory
-
-class Light
+class Light : public Model
 {
 public:
     enum LightType
@@ -46,10 +45,10 @@ protected:
     typedef boost::function<Color3 (const Light*, const Color3 &, const math::vec3 &)> ShaderFunction;
     ShaderFunction m_shader;
 
-public:
     Light(const Color3 &intensity);
     virtual ~Light();
 
+public:
     void turnon() { m_isEnabled = true; }
     void turnoff() { m_isEnabled = false; }
 

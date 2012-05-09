@@ -23,22 +23,13 @@ class Exception : public std::exception
 
 public:
     Exception(const char *text)
-        : m_what(text)
-    {
-    }
+        : m_what(text) { }
     Exception(const std::string &text)
-        : m_what(text)
-    {
-    }
+        : m_what(text) { }
+    virtual ~Exception() throw() { }
 
-    virtual ~Exception() throw()
-    {
-    }
-
-    virtual const char* what() const throw()
-    {
-        return m_what.c_str();
-    }
+    //! Returns error message.
+    virtual const char* what() const throw() { return m_what.c_str(); }
 };
 
 }
@@ -56,6 +47,7 @@ public: \
 namespace common
 {
 
+// Some standart exceptions.
 DECLARE_EXCEPTION(OutOfRangeException)
 
 }
