@@ -32,7 +32,7 @@ Light::~Light()
 
 void Light::illuminate(RenderList &renderlist) const
 {
-    if (!m_isEnabled)
+    /*if (!m_isEnabled)
         return;
 
     list<math::Triangle> &trias = renderlist.triangles();
@@ -41,7 +41,7 @@ void Light::illuminate(RenderList &renderlist) const
     {
         Material &material = t.material();
 
-        switch (material.shadeMode())
+        switch (material.shadeMode)
         {
         case Material::SM_FLAT:
             material.color() = m_shader(this, material.color(), t.normal());
@@ -59,7 +59,7 @@ void Light::illuminate(RenderList &renderlist) const
         default:
             break;
         }
-    }
+    }*/
 }
 
 Color3 AmbientLight::shader(const Color3 &matColor, const math::vec3 &/*normal*/) const

@@ -18,11 +18,11 @@ namespace math
 {
 
 //! Computes angle between two 2-vectors.
-/*! \returns angle in degrees. */
+/*! \returns Angle in degrees. */
 double AngleBetween(const vec2 &a, const vec2 &b);
 
 //! Computes angle between two 3-vectors.
-/*! \returns angle in degrees. */
+/*! \returns Angle in degrees. */
 double AngleBetween(const vec3 &a, const vec3 &b);
 
 //! Lines intersection types

@@ -123,7 +123,7 @@ void Config::configure(const OsPath &path, Controller *controller)
 
         // save it
         renderItem->setPosition(modelData[i].pos);
-        renderItem->setWindingOrder(modelData[i].wo);
+        //renderItem->setWindingOrder(modelData[i].wo);
         controller->m_rendmgr->addMesh(renderItem);
     }
 }

@@ -35,7 +35,9 @@ public:
 }
 
 //! Macro-helper for creating different exceptions.
-/*! Using: DECLARE_EXCEPTION(SomethingWasWrongException). */
+/*!
+  * Using: DECLARE_EXCEPTION(SomethingWasWrongException).
+  */
 #define DECLARE_EXCEPTION(TYPE) class TYPE : public common::Exception \
 { \
 public: \

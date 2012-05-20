@@ -10,65 +10,41 @@
 
 #include "comm_pch.h"
 
-#include "resource.h"
-#include "boundingsphere.h"
-#include "color.h"
-#include "material.h"
+#include "vertexbuffer.h"
 #include "model.h"
-#include "poly.h"
-#include "vertex.h"
+#include "resource.h"
 
 namespace rend
 {
 
+//! Vertex buffers containter.
+/*!
+  * Base renderable triangle mesh.
+  */
 class Mesh : public base::Resource, public Model
 {
 public:
     enum MeshType
     {
-        MT_MESH_UNDEFINED,
-        // Mesh is vertex and index list. Index triplets define the triangles.
-        MT_MESH_INDEXEDTRIANGLELIST,
-        // Mesh is vertex list. Vertex triplets define the triangles.
-        MT_MESH_TRIANGLELIST
+        MT_MESH_UNDEFINED,              /*!< Undefined mesh type, can't render. */
+        MT_MESH_INDEXEDTRIANGLELIST,    /*!< Index triplet in each vertex buffer define the triangle. */
+        MT_MESH_TRIANGLELIST,           /*!< Vertex triplets in each vertex buffer define the triangle. */
+        MT_MESH_LINELIST                /*!< Each two vertices define the line. */
     };
 
 private:
-    vector<math::vertex> m_vertices;
-    vector<size_t> m_indices;
-    vector<Material> m_materials;   // FIXME
+
+    list<VertexBuffer> m_submeshes;
     MeshType m_type;
 
-    BoundingSphere m_boundingSphere;
-    math::Triangle::WindingOrder m_windingOrder;
-
-    void computeBoundingSphere();
-
 public:
-    Mesh(const vector<math::vertex> &vertices,
-         const vector<size_t> &indices,
-         const vector<Material> &materials,
-         const MeshType type);
-
-    Mesh(const vector<math::vertex> &vertices,
-         const MeshType type);
-
+    Mesh();
     ~Mesh();
 
-    size_t numVertices() const { return m_vertices.size(); }
-    size_t numIndices() const { return m_indices.size(); }
+    void appendSubmesh(const VertexBuffer &submesh);
 
-    const vector<math::vertex> &vertices() const { return m_vertices; }
-    const vector<size_t> &indices() const { return m_indices; }
-    const vector<Material> &materials() const { return m_materials; }
-
-    MeshType type() const { return m_type; }
-    const BoundingSphere &bsphere() const { return m_boundingSphere; }
-
-    void setWindingOrder(math::Triangle::WindingOrder wo) { m_windingOrder = wo; }
-    math::Triangle::WindingOrder getWindingOrder() const { return m_windingOrder; }
-
-    void computeVertexNormals();
+    MeshType type() { return m_type; }
+    void setType(MeshType mt) { m_type = mt; }
 };
 
 }

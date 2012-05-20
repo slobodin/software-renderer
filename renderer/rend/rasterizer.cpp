@@ -646,9 +646,10 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
     int irestart = INTERP_LHS;
     int yrestart = y1;
 
-    int tr0 = v1.color.red(), tg0 = v1.color.green(), tb0 = v1.color.blue();
-    int tr1 = v2.color.red(), tg1 = v2.color.green(), tb1 = v2.color.blue();
-    int tr2 = v3.color.red(), tg2 = v3.color.green(), tb2 = v3.color.blue();
+    // FIXME:
+    int tr0 = v1.color[RED], tg0 = v1.color[GREEN], tb0 = v1.color[BLUE];
+    int tr1 = v2.color[RED], tg1 = v2.color[GREEN], tb1 = v2.color[BLUE];
+    int tr2 = v3.color[RED], tg2 = v3.color[GREEN], tb2 = v3.color[BLUE];
 
     if (triangleType != TT_FLAT_GENERAL)
     {
@@ -1323,7 +1324,7 @@ Rasterizer::Rasterizer(const int width, const int height)
 
 void Rasterizer::rasterize(const RenderList &rendlist)
 {
-    const list<math::Triangle> &trias = rendlist.triangles();
+    /*const list<math::Triangle> &trias = rendlist.triangles();
 
     reverse_foreach(const math::Triangle &t, trias)
     {
@@ -1345,7 +1346,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
             *syslog << "Unsupported shading mode." << logwarn;
             break;
         }
-    }
+    }*/
 }
 
 void Rasterizer::beginFrame()

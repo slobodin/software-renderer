@@ -29,7 +29,7 @@ DecoderPLG::~DecoderPLG()
 }
 
 sptr(Resource) DecoderPLG::decode(const OsPath &path)
-{
+{/*
     TextFile plgFile(path);
 
     // skip comments and find "header"
@@ -156,17 +156,17 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
             sideType = math::Triangle::ST_2_SIDED;
         }
 
-        materials.push_back(rend::Material(col, shadeMode/*, sideType*/));
+        materials.push_back(rend::Material(col, shadeMode/*, sideType*));
     }
-
-    auto newMesh = make_shared<rend::Mesh>(vertexList,
+*/
+    auto newMesh = make_shared<rend::Mesh>();/*(vertexList,
                                            indices,
                                            materials,
-                                           rend::Mesh::MT_MESH_INDEXEDTRIANGLELIST);
-    newMesh->setName(resourceName);
-    newMesh->computeVertexNormals();
+                                           rend::Mesh::MT_MESH_INDEXEDTRIANGLELIST);*/
+//    newMesh->setName(resourceName);
+//    newMesh->computeVertexNormals();
 
-    *syslog << "Decoded plg-model \"" << newMesh->name() << "\". Number of vertices:" << newMesh->numVertices() << logmess;
+//    *syslog << "Decoded plg-model \"" << newMesh->name() << "\". Number of vertices:" << newMesh->numVertices() << logmess;
     
     return newMesh;
 }

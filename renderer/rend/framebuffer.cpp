@@ -71,9 +71,9 @@ void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
         return;
 
-    m_pixels[m_width * y + x].r = color.red();
-    m_pixels[m_width * y + x].g = color.green();
-    m_pixels[m_width * y + x].b = color.blue();
+    m_pixels[m_width * y + x].r = color[RED];
+    m_pixels[m_width * y + x].g = color[GREEN];
+    m_pixels[m_width * y + x].b = color[BLUE];
 }
 
 void FrameBuffer::wpixel(const int pos, const Color3 &color)
@@ -81,9 +81,9 @@ void FrameBuffer::wpixel(const int pos, const Color3 &color)
     if (!(pos >= 0 && pos < (m_width * m_height)))
         return;
 
-    m_pixels[pos].r = color.red();
-    m_pixels[pos].g = color.green();
-    m_pixels[pos].b = color.blue();
+    m_pixels[pos].r = color[RED];
+    m_pixels[pos].g = color[GREEN];
+    m_pixels[pos].b = color[BLUE];
 }
 
 void FrameBuffer::resize(int w, int h)

@@ -16,7 +16,9 @@ namespace math
 {
 
 //! Three-component row vector.
-/*! v = (x, y, z) */
+/*!
+  * v = (x, y, z)
+  */
 struct vec3
 {
     //! X Y Z coordinates of this vector

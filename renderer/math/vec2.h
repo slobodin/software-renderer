@@ -17,7 +17,9 @@ namespace math
 {
 
 //! Two-component row vector.
-/*! v = (x, y) */
+/*!
+  * v = (x, y)
+  */
 struct vec2
 {
     //! X and Y coordinates

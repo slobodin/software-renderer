@@ -56,7 +56,8 @@ HEADERS += \
     math/m44.h \
     rend/renderdevice.h \
     third-party/cpptk-1.0.2/base/cpptkbase.h \
-    third-party/cpptk-1.0.2/cpptk.h
+    third-party/cpptk-1.0.2/cpptk.h \
+    rend/vertexbuffer.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -88,7 +89,8 @@ SOURCES += \
     math/m44.cpp \
     rend/renderdevice.cpp \
     third-party/cpptk-1.0.2/base/cpptkbase.cc \
-    third-party/cpptk-1.0.2/cpptk.cc
+    third-party/cpptk-1.0.2/cpptk.cc \
+    rend/vertexbuffer.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

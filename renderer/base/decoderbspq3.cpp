@@ -104,15 +104,15 @@ sptr(Resource) DecoderBSPQ3::decode(const OsPath &path)
         }
     }
 
-    auto newMesh = make_shared<rend::Mesh>(vertexList,
-                                           rend::Mesh::MT_MESH_TRIANGLELIST);
+    auto newMesh = make_shared<rend::Mesh>(/*vertexList,
+                                           rend::Mesh::MT_MESH_TRIANGLELIST*/);
     newMesh->setName(path.filePath());
 
     delete [] vertices;
     delete [] faces;
     delete [] meshVerts;
 
-    *syslog << "Decoded q3-bsp model \"" << newMesh->name() << "\". Number of vertices:" << newMesh->numVertices() << logmess;
+//    *syslog << "Decoded q3-bsp model \"" << newMesh->name() << "\". Number of vertices:" << newMesh->numVertices() << logmess;
 
     return newMesh;
 }

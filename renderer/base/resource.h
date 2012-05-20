@@ -14,20 +14,26 @@ namespace base
 {
 
 //! Abstract base for resources, that can be loaded.
+/*!
+  *
+  */
 class Resource
 {
 protected:
-
     //! Name of the resource.
     string m_name;
 
 public:
+    //! Default ctor.
     Resource()
         : m_name("Unnamed")
     { }
+    //! Dtor.
     virtual ~Resource() { }
 
+    //! Sets the name.
     void setName(const string &name) { m_name = name; }
+    //! Gets the name.
     string name() const { return m_name; }
 };
 

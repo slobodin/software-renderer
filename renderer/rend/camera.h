@@ -18,6 +18,9 @@ namespace rend
 {
 
 //! Scene camera.
+/*!
+  *
+  */
 class Camera
 {
     //! Camera viewport.

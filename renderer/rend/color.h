@@ -9,7 +9,6 @@
 #define COLOR4_H
 
 #include "comm_pch.h"
-#include "vec3.h"
 
 namespace rend
 {
@@ -27,51 +26,59 @@ namespace rend
 #undef ALPHA
 #endif
 
+/** Color convensions:
+  * red - from 0 to 255
+  * green - from 0 to 255
+  * blue - from 0 to 255
+  * alpha - 0 transparent, 255 - opaque
+  */
+
+//! Color component.
 enum ColorComp
 {
-    RED = 0,
+    ALPHA = 0,
+    RED,
     GREEN,
-    BLUE,
-    ALPHA
+    BLUE
 };
 
+//! Converts red, green, blue and alpha components to 32bit integer in A8R8G8B8 format.
 inline uint32_t RgbaToInt(uint32_t red, uint32_t green, uint32_t blue, uint32_t alpha)
 {
     return blue | (green << 8) | (red << 16) | (alpha << 24);
 }
 
+//! Converts red, green, blue components to 32bit integer in R8G8B8 format.
 inline uint32_t RgbToInt(uint32_t red, uint32_t green, uint32_t blue)
 {
     return blue | (green << 8) | (red << 16);
 }
 
-inline uint32_t RgbToInt(/*math::ivec3 color*/)
-{
-    // FIXME:
-    return 0;
-//    return color.z | (color.y << 8) | (color.x << 16);
-}
-
-inline uint8_t RedFromInt (int val)
+//! Returns red component from the 32bit color value.
+inline uint8_t RedFromInt (uint32_t val)
 {
     return (val >> 16) & 0xFF;
 }
 
-inline uint8_t GreenFromInt (int val)
+//! Returns green component from the 32bit color value.
+inline uint8_t GreenFromInt (uint32_t val)
 {
     return (val >> 8) & 0xFF;
 }
 
-inline uint8_t BlueFromInt (int val)
+//! Returns blue component from the 32bit color value.
+inline uint8_t BlueFromInt (uint32_t val)
 {
     return (val & 0xFF);
 }
 
-inline uint8_t AlphaFromInt (int val)
+//! Returns alpha component from the 32bit color value.
+inline uint8_t AlphaFromInt (uint32_t val)
 {
     return (val >> 24);
 }
 
+//! Stores red, green and blue components from 32bit int in last three arguments.
 inline void IntToRgb(uint32_t rgb, uint8_t &red, uint8_t &green, uint8_t &blue)
 {
     red = RedFromInt(rgb);
@@ -79,52 +86,121 @@ inline void IntToRgb(uint32_t rgb, uint8_t &red, uint8_t &green, uint8_t &blue)
     blue = BlueFromInt(rgb);
 }
 
+//! Stores red, green, blue and alpha components from 32bit int in last 4 arguments.
+inline void IntToRgba(uint32_t rgb, uint8_t &red, uint8_t &green, uint8_t &blue, uint8_t &alpha)
+{
+    red = RedFromInt(rgb);
+    green = GreenFromInt(rgb);
+    blue = BlueFromInt(rgb);
+    alpha = AlphaFromInt(rgb);
+}
+
+//! A8-R8-G8-B8 color.
+/*!
+  *
+  */
 class Color4
 {
+    //! Color array itself.
     uint8_t m_color[4];
 
 public:
-    Color4();
-    Color4(int red, int green,
-           int blue, int alpha = 0);
-    ~Color4();
+    //! Default ctor.
+    Color4(int red = 255, int green = 255,
+           int blue = 255, int alpha = 255)
+    {
+        m_color[1] = red;
+        m_color[2] = green;
+        m_color[3] = blue;
+        m_color[0] = alpha;
+    }
 
+    //! Dtor.
+    ~Color4() { }
+
+    //! Returns raw color in 32bit integer value.
     uint32_t color() const { return *((uint32_t *)this); }
-    uint8_t r() const { return m_color[0]; }
-    uint8_t g() const { return m_color[1]; }
-    uint8_t b() const { return m_color[2]; }
-    uint8_t a() const { return m_color[3]; }
+    //! Casts this object to 32bit integer color.
+    operator uint32_t() const { return color(); }
 
-    uint8_t &operator[](ColorComp ind) { return m_color[ind]; }
+    //! Component getter.
+    /*! Usage: mycolor[RED] = 128. */
+    uint8_t &operator[] (ColorComp ind) { return m_color[ind]; }
+    //! Component by-value-getter.
+    uint8_t operator[] (ColorComp ind) const { return m_color[ind]; }
 
-    void reset();
+    //! Resets to zero.
+    void reset() { memset(m_color, 0, sizeof(m_color)); }
 };
 
+//! R8-G8-B8 color.
+/*!
+  *
+  */
 class Color3
 {
+    //! Red color.
     uint32_t m_r;
+    //! Green color.
     uint32_t m_g;
+    //! Blue color.
     uint32_t m_b;
 
 public:
-    Color3();
-    Color3(uint32_t red, uint32_t green, uint32_t blue);
-    Color3(uint32_t color);
-    ~Color3();
+    //! Default ctor.
+    Color3(uint32_t red = 255, uint32_t green = 255, uint32_t blue = 255)
+        : m_r(red), m_g(green), m_b(blue)
+    { }
 
+    //! Constructs color from the 32bit integer (R8G8B8).
+    Color3(uint32_t color)
+    {
+        m_r = RedFromInt(color);
+        m_g = GreenFromInt(color);
+        m_b = BlueFromInt(color);
+    }
+
+    //! Dtor.
+    ~Color3() { }
+
+    //! Returns raw color in 32bit integer value.
     uint32_t color() const { return RgbToInt(m_r, m_g, m_b); }
-    uint8_t red() const { return static_cast<uint8_t>(m_r); }
-    uint8_t green() const { return static_cast<uint8_t>(m_g); }
-    uint8_t blue() const { return static_cast<uint8_t>(m_b); }
+    //! Casts this object to 32bit integer color.
+    operator uint32_t() const { return color(); }
 
-    operator uint32_t() const;
+    //! Component getter.
+    /*! Usage: mycolor[RED] = 128. */
+    uint32_t &operator[] (ColorComp ind)
+    {
+        switch (ind)
+        {
+        case RED:
+            return m_r;
+        case GREEN:
+            return m_g;
+        case BLUE:
+            return m_b;
+        default:
+            throw common::OutOfRangeException("Invalid color component");
+        }
+    }
+    //! Component by-value-getter.
+    uint32_t operator[] (ColorComp ind) const
+    {
+        return (*this)[ind];
+    }
+
+    //! Color scalar modulation.
     Color3 &operator*= (double s);
+    //! Color modulation.
     Color3 &operator*= (const Color3 &other);
+    //! Color addition.
     Color3 &operator+= (const Color3 &other);
-
+    //! Color modulation.
     friend Color3 operator* (const Color3 &a, const Color3 &b);
 
-    void reset();
+    //! Resets color to zero (black).
+    void reset() { m_r = m_g = m_b = 0; }
 };
 
 Color3 operator* (const Color3 &a, const Color3 &b);

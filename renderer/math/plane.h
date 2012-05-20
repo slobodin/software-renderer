@@ -15,7 +15,7 @@
 namespace math
 {
 
-//! Point plane relation types
+//! Point plane relation types.
 enum PointPlaneRelation
 {
     POINT_IN_PLANE,             /*!< Point lies on plane. */
@@ -23,7 +23,7 @@ enum PointPlaneRelation
     POINT_IN_BACK_OF_PLANE      /*!< Point in back of the plane. */
 };
 
-//! Line plane intersection types
+//! Line plane intersection types.
 enum LinePlaneIntersectionType
 {
     LINE_PLANE_NO_INTERSECT,            /*!< No line-plane intersection. */
@@ -32,15 +32,15 @@ enum LinePlaneIntersectionType
     LINE_PLANE_INTERSECT_EVERYWHERE     /*!< Line lies on plane. */
 };
 
-//! Plane in 3D space
+//! Plane in 3D space.
 /*!
- * With equation Ax + By + Cz + D = 0
- */
+  * With equation Ax + By + Cz + D = 0.
+  */
 class Plane
 {
-    //! Plane normal(A, B, C)
+    //! Plane normal(A, B, C).
     vec3 m_normal;
-    //! Distance from origin D
+    //! Distance from origin D.
     double m_d;
 
 public:

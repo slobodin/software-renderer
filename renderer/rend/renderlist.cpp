@@ -18,7 +18,7 @@ RenderList::RenderList()
 
 void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
 {
-    math::Triangle triangle;
+    /*math::Triangle triangle;
     // all mesh vertices
     const vector<math::vertex> &vertices = mesh.vertices();
     // mesh indices
@@ -85,7 +85,7 @@ void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
     default:
         *syslog << "Can't draw this mesh" << logwarn;
         break;
-    }
+    }*/
 }
 
 void RenderList::append(const Mesh &mesh)

@@ -25,7 +25,7 @@ const double EPSILON_E6 = 1E-6;
 
 //! Float point comparsion of two values.
 /*!
-  \returns true if x == y with some imprecision.
+  * \returns true if x == y with some imprecision.
   */
 inline bool DCMP(double x, double y, double pres = EPSILON_E6)
 {

@@ -16,6 +16,13 @@ namespace math
 struct M33;
 struct vec3;
 
+//! Row-column 4x4 Matrix.
+/*!
+  * (a00, a01, a02, a03)
+  * (a10, a11, a12, a13)
+  * (a20, a21, a22, a23)
+  * (a30, a31, a32, a33)
+  */
 struct M44
 {
     //! x[row][col].

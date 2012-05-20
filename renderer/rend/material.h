@@ -11,39 +11,43 @@
 #include "comm_pch.h"
 
 #include "color.h"
-#include "texture.h"
 
 namespace rend
 {
 
-class Material
+class Texture;
+
+//! Surface properties.
+/*!
+  * Holds data about shading mode, diffuse,
+  * ambient, specular and emissive reflection coefficients,
+  * texture and the list goes on.
+  */
+struct Material
 {
-public:
     enum ShadeMode
     {
+        SM_UNDEFINED,
+        SM_WIRE,
         SM_FLAT,
         SM_GOURAUD,
         SM_PHONG,
-        SM_WIRE,
-        SW_TEXTURE,
-        SM_UNDEFINED
+        SW_TEXTURE
     };
 
-private:
-    Color3 m_color;
-    ShadeMode m_shadeMode;
+    ShadeMode shadeMode;
+
+    Color3 ambientColor;
+    Color3 diffuseColor;
+    Color3 specularColor;
+    Color3 emissiveColor;
+
     sptr(Texture) m_texture;
 
-    // active, cliped, backface
+    bool useLighting;
 
-public:
+    //! Default ctor.
     Material();
-    Material(const Color3 &color, ShadeMode shadeMode);
-
-    const Color3 &color() const { return m_color; }
-    Color3 &color() { return m_color; }
-
-    ShadeMode shadeMode() const { return m_shadeMode; }
 };
 
 }

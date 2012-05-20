@@ -30,6 +30,7 @@ struct vertex
     vec2 t;
     //! Vertex color.
     rend::Color3 color;
+    // TODO: maybe diffuse color and specular color?
 
     //! Default ctor.
     vertex();

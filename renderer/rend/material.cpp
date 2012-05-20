@@ -7,19 +7,16 @@
 
 #include "material.h"
 
+#include "texture.h"
+
 namespace rend
 {
 
 Material::Material()
-    : m_shadeMode(SM_UNDEFINED)/*,
-      m_sides(math::Triangle::ST_2_SIDED)*/
-{
-}
-
-Material::Material(const Color3 &color, ShadeMode shadeMode)
-    : m_color(color),
-      m_shadeMode(shadeMode)/*,
-      m_sides(sides)*/
+    : shadeMode(SM_FLAT),
+      specularColor(0, 0, 0),
+      emissiveColor(0, 0, 0),
+      useLighting(true)
 {
 }
 

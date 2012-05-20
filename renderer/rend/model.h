@@ -15,7 +15,8 @@
 #include "m33.h"
 
 //! Abstract scene object.
-/*! Contains information about world transformation and
+/*!
+  * Contains information about world transformation and
   * appropriate setters\getters.
   */
 class Model
@@ -26,7 +27,9 @@ protected:
     math::M44 m_worldTransformation;
 
 public:
+    //! Default ctor.
     Model() { }
+    //! Dtor.
     virtual ~Model() { }
 
     //! Sets position in world space.
