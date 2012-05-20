@@ -96,7 +96,7 @@ void RenderList::zsort()
 
 void RenderList::removeBackfaces(const sptr(Camera) cam)
 {
-    list<math::Triangle>::iterator t = m_triangles.begin();
+    auto t = m_triangles.begin();
 
     while (t != m_triangles.end())
     {

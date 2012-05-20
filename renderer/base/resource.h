@@ -29,7 +29,8 @@ public:
         : m_name("Unnamed")
     { }
     //! Dtor.
-    virtual ~Resource() { }
+    virtual ~Resource()
+    { }
 
     //! Sets the name.
     void setName(const string &name) { m_name = name; }

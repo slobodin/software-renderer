@@ -38,7 +38,7 @@ void RenderMgr::update(sptr(RenderDevice) rendDevice)
     RenderList renderList;
 
     // 2. Cull full meshes and form triangles render list.
-    foreach (sptr(Mesh) &m, m_meshes)
+    foreach (sptr(Mesh) m, m_meshes)
     {
         if (!m_camera->culled(*m))
             renderList.append(*m);
