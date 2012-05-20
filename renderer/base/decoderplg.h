@@ -18,8 +18,8 @@ namespace base
 class DecoderPLG : public ResourceDecoder
 {
 public:
-    DecoderPLG();
-    ~DecoderPLG();
+    DecoderPLG() { }
+    ~DecoderPLG() { }
 
     sptr(Resource) decode(const OsPath &path);
     string extention() const;

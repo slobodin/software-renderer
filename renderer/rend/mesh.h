@@ -34,17 +34,27 @@ public:
 
 private:
 
+    //! Mesh consists of some submeshes, which holds vertex data and one material.
     list<VertexBuffer> m_submeshes;
+    //! Type of the mesh.
     MeshType m_type;
 
 public:
-    Mesh();
+    //! Default ctor.
+    Mesh(MeshType mt = MT_MESH_UNDEFINED);
+    //! Dtor.
     ~Mesh();
 
+    //! Appends submesh to this mesh.
     void appendSubmesh(const VertexBuffer &submesh);
 
+    //! Returns mesh type.
     MeshType type() { return m_type; }
+    //! Sets mesh type.
     void setType(MeshType mt) { m_type = mt; }
+
+    //! Returns vertex count of all submeshes.
+    int numVertices() const;
 };
 
 }

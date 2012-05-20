@@ -12,10 +12,6 @@
 namespace rend
 {
 
-RenderList::RenderList()
-{
-}
-
 void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
 {
     /*math::Triangle triangle;

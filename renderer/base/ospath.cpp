@@ -22,10 +22,6 @@ OsPath::OsPath(const char *path)
     parse();
 }
 
-OsPath::~OsPath()
-{
-}
-
 string OsPath::fileExtention() const
 {
     return m_extention;

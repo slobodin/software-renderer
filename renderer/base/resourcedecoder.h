@@ -10,19 +10,31 @@
 
 #include "comm_pch.h"
 
-#include "resource.h"
-#include "ospath.h"
-
 namespace base
 {
 
+class OsPath;
+class Resource;
+
+//! Abstract resource decoder.
+/*!
+  * We can simple support new assets types by creating
+  * new class derived from ResourceDecoder.
+  * All that we need is to implement decode() function, which
+  * read and process file and translates file data to
+  * inner renderer type representation.
+  */
 class ResourceDecoder
 {
 public:
+    //! Default ctor.
     ResourceDecoder() { }
+    //! Dtor.
     virtual ~ResourceDecoder() { }
 
+    //! Need to be implemented in derived classes. Creates engine representation of the asset.
     virtual sptr(Resource) decode(const OsPath &path) = 0;
+    //! Returns asset extention.
     virtual string extention() const = 0;
 };
 

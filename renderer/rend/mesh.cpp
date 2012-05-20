@@ -13,8 +13,8 @@
 namespace rend
 {
 
-Mesh::Mesh()
-    : m_type(MT_MESH_UNDEFINED)
+Mesh::Mesh(MeshType mt)
+    : m_type(mt)
 {
 }
 
@@ -28,5 +28,13 @@ void Mesh::appendSubmesh(const VertexBuffer &submesh)
     m_submeshes.back().computeVertexNormals();
 }
 
+int Mesh::numVertices() const
+{
+    int n = 0;
+    std::for_each(m_submeshes.begin(), m_submeshes.end(),
+                  [&](VertexBuffer buffer) { n += buffer.numVertices(); });
+
+    return n;
+}
 
 }

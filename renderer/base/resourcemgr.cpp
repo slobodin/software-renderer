@@ -6,6 +6,9 @@
  */
 
 #include "resourcemgr.h"
+
+#include "resource.h"
+#include "resourcedecoder.h"
 #include "ospath.h"
 #include "osfile.h"
 #include "decoderplg.h"
@@ -29,12 +32,12 @@ ResourceMgr::~ResourceMgr()
 {
 }
 
-sptr(Resource) ResourceMgr::getResource(const string &pathString)
+sptr(Resource) ResourceMgr::getResource(const string &path)
 {
     // TODO: create full path
-    OsPath path(pathString);
+    OsPath _path(path);
 
-    return getResource(path);
+    return getResource(_path);
 }
 
 sptr(Resource) ResourceMgr::getResource(const OsPath &path)

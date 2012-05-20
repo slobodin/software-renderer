@@ -7,6 +7,8 @@
 
 #include "decoderbspq3.h"
 
+#include "resource.h"
+#include "ospath.h"
 #include "osfile.h"
 #include "vec3.h"
 #include "material.h"

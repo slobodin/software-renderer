@@ -23,7 +23,10 @@ class RenderList
     list<math::Triangle> m_triangles;
 
 public:
-    RenderList();
+    //! Default ctor.
+    RenderList() { }
+    //! Dtor.
+    ~RenderList() { }
 
     static void createTriangles(const Mesh &mesh, list<math::Triangle> &output);
 

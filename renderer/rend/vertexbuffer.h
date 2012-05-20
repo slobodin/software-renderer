@@ -25,11 +25,13 @@ class Mesh;
   */
 class VertexBuffer
 {
-    friend class Mesh; // because mesh is vertex buffer container.
-
+public:
     //! Some anti-boilerplate typedefs.
     typedef vector<math::vertex> VertexArray;
     typedef vector<uint16_t> IndexArray;
+
+private:
+    friend class Mesh; // because mesh is vertex buffer container.
 
     //! Material of this vertices;
     sptr(Material) m_material;
@@ -38,9 +40,12 @@ class VertexBuffer
     //! Indices for the vertices.
     IndexArray m_indices;
 
+    //! Bounding sphere.
     BoundingSphere m_boundingSphere;
 
+    //! Helper to compute bounding sphere.
     void computeBoundingSphere();
+    //! Helper to compute vertex normals.
     void computeVertexNormals();
 
 public:
@@ -51,6 +56,9 @@ public:
 
     //! Sets the material to this submesh.
     void setMaterial(sptr(Material) material);
+    //! Gets material.
+    sptr(Material) getMaterial() const { return m_material; }
+
     //! Appends vertices to this submesh.
     void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices);
 

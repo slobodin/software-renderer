@@ -15,10 +15,12 @@
 namespace base
 {
 
+// If something wrong...
 DECLARE_EXCEPTION(FileException)
 
-/**
-  * File abstraction
+//! File abstraction.
+/*!
+  *
   */
 class OsFile
 {
@@ -29,38 +31,55 @@ protected:
         FT_BINARY
     };
 
+    //! File itself.
     std::ifstream m_file;
 
 public:
+    //! Base ctor.
     OsFile(const OsPath &path, FileType ft);
+    //! Dtor.
     virtual ~OsFile();
 };
 
-/**
-  * Text file
+//! Text file.
+/*!
+  *
   */
 class TextFile : public OsFile
 {
     stringstream m_fileData;
 
 public:
+    //! Ctor with path.
     TextFile(const OsPath &path);
 
+    //! Returns next line from the file.
+    /*! \param delim Lines deliminator. */
     string getLine(const char delim = '\n');
 };
 
+//! Binary file.
 /**
-  * Binary file
+  *
   */
 class BinaryFile : public OsFile
 {
+    //! Binary data.
     vector<uint8_t> m_fileData;
 
 public:
+    //! Ctor with path.
     BinaryFile(const OsPath &path);
 
+    //! Returns pointer to the file data with given offset.
     void *getBytes(size_t offset);
 
+    //! Gets elements with T type from the file.
+    /*!
+      * \param offset Offset from the file beginning.
+      * \param dest Array for collecting file data.
+      * \param numElements How many elements we're getting.
+      */
     template <typename T>
     void copy(size_t offset, T *dest, size_t numElemets);
 };

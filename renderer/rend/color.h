@@ -148,7 +148,11 @@ class Color3
 
 public:
     //! Default ctor.
-    Color3(uint32_t red = 255, uint32_t green = 255, uint32_t blue = 255)
+    Color3()
+        : m_r(255), m_g(255), m_b(255)
+    { }
+    //! Component ctor.
+    Color3(uint32_t red, uint32_t green, uint32_t blue)
         : m_r(red), m_g(green), m_b(blue)
     { }
 
