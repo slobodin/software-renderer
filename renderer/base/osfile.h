@@ -10,8 +10,6 @@
 
 #include "comm_pch.h"
 
-#include "ospath.h"
-
 namespace base
 {
 
@@ -32,11 +30,11 @@ protected:
     };
 
     //! File itself.
-    std::ifstream m_file;
+    ifstream m_file;
 
 public:
     //! Base ctor.
-    OsFile(const OsPath &path, FileType ft);
+    OsFile(const string &path, FileType ft);
     //! Dtor.
     virtual ~OsFile();
 };
@@ -51,7 +49,7 @@ class TextFile : public OsFile
 
 public:
     //! Ctor with path.
-    TextFile(const OsPath &path);
+    TextFile(const string &path);
 
     //! Returns next line from the file.
     /*! \param delim Lines deliminator. */
@@ -69,7 +67,7 @@ class BinaryFile : public OsFile
 
 public:
     //! Ctor with path.
-    BinaryFile(const OsPath &path);
+    BinaryFile(const string &path);
 
     //! Returns pointer to the file data with given offset.
     void *getBytes(size_t offset);

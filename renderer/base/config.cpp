@@ -42,7 +42,7 @@ Config::~Config()
 
 void Config::configure(Controller *controller)
 {
-    std::fstream inconf(path.filePath());
+    /*std::fstream inconf(path.filePath());
     if (!inconf)
     {
         *syslog << "Can't open configuration file" << logerr;
@@ -112,11 +112,13 @@ void Config::configure(Controller *controller)
         renderItem->setPosition(modelData[i].pos);
         //renderItem->setWindingOrder(modelData[i].wo);
         controller->m_rendmgr->addMesh(renderItem);
-    }
+    }*/
 }
 
 void Config::configure(ResourceMgr *rmgr)
 {
+    // add standart paths to the resources
+    // load all resources from these path
 }
 
 

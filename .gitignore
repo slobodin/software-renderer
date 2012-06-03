@@ -16,3 +16,4 @@ resources/*.*~
 *.*~
 renderer/tests/math-tester/*.pro.user
 renderer/tests/math-tester/*.*~
+bin/

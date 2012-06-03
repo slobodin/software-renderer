@@ -12,7 +12,7 @@ DEFINES += USING_PCH
 Debug:DEFINES += DEBUG
 DEFINES += RENDERER_LIBRARY
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=gnu++0x
 
 HEADERS += \
     math/vec3.h \
@@ -52,15 +52,14 @@ HEADERS += \
     rend/texture.h \
     math/math_utils.h \
     math/m44.h \
-    third-party/cpptk-1.0.2/base/cpptkbase.h \
-    third-party/cpptk-1.0.2/cpptk.h \
     rend/vertexbuffer.h \
     platform/baseappqt.h \
     platform/baseapptk.h \
     platform/baseapp.h \
     rend/viewport.h \
     rend/node.h \
-    rend/sceneobject.h
+    rend/sceneobject.h \
+    renderer.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -89,8 +88,6 @@ SOURCES += \
     rend/texture.cpp \
     math/math_utils.cpp \
     math/m44.cpp \
-    third-party/cpptk-1.0.2/base/cpptkbase.cc \
-    third-party/cpptk-1.0.2/cpptk.cc \
     rend/vertexbuffer.cpp \
     platform/baseappqt.cpp \
     platform/baseapptk.cpp \
@@ -101,13 +98,8 @@ INCLUDEPATH += ./base \
                 ./comm \
                 ./math \
                 ./rend \
-                /usr/include/tcl8.5 \
-                /usr/include
+                ./third-party/include/ \
+                $(BOOST_ROOT)
 
-LIBS += -lyaml-cpp
-LIBS += -ltcl8.5
-LIBS += -ltk8.5
-
-OTHER_FILES += \
-    third-party/cpptk-1.0.2/cpptkoptions.x \
-    third-party/cpptk-1.0.2/cpptkconstants.x
+win32:LIBS += d:\srend\software-renderer\renderer\third-party\lib\libyaml-cpp.a
+win32:LIBS += -L$(BOOST_ROOT)\stage\lib\ -lboost_filesystem-mgw46-mt-1_49 -lboost_system-mgw46-mt-1_49

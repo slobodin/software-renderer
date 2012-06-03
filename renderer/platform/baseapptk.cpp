@@ -7,13 +7,9 @@
 
 #include "baseapptk.h"
 
-#include <third-party/cpptk-1.0.2/cpptk.h>
-
-using namespace Tk;
-
 BaseAppTk::BaseAppTk(char *argv[])
 {
-    Tk::init(argv[0]);
+//    Tk::init(argv[0]);
 }
 
 BaseAppTk::~BaseAppTk()
@@ -26,7 +22,7 @@ void BaseAppTk::run()
 
 void ViewportTkImage::flush(unsigned char *pixels)
 {
-    if (m_widgetName.empty())
+    /*if (m_widgetName.empty())
         return;
 
     Tk_PhotoHandle fbphoto;
@@ -49,5 +45,5 @@ void ViewportTkImage::flush(unsigned char *pixels)
     block.offset[2] = 2;
     block.offset[3] = 0;
 
-    Tk_PhotoPutBlock(fbinterp, fbphoto, &block, 0, 0, m_width, m_width, TK_PHOTO_COMPOSITE_SET);
+    Tk_PhotoPutBlock(fbinterp, fbphoto, &block, 0, 0, m_width, m_width, TK_PHOTO_COMPOSITE_SET);*/
 }

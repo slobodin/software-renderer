@@ -23,7 +23,7 @@ enum MessageType
     MT_ERROR
 };
 
-class DLL_PUBLIC LoggerManipulator
+class LoggerManipulator
 {
     friend class Logger;
 
@@ -35,7 +35,7 @@ public:
     { }
 };
 
-class DLL_PUBLIC Logger : boost::noncopyable
+class Logger : boost::noncopyable
 {
     stringstream m_buffer;
 

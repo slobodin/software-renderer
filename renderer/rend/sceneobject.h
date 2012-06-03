@@ -17,7 +17,7 @@ namespace rend
 
 class Mesh;
 
-class DLL_PUBLIC SceneObject : public Node
+class SceneObject : public Node
 {
     sptr(Mesh) m_mesh;
 

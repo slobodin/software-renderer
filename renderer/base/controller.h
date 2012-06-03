@@ -14,20 +14,19 @@
 #include "singleton.h"
 #include "rendermgr.h"
 #include "resourcemgr.h"
-#include "renderdevice.h"
 
 namespace base
 {
 
 DECLARE_EXCEPTION(ControllerException)
 
-class DLL_PUBLIC Controller : boost::noncopyable
+class Controller : boost::noncopyable
 {
     friend class Config;
 
 protected:
     sptr(rend::RenderMgr)       m_rendmgr;
-    sptr(rend::RenderDevice)    m_rendDevice;
+    sptr(rend::Viewport)        m_viewport;
     sptr(rend::Camera)          m_mainCam;
     sptr(ResourceMgr)           m_resourceMgr;
 

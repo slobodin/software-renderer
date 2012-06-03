@@ -12,12 +12,13 @@
 namespace rend
 {
 
-RenderMgr::RenderMgr(const shared_ptr<Camera> cam)
-    : m_rasterizer(new Rasterizer(cam->width(), cam->height())),
-      m_camera(cam)
+RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport)
+    : m_rasterizer(new Rasterizer(viewport->getWidth(), viewport->getHeight())),
+      m_camera(cam),
+      m_viewport(viewport)
 {
     m_camera->setPosition(math::vec3(0.0, 0.0, -450.0));
-    m_camera->buildCamMatrix(0.0, 0.0, 0.0);
+    m_camera->lookTo(math::vec3(0, 0, 0));
 }
 
 void rend::RenderMgr::makeLight()
@@ -30,10 +31,10 @@ RenderMgr::~RenderMgr()
 
 }
 
-void RenderMgr::update(sptr(RenderDevice) rendDevice)
+void RenderMgr::update(/*sptr(RenderDevice) rendDevice*/)
 {
     // 1. Clear buffer.
-    m_rasterizer->beginFrame(rendDevice);
+    m_rasterizer->beginFrame(/*rendDevice*/);
 
     RenderList renderList;
 
@@ -62,14 +63,14 @@ void RenderMgr::update(sptr(RenderDevice) rendDevice)
     renderList.zsort();
 
     // 7. Camera -> Perspective -> Screen transformation.
-    m_camera->toScreen(renderList);
+    m_camera->toScreen(renderList, *m_viewport);
 
     // 8. Rasterize triangles.
     m_rasterizer->rasterize(renderList);
 
     // 9. Flush buffer to the screen.
-    if (rendDevice)
-        m_rasterizer->endFrame(rendDevice);
+    if (1/*rendDevice*/)
+        m_rasterizer->endFrame(/*rendDevice*/);
 }
 
 sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)
@@ -125,7 +126,7 @@ sptr(PointLight) RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 pos
 
 void RenderMgr::resize(int w, int h)
 {
-    m_camera->resize(w, h);
+    m_viewport->resize(w, h);
     m_rasterizer->resize(w, h);
 }
 

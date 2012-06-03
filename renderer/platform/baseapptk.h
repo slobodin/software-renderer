@@ -21,7 +21,7 @@ public:
     void flush(unsigned char *pixels);
 };
 
-class DLL_PUBLIC BaseAppTk : public BaseApp
+class BaseAppTk : public BaseApp
 {
 public:
     BaseAppTk(char *argv[]);

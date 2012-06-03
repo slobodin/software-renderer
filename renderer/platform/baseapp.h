@@ -15,7 +15,7 @@ namespace base
 class Controller;
 }
 
-class DLL_PUBLIC BaseApp
+class BaseApp
 {
     sptr(base::Controller) m_clientController;
 

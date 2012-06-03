@@ -7,7 +7,6 @@
 
 #include "decoderasc.h"
 
-#include "ospath.h"
 #include "resource.h"
 
 namespace base
@@ -21,7 +20,7 @@ DecoderASC::~DecoderASC()
 {
 }
 
-sptr(Resource) DecoderASC::decode(const OsPath &path)
+sptr(Resource) DecoderASC::decode(const string &path)
 {
 }
 

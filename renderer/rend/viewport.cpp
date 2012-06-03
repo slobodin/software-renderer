@@ -23,6 +23,30 @@ Viewport::Viewport(int width, int height, boost::shared_ptr<Camera> camera)
     resize(m_width, m_height);
 }
 
+Viewport::~Viewport()
+{
+}
+
+int Viewport::getWidth() const
+{
+    return m_width;
+}
+
+int Viewport::getHeight() const
+{
+    return m_height;
+}
+
+int Viewport::getAspect() const
+{
+    return m_aspect;
+}
+
+std::pair<int, int> Viewport::getCenter() const
+{
+    return std::pair<int, int>(m_centerX, m_centerY);
+}
+
 void Viewport::resize(int w, int h)
 {
     if (!m_camera)

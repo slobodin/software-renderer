@@ -8,7 +8,6 @@
 #include "decoderbspq3.h"
 
 #include "resource.h"
-#include "ospath.h"
 #include "osfile.h"
 #include "vec3.h"
 #include "material.h"
@@ -25,7 +24,7 @@ DecoderBSPQ3::~DecoderBSPQ3()
 {
 }
 
-sptr(Resource) DecoderBSPQ3::decode(const OsPath &path)
+sptr(Resource) DecoderBSPQ3::decode(const string &path)
 {
     BinaryFile file(path);
 
@@ -101,14 +100,14 @@ sptr(Resource) DecoderBSPQ3::decode(const OsPath &path)
             break;
 
         default:
-            *syslog << "Bad face type in q3 file" << path.filePath() << logwarn;
+            *syslog << "Bad face type in q3 file" << path << logwarn;
             break;
         }
     }
 
     auto newMesh = make_shared<rend::Mesh>(/*vertexList,
                                            rend::Mesh::MT_MESH_TRIANGLELIST*/);
-    newMesh->setName(path.filePath());
+    newMesh->setName(path);
 
     delete [] vertices;
     delete [] faces;

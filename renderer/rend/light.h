@@ -13,7 +13,7 @@
 #include "vec3.h"
 #include "color.h"
 #include "renderlist.h"
-#include "model.h"
+#include "node.h"
 
 namespace rend
 {

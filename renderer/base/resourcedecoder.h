@@ -13,7 +13,6 @@
 namespace base
 {
 
-class OsPath;
 class Resource;
 
 //! Abstract resource decoder.
@@ -33,7 +32,7 @@ public:
     virtual ~ResourceDecoder() { }
 
     //! Need to be implemented in derived classes. Creates engine representation of the asset.
-    virtual sptr(Resource)  decode(const OsPath &path) = 0;
+    virtual sptr(Resource)  decode(const string &path) = 0;
 
     //! Returns asset extention.
     virtual string          extention() const = 0;

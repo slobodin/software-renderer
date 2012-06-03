@@ -29,6 +29,8 @@ class ResourceMgr : boost::noncopyable
     map<string, sptr(Resource) >        m_resources;
     map<string, sptr(ResourceDecoder) > m_decoders;
 
+    bool checkFilePath(const string &path) const;
+
 public:
     //! Default ctor.
     ResourceMgr();
@@ -42,14 +44,14 @@ public:
       * \return Pointer to the resource.
       * \param path Path to the asset.
       */
-    sptr(Resource) getResource(const string &path);
+    sptr(Resource) getResource(const string &resourcepath);
 
     // getMesh
     // getTexture
     // etc
 
-    void loadResource(const string &name);
-    void unloadResource(const string &name);
+    void loadResource(const string &resourcepath);
+    void unloadResource(const string &resourcepath);
 
     void addPath(const string &name);
 };

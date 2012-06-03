@@ -22,6 +22,7 @@ class RenderMgr : boost::noncopyable
 {
     sptr(Rasterizer) m_rasterizer;
     sptr(Camera) m_camera;
+    sptr(Viewport) m_viewport;
 
     vector<sptr(Mesh) > m_meshes;
     vector<sptr(Light) > m_lights;
@@ -30,10 +31,10 @@ class RenderMgr : boost::noncopyable
     void makeLight();
 
 public:
-    RenderMgr(const shared_ptr<Camera> cam);
+    RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport);
     ~RenderMgr();
 
-    void update(sptr(RenderDevice) rendDevice);
+    void update(/*sptr(RenderDevice) rendDevice*/);
 
     // TODO: make uniform method `addSceneObject(Node *n);'
     void addMesh(sptr(rend::Mesh) mesh);

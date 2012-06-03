@@ -7,6 +7,8 @@
 
 #include "camera.h"
 
+#include "m33.h"
+
 namespace rend
 {
 
@@ -104,29 +106,7 @@ void Camera::toCamera(RenderList &rendList) const
     }
 }
 
-void Camera::toCamera(math::vec3 &v) const
-{
-}
-
-void Camera::toScreen(math::vec3 &v) const
-{
-    // perspective transformation
-    double z = v.z;
-
-    assert(z != 0.0);
-
-    v.x = m_distance * v.x / z;
-    v.y = m_distance * v.y * m_aspect / z;
-
-    // screen transformation
-    double alpha = 0.5 * m_viewPort.width - 0.5;
-    double beta = 0.5 * m_viewPort.height - 0.5;
-
-    v.x = alpha + alpha * v.x;
-    v.y = beta - beta * v.y;
-}
-
-void Camera::toScreen(RenderList &rendList) const
+void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
 {
     list<math::Triangle> &trias = rendList.triangles();
 
@@ -136,9 +116,9 @@ void Camera::toScreen(RenderList &rendList) const
         math::vec3 &p2 = t.v(1).p;
         math::vec3 &p3 = t.v(2).p;
 
-        toScreen(p1);
-        toScreen(p2);
-        toScreen(p3);
+        toScreen(p1, viewport);
+        toScreen(p2, viewport);
+        toScreen(p3, viewport);
     }
 }
 
@@ -158,6 +138,28 @@ bool Camera::culled(const Mesh &obj) const
         return true;*/
 
     return false;
+}
+
+void Camera::toCamera(math::vec3 &v) const
+{
+}
+
+void Camera::toScreen(math::vec3 &v, const Viewport &viewport) const
+{
+    // perspective transformation
+    double z = v.z;
+
+    assert(z != 0.0);
+
+    v.x = m_distance * v.x / z;
+    v.y = m_distance * v.y * viewport.getAspect() / z;
+
+    // screen transformation
+    double alpha = 0.5 * viewport.getWidth() - 0.5;
+    double beta = 0.5 * viewport.getHeight() - 0.5;
+
+    v.x = alpha + alpha * v.x;
+    v.y = beta - beta * v.y;
 }
 
 }

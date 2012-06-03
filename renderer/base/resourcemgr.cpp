@@ -16,6 +16,10 @@
 namespace base
 {
 
+bool ResourceMgr::checkFilePath(const string &path) const
+{
+}
+
 ResourceMgr::ResourceMgr()
 {
     sptr(ResourceDecoder) plgDecoder(new DecoderPLG);
@@ -31,58 +35,103 @@ ResourceMgr::~ResourceMgr()
 {
 }
 
-sptr(Resource) ResourceMgr::getResource(const string &path)
+sptr(Resource) ResourceMgr::getResource(const string &resourcepath)
 {
-    // ensure that we have decoder for this resource
-    auto dit = m_decoders.find(path.fileExtention());
+    using namespace fs;
 
-    if (dit == m_decoders.end())
+    path p(resourcepath);
+    string fullpath = complete(p).string();
+
+    auto rit = m_resources.find(fullpath);
+    if (rit == m_resources.end())
     {
-        *syslog << "Unsupported file format. File:" << path.filePath() << logerr;
-        // no such decoder
-        // unsupported file format
+        *syslog << "Getting null resource" << resourcepath << logwarn;
         return sptr(Resource)();
     }
 
-    // if we already have the resource
-    auto rit = m_resources.find(path.filePath());
+    return m_resources[fullpath];
+}
 
-    // decode resource if need
-    if (rit == m_resources.end())
+void ResourceMgr::loadResource(const string &resourcepath)
+{
+    using namespace fs;
+    const char *error = "Loading resource:";
+
+    path p(resourcepath);
+    if (is_directory(p))
     {
-        sptr(Resource) newResource;
-        try
-        {
-            newResource = dit->second->decode(path);
-        }
-        catch(FileException)
-        {
-            return sptr(Resource)();
-        }
-
-        if (newResource.get())
-            m_resources[path.filePath()] = newResource;
-        else
-        {
-            *syslog << "Can't decode resource. File:" << path.filePath() << logerr;
-            return sptr(Resource)();
-        }
+        *syslog << error << resourcepath << "isn't a regular file" << logerr;
+        return;
     }
 
-    return m_resources[path.filePath()];
+    if (p.has_extension())
+    {
+        *syslog << error << resourcepath << "without extention" << logerr;
+        return;
+    }
+
+    // ensure that we have decoder for this resource
+    auto dit = m_decoders.find(p.extension().string());
+
+    if (dit == m_decoders.end())
+    {
+        *syslog << error << resourcepath << "has unsupported file format." << logerr;
+        return;
+    }
+
+    // if we already have the resource
+    string fullpath = complete(p).string();
+
+    auto rit = m_resources.find(fullpath);
+    if (rit != m_resources.end())
+    {
+        *syslog << error << resourcepath << "already loaded." << logwarn;
+        return;
+    }
+
+    sptr(Resource) newResource;
+    try
+    {
+        newResource = dit->second->decode(fullpath);
+    }
+    catch(FileException)
+    {
+        return;
+    }
+
+    if (newResource)
+        m_resources[fullpath] = newResource;
+    else
+    {
+        *syslog << error << "Can't decode resource:" << resourcepath << logerr;
+        return;
+    }
 }
 
-void ResourceMgr::loadResource(const string &name)
-{
-}
-
-void ResourceMgr::unloadResource(const string &name)
+void ResourceMgr::unloadResource(const string &resourcepath)
 {
 }
 
 void ResourceMgr::addPath(const string &name)
 {
+    using namespace fs;
+
     path p(name);
+
+    if (exists(p))
+    {
+        if (is_directory(p))
+        {
+            m_loadablePaths.push_back(p);
+        }
+        else
+        {
+            *syslog << "Adding new path to resource manager:" << name << "isn't a directory" << logerr;
+            return;
+        }
+    }
+    else
+        *syslog << "Adding new path to resource manager:" << name << "doesn't exist" <<logerr;
 }
 
 }

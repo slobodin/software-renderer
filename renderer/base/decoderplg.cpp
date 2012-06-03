@@ -8,7 +8,6 @@
 #include "decoderplg.h"
 
 #include "resource.h"
-#include "ospath.h"
 #include "osfile.h"
 #include "mesh.h"
 #include "material.h"
@@ -42,7 +41,7 @@ struct PlgPolyData
     }
 };
 
-sptr(Resource) DecoderPLG::decode(const OsPath &path)
+sptr(Resource) DecoderPLG::decode(const string &path)
 {
     TextFile plgFile(path);
 
@@ -112,7 +111,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
         // always three vertices
         if (newData.numVertices != 3)
         {
-            *syslog << "Can't decode PLG file" << path.filePath() << ". Number of vertices =/= 3." << logerr;
+            *syslog << "Can't decode PLG file" << path << ". Number of vertices =/= 3." << logerr;
             return sptr(Resource)();
         }
 
@@ -128,7 +127,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
 
     if (polysData.empty())
     {
-        *syslog << "Can't decode PLG file" << path.filePath() << ". Empty polygons data." << logerr;
+        *syslog << "Can't decode PLG file" << path << ". Empty polygons data." << logerr;
         return sptr(Resource)();
     }
 
@@ -168,7 +167,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
             break;
 
         default:
-            *syslog << "Bad shade mode in plg-file" << path.filePath() << ". Setting to defaults." << logwarn;
+            *syslog << "Bad shade mode in plg-file" << path << ". Setting to defaults." << logwarn;
             shadeMode = rend::Material::SM_WIRE;
         }
 
@@ -206,7 +205,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
 
     newMesh->setName(resourceName);
 
-    *syslog << "Decoded plg-model \"" << newMesh->name()
+    *syslog << "Decoded plg-model \"" << newMesh->getName()
             << "\". Number of vertices:" << newMesh->numVertices() << logmess;
     
     return newMesh;

@@ -24,7 +24,7 @@ namespace rend
   */
 class Camera
 {
-    friend Viewport::resize(int w, int h);  // when resizing the viewport, we need to update some cam params
+    friend void Viewport::resize(int w, int h);  // when resizing the viewport, we need to update some cam params
 
     //! Position of the camera in the world.
     math::vec3 m_position;
@@ -55,7 +55,7 @@ class Camera
 
     // helpers
     void toCamera(math::vec3 &v) const;
-    void toScreen(math::vec3 &v) const;
+    void toScreen(math::vec3 &v, const Viewport &viewport) const;
 
 public:
     //! Default ctor.
@@ -77,7 +77,7 @@ public:
     void lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo);
 
     void toCamera(RenderList &rendList) const;
-    void toScreen(RenderList &rendList) const;
+    void toScreen(RenderList &rendList, const Viewport &viewport) const;
 
     bool culled(const Mesh &obj) const;
 };

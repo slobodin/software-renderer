@@ -16,7 +16,7 @@ namespace rend
 class FrameBuffer;
 class Camera;
 
-class DLL_PUBLIC Viewport
+class Viewport
 {
     //! Screen width.
     int m_width;
@@ -35,11 +35,14 @@ public:
     Viewport(int width, int height, boost::shared_ptr<Camera> camera);
     virtual ~Viewport();
 
-    void getWidth();
-    void getHeight();
+    int                 getWidth() const;
+    int                 getHeight() const;
+    int                 getAspect() const;
+    std::pair<int, int> getCenter() const;
+
     void resize(int w, int h);
 
-    virtual void flush(unsigned char *pixels) = 0;
+    virtual void flush(unsigned char *pixels) { /* nothing */ }
 };
 
 }

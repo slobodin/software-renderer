@@ -46,8 +46,8 @@ public:
 
     void rasterize(const RenderList &rendlist);
 
-    void beginFrame(sptr(RenderDevice) device);
-    void endFrame(sptr(RenderDevice) device);
+    void beginFrame(/*sptr(RenderDevice) device*/);
+    void endFrame(/*sptr(RenderDevice) device*/);
 
     void resize(int w, int h);
 };

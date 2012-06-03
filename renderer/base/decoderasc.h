@@ -21,7 +21,7 @@ public:
     DecoderASC();
     ~DecoderASC();
 
-    sptr(Resource)  decode(const OsPath &path);
+    sptr(Resource)  decode(const string &path);
     string          extention() const;
 };
 

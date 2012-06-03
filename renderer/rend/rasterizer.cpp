@@ -1356,14 +1356,14 @@ void Rasterizer::rasterize(const RenderList &rendlist)
     }
 }
 
-void Rasterizer::beginFrame(sptr(RenderDevice) device)
+void Rasterizer::beginFrame(/*sptr(RenderDevice) device*/)
 {
     m_fb.clear();
 }
 
-void Rasterizer::endFrame(sptr(RenderDevice) device)
+void Rasterizer::endFrame(/*sptr(RenderDevice) device*/)
 {
-    device->flush(m_fb);
+//    device->flush(m_fb);
 }
 
 void Rasterizer::resize(int w, int h)

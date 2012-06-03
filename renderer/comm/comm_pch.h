@@ -26,6 +26,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <utility>
 #include <algorithm>
 #include <exception>
 #include <functional>
@@ -67,11 +68,15 @@ using std::istringstream;
 using boost::shared_ptr;
 using boost::make_shared;
 using boost::dynamic_pointer_cast;
-using boost::filesystem3::path;
+namespace fs = boost::filesystem3;
+using fs::path;
 
+#ifdef RENDERER_LIBRARY
+#define BUILDING_DLL
+#include "logger.h"
 #include "dll.h"
 #include "comm_macro.h"
 #include "exception.h"
-#include "logger.h"
+#endif
 
 #endif // COMM_PCH_H
