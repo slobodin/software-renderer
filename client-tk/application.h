@@ -18,4 +18,5 @@ public:
 
     void run();
 };
+
 #endif // APPLICATION_H

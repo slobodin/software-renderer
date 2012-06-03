@@ -184,8 +184,8 @@ public:
     DecoderBSPQ3();
     ~DecoderBSPQ3();
 
-    sptr(Resource) decode(const OsPath &path);
-    string extention() const;
+    sptr(Resource)  decode(const OsPath &path);
+    string          extention() const;
 };
 
 }

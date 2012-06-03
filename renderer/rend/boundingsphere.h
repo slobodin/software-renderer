@@ -25,10 +25,10 @@ public:
     BoundingSphere(const vector<math::vec3> &vertices);
     ~BoundingSphere();
 
-    math::vec3 center() const { return m_centerPoint; }
-    double radius() const { return m_radius; }
+    math::vec3  center() const { return m_centerPoint; }
+    double      radius() const { return m_radius; }
 
-    void calculate(const vector<math::vec3> &vertices);
+    void        calculate(const vector<math::vec3> &vertices);
 };
 
 }

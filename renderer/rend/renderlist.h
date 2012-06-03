@@ -22,18 +22,18 @@ class RenderList
 {
     list<math::Triangle> m_triangles;
 
+    static void createTriangles(const VertexBuffer &vertexBuffer, list<math::Triangle> &output);
+
 public:
     //! Default ctor.
     RenderList() { }
     //! Dtor.
     ~RenderList() { }
 
-    static void createTriangles(const Mesh &mesh, list<math::Triangle> &output);
-
     void append(const Mesh &mesh);
 
-    const list<math::Triangle> &triangles() const { return m_triangles; }
-    list<math::Triangle> &triangles() { return m_triangles; }
+    const list<math::Triangle>& triangles() const { return m_triangles; }
+    list<math::Triangle>&       triangles() { return m_triangles; }
 
     void zsort();
     void removeBackfaces(const sptr(Camera) cam);

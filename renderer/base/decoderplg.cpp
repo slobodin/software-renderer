@@ -175,6 +175,7 @@ sptr(Resource) DecoderPLG::decode(const OsPath &path)
         material->shadeMode = shadeMode;
 
         vb.setMaterial(material);
+        vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
         newMesh->appendSubmesh(vb);
 
         if (bounds.second != polysData.end())

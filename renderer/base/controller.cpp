@@ -18,7 +18,7 @@ void Controller::resize(int w, int h)
     m_rendmgr->resize(w, h);
 }
 
-Controller::Controller(char *argv[], const string &conf)
+Controller::Controller(char *argv[])
     : m_resourceMgr(new ResourceMgr)
 {
     m_mainCam = make_shared<rend::Camera>(math::vec3(), 640, 480);

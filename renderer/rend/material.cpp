@@ -13,7 +13,7 @@ namespace rend
 {
 
 Material::Material()
-    : shadeMode(SM_FLAT),
+    : shadeMode(SM_WIRE),
       specularColor(0, 0, 0),
       emissiveColor(0, 0, 0),
       useLighting(true)

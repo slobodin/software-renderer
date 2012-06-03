@@ -45,6 +45,7 @@
 #include <boost/function.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/filesystem.hpp>
 
 // Some useful classes.
 using std::string;
@@ -66,13 +67,11 @@ using std::istringstream;
 using boost::shared_ptr;
 using boost::make_shared;
 using boost::dynamic_pointer_cast;
+using boost::filesystem3::path;
 
-// This includes needs only in renderer library.
-//#ifdef RENDERER_LIBRARY
 #include "dll.h"
 #include "comm_macro.h"
 #include "exception.h"
 #include "logger.h"
-//#endif
 
 #endif // COMM_PCH_H

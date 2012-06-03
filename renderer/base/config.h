@@ -8,9 +8,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "ospath.h"
-#include "osfile.h"
 #include "controller.h"
+#include "resourcemgr.h"
 
 namespace base
 {
@@ -21,7 +20,8 @@ class Config
     Config();
     ~Config();
 
-    void configure(const OsPath &path, Controller *controller);
+    void configure(Controller *controller);
+    void configure(ResourceMgr *rmgr);
 };
 
 }

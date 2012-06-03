@@ -9,7 +9,6 @@
 
 #include "resource.h"
 #include "resourcedecoder.h"
-#include "ospath.h"
 #include "osfile.h"
 #include "decoderplg.h"
 #include "decoderbspq3.h"
@@ -33,14 +32,6 @@ ResourceMgr::~ResourceMgr()
 }
 
 sptr(Resource) ResourceMgr::getResource(const string &path)
-{
-    // TODO: create full path
-    OsPath _path(path);
-
-    return getResource(_path);
-}
-
-sptr(Resource) ResourceMgr::getResource(const OsPath &path)
 {
     // ensure that we have decoder for this resource
     auto dit = m_decoders.find(path.fileExtention());
@@ -79,6 +70,19 @@ sptr(Resource) ResourceMgr::getResource(const OsPath &path)
     }
 
     return m_resources[path.filePath()];
+}
+
+void ResourceMgr::loadResource(const string &name)
+{
+}
+
+void ResourceMgr::unloadResource(const string &name)
+{
+}
+
+void ResourceMgr::addPath(const string &name)
+{
+    path p(name);
 }
 
 }

@@ -10,15 +10,13 @@
 namespace math
 {
 
-Triangle::Triangle(WindingOrder wo, SideType st)
-    : m_windingOrder(wo),
-      m_sideType(st)
+Triangle::Triangle(SideType st)
+    : m_sideType(st)
 {
 }
 
-Triangle::Triangle(const vertex *arr, WindingOrder wo, SideType st)
-    : m_windingOrder(wo),
-      m_sideType(st)
+Triangle::Triangle(const vertex *arr, SideType st)
+    : m_sideType(st)
 {
     if (!arr)
     {
@@ -87,18 +85,18 @@ void Triangle::computeNormal()
 {
     vec3 p1, p2;
 
-    if (m_windingOrder == WO_CW)
-    {
-        p1.set((m_verts[1].p - m_verts[0].p).normalize());
-        p2.set((m_verts[2].p - m_verts[0].p).normalize());
-    }
-    else if (m_windingOrder == WO_CCW)
-    {
+//    if (m_windingOrder == WO_CW)
+//    {
+//        p1.set((m_verts[1].p - m_verts[0].p).normalize());
+//        p2.set((m_verts[2].p - m_verts[0].p).normalize());
+//    }
+//    else if (m_windingOrder == WO_CCW)
+//    {
         p1.set((m_verts[0].p - m_verts[1].p).normalize());
         p2.set((m_verts[2].p - m_verts[1].p).normalize());
-    }
-    else
-        throw std::exception();
+//    }
+//    else
+//        throw std::exception();
 
     m_normal = p1.crossProduct(p2);
     m_normal.normalize();

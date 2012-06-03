@@ -33,9 +33,9 @@ public:
     { }
 
     //! Sets the name.
-    void setName(const string &name) { m_name = name; }
+    void    setName(const string &name) { m_name = name; }
     //! Gets the name.
-    string name() const { return m_name; }
+    string  getName() const { return m_name; }
 };
 
 }

@@ -25,7 +25,6 @@ HEADERS += \
     base/decoderplg.h \
     base/logger.h \
     base/osfile.h \
-    base/ospath.h \
     base/resource.h \
     base/resourcedecoder.h \
     base/resourcemgr.h \
@@ -51,13 +50,17 @@ HEADERS += \
     base/decoderasc.h \
     math/vertex.h \
     rend/texture.h \
-    rend/model.h \
     math/math_utils.h \
     math/m44.h \
-    rend/renderdevice.h \
     third-party/cpptk-1.0.2/base/cpptkbase.h \
     third-party/cpptk-1.0.2/cpptk.h \
-    rend/vertexbuffer.h
+    rend/vertexbuffer.h \
+    platform/baseappqt.h \
+    platform/baseapptk.h \
+    platform/baseapp.h \
+    rend/viewport.h \
+    rend/node.h \
+    rend/sceneobject.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -65,7 +68,6 @@ SOURCES += \
     base/decoderplg.cpp \
     base/logger.cpp \
     base/osfile.cpp \
-    base/ospath.cpp \
     base/resourcemgr.cpp \
     math/m33.cpp \
     math/plane.cpp \
@@ -87,10 +89,13 @@ SOURCES += \
     rend/texture.cpp \
     math/math_utils.cpp \
     math/m44.cpp \
-    rend/renderdevice.cpp \
     third-party/cpptk-1.0.2/base/cpptkbase.cc \
     third-party/cpptk-1.0.2/cpptk.cc \
-    rend/vertexbuffer.cpp
+    rend/vertexbuffer.cpp \
+    platform/baseappqt.cpp \
+    platform/baseapptk.cpp \
+    rend/viewport.cpp \
+    rend/sceneobject.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

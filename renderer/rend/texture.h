@@ -8,10 +8,12 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include "resource.h"
+
 namespace rend
 {
 
-class Texture
+class Texture : public base::Resource
 {
 public:
     Texture();

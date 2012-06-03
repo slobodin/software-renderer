@@ -13,8 +13,7 @@
 namespace rend
 {
 
-Mesh::Mesh(MeshType mt)
-    : m_type(mt)
+Mesh::Mesh()
 {
 }
 
@@ -35,6 +34,11 @@ int Mesh::numVertices() const
                   [&](VertexBuffer buffer) { n += buffer.numVertices(); });
 
     return n;
+}
+
+int Mesh::numSubMeshes() const
+{
+    return m_submeshes.size();
 }
 
 }

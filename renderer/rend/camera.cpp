@@ -11,8 +11,6 @@ namespace rend
 {
 
 Camera::Camera(const math::vec3 position,
-               double width,
-               double height,
                double fov,
                double nearZ,
                double farZ)
@@ -24,34 +22,6 @@ Camera::Camera(const math::vec3 position,
       m_nearZ(nearZ),
       m_farZ(farZ)
 {
-    resize(width, height);
-}
-
-void Camera::resize(int w, int h)
-{
-    m_viewPort.width = w;
-    m_viewPort.height = h;
-    m_viewPort.centerX = (m_viewPort.width - 1) / 2;
-    m_viewPort.centerY = (m_viewPort.height - 1) / 2;
-
-    m_aspect = m_viewPort.width / m_viewPort.height;
-
-    m_viewPlaneWidth = 2.0;
-    m_viewPlaneHeight = 2.0 / m_aspect;
-
-    m_distance = 0.5 * m_viewPlaneWidth * tan(math::DegToRad(m_fov / 2));
-}
-
-string Camera::state() const
-{
-    std::ostringstream out;
-    out << "Camera:\n";
-    out << "    -position: " << m_position << "\n";
-    out << "    -dir: " << m_dir << "\n";
-    out << "    -up: " << m_up << "\n";
-    out << "    -right: " << m_right << "\n";
-
-    return out.str();
 }
 
 void Camera::setPosition(const math::vec3 &pos)
@@ -62,38 +32,22 @@ void Camera::setPosition(const math::vec3 &pos)
     m_worldToCamera.x[3][2] = -m_position.z;
 }
 
+math::vec3 Camera::getPosition() const
+{
+    return m_position;
+}
+
 void Camera::setDirection(const math::vec3 &dir)
 {
     m_dir = dir;
 }
 
-void Camera::buildCamMatrix(const double yaw, const double pitch, const double roll)
+math::vec3 Camera::getDirection() const
 {
-    m_dir = math::vec3(0.0, 0.0, 1.0);
-    m_right = math::vec3(1.0, 0.0, 0.0);
-    m_up = math::vec3(0.0, 1.0, 0.0);
-
-    math::M33 rot = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, roll);
-    m_dir = m_dir * rot;
-    m_right = m_right * rot;
-    m_up = m_up * rot;
-
-    m_dir.normalize();
-    double dot = m_up.dotProduct(m_dir);
-    math::vec3 temp = dot * m_dir;
-    m_up -= temp;
-
-    m_right = m_up.crossProduct(m_dir);
-
-    m_up.normalize();
-    m_right.normalize();
-
-    rot.invert();
-
-    m_worldToCamera.set(rot, -m_position);
+    return m_dir;
 }
 
-void Camera::buildCamMatrix(const math::vec3 &lookAtPoint)
+void Camera::lookTo(const math::vec3 &lookAtPoint)
 {
     // direction = target - camera_poition
     m_dir = lookAtPoint - m_position;
@@ -118,10 +72,10 @@ void Camera::buildCamMatrix(const math::vec3 &lookAtPoint)
     m_worldToCamera.set(resM, -m_position);
 }
 
-void Camera::buildCamMatrix(const math::vec3 &lookFrom, const math::vec3 &lookTo)
+void Camera::lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo)
 {
     m_position = lookFrom;
-    buildCamMatrix(lookTo);
+    this->lookTo(lookTo);
 }
 
 void Camera::toCamera(RenderList &rendList) const
@@ -148,6 +102,10 @@ void Camera::toCamera(RenderList &rendList) const
 
         t++;
     }
+}
+
+void Camera::toCamera(math::vec3 &v) const
+{
 }
 
 void Camera::toScreen(math::vec3 &v) const

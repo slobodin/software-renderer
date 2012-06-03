@@ -5,8 +5,8 @@
  *      Author: flamingo
  */
 
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef NODE_H
+#define NODE_H
 
 #include "comm_pch.h"
 
@@ -19,7 +19,7 @@
   * Contains information about world transformation and
   * appropriate setters\getters.
   */
-class Model
+class Node
 {
 protected:
     //! Local to world transformation.
@@ -28,9 +28,9 @@ protected:
 
 public:
     //! Default ctor.
-    Model() { }
+    Node() { }
     //! Dtor.
-    virtual ~Model() { }
+    virtual ~Node() { }
 
     //! Sets position in world space.
     void setPosition(const math::vec3 &pos);
@@ -54,14 +54,14 @@ public:
     math::M44 getTransformation() const;
 };
 
-inline void Model::setPosition(const math::vec3 &pos)
+inline void Node::setPosition(const math::vec3 &pos)
 {
     m_worldTransformation.x[3][0] = pos.x;
     m_worldTransformation.x[3][1] = pos.y;
     m_worldTransformation.x[3][2] = pos.z;
 }
 
-inline void Model::setRotation(const math::vec3 &angles)
+inline void Node::setRotation(const math::vec3 &angles)
 {
     math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(angles.y,
                                                             angles.x,
@@ -72,32 +72,32 @@ inline void Model::setRotation(const math::vec3 &angles)
     m_worldTransformation *= affTr;
 }
 
-inline void Model::setRotation(double yaw, double pitch, double roll)
+inline void Node::setRotation(double yaw, double pitch, double roll)
 {
     setRotation(math::vec3(pitch, yaw, roll));
 }
 
-inline void Model::setScale(const math::vec3 &coeff)
+inline void Node::setScale(const math::vec3 &coeff)
 {
     m_worldTransformation = math::M44(math::M33::getScaleMatrix(coeff) /* setting scale matrix */,
                                       math::vec3() /* no translation */);
 }
 
-inline void Model::setTransformation(const math::M44 &tr)
+inline void Node::setTransformation(const math::M44 &tr)
 {
     m_worldTransformation = tr;
 }
 
-inline math::vec3 Model::getPosition() const
+inline math::vec3 Node::getPosition() const
 {
     return math::vec3(m_worldTransformation.x[3][0],
                       m_worldTransformation.x[3][1],
                       m_worldTransformation.x[3][2]);
 }
 
-inline math::M44 Model::getTransformation() const
+inline math::M44 Node::getTransformation() const
 {
     return m_worldTransformation;
 }
 
-#endif // MODEL_H
+#endif // NODE_H

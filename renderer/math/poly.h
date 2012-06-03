@@ -19,30 +19,22 @@ namespace math
 class Triangle
 {
 public:
-    enum WindingOrder
-    {
-        WO_CW,
-        WO_CCW
-    };
-
     enum SideType
     {
-        ST_1_SIDED,
-        ST_2_SIDED
+        ONE_SIDE,
+        TWO_SIDE
     };
 
 private:
     vertex m_verts[3];
     vec3 m_normal;
 
-    // FIXME: material id!
-    rend::Material m_material;
-    WindingOrder m_windingOrder;
+    sptr(rend::Material) m_material;
     SideType m_sideType;
 
 public:
-    Triangle(WindingOrder wo = WO_CW, SideType st = ST_2_SIDED);
-    Triangle(const vertex *arr, WindingOrder wo = WO_CW, SideType st = ST_2_SIDED);
+    Triangle(SideType st = TWO_SIDE);
+    Triangle(const vertex *arr, SideType st = TWO_SIDE);
 
     const vertex &v(const size_t ind) const;
     vertex &v(const size_t ind);
@@ -51,11 +43,8 @@ public:
     vector<vec3> normals() const;
     vector<vec2> uvs() const;
 
-    const rend::Material &material() const { return m_material; }
-    rend::Material &material() { return m_material; }
-
-    void setWindingOrder(WindingOrder wo) { m_windingOrder = wo; }
-    WindingOrder getWindingOrder() const { return m_windingOrder; }
+    sptr(rend::Material) getMaterial() const { return m_material; }
+    void setMaterial(sptr(rend::Material) material) { m_material = material; }
 
     void setSideType(SideType st) { m_sideType = st; }
     SideType getSideType() const { return m_sideType; }

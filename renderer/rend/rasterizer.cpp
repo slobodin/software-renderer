@@ -438,9 +438,10 @@ bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
     return true;
 }
 
-void Rasterizer::drawLine(const math::vec3 &p1, const math::vec3 &p2, const Color3 &color)
+void Rasterizer::drawLine(const math::vertex &p1, const math::vertex &p2)
 {
-    math::vec3 pc1(p1), pc2(p2);
+    math::vec3 pc1(p1.p), pc2(p2.p);
+    Color3 color = p1.color;
 
     int cols = m_fb.width();
 
@@ -515,13 +516,13 @@ void Rasterizer::drawLine(const math::vec3 &p1, const math::vec3 &p2, const Colo
     }
 }
 
-void Rasterizer::drawFillTriangle(const math::vec3 &p1,
-                                  const math::vec3 &p2,
-                                  const math::vec3 &p3,
-                                  const Color3 &color)
+void Rasterizer::drawFillTriangle(const math::vertex &p1,
+                                  const math::vertex &p2,
+                                  const math::vertex &p3)
 {
-    int x1 = p1.x, x2 = p2.x, x3 = p3.x;
-    int y1 = p1.y, y2 = p2.y, y3 = p3.y;
+    int x1 = p1.p.x, x2 = p2.p.x, x3 = p3.p.x;
+    int y1 = p1.p.y, y2 = p2.p.y, y3 = p3.p.y;
+    const Color3 &color = p1.color;
 
     if ((x1 == x2 && x2 == x3) || (y1 == y2 && y2 == y3))
         return;
@@ -567,21 +568,21 @@ void Rasterizer::drawFillTriangle(const math::vec3 &p1,
     }
 }
 
-void Rasterizer::drawFillTriangle(const math::Triangle &tr, const Color3 &color)
+void Rasterizer::drawFillTriangle(const math::Triangle &tr)
 {
-    drawFillTriangle(tr.v(0).p, tr.v(1).p, tr.v(2).p, color);
+    drawFillTriangle(tr.v(0), tr.v(1), tr.v(2));
 }
 
-void Rasterizer::drawTriangle(const math::vec3 &p1, const math::vec3 &p2, const math::vec3 &p3, const Color3 &color)
+void Rasterizer::drawTriangle(const math::vertex &p1, const math::vertex &p2, const math::vertex &p3)
 {
-    drawLine(p1, p2, color);
-    drawLine(p2, p3, color);
-    drawLine(p3, p1, color);
+    drawLine(p1, p2);
+    drawLine(p2, p3);
+    drawLine(p3, p1);
 }
 
-void Rasterizer::drawTriangle(const math::Triangle &tr, const Color3 &color)
+void Rasterizer::drawTriangle(const math::Triangle &tr)
 {
-    drawTriangle(tr.v(0).p, tr.v(1).p, tr.v(2).p, color);
+    drawTriangle(tr.v(0), tr.v(1), tr.v(2));
 }
 
 void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex &v2, const math::vertex &v3)
@@ -1324,18 +1325,24 @@ Rasterizer::Rasterizer(const int width, const int height)
 
 void Rasterizer::rasterize(const RenderList &rendlist)
 {
-    /*const list<math::Triangle> &trias = rendlist.triangles();
+    const list<math::Triangle> &trias = rendlist.triangles();
 
-    reverse_foreach(const math::Triangle &t, trias)
+    BOOST_REVERSE_FOREACH(const math::Triangle &t, trias)
     {
-        switch(t.material().shadeMode())
+        if (!t.getMaterial())
+        {
+            *syslog << "Material has not been setted for this triangle" << logdebug;
+            continue;
+        }
+
+        switch(t.getMaterial()->shadeMode)
         {
         case Material::SM_WIRE:
-            drawTriangle(t, t.material().color());
+            drawTriangle(t);
             break;
 
         case Material::SM_FLAT:
-            drawFillTriangle(t, t.material().color());
+            drawFillTriangle(t);
             break;
 
         case Material::SM_GOURAUD:
@@ -1343,13 +1350,13 @@ void Rasterizer::rasterize(const RenderList &rendlist)
             break;
 
         default:
-            *syslog << "Unsupported shading mode." << logwarn;
+            *syslog << "Unsupported shading mode." << logdebug;
             break;
         }
-    }*/
+    }
 }
 
-void Rasterizer::beginFrame()
+void Rasterizer::beginFrame(sptr(RenderDevice) device)
 {
     m_fb.clear();
 }

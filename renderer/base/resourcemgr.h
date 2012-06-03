@@ -15,7 +15,6 @@ namespace base
 
 class Resource;
 class ResourceDecoder;
-class OsPath;
 
 DECLARE_EXCEPTION(UnsupportedResource)
 
@@ -25,7 +24,9 @@ DECLARE_EXCEPTION(UnsupportedResource)
   */
 class ResourceMgr : boost::noncopyable
 {
-    map<string, sptr(Resource) > m_resources;
+    vector<path> m_loadablePaths;
+
+    map<string, sptr(Resource) >        m_resources;
     map<string, sptr(ResourceDecoder) > m_decoders;
 
 public:
@@ -36,13 +37,21 @@ public:
     
     //! Gets the resource.
     /*!
-      * Just returns the pointer to resource, if resource is loaded.
+      * Just returns the pointer to the resource, if resource is loaded.
       * Otherwise loads resource from the filesystem.
       * \return Pointer to the resource.
       * \param path Path to the asset.
       */
     sptr(Resource) getResource(const string &path);
-    sptr(Resource) getResource(const OsPath &path);
+
+    // getMesh
+    // getTexture
+    // etc
+
+    void loadResource(const string &name);
+    void unloadResource(const string &name);
+
+    void addPath(const string &name);
 };
 
 }

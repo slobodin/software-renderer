@@ -12,24 +12,25 @@
 namespace rend
 {
 
-void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
+void RenderList::createTriangles(const VertexBuffer &vertexBuffer, list<math::Triangle> &output)
 {
-    /*math::Triangle triangle;
+    math::Triangle triangle;
     // all mesh vertices
-    const vector<math::vertex> &vertices = mesh.vertices();
+    auto vertices = vertexBuffer.getVertices();
     // mesh indices
-    const vector<size_t> &indices = mesh.indices();
+    auto indices = vertexBuffer.getIndices();
     // FIXME: not here!
     // mesh world transformation
-    const math::M44 &tr = mesh.getTransformation();
+//    const math::M44 &tr = mesh.getTransformation();
+    math::M44 tr;
 
-    switch(mesh.type())
+    switch(vertexBuffer.getType())
     {
-    case Mesh::MT_MESH_INDEXEDTRIANGLELIST:
+    case VertexBuffer::INDEXEDTRIANGLELIST:
 
-        for(size_t ind = 0, t = 0; ind < mesh.numIndices(); ind += 3, t++)
+        for(size_t ind = 0, t = 0; ind < indices.size(); ind += 3, t++)
         {
-            if ((ind + 2) >= mesh.numIndices())
+            if ((ind + 2) >= indices.size())
                 break;
 
             // form the triangle
@@ -42,14 +43,14 @@ void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
             triangle.v(1).p = triangle.v(1).p * tr;
             triangle.v(2).p = triangle.v(2).p * tr;
 
+            triangle.setMaterial(vertexBuffer.getMaterial());
+
             // set material
-            if (!mesh.materials().empty())
-                triangle.material() = mesh.materials()[t];
-            else
-                triangle.material() = Material(Color3(255, 0, 0), Material::SM_WIRE);
+//            if (!vertexBuffer.getMaterial()->
+//                triangle.material() = mesh.materials()[t];
+//            else
 
             // compute normals
-            triangle.setWindingOrder(mesh.getWindingOrder());
             triangle.computeNormal();
 
             // save it
@@ -57,36 +58,39 @@ void RenderList::createTriangles(const Mesh &mesh, list<math::Triangle> &output)
         }
         break;
 
-    case Mesh::MT_MESH_TRIANGLELIST:
+    case VertexBuffer::TRIANGLELIST:
 
-        for(size_t v = 0; v < mesh.numVertices(); v += 3)
+        for(size_t v = 0; v < vertices.size(); v += 3)
         {
-            if ((v + 2) >= mesh.numVertices())
+            if ((v + 2) >= vertices.size())
                 break;
 
             triangle.v(0) = vertices[v];
             triangle.v(1) = vertices[v + 1];
             triangle.v(2) = vertices[v + 2];
 
-            triangle.material() = Material(Color3(255, 0, 0), Material::SM_FLAT);
+            //triangle.material() = Material();//Material(Color3(255, 0, 0), Material::SM_FLAT);
 
-            triangle.setWindingOrder(mesh.getWindingOrder());
+//            triangle.setWindingOrder(mesh.getWindingOrder());
             triangle.computeNormal();
 
             output.push_back(triangle);
         }
         break;
 
-    case Mesh::MT_MESH_UNDEFINED:
+    case VertexBuffer::UNDEFINED:
     default:
-        *syslog << "Can't draw this mesh" << logwarn;
+        *syslog << "Can't draw this mesh" << logerr;
         break;
-    }*/
+    }
 }
 
 void RenderList::append(const Mesh &mesh)
 {
-    RenderList::createTriangles(mesh, m_triangles);
+    const list<VertexBuffer> &subMeshes = mesh.getSubmeshes();
+
+    foreach (const VertexBuffer &vb, subMeshes)
+        RenderList::createTriangles(vb, m_triangles);
 }
 
 void RenderList::zsort()
@@ -106,7 +110,7 @@ void RenderList::removeBackfaces(const sptr(Camera) cam)
             continue;
         }
 
-        if (t->getSideType() == math::Triangle::ST_2_SIDED)
+        if (t->getSideType() == math::Triangle::TWO_SIDE)
         {
             t++;
             continue;

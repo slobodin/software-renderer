@@ -20,7 +20,7 @@ namespace rend
 
 DECLARE_EXCEPTION(LightException)
 
-class Light : public Model
+class Light : public Node
 {
 public:
     enum LightType

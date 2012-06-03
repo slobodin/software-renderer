@@ -54,7 +54,7 @@ public:
     Plane(const vec3 &p0, const vec3 &p1, const vec3 &p2);
 
     const vec3 &normal() const { return m_normal; }
-    double distance() const { return m_d; }
+    double      distance() const { return m_d; }
 
     //! Check point position relative to the plane.
     /*!

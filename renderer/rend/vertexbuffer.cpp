@@ -13,7 +13,8 @@
 namespace rend
 {
 
-VertexBuffer::VertexBuffer()
+VertexBuffer::VertexBuffer(VertexBufferType type)
+    : m_type(type)
 {
 }
 

@@ -48,6 +48,7 @@ public:
 
     int width() const { return m_width; }
     int height() const { return m_height; }
+
     int xorig() const { return m_xOrigin; }
     int yorig() const { return m_yOrigin; }
 

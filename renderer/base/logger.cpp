@@ -46,21 +46,21 @@ Logger &Logger::operator<< (const string &text)
     return *this;
 }
 
-Logger &Logger::operator<< (const int num)
+Logger &Logger::operator<< (int num)
 {
     m_buffer << num << " ";
 
     return *this;
 }
 
-Logger &Logger::operator<< (const unsigned num)
+Logger &Logger::operator<< (unsigned num)
 {
     m_buffer << num << " ";
 
     return *this;
 }
 
-Logger &Logger::operator<< (const double num)
+Logger &Logger::operator<< (double num)
 {
     m_buffer << num << " ";
 

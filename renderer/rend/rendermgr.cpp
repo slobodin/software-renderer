@@ -33,7 +33,7 @@ RenderMgr::~RenderMgr()
 void RenderMgr::update(sptr(RenderDevice) rendDevice)
 {
     // 1. Clear buffer.
-    m_rasterizer->beginFrame();
+    m_rasterizer->beginFrame(rendDevice);
 
     RenderList renderList;
 

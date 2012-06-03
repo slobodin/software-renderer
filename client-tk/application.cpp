@@ -26,7 +26,7 @@ try
 
     return 0;
 }
-catch(common::Exception &e)
+catch (common::Exception &e)
 {
     *syslog << "Renderer exception:" << e.what() << logerr;
     return 1;
@@ -36,7 +36,7 @@ catch (std::exception &e)
     *syslog << "stl exception:" << e.what() << logerr;
     return 1;
 }
-catch(...)
+catch (...)
 {
     *syslog << "Unknown exception occurred" << logerr;
     return 1;

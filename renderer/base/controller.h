@@ -26,14 +26,14 @@ class DLL_PUBLIC Controller : boost::noncopyable
     friend class Config;
 
 protected:
-    sptr(rend::RenderMgr) m_rendmgr;
-    sptr(rend::RenderDevice) m_rendDevice;
-    sptr(rend::Camera) m_mainCam;
-    sptr(ResourceMgr) m_resourceMgr;
+    sptr(rend::RenderMgr)       m_rendmgr;
+    sptr(rend::RenderDevice)    m_rendDevice;
+    sptr(rend::Camera)          m_mainCam;
+    sptr(ResourceMgr)           m_resourceMgr;
 
     void resize(int w, int h);
 
-    Controller(char *argv[], const string &conf);
+    Controller(char *argv[]);
     virtual ~Controller();
 
 public:
@@ -48,9 +48,7 @@ public:
 
     void update();
 
-    void setDevice(sptr(rend::RenderDevice) rendDevice) { m_rendDevice = rendDevice; }
-    int deviceWidth() const { return m_mainCam->width(); }
-    int deviceHeight() const { return m_mainCam->height(); }
+    sptr(rend::RenderMgr) getRenderManager() { return m_rendmgr; }
 };
 
 }

@@ -32,8 +32,7 @@ class DLL_PUBLIC LoggerManipulator
 public:
     LoggerManipulator(const MessageType type)
         : m_type(type)
-    {
-    }
+    { }
 };
 
 class DLL_PUBLIC Logger : boost::noncopyable
@@ -48,9 +47,9 @@ public:
 
     Logger &operator<< (const char *text);
     Logger &operator<< (const string &text);
-    Logger &operator<< (const int num);
-    Logger &operator<< (const unsigned num);
-    Logger &operator<< (const double num);
+    Logger &operator<< (int num);
+    Logger &operator<< (unsigned num);
+    Logger &operator<< (double num);
 
     Logger &operator<< (const LoggerManipulator &man);
 };

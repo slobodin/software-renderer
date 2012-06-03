@@ -14,7 +14,6 @@
 #include "rasterizer.h"
 #include "mesh.h"
 #include "light.h"
-#include "renderdevice.h"
 
 namespace rend
 {
@@ -38,9 +37,16 @@ public:
 
     // TODO: make uniform method `addSceneObject(Node *n);'
     void addMesh(sptr(rend::Mesh) mesh);
-    sptr(AmbientLight) addAmbientLight(Color3 intensity);
-    sptr(DirectionalLight) addDirectionalLight(Color3 intensity, math::vec3 direction);
-    sptr(PointLight) addPointLight(Color3 intensity, math::vec3 position /* Coeffs */);
+    void addViewport();
+
+    // void setAmbientLight(color);
+    // light* addLight....
+
+
+
+    sptr(AmbientLight)      addAmbientLight(Color3 intensity);
+    sptr(DirectionalLight)  addDirectionalLight(Color3 intensity, math::vec3 direction);
+    sptr(PointLight)        addPointLight(Color3 intensity, math::vec3 position /* Coeffs */);
 
     void resize(int w, int h);
 };

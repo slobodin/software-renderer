@@ -191,7 +191,17 @@ public:
     //! Component by-value-getter.
     uint32_t operator[] (ColorComp ind) const
     {
-        return (*this)[ind];
+        switch (ind)
+        {
+        case RED:
+            return m_r;
+        case GREEN:
+            return m_g;
+        case BLUE:
+            return m_b;
+        default:
+            throw common::OutOfRangeException("Invalid color component");
+        }
     }
 
     //! Color scalar modulation.

@@ -17,7 +17,6 @@ struct ModelData
 {
     string modelpath;
     math::vec3 pos;
-    math::Triangle::WindingOrder wo;
 };
 
 static void operator>> (const YAML::Node &node, math::vec3 &v)
@@ -31,18 +30,6 @@ static void operator>> (const YAML::Node &node, ModelData &data)
 {
     node["model"] >> data.modelpath;
     node["position"] >> data.pos;
-    string wo;
-    node["order"] >> wo;
-
-    if (wo == "CW")
-        data.wo = math::Triangle::WO_CW;
-    else if (wo == "CCW")
-        data.wo = math::Triangle::WO_CCW;
-    else
-    {
-        *syslog << "Bad winding order in model" << data.modelpath << ". Setting to defaults" << logwarn;
-        data.wo = math::Triangle::WO_CW;
-    }
 }
 
 Config::Config()
@@ -53,7 +40,7 @@ Config::~Config()
 {
 }
 
-void Config::configure(const OsPath &path, Controller *controller)
+void Config::configure(Controller *controller)
 {
     std::fstream inconf(path.filePath());
     if (!inconf)
@@ -126,6 +113,10 @@ void Config::configure(const OsPath &path, Controller *controller)
         //renderItem->setWindingOrder(modelData[i].wo);
         controller->m_rendmgr->addMesh(renderItem);
     }
+}
+
+void Config::configure(ResourceMgr *rmgr)
+{
 }
 
 
