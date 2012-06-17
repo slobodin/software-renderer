@@ -1,7 +1,6 @@
-QT          += core
 TEMPLATE    = lib
 LANGUAGE    = C++
-CONFIG      += console precompile_header
+CONFIG      += console precompile_header staticlib
 
 PRECOMPILED_HEADER = comm/comm_pch.h
 
@@ -37,7 +36,6 @@ HEADERS += \
     rend/mesh.h \
     math/plane.h \
     rend/rendermgr.h \
-    dll.h \
     rend/rasterizer.h \
     rend/framebuffer.h \
     rend/color.h \
@@ -53,13 +51,12 @@ HEADERS += \
     math/math_utils.h \
     math/m44.h \
     rend/vertexbuffer.h \
-    platform/baseappqt.h \
-    platform/baseapptk.h \
     platform/baseapp.h \
     rend/viewport.h \
     rend/node.h \
     rend/sceneobject.h \
-    renderer.h
+    renderer.h \
+    platform/events.h
 
 SOURCES += \
     comm/string_utils.cpp \
@@ -89,10 +86,9 @@ SOURCES += \
     math/math_utils.cpp \
     math/m44.cpp \
     rend/vertexbuffer.cpp \
-    platform/baseappqt.cpp \
-    platform/baseapptk.cpp \
     rend/viewport.cpp \
-    rend/sceneobject.cpp
+    rend/sceneobject.cpp \
+    platform/baseapp.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \
@@ -101,5 +97,6 @@ INCLUDEPATH += ./base \
                 ./third-party/include/ \
                 $(BOOST_ROOT)
 
-win32:LIBS += d:\srend\software-renderer\renderer\third-party\lib\libyaml-cpp.a
-win32:LIBS += -L$(BOOST_ROOT)\stage\lib\ -lboost_filesystem-mgw46-mt-1_49 -lboost_system-mgw46-mt-1_49
+win32:LIBS += d:/srend/software-renderer/renderer/third-party/lib/libyaml-cpp.a
+win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_filesystem-mgw46-mt-1_49.a
+win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_system-mgw46-mt-1_49.a

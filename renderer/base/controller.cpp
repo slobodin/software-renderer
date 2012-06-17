@@ -9,24 +9,24 @@
 
 #include "vec3.h"
 #include "config.h"
+#include "rendermgr.h"
+#include "resourcemgr.h"
+#include "viewport.h"
+#include "camera.h"
 
 namespace base
 {
 
 void Controller::resize(int w, int h)
 {
-    m_rendmgr->resize(w, h);
+    if (m_rendmgr)
+        m_rendmgr->resize(w, h);
 }
 
-Controller::Controller(char *argv[])
+Controller::Controller(const char *argv[])
     : m_resourceMgr(new ResourceMgr)
 {
     m_mainCam = make_shared<rend::Camera>(math::vec3());
-    m_viewport = make_shared<rend::Viewport>(640, 480, m_mainCam);
-    m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam, m_viewport);
-
-    Config config;
-    config.configure(this);
 }
 
 Controller::~Controller()
@@ -35,7 +35,40 @@ Controller::~Controller()
 
 void Controller::update()
 {
+    if (!m_rendmgr || !m_mainCam || !m_viewport)
+    {
+        *syslog << "Controller uninitialized" << logerr;
+        return;
+    }
+
     m_rendmgr->update();
+}
+
+void Controller::setViewport(sptr(rend::Viewport) viewport)
+{
+    if (m_viewport)
+    {
+        *syslog << "Viewport already setted" << logwarn;
+        return;
+    }
+
+    m_viewport = viewport;
+    m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam, m_viewport);
+}
+
+sptr(rend::Camera) Controller::getCamera()
+{
+    return m_mainCam;
+}
+
+sptr(ResourceMgr) Controller::getResmgr()
+{
+    return m_resourceMgr;
+}
+
+sptr(rend::RenderMgr) Controller::getRendmgr()
+{
+    return m_rendmgr;
 }
 
 }

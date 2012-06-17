@@ -8,6 +8,11 @@
 #include "rendermgr.h"
 
 #include "vec3.h"
+#include "viewport.h"
+#include "camera.h"
+#include "rasterizer.h"
+#include "mesh.h"
+#include "light.h"
 
 namespace rend
 {

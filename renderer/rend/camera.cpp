@@ -8,6 +8,9 @@
 #include "camera.h"
 
 #include "m33.h"
+#include "renderlist.h"
+#include "viewport.h"
+#include "mesh.h"
 
 namespace rend
 {

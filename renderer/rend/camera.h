@@ -12,11 +12,13 @@
 
 #include "vec3.h"
 #include "m44.h"
-#include "renderlist.h"
-#include "viewport.h"
 
 namespace rend
 {
+
+class Viewport;
+class RenderList;
+class Mesh;
 
 //! Scene camera.
 /*!
@@ -24,7 +26,7 @@ namespace rend
   */
 class Camera
 {
-    friend void Viewport::resize(int w, int h);  // when resizing the viewport, we need to update some cam params
+    friend class Viewport; // when resizing the viewport, we need to update some cam params
 
     //! Position of the camera in the world.
     math::vec3 m_position;

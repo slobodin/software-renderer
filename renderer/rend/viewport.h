@@ -42,7 +42,7 @@ public:
 
     void resize(int w, int h);
 
-    virtual void flush(unsigned char *pixels) { /* nothing */ }
+    virtual void flush(unsigned char *pixels) = 0;
 };
 
 }

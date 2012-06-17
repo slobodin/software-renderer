@@ -72,11 +72,10 @@ namespace fs = boost::filesystem3;
 using fs::path;
 
 #ifdef RENDERER_LIBRARY
-#define BUILDING_DLL
 #include "logger.h"
-#include "dll.h"
+#endif
+
 #include "comm_macro.h"
 #include "exception.h"
-#endif
 
 #endif // COMM_PCH_H

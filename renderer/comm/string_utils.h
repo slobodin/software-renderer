@@ -34,6 +34,9 @@ public:
 extern IsSpace isSpacePredicat;
 extern IsNotSpace isNotSpacePredicat;
 
+string upper(const string &str);
+string lower(const string &str);
+
 }
 
 #endif // STRING_UTILS_H

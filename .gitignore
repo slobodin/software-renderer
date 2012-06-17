@@ -3,6 +3,7 @@ client-release/*.*
 renderer-debug/*.*
 renderer-release/*.*
 client/*.pro.user
+client-win/*.pro.user
 renderer/*.pro.user
 client-tk/*.pro.user
 client-debug/*

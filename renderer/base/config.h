@@ -16,12 +16,12 @@ namespace base
 
 class Config
 {
-    friend class Controller;
+public:
     Config();
     ~Config();
 
-    void configure(Controller *controller);
-    void configure(ResourceMgr *rmgr);
+    void configure(sptr(Controller) controller);
+    void configure(sptr(ResourceMgr) rmgr);
 };
 
 }

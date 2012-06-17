@@ -40,7 +40,7 @@ Config::~Config()
 {
 }
 
-void Config::configure(Controller *controller)
+void Config::configure(sptr(Controller) controller)
 {
     /*std::fstream inconf(path.filePath());
     if (!inconf)
@@ -115,7 +115,7 @@ void Config::configure(Controller *controller)
     }*/
 }
 
-void Config::configure(ResourceMgr *rmgr)
+void Config::configure(sptr(ResourceMgr) rmgr)
 {
     // add standart paths to the resources
     // load all resources from these path

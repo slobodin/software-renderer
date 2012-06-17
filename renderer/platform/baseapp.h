@@ -9,35 +9,38 @@
 #define BASEAPP_H
 
 #include "comm_pch.h"
+#include "events.h"
 
 namespace base
 {
 class Controller;
 }
 
+namespace platform
+{
+
 class BaseApp
 {
+protected:
     sptr(base::Controller) m_clientController;
 
 public:
-    BaseApp() { }
-    virtual ~BaseApp() { }
-
-    virtual void setupRenderingContext(const string &windowTitle) = 0;
+    BaseApp();
+    virtual ~BaseApp();
 
     virtual void onFrameStart() = 0;
     virtual void onFrameEnd() = 0;
 
-    virtual void onMouseMotion(int dx, int dy) = 0;
-    virtual void onMouseLeftPressed(int x, int y) = 0;
-    virtual void onMouseLeftReleased(int x, int y) = 0;
-    virtual void onMouseRightPressed(int x, int y) = 0;
-    virtual void onMouseRightReleased(int x, int y) = 0;
+    virtual void onMouseEvent(const MouseEvent &ev) = 0;
 
     virtual void onKeyPressed(int keycode) = 0;
     virtual void onKeyReleased(int keycode) = 0;
 
-    virtual void run() = 0;
+    virtual void onResize(int w, int h) = 0;
+
+    virtual int run();
 };
+
+}
 
 #endif // BASEAPP_H

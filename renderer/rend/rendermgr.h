@@ -10,13 +10,20 @@
 
 #include "comm_pch.h"
 
-#include "camera.h"
-#include "rasterizer.h"
-#include "mesh.h"
-#include "light.h"
+#include "color.h"
+#include "vec3.h"
 
 namespace rend
 {
+
+class Camera;
+class Rasterizer;
+class Mesh;
+class Light;
+class Viewport;
+class AmbientLight;
+class DirectionalLight;
+class PointLight;
 
 class RenderMgr : boost::noncopyable
 {
