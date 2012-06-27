@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    client \
-    renderer
+    renderer \
+    client
