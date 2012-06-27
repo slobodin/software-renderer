@@ -1,18 +1,16 @@
-/*
- * main.cpp
- *
- *      Author: flamingo
- *      E-mail: epiforce57@gmail.com
- */
+#include "windowsapplication.h"
 
-#include <QtGui/QApplication>
-#include "mainwindow.h"
-
-int main(int argc, char *argv[])
+int main(int argc, const char **argv) try
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    
-    return a.exec();
+    WindowsApplication app(argv);
+
+    return app.run();
+}
+catch (common::Exception &e)
+{
+    std::cerr << "Program terminated with exception " << e.what() << "\n";
+}
+catch (...)
+{
+    std::cerr << "Something wrong. Aborting.\n";
 }

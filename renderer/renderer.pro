@@ -14,80 +14,80 @@ DEFINES += RENDERER_LIBRARY
 QMAKE_CXXFLAGS += -std=gnu++0x
 
 HEADERS += \
-    math/vec3.h \
-    math/vec2.h \
-    math/common_math.h \
-    comm/string_utils.h \
-    comm/comm_macro.h \
-    comm/comm_pch.h \
-    base/controller.h \
-    base/decoderplg.h \
-    base/logger.h \
-    base/osfile.h \
-    base/resource.h \
-    base/resourcedecoder.h \
     base/resourcemgr.h \
-    comm/exception.h \
-    comm/singleton.h \
-    math/m22.h \
-    math/m33.h \
-    rend/boundingsphere.h \
-    rend/camera.h \
-    rend/mesh.h \
-    math/plane.h \
-    rend/rendermgr.h \
-    rend/rasterizer.h \
-    rend/framebuffer.h \
-    rend/color.h \
-    math/poly.h \
-    base/config.h \
-    rend/material.h \
-    rend/light.h \
-    rend/renderlist.h \
+    base/resourcedecoder.h \
+    base/resource.h \
+    base/osfile.h \
+    base/logger.h \
+    base/decoderplg.h \
     base/decoderbspq3.h \
     base/decoderasc.h \
+    base/controller.h \
+    base/config.h \
+    comm/string_utils.h \
+    comm/singleton.h \
+    comm/exception.h \
+    comm/comm_pch.h \
+    comm/comm_macro.h \
     math/vertex.h \
-    rend/texture.h \
+    math/vec3.h \
+    math/vec2.h \
+    math/poly.h \
+    math/plane.h \
     math/math_utils.h \
     math/m44.h \
-    rend/vertexbuffer.h \
-    platform/baseapp.h \
+    math/m33.h \
+    math/m22.h \
+    math/common_math.h \
     rend/viewport.h \
-    rend/node.h \
+    rend/vertexbuffer.h \
+    rend/texture.h \
     rend/sceneobject.h \
-    renderer.h \
-    platform/events.h
+    rend/rendermgr.h \
+    rend/renderlist.h \
+    rend/rasterizer.h \
+    rend/node.h \
+    rend/mesh.h \
+    rend/material.h \
+    rend/light.h \
+    rend/framebuffer.h \
+    rend/color.h \
+    rend/camera.h \
+    rend/boundingsphere.h \
+    platform/events.h \
+    platform/baseapp.h \
+    renderer.h
 
 SOURCES += \
-    comm/string_utils.cpp \
-    base/controller.cpp \
-    base/decoderplg.cpp \
-    base/logger.cpp \
-    base/osfile.cpp \
     base/resourcemgr.cpp \
-    math/m33.cpp \
-    math/plane.cpp \
-    rend/boundingsphere.cpp \
-    rend/camera.cpp \
-    rend/mesh.cpp \
-    rend/rendermgr.cpp \
-    rend/rasterizer.cpp \
-    rend/framebuffer.cpp \
-    rend/color.cpp \
-    math/poly.cpp \
-    base/config.cpp \
-    rend/material.cpp \
-    rend/light.cpp \
-    rend/renderlist.cpp \
+    base/osfile.cpp \
+    base/logger.cpp \
+    base/decoderplg.cpp \
     base/decoderbspq3.cpp \
     base/decoderasc.cpp \
+    base/controller.cpp \
+    base/config.cpp \
+    comm/string_utils.cpp \
     math/vertex.cpp \
-    rend/texture.cpp \
+    math/poly.cpp \
+    math/plane.cpp \
     math/math_utils.cpp \
     math/m44.cpp \
-    rend/vertexbuffer.cpp \
+    math/m33.cpp \
     rend/viewport.cpp \
+    rend/vertexbuffer.cpp \
+    rend/texture.cpp \
     rend/sceneobject.cpp \
+    rend/rendermgr.cpp \
+    rend/renderlist.cpp \
+    rend/rasterizer.cpp \
+    rend/mesh.cpp \
+    rend/material.cpp \
+    rend/light.cpp \
+    rend/framebuffer.cpp \
+    rend/color.cpp \
+    rend/camera.cpp \
+    rend/boundingsphere.cpp \
     platform/baseapp.cpp
 
 INCLUDEPATH += ./base \

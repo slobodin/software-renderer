@@ -1,30 +1,31 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2012-05-09T15:46:59
-#
-#-------------------------------------------------
-
-QT       += core gui
-
-TARGET = client
 TEMPLATE = app
+CONFIG += console
+CONFIG -= qt
 
-QMAKE_CXXFLAGS += -std=c++0x
-DEFINES += CLIENT_MAIN
-
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    clientcontroller.cpp
-
-HEADERS  += mainwindow.h \
-    clientcontroller.h
-
-FORMS    += mainwindow.ui
+QMAKE_CXXFLAGS += -std=gnu++0x
 
 INCLUDEPATH += ../renderer/base \
                ../renderer/comm \
                ../renderer/math \
                ../renderer/rend \
-               ../renderer/
+               ../renderer/ \
+               $(BOOST_ROOT)
 
-LIBS += -L../renderer-debug/ -lrenderer
+HEADERS += \
+    windowsviewport.h \
+    windowsapplication.h
+
+SOURCES += \
+    windowsviewport.cpp \
+    windowsapplication.cpp \
+    main.cpp
+
+win32:LIBS += d:/srend/software-renderer/bin/renderer/debug/librenderer.a
+win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_filesystem-mgw46-1_49.a
+win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_system-mgw46-1_49.a
+win32:LIBS += d:/srend/software-renderer/renderer/third-party/lib/libyaml-cpp.a
+
+LIBS += -lgdi32
+LIBS += -lkernel32
+LIBS += -luser32
+LIBS += -lcomctl32
