@@ -1,5 +1,3 @@
-client/*.pro.user
-renderer/*.pro.user
 resources/*.bsp
 resources/*.*~
 *.*~
