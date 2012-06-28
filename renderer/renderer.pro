@@ -97,6 +97,6 @@ INCLUDEPATH += ./base \
                 ./third-party/include/ \
                 $(BOOST_ROOT)
 
-win32:LIBS += ./third-party/lib/libyaml-cpp.a
+LIBS += ./third-party/lib/libyaml-cpp.a
 win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_filesystem-mgw46-mt-1_49.a
 win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_system-mgw46-mt-1_49.a

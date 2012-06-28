@@ -2,4 +2,11 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     renderer \
-    client-win
+
+win32 {
+SUBDIRS += client-win
+}
+
+unix {
+SUBDIRS += client-unix
+}
