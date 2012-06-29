@@ -8,18 +8,17 @@
 #include "xviewport.h"
 #include <cstdlib>
 
-static const int DEFAULT_EVENT_MASK = ExposureMask |
-        ButtonPressMask |
-        ButtonReleaseMask |
-        EnterWindowMask |
-        LeaveWindowMask |
-        PointerMotionMask |
-        FocusChangeMask |
-        KeyPressMask |
-        KeyReleaseMask |
-        SubstructureNotifyMask |
-        StructureNotifyMask |
-        SubstructureRedirectMask;
+static const int DEFAULT_EVENT_MASK =
+        ExposureMask |          // redraw window
+        ButtonPressMask |       // button was pressed
+        ButtonReleaseMask |     // button was released
+        EnterWindowMask |       // entering in the window
+        LeaveWindowMask |       // leaving window
+        PointerMotionMask |     // trace cursor position
+        ButtonMotionMask |      // trace cursor position when a button pressed
+        ResizeRedirectMask |    // resize event
+        KeyPressMask |          // key pressed
+        KeyReleaseMask;         // key released
 
 XViewport::XViewport(int width, int height, boost::shared_ptr<rend::Camera> camera)
     : Viewport(width, height, camera),
@@ -30,7 +29,7 @@ XViewport::XViewport(int width, int height, boost::shared_ptr<rend::Camera> came
         throw XServerException("Can't connect to X Server");
 
     m_window = XCreateSimpleWindow(d, RootWindow(d, 0), 0, 0, width, height, 0,
-                                   WhitePixel(d, 0), WhitePixel(d, 0));
+                                   BlackPixel(d, 0), BlackPixel(d, 0));
 
     if (!m_window)
         throw XServerException("Can't create X window");

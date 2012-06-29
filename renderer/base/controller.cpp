@@ -41,6 +41,7 @@ void Controller::update()
         return;
     }
 
+    // m_inputManager->capture() ???
     m_rendmgr->update();
 }
 

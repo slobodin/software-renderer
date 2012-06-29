@@ -10,6 +10,8 @@ DEFINES += USING_PCH
 
 Debug:DEFINES += DEBUG
 DEFINES += RENDERER_LIBRARY
+win32:DEFINES += WINDOWS_VERSION
+unix:DEFINES += LINUX_VERSION
 
 QMAKE_CXXFLAGS += -std=gnu++0x
 
@@ -88,7 +90,8 @@ SOURCES += \
     rend/color.cpp \
     rend/camera.cpp \
     rend/boundingsphere.cpp \
-    platform/baseapp.cpp
+    platform/baseapp.cpp \
+    platform/events.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

@@ -78,7 +78,7 @@ void WindowsApplication::onFrameEnd()
 {
 }
 
-void WindowsApplication::onMouseEvent(const MouseEvent &ev)
+void WindowsApplication::onMouseEvent(const platform::MouseEvent &ev)
 {
     if (ev.isLeftPressed())
         std::cerr << "Left pressed\n";
@@ -95,11 +95,11 @@ void WindowsApplication::onMouseEvent(const MouseEvent &ev)
     }*/
 }
 
-void WindowsApplication::onKeyPressed(int keycode)
+void WindowsApplication::onKeyPressed(const platform::KeyboardEvent &ev)
 {
 }
 
-void WindowsApplication::onKeyReleased(int keycode)
+void WindowsApplication::onKeyReleased(const platform::KeyboardEvent &ev)
 {
 }
 

@@ -33,8 +33,8 @@ public:
 
     virtual void onMouseEvent(const MouseEvent &ev) = 0;
 
-    virtual void onKeyPressed(int keycode) = 0;
-    virtual void onKeyReleased(int keycode) = 0;
+    virtual void onKeyPressed(const KeyboardEvent &ev) = 0;
+    virtual void onKeyReleased(const KeyboardEvent &ev) = 0;
 
     virtual void onResize(int w, int h) = 0;
 

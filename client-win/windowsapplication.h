@@ -23,10 +23,10 @@ public:
     virtual void onFrameStart();
     virtual void onFrameEnd();
 
-    virtual void onMouseEvent(const MouseEvent &ev);
+    virtual void onMouseEvent(const platform::MouseEvent &ev);
 
-    virtual void onKeyPressed(int keycode);
-    virtual void onKeyReleased(int keycode);
+    virtual void onKeyPressed(const platform::KeyboardEvent &ev);
+    virtual void onKeyReleased(const platform::KeyboardEvent &ev);
 
     virtual void onResize(int w, int h);
 
