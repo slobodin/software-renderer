@@ -16,7 +16,7 @@ static const int DEFAULT_EVENT_MASK =
         LeaveWindowMask |       // leaving window
         PointerMotionMask |     // trace cursor position
         ButtonMotionMask |      // trace cursor position when a button pressed
-        ResizeRedirectMask |    // resize event
+//        ResizeRedirectMask |    // resize event
         KeyPressMask |          // key pressed
         KeyReleaseMask;         // key released
 

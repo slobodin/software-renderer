@@ -80,6 +80,24 @@ int UnixApplication::run()
             std::cerr << "Exposing\n";
             break;
 
+        case MotionNotify:
+        {
+            platform::MouseEvent mouseEvent;
+
+            mouseEvent.x = report.xbutton.x;
+            mouseEvent.y = report.xbutton.y;
+
+            mouseEvent.buttonsState = (report.xbutton.state & Button1Mask)
+                    ? platform::MouseEvent::LEFT_PRESSED : 0;
+            mouseEvent.buttonsState |= (report.xbutton.state & Button3Mask)
+                    ? platform::MouseEvent::RIGHT_PRESSED : 0;
+            mouseEvent.buttonsState |= (report.xbutton.state & Button2Mask)
+                    ? platform::MouseEvent::MIDDLE_PRESSED : 0;
+
+            onMouseEvent(mouseEvent);
+        }
+            break;
+
         case ButtonRelease:
         case ButtonPress:
         {
