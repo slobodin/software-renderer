@@ -1,3 +1,10 @@
+/*
+ * windowsviewport.h
+ *
+ *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
+ */
+
 #ifndef WINDOWSVIEWPORT_H
 #define WINDOWSVIEWPORT_H
 

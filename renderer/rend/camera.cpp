@@ -113,7 +113,7 @@ void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
 {
     list<math::Triangle> &trias = rendList.triangles();
 
-    foreach (math::Triangle &t, trias)
+    for (auto &t : trias)
     {
         math::vec3 &p1 = t.v(0).p;
         math::vec3 &p2 = t.v(1).p;

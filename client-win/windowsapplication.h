@@ -1,3 +1,10 @@
+/*
+ * windowsapplication.h
+ *
+ *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
+ */
+
 #ifndef WINDOWSAPPLICATION_H
 #define WINDOWSAPPLICATION_H
 

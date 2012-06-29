@@ -1,3 +1,10 @@
+/*
+ * baseapp.cpp
+ *
+ *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
+ */
+
 #include "baseapp.h"
 
 #include "controller.h"

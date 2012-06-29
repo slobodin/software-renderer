@@ -1,3 +1,10 @@
+/*
+ * main.cpp
+ *
+ *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
+ */
+
 #include "windowsapplication.h"
 
 int main(int argc, const char **argv) try

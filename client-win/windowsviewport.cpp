@@ -1,3 +1,10 @@
+/*
+ * windowsviewport.cpp
+ *
+ *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
+ */
+
 #include "windowsviewport.h"
 #include "windowsapplication.h"
 

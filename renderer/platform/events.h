@@ -1,3 +1,10 @@
+/*
+ * events.h
+ *
+ *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
+ */
+
 #ifndef EVENTS_H
 #define EVENTS_H
 

@@ -1,3 +1,10 @@
+/*
+ * renderer.h
+ *
+ *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
+ */
+
 #ifndef RENDERER_H
 #define RENDERER_H
 
