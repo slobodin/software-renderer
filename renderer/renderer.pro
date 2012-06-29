@@ -58,7 +58,10 @@ HEADERS += \
     rend/boundingsphere.h \
     platform/events.h \
     platform/baseapp.h \
-    renderer.h
+    renderer.h \
+    base/decoderobj.h \
+    base/decoder3ds.h \
+    base/decodermd2.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -91,7 +94,10 @@ SOURCES += \
     rend/camera.cpp \
     rend/boundingsphere.cpp \
     platform/baseapp.cpp \
-    platform/events.cpp
+    platform/events.cpp \
+    base/decoderobj.cpp \
+    base/decoder3ds.cpp \
+    base/decodermd2.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \
