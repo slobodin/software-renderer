@@ -39,7 +39,10 @@ RenderMgr::~RenderMgr()
 void RenderMgr::update()
 {
     if (!m_viewport)
+    {
+        *syslog << "Viewport is not setted" << logdebug;
         return;
+    }
 
     // 1. Clear buffer.
     m_rasterizer->beginFrame(m_viewport);
