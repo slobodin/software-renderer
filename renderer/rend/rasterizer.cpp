@@ -9,6 +9,7 @@
 
 #include "vec2.h"
 #include "poly.h"
+#include "viewport.h"
 
 namespace rend
 {
@@ -1356,14 +1357,15 @@ void Rasterizer::rasterize(const RenderList &rendlist)
     }
 }
 
-void Rasterizer::beginFrame(/*sptr(RenderDevice) device*/)
+void Rasterizer::beginFrame(sptr(Viewport) viewport)
 {
     m_fb.clear();
+    viewport->frameBegin();
 }
 
-void Rasterizer::endFrame(/*sptr(RenderDevice) device*/)
+void Rasterizer::endFrame(sptr(Viewport) viewport)
 {
-//    device->flush(m_fb);
+    viewport->flush(m_fb);
 }
 
 void Rasterizer::resize(int w, int h)

@@ -92,6 +92,10 @@ WindowsViewport::~WindowsViewport()
         DestroyWindow(m_hWnd);
 }
 
+void WindowsViewport::frameBegin()
+{
+}
+
 void WindowsViewport::flush(unsigned char *pixels)
 {
 }

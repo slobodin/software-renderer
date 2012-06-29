@@ -55,6 +55,7 @@ public:
     void resize(int w, int h);
 
     rgb *pixels() { return m_pixels; }
+    operator unsigned char *() { return reinterpret_cast<unsigned char *>(m_pixels); }
 };
 
 }

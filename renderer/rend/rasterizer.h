@@ -22,6 +22,8 @@
 namespace rend
 {
 
+class Viewport;
+
 class Rasterizer
 {
     FrameBuffer m_fb;
@@ -46,8 +48,8 @@ public:
 
     void rasterize(const RenderList &rendlist);
 
-    void beginFrame(/*sptr(RenderDevice) device*/);
-    void endFrame(/*sptr(RenderDevice) device*/);
+    void beginFrame(sptr(Viewport) viewport);
+    void endFrame(sptr(Viewport) viewport);
 
     void resize(int w, int h);
 };

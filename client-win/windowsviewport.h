@@ -19,6 +19,7 @@ public:
                     boost::shared_ptr<rend::Camera> camera);
     ~WindowsViewport();
 
+    void frameBegin();
     void flush(unsigned char *pixels);
 };
 

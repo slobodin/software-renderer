@@ -16,6 +16,7 @@ UnixApplication::UnixApplication(int argc, const char *argv[])
     m_playerCamera = m_clientController->getCamera();
 
     m_clientController->setViewport(boost::make_shared<XViewport>(640, 480, m_playerCamera));
+    m_viewport = boost::dynamic_pointer_cast<XViewport>(m_clientController->getViewport());
 }
 
 UnixApplication::~UnixApplication()
@@ -48,4 +49,30 @@ void UnixApplication::onResize(int w, int h)
 
 int UnixApplication::run()
 {
+    XEvent event;
+
+    static int a;
+
+    while (1)
+    {
+        XNextEvent(m_viewport->getXDisplay(), &event);
+
+        switch (event.type)
+        {
+        case Expose:
+            std::cerr << "Run engine" << a++ << "\n";
+            break;
+
+        case ButtonPress:
+
+            break;
+
+        default:
+
+//            BaseApp::run();
+            break;
+        }
+    }
+
+    return 0;
 }

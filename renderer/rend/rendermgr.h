@@ -41,7 +41,7 @@ public:
     RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport);
     ~RenderMgr();
 
-    void update(/*sptr(RenderDevice) rendDevice*/);
+    void update();
 
     // TODO: make uniform method `addSceneObject(Node *n);'
     void addMesh(sptr(rend::Mesh) mesh);

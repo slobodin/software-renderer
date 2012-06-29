@@ -22,6 +22,9 @@ public:
     XViewport(int width, int height, boost::shared_ptr<rend::Camera> camera);
     virtual ~XViewport();
 
+    Display *getXDisplay() { return d; }
+
+    void frameBegin();
     void flush(unsigned char *pixels);
 };
 

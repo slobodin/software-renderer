@@ -45,6 +45,7 @@ public:
     int                 getAspect() const;
     std::pair<int, int> getCenter() const;
 
+    virtual void frameBegin() = 0;
     virtual void flush(unsigned char *pixels) = 0;
 };
 

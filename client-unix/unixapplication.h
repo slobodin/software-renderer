@@ -10,9 +10,12 @@
 
 #include "renderer.h"
 
+class XViewport;
+
 class UnixApplication : public platform::BaseApp
 {
     sptr(rend::Camera) m_playerCamera;
+    sptr(XViewport) m_viewport;
 
 public:
     UnixApplication(int argc, const char *argv[]);

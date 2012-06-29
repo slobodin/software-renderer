@@ -36,18 +36,21 @@ RenderMgr::~RenderMgr()
 
 }
 
-void RenderMgr::update(/*sptr(RenderDevice) rendDevice*/)
+void RenderMgr::update()
 {
+    if (!m_viewport)
+        return;
+
     // 1. Clear buffer.
-    m_rasterizer->beginFrame(/*rendDevice*/);
+    m_rasterizer->beginFrame(m_viewport);
 
     RenderList renderList;
 
     // 2. Cull full meshes and form triangles render list.
-    foreach (sptr(Mesh) m, m_meshes)
+    for (auto mesh : m_meshes)
     {
-        if (!m_camera->culled(*m))
-            renderList.append(*m);
+        if (!m_camera->culled(*mesh))
+            renderList.append(*mesh);
     }
 
     // 3. Cull backfaces.
@@ -55,10 +58,8 @@ void RenderMgr::update(/*sptr(RenderDevice) rendDevice*/)
     renderList.removeBackfaces(m_camera);
 
     // 4. Lighting.
-    foreach (sptr(Light) &l, m_lights)
-    {
-        l->illuminate(renderList);
-    }
+    for (auto light : m_lights)
+        light->illuminate(renderList);
 
     // 5. World -> Camera transformation. Cull triangles with negative Z.
     // TODO: frustum culling here.
@@ -74,8 +75,7 @@ void RenderMgr::update(/*sptr(RenderDevice) rendDevice*/)
     m_rasterizer->rasterize(renderList);
 
     // 9. Flush buffer to the screen.
-    if (1/*rendDevice*/)
-        m_rasterizer->endFrame(/*rendDevice*/);
+    m_rasterizer->endFrame(m_viewport);
 }
 
 sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)
