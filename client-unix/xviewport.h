@@ -9,11 +9,18 @@
 #define XVIEWPORT_H
 
 #include "renderer.h"
+#include <X11/Xlib.h>
+
+DECLARE_EXCEPTION(XServerException)
 
 class XViewport : public rend::Viewport
 {
+    Display *d;
+    Window m_window;
+
 public:
     XViewport(int width, int height, boost::shared_ptr<rend::Camera> camera);
+    virtual ~XViewport();
 
     void flush(unsigned char *pixels);
 };

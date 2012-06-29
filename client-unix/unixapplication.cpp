@@ -6,20 +6,20 @@
  */
 
 #include "unixapplication.h"
-#include <cstdlib>
+#include "xviewport.h"
 
-UnixApplication::UnixApplication()
-    : d(0)
+UnixApplication::UnixApplication(int argc, const char *argv[])
+    : platform::BaseApp()
 {
-    d = XOpenDisplay(getenv("DISPLAY"));
-    if (!d)
-        throw XServerException("Can't connect to X Server");
+    m_clientController = boost::make_shared<base::Controller>(argc, argv);
+
+    m_playerCamera = m_clientController->getCamera();
+
+    m_clientController->setViewport(boost::make_shared<XViewport>(640, 480, m_playerCamera));
 }
 
 UnixApplication::~UnixApplication()
 {
-    if (d)
-        XCloseDisplay(d);
 }
 
 void UnixApplication::onFrameStart()

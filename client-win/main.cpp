@@ -2,7 +2,7 @@
 
 int main(int argc, const char **argv) try
 {
-    WindowsApplication app(argv);
+    WindowsApplication app(argc, argv);
 
     return app.run();
 }

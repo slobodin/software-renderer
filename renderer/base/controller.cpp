@@ -23,7 +23,7 @@ void Controller::resize(int w, int h)
         m_rendmgr->resize(w, h);
 }
 
-Controller::Controller(const char *argv[])
+Controller::Controller(int argc, const char *argv[])
     : m_resourceMgr(new ResourceMgr)
 {
     m_mainCam = make_shared<rend::Camera>(math::vec3());
@@ -69,6 +69,11 @@ sptr(ResourceMgr) Controller::getResmgr()
 sptr(rend::RenderMgr) Controller::getRendmgr()
 {
     return m_rendmgr;
+}
+
+sptr(rend::Viewport) Controller::getViewport()
+{
+    return m_viewport;
 }
 
 }

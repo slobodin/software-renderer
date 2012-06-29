@@ -7,9 +7,9 @@
 
 #include "unixapplication.h"
 
-int main()
+int main(int argc, const char **argv)
 {
-    UnixApplication app;
+    UnixApplication app(argc, argv);
 //    char *msg = "Hello, world!";
 
 //    Display *d;

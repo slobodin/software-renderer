@@ -10,7 +10,7 @@ class WindowsApplication : public platform::BaseApp
     sptr(rend::Camera) m_playerCamera;
 
 public:
-    WindowsApplication(const char **argv);
+    WindowsApplication(int argc, const char **argv);
     virtual ~WindowsApplication();
 
     virtual void onFrameStart();

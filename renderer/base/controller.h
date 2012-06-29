@@ -41,7 +41,7 @@ class Controller : boost::noncopyable
     void update();
 
 public:
-    Controller(const char *argv[]);
+    Controller(int argc, const char *argv[]);
     virtual ~Controller();
 
     void setViewport(sptr(rend::Viewport) viewport);
@@ -49,6 +49,7 @@ public:
     sptr(rend::Camera)      getCamera();
     sptr(ResourceMgr)       getResmgr();
     sptr(rend::RenderMgr)   getRendmgr();
+    sptr(rend::Viewport)    getViewport();
 
     void resize(int w, int h);
 };

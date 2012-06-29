@@ -48,12 +48,12 @@ LRESULT WINAPI WindowsApplication::handleMessage(HWND hwnd, UINT msg, WPARAM wp,
     }
 }
 
-WindowsApplication::WindowsApplication(const char **argv)
+WindowsApplication::WindowsApplication(int argc, const char **argv)
     : platform::BaseApp()
 {
     m_hInstance = GetModuleHandle(NULL);
 
-    m_clientController = boost::make_shared<base::Controller>(argv);
+    m_clientController = boost::make_shared<base::Controller>(argc, argv);
     m_playerCamera = m_clientController->getCamera();
 
     m_clientController->setViewport(boost::make_shared<WindowsViewport>(this, 640, 480, m_playerCamera));

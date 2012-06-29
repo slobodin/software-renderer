@@ -9,16 +9,13 @@
 #define UNIXAPPLICATION_H
 
 #include "renderer.h"
-#include <X11/Xlib.h>
-
-DECLARE_EXCEPTION(XServerException)
 
 class UnixApplication : public platform::BaseApp
 {
-    Display *d;
+    sptr(rend::Camera) m_playerCamera;
 
 public:
-    UnixApplication();    
+    UnixApplication(int argc, const char *argv[]);
     virtual ~UnixApplication();
 
     virtual void onFrameStart();

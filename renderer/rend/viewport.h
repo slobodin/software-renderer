@@ -15,9 +15,11 @@ namespace rend
 
 class FrameBuffer;
 class Camera;
+class RenderMgr;
 
-class Viewport
+class Viewport : boost::noncopyable
 {
+protected:
     //! Screen width.
     int m_width;
     //! Screen height.
@@ -31,6 +33,9 @@ class Viewport
 
     boost::shared_ptr<Camera> m_camera;
 
+    friend class RenderMgr;
+    void resize(int w, int h);
+
 public:
     Viewport(int width, int height, boost::shared_ptr<Camera> camera);
     virtual ~Viewport();
@@ -39,8 +44,6 @@ public:
     int                 getHeight() const;
     int                 getAspect() const;
     std::pair<int, int> getCenter() const;
-
-    void resize(int w, int h);
 
     virtual void flush(unsigned char *pixels) = 0;
 };
