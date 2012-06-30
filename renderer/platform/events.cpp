@@ -145,6 +145,11 @@ LinuxKeymap::LinuxKeymap()
 
 KeyboardEvent::KeyboardEvent(unsigned long keycode)
 {
+    setKeyCode(keycode);
+}
+
+void KeyboardEvent::setKeyCode(unsigned long keycode)
+{
 #if defined(LINUX_VERSION)
     m_keycode = LinuxKeymap::get().getKeyCode(keycode);
 #elif defined(WINDOWS_VERSION)

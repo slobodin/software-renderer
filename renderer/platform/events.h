@@ -105,6 +105,8 @@ private:
 public:
     KeyboardEvent(unsigned long keycode);
 
+    void setKeyCode(unsigned long keycode);
+
     KEY_CODE keycode() const;
 };
 

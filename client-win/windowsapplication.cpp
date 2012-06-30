@@ -12,27 +12,33 @@
 
 LRESULT WINAPI WindowsApplication::handleMessage(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-    static MouseEvent mouseEvent;
+    static platform::MouseEvent mouseEvent;
+    static platform::KeyboardEvent keyboardEvent(0);
 
     switch (msg)
     {
     case WM_KEYDOWN:
-//        keyboard.keyCode = (IO::EKeyboardCodes)wp;
-        //HandleKeyDown(wp);
+        memset(&keyboardEvent, 0, sizeof(platform::KeyboardEvent));
+        keyboardEvent.setKeyCode(wp);
+
+        onKeyPressed(keyboardEvent);
+
         return 0;
 
     case WM_KEYUP:
-//        memset(&keyboard, 0, sizeof(keyboard));
-        //HandleKeyUp(wp);
+        memset(&keyboardEvent, 0, sizeof(platform::KeyboardEvent));
+        keyboardEvent.setKeyCode(wp);
+
+        onKeyReleased(keyboardEvent);
         return 0;
 
     case WM_MOUSEMOVE:
-        memset(&mouseEvent, 0, sizeof(MouseEvent));
+        memset(&mouseEvent, 0, sizeof(platform::MouseEvent));
         mouseEvent.x = LOWORD(lp);
         mouseEvent.y = HIWORD(lp);
         mouseEvent.buttonsState = wp & (MK_LBUTTON | MK_RBUTTON);
         if (wp & MK_MBUTTON)
-            mouseEvent.buttonsState |= MouseEvent::MIDDLE_PRESSED;
+            mouseEvent.buttonsState |= platform::MouseEvent::MIDDLE_PRESSED;
 
         onMouseEvent(mouseEvent);
 
@@ -64,6 +70,7 @@ WindowsApplication::WindowsApplication(int argc, const char **argv)
     m_playerCamera = m_clientController->getCamera();
 
     m_clientController->setViewport(boost::make_shared<WindowsViewport>(this, 640, 480, m_playerCamera));
+    m_viewport = boost::dynamic_pointer_cast<WindowsViewport>(m_clientController->getViewport());
 }
 
 WindowsApplication::~WindowsApplication()
@@ -97,6 +104,10 @@ void WindowsApplication::onMouseEvent(const platform::MouseEvent &ev)
 
 void WindowsApplication::onKeyPressed(const platform::KeyboardEvent &ev)
 {
+    if (ev.keycode() == platform::KEY_NONE)
+        std::cerr << "Key none!\n";
+
+    std::cerr << "Getted keycode: " << std::hex << ev.keycode() << std::dec << "\n";
 }
 
 void WindowsApplication::onKeyReleased(const platform::KeyboardEvent &ev)

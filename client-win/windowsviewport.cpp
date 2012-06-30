@@ -105,4 +105,26 @@ void WindowsViewport::frameBegin()
 
 void WindowsViewport::flush(unsigned char *pixels)
 {
+    if (!m_hDC)
+        return;
+
+    static BITMAPINFO bmi;
+    memset(&bmi, 0, sizeof(bmi));
+
+    bmi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth       = m_width;
+    bmi.bmiHeader.biHeight      = -m_height;
+    bmi.bmiHeader.biPlanes      = 1;
+    bmi.bmiHeader.biBitCount    = 24;
+    bmi.bmiHeader.biCompression = BI_RGB;
+    bmi.bmiHeader.biSizeImage   = 0;
+
+    SetDIBitsToDevice(m_hDC,
+        0, 0,
+        m_width, m_height,
+        0, 0,
+        0, m_height,
+        pixels,
+        &bmi,
+        DIB_RGB_COLORS);
 }

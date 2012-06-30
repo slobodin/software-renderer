@@ -49,7 +49,7 @@ void UnixApplication::onKeyPressed(const platform::KeyboardEvent &ev)
 //    if (ev.keycode() == platform::KEY_NONE)
 //        std::cerr << "Key none!\n";
 
-//    std::cerr << "Getted keycode: " << std::hex << ev.keycode() << "\n";
+//    std::cerr << "Getted keycode: " << std::hex << ev.keycode() << std::dec << "\n";
 }
 
 void UnixApplication::onKeyReleased(const platform::KeyboardEvent &ev)

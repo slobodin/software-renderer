@@ -11,10 +11,13 @@
 #include "renderer.h"
 #include <windows.h>
 
+class WindowsViewport;
+
 class WindowsApplication : public platform::BaseApp
 {
     HINSTANCE m_hInstance;
     sptr(rend::Camera) m_playerCamera;
+    sptr(WindowsViewport) m_viewport;
 
 public:
     WindowsApplication(int argc, const char **argv);

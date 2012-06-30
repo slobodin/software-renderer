@@ -23,7 +23,10 @@ BaseApp::~BaseApp()
 int BaseApp::run()
 {
     if (!m_clientController)
+    {
+        *syslog << "Renderer controller not initialized. Can't work now." << logerr;
         return -1;
+    }
 
     onFrameStart();
 
