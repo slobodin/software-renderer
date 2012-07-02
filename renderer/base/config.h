@@ -20,8 +20,8 @@ public:
     Config();
     ~Config();
 
-    void configure(sptr(Controller) controller);
-    void configure(sptr(ResourceMgr) rmgr);
+    void configure(Controller *controller);
+    void configure(ResourceMgr *rmgr);
 };
 
 }

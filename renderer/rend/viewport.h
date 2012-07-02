@@ -13,6 +13,9 @@
 namespace rend
 {
 
+const int DEFAULT_WIDTH = 640;
+const int DEFAULT_HEIGHT = 480;
+
 class FrameBuffer;
 class Camera;
 class RenderMgr;
@@ -46,7 +49,7 @@ public:
     std::pair<int, int> getCenter() const;
 
     virtual void frameBegin() = 0;
-    virtual void flush(unsigned char *pixels) = 0;
+    virtual void flush(const unsigned char * const pixels) = 0;
 };
 
 }

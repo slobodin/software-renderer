@@ -10,22 +10,25 @@
 
 #include "renderer.h"
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 DECLARE_EXCEPTION(XServerException)
 
 class XViewport : public rend::Viewport
 {
-    Display *d;
+    Display *m_display;
     Window m_window;
+    XVisualInfo *m_visual;
+    XImage *m_XScreenBuffer;
 
 public:
     XViewport(int width, int height, boost::shared_ptr<rend::Camera> camera);
     virtual ~XViewport();
 
-    Display *getXDisplay() { return d; }
+    Display *getXDisplay() { return m_display; }
 
     void frameBegin();
-    void flush(unsigned char *pixels);
+    void flush(const unsigned char * const pixels);
 };
 
 #endif // XVIEWPORT_H

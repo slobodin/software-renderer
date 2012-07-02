@@ -68,8 +68,6 @@ int UnixApplication::run()
 {
     XEvent report;
 
-    static int a;
-
     while (1)
     {
         XNextEvent(m_viewport->getXDisplay(), &report);
@@ -157,11 +155,11 @@ int UnixApplication::run()
         }
             break;
 
-        default:
-
-//            BaseApp::run();
+        default:            
             break;
         }
+
+        BaseApp::run();
     }
 
     return 0;

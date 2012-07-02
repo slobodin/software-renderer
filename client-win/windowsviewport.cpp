@@ -103,7 +103,7 @@ void WindowsViewport::frameBegin()
 {
 }
 
-void WindowsViewport::flush(unsigned char *pixels)
+void WindowsViewport::flush(const unsigned char *const pixels)
 {
     if (!m_hDC)
         return;

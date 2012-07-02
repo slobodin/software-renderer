@@ -27,7 +27,7 @@ public:
     ~WindowsViewport();
 
     void frameBegin();
-    void flush(unsigned char *pixels);
+    void flush(const unsigned char * const pixels);
 };
 
 #endif // WINDOWSVIEWPORT_H

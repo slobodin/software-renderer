@@ -20,7 +20,7 @@ INCLUDEPATH += ../renderer/base \
                 ../renderer/third-party/include/ \
                 ../renderer
 
-LIBS += ../../renderer/third-party/lib/libyaml-cpp.a
 LIBS += ../../bin/renderer/librenderer.a
+LIBS += ../../renderer/third-party/lib/libyaml-cpp.a
 
 LIBS += -lX11 -lboost_system -lboost_filesystem

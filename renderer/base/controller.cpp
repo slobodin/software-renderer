@@ -27,6 +27,8 @@ Controller::Controller(int argc, const char *argv[])
     : m_resourceMgr(new ResourceMgr)
 {
     m_mainCam = make_shared<rend::Camera>(math::vec3());
+
+    Config config;
 }
 
 Controller::~Controller()

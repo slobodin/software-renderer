@@ -12,8 +12,6 @@
 
 #include "color.h"
 
-class QImage;
-
 namespace rend
 {
 

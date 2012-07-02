@@ -45,6 +45,10 @@ sptr(Resource) ResourceMgr::getResource(const string &resourcepath)
     auto rit = m_resources.find(fullpath);
     if (rit == m_resources.end())
     {
+        // try to load
+
+        // if unsuccessfull return NULL
+
         *syslog << "Getting null resource" << resourcepath << logwarn;
         return sptr(Resource)();
     }
@@ -122,6 +126,7 @@ void ResourceMgr::addPath(const string &name)
     {
         if (is_directory(p))
         {
+            // if this path isn't in container
             m_loadablePaths.push_back(p);
         }
         else

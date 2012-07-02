@@ -16,6 +16,11 @@ Viewport::Viewport(int width, int height, boost::shared_ptr<Camera> camera)
       m_height(height),
       m_camera(camera)
 {
+    if (m_width <= 0)
+        m_width = DEFAULT_WIDTH;
+    if (m_height <= 0)
+        m_height = DEFAULT_HEIGHT;
+
     m_centerX = (m_width - 1) / 2;
     m_centerY = (m_height - 1) / 2;
     m_aspect = m_width / m_height;
