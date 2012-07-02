@@ -49,7 +49,7 @@ public:
     std::pair<int, int> getCenter() const;
 
     virtual void frameBegin() = 0;
-    virtual void flush(const unsigned char * const pixels) = 0;
+    virtual void flush(const unsigned char *const pixels) = 0;
 };
 
 }
