@@ -111,7 +111,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
         // always three vertices
         if (newData.numVertices != 3)
         {
-            *syslog << "Can't decode PLG file" << path << ". Number of vertices =/= 3." << logerr;
+            syslog << "Can't decode PLG file" << path << ". Number of vertices =/= 3." << logerr;
             return sptr(Resource)();
         }
 
@@ -127,7 +127,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
 
     if (polysData.empty())
     {
-        *syslog << "Can't decode PLG file" << path << ". Empty polygons data." << logerr;
+        syslog << "Can't decode PLG file" << path << ". Empty polygons data." << logerr;
         return sptr(Resource)();
     }
 
@@ -167,7 +167,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
             break;
 
         default:
-            *syslog << "Bad shade mode in plg-file" << path << ". Setting to defaults." << logwarn;
+            syslog << "Bad shade mode in plg-file" << path << ". Setting to defaults." << logwarn;
             shadeMode = rend::Material::SM_WIRE;
         }
 
@@ -205,13 +205,13 @@ sptr(Resource) DecoderPLG::decode(const string &path)
 
     newMesh->setName(resourceName);
 
-    *syslog << "Decoded plg-model \"" << newMesh->getName()
+    syslog << "Decoded plg-model \"" << newMesh->getName()
             << "\". Number of vertices:" << newMesh->numVertices() << logmess;
     
     return newMesh;
 }
 
-string DecoderPLG::extention() const
+string DecoderPLG::extension() const
 {
     return "plg";
 }

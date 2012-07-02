@@ -31,7 +31,7 @@ sptr(Resource) DecoderBSPQ3::decode(const string &path)
     header = reinterpret_cast<BSPHeader *>(file.getBytes(0));
     if (!(header->ID == (*(int *)"IBSP") && header->version == 0x2E))   // 0x50534249
     {
-        *syslog << "Bad BSP header" << logerr;
+        syslog << "Bad BSP header" << logerr;
 
         return sptr(Resource)();
     }
@@ -100,7 +100,7 @@ sptr(Resource) DecoderBSPQ3::decode(const string &path)
             break;
 
         default:
-            *syslog << "Bad face type in q3 file" << path << logwarn;
+            syslog << "Bad face type in q3 file" << path << logwarn;
             break;
         }
     }
@@ -118,7 +118,7 @@ sptr(Resource) DecoderBSPQ3::decode(const string &path)
     return newMesh;
 }
 
-string DecoderBSPQ3::extention() const
+string DecoderBSPQ3::extension() const
 {
     return "bsp";
 }

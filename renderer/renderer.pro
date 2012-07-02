@@ -61,7 +61,8 @@ HEADERS += \
     renderer.h \
     base/decoderobj.h \
     base/decoder3ds.h \
-    base/decodermd2.h
+    base/decodermd2.h \
+    platform/baseapplinux.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -97,7 +98,8 @@ SOURCES += \
     platform/events.cpp \
     base/decoderobj.cpp \
     base/decoder3ds.cpp \
-    base/decodermd2.cpp
+    base/decodermd2.cpp \
+    platform/baseapplinux.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

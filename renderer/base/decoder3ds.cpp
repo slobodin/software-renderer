@@ -20,9 +20,11 @@ Decoder3DS::~Decoder3DS()
 
 sptr(Resource) Decoder3DS::decode(const string &path)
 {
+    syslog << "3DS files not supported yet" << logerr;
+    return sptr(Resource)();
 }
 
-string Decoder3DS::extention() const
+string Decoder3DS::extension() const
 {
     return "3ds";
 }

@@ -16,7 +16,6 @@ namespace rend
 const int DEFAULT_WIDTH = 640;
 const int DEFAULT_HEIGHT = 480;
 
-class FrameBuffer;
 class Camera;
 class RenderMgr;
 
@@ -37,7 +36,7 @@ protected:
     boost::shared_ptr<Camera> m_camera;
 
     friend class RenderMgr;
-    void resize(int w, int h);
+    virtual void resize(int w, int h);
 
 public:
     Viewport(int width, int height, boost::shared_ptr<Camera> camera);
@@ -48,7 +47,6 @@ public:
     int                 getAspect() const;
     std::pair<int, int> getCenter() const;
 
-    virtual void frameBegin() = 0;
     virtual void flush(const unsigned char *const pixels) = 0;
 };
 

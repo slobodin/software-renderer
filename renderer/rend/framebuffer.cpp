@@ -94,8 +94,8 @@ void FrameBuffer::resize(int w, int h)
     if (m_pixels)
         delete [] m_pixels;
 
-    m_pixels = new FrameBuffer::rgb[w * h];
-    memset(m_pixels, 0xFF, sizeof(FrameBuffer::rgb) * w * h);
+    m_pixels = new FrameBuffer::rgb[m_width * m_height];
+    memset(m_pixels, 0x00, sizeof(FrameBuffer::rgb) * m_width * m_height);
 }
 
 }

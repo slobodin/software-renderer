@@ -22,7 +22,7 @@ OsFile::OsFile(const string &path, FileType ft)
 
     if (!m_file)
     {
-        *syslog << "Can't locate file" << path << logerr;
+        syslog << "Can't locate file" << path << logerr;
         throw FileException("Can't locate file");
     }
 }

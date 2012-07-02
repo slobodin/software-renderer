@@ -29,8 +29,6 @@ class ResourceMgr : boost::noncopyable
     map<string, sptr(Resource) >        m_resources;
     map<string, sptr(ResourceDecoder) > m_decoders;
 
-    bool checkFilePath(const string &path) const;
-
 public:
     //! Default ctor.
     ResourceMgr();
@@ -53,7 +51,10 @@ public:
     void loadResource(const string &resourcepath);
     void unloadResource(const string &resourcepath);
 
+    void loadResources();
+
     void addPath(const string &name);
+    void listPath();
 };
 
 }

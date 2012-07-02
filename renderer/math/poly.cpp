@@ -20,7 +20,7 @@ Triangle::Triangle(const vertex *arr, SideType st)
 {
     if (!arr)
     {
-        *syslog << "Trying to initialize triangle with an empty array" << logdebug;
+        syslog << "Trying to initialize triangle with an empty array" << logdebug;
         return;
     }
 

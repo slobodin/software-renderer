@@ -10,6 +10,12 @@
 
 #include "comm_pch.h"
 
+namespace math
+{
+struct vec2;
+struct vec3;
+}
+
 namespace base
 {
 
@@ -37,24 +43,25 @@ class Logger : boost::noncopyable
 {
     stringstream m_buffer;
 
-    static Logger *m_instance;
     Logger();
 
 public:
-    static Logger *instance();
+    static Logger &instance();
 
     Logger &operator<< (const char *text);
     Logger &operator<< (const string &text);
     Logger &operator<< (int num);
     Logger &operator<< (unsigned num);
     Logger &operator<< (double num);
+    Logger &operator<< (const math::vec2 &vect);
+    Logger &operator<< (const math::vec3 &vect);
 
     Logger &operator<< (const LoggerManipulator &man);
 };
 
 }
 
-extern base::Logger *syslog;
+extern base::Logger &syslog;
 extern const base::LoggerManipulator logdebug;
 extern const base::LoggerManipulator logmess;
 extern const base::LoggerManipulator logwarn;

@@ -40,7 +40,7 @@ void RenderMgr::update()
 {
     if (!m_viewport)
     {
-        *syslog << "Viewport is not setted" << logdebug;
+        syslog << "Viewport is not setted" << logdebug;
         return;
     }
 
@@ -91,7 +91,7 @@ sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)
     }
     catch(LightException)
     {
-        *syslog << "Light limit is reached" << logerr;
+        syslog << "Light limit is reached" << logerr;
         return dynamic_pointer_cast<AmbientLight>(sptr(Light)());
     }
 
@@ -108,7 +108,7 @@ sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, ma
     }
     catch(LightException)
     {
-        *syslog << "Light limit is reached" << logerr;
+        syslog << "Light limit is reached" << logerr;
         return dynamic_pointer_cast<DirectionalLight>(sptr(Light)());
     }
 
@@ -125,7 +125,7 @@ sptr(PointLight) RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 pos
     }
     catch(LightException)
     {
-        *syslog << "Light limit is reached" << logerr;
+        syslog << "Light limit is reached" << logerr;
         return dynamic_pointer_cast<PointLight>(sptr(Light)());
     }
 
@@ -142,7 +142,7 @@ void RenderMgr::addMesh(sptr(rend::Mesh) mesh)
 {
     if (!mesh)
     {
-        *syslog << "Trying to add empty mesh" << logerr;
+        syslog << "Trying to add empty mesh" << logerr;
         return;
     }
 

@@ -1332,7 +1332,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
     {
         if (!t.getMaterial())
         {
-            *syslog << "Material has not been setted for this triangle" << logdebug;
+            syslog << "Material has not been setted for this triangle" << logdebug;
             continue;
         }
 
@@ -1351,7 +1351,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
             break;
 
         default:
-            *syslog << "Unsupported shading mode." << logdebug;
+            syslog << "Unsupported shading mode." << logdebug;
             break;
         }
     }
@@ -1360,7 +1360,6 @@ void Rasterizer::rasterize(const RenderList &rendlist)
 void Rasterizer::beginFrame(sptr(Viewport) viewport)
 {
     m_fb.clear();
-    viewport->frameBegin();
 }
 
 void Rasterizer::endFrame(sptr(Viewport) viewport)

@@ -80,7 +80,7 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, list<math::Tr
 
     case VertexBuffer::UNDEFINED:
     default:
-        *syslog << "Can't draw this mesh" << logerr;
+        syslog << "Can't draw this mesh" << logerr;
         break;
     }
 }

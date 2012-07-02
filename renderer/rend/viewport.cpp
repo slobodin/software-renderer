@@ -17,13 +17,17 @@ Viewport::Viewport(int width, int height, boost::shared_ptr<Camera> camera)
       m_camera(camera)
 {
     if (m_width <= 0)
+    {
+        syslog << "Invalid width. Setting default." << logwarn;
         m_width = DEFAULT_WIDTH;
+    }
     if (m_height <= 0)
+    {
+        syslog << "Invalid height. Setting default." << logwarn;
         m_height = DEFAULT_HEIGHT;
+    }
 
-    m_centerX = (m_width - 1) / 2;
-    m_centerY = (m_height - 1) / 2;
-    m_aspect = m_width / m_height;
+    syslog << "Viewport size [" << m_width << "," << m_height << "]" << logmess;
 
     resize(m_width, m_height);
 }
@@ -56,15 +60,22 @@ void Viewport::resize(int w, int h)
 {
     if (!m_camera)
     {
-        *syslog << "Can't resize viewport. No active camera." << logerr;
+        syslog << "Can't resize viewport. No active camera." << logerr;
         return;
     }
 
     if (w <= 0 || h <= 0)
     {
-        *syslog << "Can't resize viewport. Invalid width and height values." << logerr;
+        syslog << "Can't resize viewport. Invalid width and height values." << logerr;
         return;
     }
+
+    m_width = w;
+    m_height = h;
+
+    m_centerX = (m_width - 1) / 2;
+    m_centerY = (m_height - 1) / 2;
+    m_aspect = m_width / m_height;
 
     // update cam
     m_camera->m_viewPlaneWidth = 2.0;

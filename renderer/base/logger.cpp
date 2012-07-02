@@ -7,10 +7,11 @@
 
 #include "logger.h"
 
+#include "vec2.h"
+#include "vec3.h"
+
 namespace base
 {
-
-Logger *Logger::m_instance = 0;
 
 Logger::Logger()
 {
@@ -24,10 +25,9 @@ Logger::Logger()
     cerr << msg.str() << endl;
 }
 
-Logger *Logger::instance()
+Logger &Logger::instance()
 {
-    if (!m_instance)
-        m_instance = new Logger;
+    static Logger m_instance;
 
     return m_instance;
 }
@@ -67,6 +67,20 @@ Logger &Logger::operator<< (double num)
     return *this;
 }
 
+Logger &Logger::operator<< (const math::vec2 &vect)
+{
+    m_buffer << vect << " ";
+
+    return *this;
+}
+
+Logger &Logger::operator<< (const math::vec3 &vect)
+{
+    m_buffer << vect << " ";
+
+    return *this;
+}
+
 Logger &Logger::operator<< (const LoggerManipulator &man)
 {
     switch (man.m_type)
@@ -96,7 +110,7 @@ Logger &Logger::operator<< (const LoggerManipulator &man)
 
 }
 
-base::Logger *syslog = base::Logger::instance();
+base::Logger &syslog = base::Logger::instance();
 const base::LoggerManipulator logdebug(base::MT_DEBUG);
 const base::LoggerManipulator logmess(base::MT_MESSAGE);
 const base::LoggerManipulator logwarn(base::MT_WARNING);

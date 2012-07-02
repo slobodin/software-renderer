@@ -24,7 +24,7 @@ int BaseApp::run()
 {
     if (!m_clientController)
     {
-        *syslog << "Renderer controller not initialized. Can't work now." << logerr;
+        syslog << "Renderer controller not initialized. Can't work now." << logerr;
         return -1;
     }
 

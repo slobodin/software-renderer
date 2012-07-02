@@ -25,6 +25,7 @@ class BaseApp;
 namespace base
 {
 
+class Config;
 class ResourceMgr;
 
 DECLARE_EXCEPTION(ControllerException)
@@ -40,11 +41,18 @@ class Controller : boost::noncopyable
 
     void update();
 
+    Config *m_controllerConfig;
+    std::pair<int, int> getViewportSize();
+
+    void createRenderManager();
+    bool viewportExist();
+
 public:
     Controller(int argc, const char *argv[]);
     virtual ~Controller();
 
-    void setViewport(sptr(rend::Viewport) viewport);
+    template<typename T>
+    void createViewport();
 
     sptr(rend::Camera)      getCamera();
     sptr(ResourceMgr)       getResmgr();
@@ -53,6 +61,19 @@ public:
 
     void resize(int w, int h);
 };
+
+// because there is no `export' keyword
+template<typename T>
+void Controller::createViewport()
+{
+    if (viewportExist())
+        return;
+
+    auto size = getViewportSize();
+
+    m_viewport = boost::make_shared<T>(size.first, size.second, m_mainCam);
+    createRenderManager();
+}
 
 }
 

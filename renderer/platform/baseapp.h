@@ -9,7 +9,6 @@
 #define BASEAPP_H
 
 #include "comm_pch.h"
-#include "events.h"
 
 namespace base
 {
@@ -18,6 +17,9 @@ class Controller;
 
 namespace platform
 {
+
+struct MouseEvent;
+struct KeyboardEvent;
 
 class BaseApp
 {

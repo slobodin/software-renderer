@@ -20,9 +20,11 @@ DecoderOBJ::~DecoderOBJ()
 
 sptr(Resource) DecoderOBJ::decode(const string &path)
 {
+    syslog << "OBJ files not supported yet" << logerr;
+    return sptr(Resource)();
 }
 
-string DecoderOBJ::extention() const
+string DecoderOBJ::extension() const
 {
     return "obj";
 }

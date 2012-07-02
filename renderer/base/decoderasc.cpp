@@ -22,9 +22,11 @@ DecoderASC::~DecoderASC()
 
 sptr(Resource) DecoderASC::decode(const string &path)
 {
+    syslog << "ASC files not supported yet" << logerr;
+    return sptr(Resource)();
 }
 
-string DecoderASC::extention() const
+string DecoderASC::extension() const
 {
     return "asc";
 }

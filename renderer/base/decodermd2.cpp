@@ -20,9 +20,11 @@ DecoderMD2::~DecoderMD2()
 
 sptr(Resource) DecoderMD2::decode(const string &path)
 {
+    syslog << "MD2 files not supported yet" << logerr;
+    return sptr(Resource)();
 }
 
-string DecoderMD2::extention() const
+string DecoderMD2::extension() const
 {
     return "md2";
 }

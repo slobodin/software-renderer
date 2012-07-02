@@ -5,12 +5,12 @@
  *      E-mail: epiforce57@gmail.com
  */
 
-#include "unixapplication.h"
+#include "application.h"
 
 int main(int argc, const char **argv)
 try
 {
-    UnixApplication app(argc, argv);
+    Application app(argc, argv);
 
     return app.run();
 }

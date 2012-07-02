@@ -30,7 +30,7 @@ void SceneObject::setMesh(sptr(Mesh) mesh)
 {
     if (!mesh)
     {
-        *syslog << "Trying to set empty mesh." << logerr;
+        syslog << "Trying to set empty mesh." << logerr;
         return;
     }
 

@@ -8,16 +8,22 @@
 #include "config.h"
 
 #include <yaml-cpp/yaml.h>
-#include "poly.h"
+#include "viewport.h"
 
 namespace base
 {
 
-struct ModelData
+const char * const DEFAULT_RENDERER_CONFIG = "renderer.yaml";
+const char * const DEFAULT_SCENE_CONFIG = "scene.yaml";
+
+
+void RendererConfig::makeDefaults()
 {
-    string modelpath;
-    math::vec3 pos;
-};
+    camPosition = math::vec3(0, 0, 0);
+    width = rend::DEFAULT_WIDTH;
+    height = rend::DEFAULT_HEIGHT;
+    pathToTheAssets = "";   // executable dir
+}
 
 static void operator>> (const YAML::Node &node, math::vec3 &v)
 {
@@ -26,18 +32,103 @@ static void operator>> (const YAML::Node &node, math::vec3 &v)
     node[2] >> v.z;
 }
 
-static void operator>> (const YAML::Node &node, ModelData &data)
+static void operator>> (const YAML::Node &node, SceneConfig::ObjInfo &objInfo)
 {
-    node["model"] >> data.modelpath;
-    node["position"] >> data.pos;
+    node["model"] >> objInfo.pathToTheModel;
+    node["position"] >> objInfo.position;
 }
 
-Config::Config()
+//! Finds value by the key and stores it in `value'.
+/** If can't find value - sets it to default. */
+template<typename T>
+bool FindValue(const YAML::Node &doc, T &value, string key, const T defaultValue)
 {
+    if(const YAML::Node *pName = doc.FindValue(key))
+    {
+        *pName >> value;
+    }
+    else
+    {
+        syslog << "Can't find" << key << ". Setting to default value" << defaultValue << logwarn;
+        value = defaultValue;
+    }
 }
 
-Config::~Config()
+void Config::parseRendererConfig() try
 {
+    YAML::Parser cfg(m_rendererConfigData);
+
+    YAML::Node doc;
+    cfg.GetNextDocument(doc);
+
+    FindValue(doc, m_rendererConfig.width, "width", rend::DEFAULT_WIDTH);
+    FindValue(doc, m_rendererConfig.height, "height", rend::DEFAULT_HEIGHT);
+    FindValue(doc, m_rendererConfig.camPosition, "campos", math::vec3(0, 0, 0));
+    FindValue(doc, m_rendererConfig.pathToTheAssets, "assets", string(""));
+}
+catch (YAML::Exception &e)
+{
+    syslog << "Error while parsing config file. Setting to defaults.\nError:"
+           << e.what() << logerr;
+
+    m_rendererConfig.makeDefaults();
+}
+
+Config::Config(const string &cfgDir)
+{
+    m_rendererConfig.makeDefaults();
+
+    fs::path mainDir;
+
+    cfgDir.empty() ? mainDir = DEFAULT_RENDERER_CONFIG : mainDir = cfgDir;
+
+    if (fs::exists(mainDir))
+    {
+        if (fs::is_regular_file(mainDir))
+        {
+            if (mainDir.extension().string() != ".yaml")
+            {
+                syslog << "Invalid type of config a file" << logerr;
+                return;
+            }
+        }
+        else if (fs::is_directory(mainDir))
+        {
+            mainDir /= DEFAULT_RENDERER_CONFIG;
+        }
+        else
+        {
+            syslog << "Unknown error while opening a configuration file" << logerr;
+            return;
+        }
+    }
+    else
+    {
+        syslog << "Cannot find config file. Setting defaults." << logwarn;
+        return;
+    }
+
+    string loadPath = fs::complete(mainDir).string();
+
+    std::ifstream rendererConfigFile(loadPath);
+
+    if (rendererConfigFile)
+    {
+        m_rendererConfigData << rendererConfigFile.rdbuf();
+        parseRendererConfig();
+    }
+    else
+        syslog << "Cannot open config file. Setting defaults." << logwarn;
+}
+
+RendererConfig Config::getRendererConfig() const
+{
+    return m_rendererConfig;
+}
+
+SceneConfig Config::getSceneConfig() const
+{
+    return m_sceneConfig;
 }
 
 void Config::configure(Controller *controller)
@@ -114,12 +205,5 @@ void Config::configure(Controller *controller)
         controller->m_rendmgr->addMesh(renderItem);
     }*/
 }
-
-void Config::configure(ResourceMgr *rmgr)
-{
-    // add standart paths to the resources
-    // load all resources from these path
-}
-
 
 }

@@ -34,8 +34,8 @@ public:
     //! Need to be implemented in derived classes. Creates engine representation of the asset.
     virtual sptr(Resource)  decode(const string &path) = 0;
 
-    //! Returns asset extention.
-    virtual string          extention() const = 0;
+    //! Returns asset extension.
+    virtual string          extension() const = 0;
 };
 
 }
