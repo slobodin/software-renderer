@@ -37,6 +37,7 @@ void Camera::setPosition(const math::vec3 &pos)
 {
     m_position = pos;
 
+    // position changed -> translation matrix changed
     buildCamMatrix();
 }
 
@@ -50,6 +51,7 @@ void Camera::setDirection(const math::vec3 &dir)
     m_dir = dir;
     m_dir.normalize();
 
+    // direction changed -> up and right vectors changed -> rotation matrix changed
     buildCamMatrix();
 }
 
@@ -63,8 +65,16 @@ math::vec3 Camera::getRightVector() const
     return m_right;
 }
 
+math::vec3 Camera::getUpVector() const
+{
+    return m_up;
+}
+
 void Camera::buildCamMatrix()
 {
+    // we must set up and right vectors (in order to create camera basis)
+    // suppose, that we already have proper direction
+
     // up is Y
     m_up.set(0.0, 1.0, 0.0);
     // find right vector
@@ -72,16 +82,20 @@ void Camera::buildCamMatrix()
     // find up vector
     m_up = m_dir.crossProduct(m_right);
 
+    // normalize all vectors
     m_right.normalize();
     m_up.normalize();
     m_dir.normalize();
 
-    // create matrix
+    // create rotation matrix (like Rx-1 * Ry-1 * Rz-1 matrix in camera implementation with Euler angles)
     math::M33 rotM(m_right.x, m_up.x, m_dir.x,
                    m_right.y, m_up.y, m_dir.y,
                    m_right.z, m_up.z, m_dir.z);
 
+    // create inv translation matrix
     m_worldToCamera.set(-m_position);
+
+    // do not forget to multiply inv translation matrix by rotation matrix
     m_worldToCamera *= rotM;
 }
 

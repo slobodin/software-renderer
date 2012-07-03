@@ -80,6 +80,7 @@ public:
     math::vec3  getDirection() const;
 
     math::vec3  getRightVector() const;
+    math::vec3  getUpVector() const;
 
     void lookTo(const math::vec3 &lookAtPoint);
     void lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo);
