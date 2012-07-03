@@ -26,6 +26,15 @@ sptr(Mesh) SceneObject::getMesh()
     return m_mesh;
 }
 
+const sptr(Mesh) SceneObject::getMesh() const
+{
+    return m_mesh;
+}
+
+sptr(SceneObject) SceneObject::clone()
+{
+}
+
 void SceneObject::setMesh(sptr(Mesh) mesh)
 {
     if (!mesh)

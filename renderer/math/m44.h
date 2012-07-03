@@ -40,6 +40,10 @@ struct M44
         double a30, double a31, double a32, double a33);
     //! Affine transform ctor.
     M44(const M33 &rotScale, const vec3 &translation);
+    //! Set affine transform.
+    M44(const vec3 &translation);
+    //! Set affine transform.
+    M44(const M33 &rotScale);
 
     //! Set elements with array.
     void set(const double (&src)[4][4]);
@@ -50,6 +54,10 @@ struct M44
              double a30, double a31, double a32, double a33);
     //! Set affine transform.
     void set(const M33 &rotScale, const vec3 &translation);
+    //! Set affine transform.
+    void set(const vec3 &translation);
+    //! Set affine transform.
+    void set(const M33 &rotScale);
     //! Reset to identity matrix.
     void reset();
 

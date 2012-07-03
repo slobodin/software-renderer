@@ -40,6 +40,16 @@ M44::M44(const M33 &rotScale, const vec3 &translation)
     set(rotScale, translation);
 }
 
+M44::M44(const vec3 &translation)
+{
+    set(translation);
+}
+
+M44::M44(const M33 &rotScale)
+{
+    set(rotScale);
+}
+
 void M44::set(const double (&src)[4][4])
 {
     memcpy(x, src, 4 * 4 * sizeof(double));
@@ -89,6 +99,53 @@ void M44::set(const M33 &rotScale, const vec3 &translation)
     x[3][0] = translation.x;
     x[3][1] = translation.y;
     x[3][2] = translation.z;
+    x[3][3] = 1.0;
+}
+
+void M44::set(const vec3 &translation)
+{
+    x[0][0] = 1.0;
+    x[0][1] = 0.0;
+    x[0][2] = 0.0;
+    x[0][3] = 0.0;
+    // second row
+    x[1][0] = 0.0;
+    x[1][1] = 1.0;
+    x[1][2] = 0.0;
+    x[1][3] = 0.0;
+    // third row
+    x[2][0] = 0.0;
+    x[2][1] = 0.0;
+    x[2][2] = 1.0;
+    x[2][3] = 0.0;
+    // fourth row
+    x[3][0] = translation.x;
+    x[3][1] = translation.y;
+    x[3][2] = translation.z;
+    x[3][3] = 1.0;
+}
+
+void M44::set(const M33 &rotScale)
+{
+    // first row
+    x[0][0] = rotScale.x[0][0];
+    x[0][1] = rotScale.x[0][1];
+    x[0][2] = rotScale.x[0][2];
+    x[0][3] = 0.0;
+    // second row
+    x[1][0] = rotScale.x[1][0];
+    x[1][1] = rotScale.x[1][1];
+    x[1][2] = rotScale.x[1][2];
+    x[1][3] = 0.0;
+    // third row
+    x[2][0] = rotScale.x[2][0];
+    x[2][1] = rotScale.x[2][1];
+    x[2][2] = rotScale.x[2][2];
+    x[2][3] = 0.0;
+    // fourth row
+    x[3][0] = 0.0;
+    x[3][1] = 0.0;
+    x[3][2] = 0.0;
     x[3][3] = 1.0;
 }
 

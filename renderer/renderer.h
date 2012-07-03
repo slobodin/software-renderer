@@ -16,9 +16,12 @@
 #include "platform/events.h"
 
 #include "base/controller.h"
+#include "base/resourcemgr.h"
 
 #include "rend/viewport.h"
 #include "rend/camera.h"
+#include "rend/rendermgr.h"
+#include "rend/sceneobject.h"
 
 #include "math/common_math.h"
 #include "math/m22.h"

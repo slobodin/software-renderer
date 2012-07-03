@@ -1,4 +1,4 @@
-campos: [0, 0, 0]
+campos: [0, 0, -450]
 width: 640
 height: 480
 assets: ../../resources/

@@ -14,6 +14,8 @@ class Application : public platform::BaseAppLinux
 {
     sptr(rend::Camera) m_playerCamera;
 
+    void setWindowTitle(const string &title);
+
 public:
     Application(int argc, const char *argv[]);
     virtual ~Application();

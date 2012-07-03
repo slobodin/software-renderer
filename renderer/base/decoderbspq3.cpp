@@ -12,6 +12,7 @@
 #include "vec3.h"
 #include "material.h"
 #include "mesh.h"
+#include "sceneobject.h"
 
 namespace base
 {
@@ -107,7 +108,8 @@ sptr(Resource) DecoderBSPQ3::decode(const string &path)
 
     auto newMesh = make_shared<rend::Mesh>(/*vertexList,
                                            rend::Mesh::MT_MESH_TRIANGLELIST*/);
-    newMesh->setName(path);
+    auto newSceneObject = make_shared<rend::SceneObject>(newMesh);
+    newSceneObject->setName(path);  // FIXME:! not path!
 
     delete [] vertices;
     delete [] faces;
@@ -115,7 +117,7 @@ sptr(Resource) DecoderBSPQ3::decode(const string &path)
 
 //    *syslog << "Decoded q3-bsp model \"" << newMesh->name() << "\". Number of vertices:" << newMesh->numVertices() << logmess;
 
-    return newMesh;
+    return newSceneObject;
 }
 
 string DecoderBSPQ3::extension() const

@@ -11,6 +11,7 @@
 #include "osfile.h"
 #include "mesh.h"
 #include "material.h"
+#include "sceneobject.h"
 
 namespace base
 {
@@ -140,7 +141,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
         rend::VertexBuffer vb;
         vector<int> indices;
 
-        std::for_each(bounds.first, bounds.second, [&indices](PlgPolyData data) {
+        std::for_each(bounds.first, bounds.second, [&indices](const PlgPolyData &data) {
                             std::copy(data.indices, data.indices + 3, std::back_inserter(indices));
                          });
 
@@ -203,12 +204,14 @@ sptr(Resource) DecoderPLG::decode(const string &path)
 
     */
 
-    newMesh->setName(resourceName);
+    auto newObject = make_shared<rend::SceneObject>(newMesh);
 
-    syslog << "Decoded plg-model \"" << newMesh->getName()
+    newObject->setName(resourceName);
+
+    syslog << "Decoded plg-model \"" << newObject->getName()
             << "\". Number of vertices:" << newMesh->numVertices() << logmess;
     
-    return newMesh;
+    return newObject;
 }
 
 string DecoderPLG::extension() const

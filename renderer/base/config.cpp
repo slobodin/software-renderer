@@ -22,7 +22,7 @@ void RendererConfig::makeDefaults()
     camPosition = math::vec3(0, 0, 0);
     width = rend::DEFAULT_WIDTH;
     height = rend::DEFAULT_HEIGHT;
-    pathToTheAssets = "";   // executable dir
+    pathToTheAssets = fs::complete(fs::current_path()).string();   // executable dir
 }
 
 static void operator>> (const YAML::Node &node, math::vec3 &v)
@@ -65,6 +65,16 @@ void Config::parseRendererConfig() try
     FindValue(doc, m_rendererConfig.height, "height", rend::DEFAULT_HEIGHT);
     FindValue(doc, m_rendererConfig.camPosition, "campos", math::vec3(0, 0, 0));
     FindValue(doc, m_rendererConfig.pathToTheAssets, "assets", string(""));
+
+    // check resources path
+    fs::path p(m_rendererConfig.pathToTheAssets);
+
+    // if this path exists, then save it
+    if (fs::exists(p) && fs::is_directory(p))
+        m_rendererConfig.pathToTheAssets = fs::complete(p).string();
+    // otherwise save current path (at the time of entry to main())
+    else
+        m_rendererConfig.pathToTheAssets = fs::complete(fs::current_path()).string();
 }
 catch (YAML::Exception &e)
 {

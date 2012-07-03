@@ -12,6 +12,8 @@
 #include "osfile.h"
 #include "decoderplg.h"
 #include "decoderbspq3.h"
+#include "mesh.h"
+#include "sceneobject.h"
 
 namespace base
 {
@@ -25,34 +27,81 @@ ResourceMgr::ResourceMgr()
     // add all
     m_decoders[plgDecoder->extension()] = plgDecoder;
     m_decoders[bspDecoder->extension()] = bspDecoder;
-
-    // add path of the executable directory
-//    m_loadablePaths.push_back(fs::current_path());
 }
 
 ResourceMgr::~ResourceMgr()
 {
 }
 
-sptr(Resource) ResourceMgr::getResource(const string &resourcepath)
+sptr(rend::SceneObject) ResourceMgr::getSceneObject(const string &name)
 {
-    using namespace fs;
+    sptr(rend::SceneObject) nullSceneObj;
 
-    path p(resourcepath);
-    string fullpath = complete(p).string();
+    sptr(Resource) newResource = getResource(name);
+    if (newResource)
+    {
+        if (boost::dynamic_pointer_cast<rend::SceneObject>(newResource))
+            return boost::dynamic_pointer_cast<rend::SceneObject>(newResource);
+        else
+        {
+            syslog << "Trying to get scene object, but getted object of another type." << logwarn;
+            return nullSceneObj;
+        }
+    }
+    else
+        return nullSceneObj;
+}
 
+sptr(Resource) ResourceMgr::getResource(const string &name)
+{
+    fs::path p(name);
+    string fullpath = fs::complete(p).string();
+
+    // Find by full path.
     auto rit = m_resources.find(fullpath);
+    // if can't find -> load resource
     if (rit == m_resources.end())
     {
-        // try to load
+        loadResource(fullpath);
 
-        // if unsuccessfull return NULL
+        // find again
+        rit = m_resources.find(fullpath);
 
-        syslog << "Getting null resource" << resourcepath << logwarn;
-        return sptr(Resource)();
+        // if can't find again -> search in all directories
+        if (rit == m_resources.end())
+        {
+            for (auto dir : m_loadablePaths)
+            {
+                fs::path p(dir);
+                p /= name;
+
+                rit = m_resources.find(fs::complete(p).string());
+                if (rit != m_resources.end())
+                {
+                    return rit->second;
+                }
+            }
+
+            // else -> find by name
+            rit = std::find_if(m_resources.begin(), m_resources.end(),
+                               [&](map<string, sptr(Resource) >::value_type &val) { return val.second->getName() == name; } );     // do you like C++ too??
+
+            // no such resource
+            if (rit == m_resources.end())
+            {
+                syslog << "No such resource" << name << logwarn;
+                return sptr(Resource)();
+            }
+            else
+            {
+                return rit->second;
+            }
+        }
+        else
+            return m_resources[fullpath];
     }
-
-    return m_resources[fullpath];
+    else
+        return m_resources[fullpath];
 }
 
 void ResourceMgr::loadResource(const string &resourcepath) try
@@ -68,7 +117,7 @@ void ResourceMgr::loadResource(const string &resourcepath) try
 
     if (!p.has_extension())
     {
-        syslog << error << resourcepath << "without extension" << logerr;
+//        syslog << error << resourcepath << "without extension" << logerr;
         return;
     }
 
@@ -100,6 +149,9 @@ void ResourceMgr::loadResource(const string &resourcepath) try
         return;
     }
 
+    if (!fs::exists(fullpath))
+        return;
+
     sptr(Resource) newResource;
     try
     {
@@ -127,7 +179,7 @@ void ResourceMgr::unloadResource(const string &resourcepath)
 {
 }
 
-void ResourceMgr::loadResources() try
+void ResourceMgr::loadAllResources() try
 {
     for (auto loadablePath : m_loadablePaths)
     {
@@ -142,6 +194,13 @@ void ResourceMgr::loadResources() try
                 loadResource(p.string());
         }
     }
+
+    syslog << "\nLoaded resources:\n";
+    for (auto resource : m_resources)
+    {
+        syslog << resource.first << "with name" << resource.second->getName() << "\n";
+    }
+    syslog << logmess;
 }
 catch (fs::filesystem_error &e)
 {
@@ -150,6 +209,12 @@ catch (fs::filesystem_error &e)
 
 void ResourceMgr::addPath(const string &name) try
 {
+    if (name.empty())
+    {
+        syslog << "Trying to add empty resources path" << logwarn;
+        return;
+    }
+
     using namespace fs;
 
     path p(name);
@@ -171,12 +236,12 @@ void ResourceMgr::addPath(const string &name) try
         }
         else
         {
-            syslog << "Adding new path to resource manager:" << name << "isn't a directory" << logerr;
+            syslog << "Adding new path to resource manager:" << name << "isn't a directory" << logwarn;
             return;
         }
     }
     else
-        syslog << "Adding new path to resource manager:" << name << "doesn't exist" <<logerr;
+        syslog << "Adding new path to resource manager:" << name << "doesn't exist" <<logwarn;
 }
 catch (fs::filesystem_error &e)
 {

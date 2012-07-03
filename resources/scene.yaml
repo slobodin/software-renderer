@@ -1,9 +1,9 @@
 Objects:
-  - model: ../resources/tank1.plg
+  - model: tank1.plg
     position: [0, 0, 0]
-#  - model: ../resources/tower1.plg
+#  - model: tower1.plg
 #    position: [0, 0, -250]
 #    order: CCW
-#  - model: ../resources/q3ctf1.bsp
+#  - model: q3ctf1.bsp
 #    position: [0, 0, 0]
 #    order: CW

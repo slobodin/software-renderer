@@ -9,6 +9,7 @@
 
 #include "m33.h"
 #include "renderlist.h"
+#include "vertexbuffer.h"
 
 namespace rend
 {
@@ -31,7 +32,7 @@ int Mesh::numVertices() const
 {
     int n = 0;
     std::for_each(m_submeshes.begin(), m_submeshes.end(),
-                  [&](VertexBuffer buffer) { n += buffer.numVertices(); });
+                  [&](const VertexBuffer &buffer) { n += buffer.numVertices(); });
 
     return n;
 }

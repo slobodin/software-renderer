@@ -17,7 +17,7 @@ namespace base
 /*!
   *
   */
-class Resource
+class Resource : boost::noncopyable
 {
 protected:
     //! Name of the resource.

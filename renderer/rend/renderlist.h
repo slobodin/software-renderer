@@ -10,19 +10,27 @@
 
 #include "comm_pch.h"
 
-#include "mesh.h"
 #include "poly.h"
+
+namespace math
+{
+struct M44;
+}
 
 namespace rend
 {
 
+class VertexBuffer;
+class SceneObject;
 class Camera;
 
 class RenderList
 {
     list<math::Triangle> m_triangles;
 
-    static void createTriangles(const VertexBuffer &vertexBuffer, list<math::Triangle> &output);
+    static void createTriangles(const VertexBuffer &vertexBuffer,
+                                const math::M44 &transform,
+                                list<math::Triangle> &output);
 
 public:
     //! Default ctor.
@@ -30,10 +38,10 @@ public:
     //! Dtor.
     ~RenderList() { }
 
-    void append(const Mesh &mesh);
+    void append(const SceneObject &mesh);
 
-    const list<math::Triangle>& triangles() const { return m_triangles; }
-    list<math::Triangle>&       triangles() { return m_triangles; }
+    const list<math::Triangle> &triangles() const { return m_triangles; }
+    list<math::Triangle>       &triangles() { return m_triangles; }
 
     void zsort();
     void removeBackfaces(const sptr(Camera) cam);

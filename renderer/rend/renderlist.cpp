@@ -6,23 +6,23 @@
  */
 
 #include "renderlist.h"
+#include "m44.h"
 #include "camera.h"
 #include "vertex.h"
+#include "vertexbuffer.h"
+#include "mesh.h"
+#include "sceneobject.h"
 
 namespace rend
 {
 
-void RenderList::createTriangles(const VertexBuffer &vertexBuffer, list<math::Triangle> &output)
+void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M44 &transform, list<math::Triangle> &output)
 {
     math::Triangle triangle;
     // all mesh vertices
     auto vertices = vertexBuffer.getVertices();
     // mesh indices
     auto indices = vertexBuffer.getIndices();
-    // FIXME: not here!
-    // mesh world transformation
-//    const math::M44 &tr = mesh.getTransformation();
-    math::M44 tr;
 
     switch(vertexBuffer.getType())
     {
@@ -39,9 +39,9 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, list<math::Tr
             triangle.v(2) = vertices[indices[ind + 2]];
 
             // translate and rotate the triangle
-            triangle.v(0).p = triangle.v(0).p * tr;
-            triangle.v(1).p = triangle.v(1).p * tr;
-            triangle.v(2).p = triangle.v(2).p * tr;
+            triangle.v(0).p = triangle.v(0).p * transform;
+            triangle.v(1).p = triangle.v(1).p * transform;
+            triangle.v(2).p = triangle.v(2).p * transform;
 
             triangle.setMaterial(vertexBuffer.getMaterial());
 
@@ -85,12 +85,13 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, list<math::Tr
     }
 }
 
-void RenderList::append(const Mesh &mesh)
+void RenderList::append(const SceneObject &obj)
 {
-    const list<VertexBuffer> &subMeshes = mesh.getSubmeshes();
+    const list<VertexBuffer> &subMeshes = obj.getMesh()->getSubmeshes();
+    math::M44 worldTransform = obj.getTransformation();
 
     foreach (const VertexBuffer &vb, subMeshes)
-        RenderList::createTriangles(vb, m_triangles);
+        RenderList::createTriangles(vb, worldTransform, m_triangles);
 }
 
 void RenderList::zsort()

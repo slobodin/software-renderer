@@ -18,12 +18,12 @@ namespace rend
 
 class Camera;
 class Rasterizer;
-class Mesh;
 class Light;
 class Viewport;
 class AmbientLight;
 class DirectionalLight;
 class PointLight;
+class SceneObject;
 
 class RenderMgr : boost::noncopyable
 {
@@ -31,8 +31,8 @@ class RenderMgr : boost::noncopyable
     sptr(Camera) m_camera;
     sptr(Viewport) m_viewport;
 
-    vector<sptr(Mesh) > m_meshes;
-    vector<sptr(Light) > m_lights;
+    list<sptr(SceneObject) > m_sceneObjects;
+    list<sptr(Light) > m_lights;
 
     // helpers
     void makeLight();
@@ -44,8 +44,9 @@ public:
     void update();
 
     // TODO: make uniform method `addSceneObject(Node *n);'
-    void addMesh(sptr(rend::Mesh) mesh);
-    void addViewport();
+    void addSceneObject(sptr(SceneObject) node);
+
+    sptr(SceneObject) getSceneObject(const string &name);
 
     // void setAmbientLight(color);
     // light* addLight....

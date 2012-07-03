@@ -10,6 +10,11 @@
 
 #include "comm_pch.h"
 
+namespace rend
+{
+class SceneObject;
+}
+
 namespace base
 {
 
@@ -29,29 +34,30 @@ class ResourceMgr : boost::noncopyable
     map<string, sptr(Resource) >        m_resources;
     map<string, sptr(ResourceDecoder) > m_decoders;
 
-public:
-    //! Default ctor.
-    ResourceMgr();
-    //! Dtor.
-    ~ResourceMgr();
-    
     //! Gets the resource.
     /*!
       * Just returns the pointer to the resource, if resource is loaded.
       * Otherwise loads resource from the filesystem.
       * \return Pointer to the resource.
-      * \param path Path to the asset.
+      * \param name Path to the asset or name of the resource.
       */
-    sptr(Resource) getResource(const string &resourcepath);
-
-    // getMesh
-    // getTexture
-    // etc
+    sptr(Resource) getResource(const string &name);
 
     void loadResource(const string &resourcepath);
     void unloadResource(const string &resourcepath);
 
-    void loadResources();
+public:
+    //! Default ctor.
+    ResourceMgr();
+    //! Dtor.
+    ~ResourceMgr();
+
+    // getMesh
+    // getTexture
+    // etc
+    sptr(rend::SceneObject) getSceneObject(const string &name);
+
+    void loadAllResources();
 
     void addPath(const string &name);
     void listPath();

@@ -13,6 +13,7 @@
 #include "rasterizer.h"
 #include "mesh.h"
 #include "light.h"
+#include "sceneobject.h"
 
 namespace rend
 {
@@ -22,8 +23,7 @@ RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> vi
       m_camera(cam),
       m_viewport(viewport)
 {
-    m_camera->setPosition(math::vec3(0.0, 0.0, -450.0));
-    m_camera->lookTo(math::vec3(0, 0, 0));
+    m_camera->setRotation( { 0, 0, 0 } );
 }
 
 void rend::RenderMgr::makeLight()
@@ -47,13 +47,16 @@ void RenderMgr::update()
     // 1. Clear buffer.
     m_rasterizer->beginFrame(m_viewport);
 
+    // update camera
+//    m_camera->buildCamMatrix();
+
     RenderList renderList;
 
     // 2. Cull full meshes and form triangles render list.
-    for (auto mesh : m_meshes)
+    for (auto obj : m_sceneObjects)
     {
-        if (!m_camera->culled(*mesh))
-            renderList.append(*mesh);
+        if (!m_camera->culled(*obj))
+            renderList.append(*obj);
     }
 
     // 3. Cull backfaces.
@@ -138,15 +141,20 @@ void RenderMgr::resize(int w, int h)
     m_rasterizer->resize(w, h);
 }
 
-void RenderMgr::addMesh(sptr(rend::Mesh) mesh)
+void RenderMgr::addSceneObject(sptr(SceneObject) node)
 {
-    if (!mesh)
+    if (!node)
     {
-        syslog << "Trying to add empty mesh" << logerr;
+        syslog << "Trying to add empty object" << logerr;
         return;
     }
 
-    m_meshes.push_back(mesh);
+    m_sceneObjects.push_back(node);
+}
+
+sptr(SceneObject) RenderMgr::getSceneObject(const string &name)
+{
+    return sptr(SceneObject)();
 }
 
 }

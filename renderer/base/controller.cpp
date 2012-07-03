@@ -39,11 +39,11 @@ Controller::Controller(int argc, const char *argv[])
     m_mainCam = make_shared<rend::Camera>(camPosition);
 
     // notify rmgr about resource path. Thus it will can load resources from this path
-    m_resourceMgr->addPath(m_controllerConfig->getRendererConfig().pathToTheAssets);
-    m_resourceMgr->listPath();
+    string resourcesPath = m_controllerConfig->getRendererConfig().pathToTheAssets;
+    m_resourceMgr->addPath(resourcesPath);
 
     // load all loadable from assets path
-    m_resourceMgr->loadResources();
+    m_resourceMgr->loadAllResources();
 
     // learn about scene objects (read from the config file)
 

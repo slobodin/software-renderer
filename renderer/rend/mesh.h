@@ -11,7 +11,6 @@
 #include "comm_pch.h"
 
 #include "vertexbuffer.h"
-#include "resource.h"
 
 namespace rend
 {
@@ -20,7 +19,7 @@ namespace rend
 /*!
   * Base renderable triangle mesh.
   */
-class Mesh : public base::Resource
+class Mesh
 {
     //! Mesh consists of some submeshes, which holds vertex data and one material.
     list<VertexBuffer> m_submeshes;
@@ -39,6 +38,10 @@ public:
     int numSubMeshes() const;
 
     const list<VertexBuffer> &getSubmeshes() const { return m_submeshes; }
+
+private:
+    Mesh(const Mesh &);
+    Mesh &operator= (const Mesh &);
 };
 
 }

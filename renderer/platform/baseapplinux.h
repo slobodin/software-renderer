@@ -17,6 +17,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 
 namespace platform
 {
@@ -52,6 +53,7 @@ public:
     virtual ~XViewport();
 
     Display *getXDisplay() { return m_display; }
+    Window  &getWindow() { return m_window; }
 
     void flush(const unsigned char * const pixels);
 };

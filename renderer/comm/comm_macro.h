@@ -11,7 +11,7 @@
 #include <boost/smart_ptr.hpp>
 
 // macro-helpers to create smart pointers
-// use this everywhere
+// use wherever its possible
 #define sptr(TYPE) boost::shared_ptr<TYPE>
 
 #define aptr(TYPE) std::auto_ptr<TYPE>
