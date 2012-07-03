@@ -70,6 +70,10 @@ math::vec3 Camera::getUpVector() const
     return m_up;
 }
 
+void Camera::setEulerAnglesRotation(double yaw, double pitch, double roll)
+{
+}
+
 void Camera::buildCamMatrix()
 {
     // we must set up and right vectors (in order to create camera basis)
