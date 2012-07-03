@@ -21,12 +21,12 @@ Camera::Camera(const math::vec3 position,
                double nearZ,
                double farZ)
     : m_position(position),
-//      m_right(1.0, 0.0, 0.0),
-//      m_up(0.0, 1.0, 0.0),
-//      m_dir(0.0, 0.0, 1.0),
-      m_yaw(0),
-      m_pitch(0),
-      m_roll(0),
+      m_right(1.0, 0.0, 0.0),
+      m_up(0.0, 1.0, 0.0),
+      m_dir(0.0, 0.0, 1.0),
+//      m_yaw(0),
+//      m_pitch(0),
+//      m_roll(0),
       m_fov(fov),
       m_nearZ(nearZ),
       m_farZ(farZ)
@@ -36,18 +36,8 @@ Camera::Camera(const math::vec3 position,
 void Camera::setPosition(const math::vec3 &pos)
 {
     m_position = pos;
-    m_worldToCamera.x[3][0] = -m_position.x;
-    m_worldToCamera.x[3][1] = -m_position.y;
-    m_worldToCamera.x[3][2] = -m_position.z;
-    m_worldToCamera.x[3][3] = 1.0;
 
-//    m_dir.normalize();
-
-//    m_up -= m_up.dotProduct(m_dir) * m_dir;
-//    m_right = m_up.crossProduct(m_dir);
-
-//    m_up.normalize();
-//    m_right.normalize();
+    buildCamMatrix();
 }
 
 math::vec3 Camera::getPosition() const
@@ -55,94 +45,59 @@ math::vec3 Camera::getPosition() const
     return m_position;
 }
 
-//void Camera::setDirection(const math::vec3 &dir)
-//{
-//    m_dir = dir;
-//    m_dir.normalize();
+void Camera::setDirection(const math::vec3 &dir)
+{
+    m_dir = dir;
+    m_dir.normalize();
 
-////    buildCamMatrix();
-//}
+    buildCamMatrix();
+}
 
 math::vec3 Camera::getDirection() const
 {
-    return math::vec3(m_yaw, m_pitch, m_roll);
+    return m_dir;
 }
 
-//void Camera::buildCamMatrix()
-//{
-//    // up is Y
-//    m_up.set(0.0, 1.0, 0.0);
-//    // find right vector
-//    m_right = m_up.crossProduct(m_dir);
-//    // find up vector
-//    m_up = m_dir.crossProduct(m_right);
-
-//    m_right.normalize();
-//    m_up.normalize();
-//    m_dir.normalize();
-
-//    // create matrix
-//    math::M33 resM(m_right.x, m_up.x, m_dir.x,
-//                   m_right.y, m_up.y, m_dir.y,
-//                   m_right.z, m_up.z, m_dir.z);
-
-//    m_worldToCamera.set(resM, -m_position);
-//}
-
-//void Camera::lookTo(const math::vec3 &lookAtPoint)
-//{
-//    // direction = target - camera_poition
-//    m_dir = lookAtPoint - m_position;
-//    m_dir.normalize();
-
-//    buildCamMatrix();
-//}
-
-//void Camera::lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo)
-//{
-//    m_position = lookFrom;
-//    this->lookTo(lookTo);
-//}
-
-void Camera::setRotation(const math::vec3 &eulerAngles)
+math::vec3 Camera::getRightVector() const
 {
-//    m_right.set(1.0, 0.0, 0.0);
-//    m_up.set(0.0, 1.0, 0.0);
-//    m_dir.set(0.0, 0.0, 1.0);
+    return m_right;
+}
 
-    m_yaw = eulerAngles.x;
-    m_pitch = eulerAngles.y;
-    m_roll = eulerAngles.z;
+void Camera::buildCamMatrix()
+{
+    // up is Y
+    m_up.set(0.0, 1.0, 0.0);
+    // find right vector
+    m_right = m_up.crossProduct(m_dir);
+    // find up vector
+    m_up = m_dir.crossProduct(m_right);
 
-    math::M44 invTranslationM(-m_position);
-//    math::M33 rotationM = math::M33::getRotateYawPitchRollMatrix(m_yaw, m_pitch, m_roll);
-    math::M33 invRotationM = math::M33::getRotateYawPitchRollMatrix(-m_yaw, -m_pitch, -m_roll);
+    m_right.normalize();
+    m_up.normalize();
+    m_dir.normalize();
 
-    m_worldToCamera = invTranslationM * invRotationM;
+    // create matrix
+    math::M33 rotM(m_right.x, m_up.x, m_dir.x,
+                   m_right.y, m_up.y, m_dir.y,
+                   m_right.z, m_up.z, m_dir.z);
 
-//    m_right = m_right * invTranslationM;
-//    m_up = m_up * invTranslationM;
-//    m_dir = m_dir * invTranslationM;
+    m_worldToCamera.set(-m_position);
+    m_worldToCamera *= rotM;
+}
 
-//    m_dir.normalize();
+void Camera::lookTo(const math::vec3 &lookAtPoint)
+{
+    // direction = target - camera_poition
+    m_dir = lookAtPoint - m_position;
+    m_dir.normalize();
 
-//    m_up -= m_up.dotProduct(m_dir) * m_dir;
-//    m_right = m_up.crossProduct(m_dir);
+    buildCamMatrix();
+}
 
-//    m_up.normalize();
-//    m_right.normalize();
-
-//    m_right = m_right * resM;
-//    m_up = m_up * resM;
-//    m_dir = m_dir * resM;
-
-//    m_dir.normalize();
-
-//    m_up -= m_up.dotProduct(m_dir) * m_dir;
-//    m_right = m_up.crossProduct(m_dir);
-
-//    m_up.normalize();
-//    m_right.normalize();
+void Camera::lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo)
+{
+    m_position = lookFrom;
+    this->lookTo(lookTo);
 }
 
 void Camera::toCamera(RenderList &rendList) const

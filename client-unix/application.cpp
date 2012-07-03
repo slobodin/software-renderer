@@ -69,7 +69,9 @@ void Application::onMouseEvent(const platform::MouseEvent &ev)
         if (abs(yaw) > 360) yaw %= 360;
         if (abs(pitch) > 360) pitch %= 360;
 
-        m_playerCamera->setRotation( { (double)yaw, (double)pitch, 0 });
+        math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, 0);
+        math::vec3 camDir = math::vec3(0, 0, 1) * rotM;
+        m_playerCamera->setDirection(camDir);
     }
 
     prevEvent = ev;
@@ -86,7 +88,7 @@ void Application::onMouseEvent(const platform::MouseEvent &ev)
 
 void Application::onKeyPressed(const platform::KeyboardEvent &ev)
 {
-    static double velocity = 10;
+    static const double velocity = 10.0;
     static math::vec3 ds;
     static math::vec3 position;
 
@@ -104,10 +106,15 @@ void Application::onKeyPressed(const platform::KeyboardEvent &ev)
         position -= ds;
     }
     else if (ev.keycode() == platform::KEY_RIGHT)
-//        ds = m_playerCamera->getR() * velocity;;
-        ;
+    {
+        ds = m_playerCamera->getRightVector() * velocity;
+        position += ds;
+    }
     else if (ev.keycode() == platform::KEY_LEFT)
-        ;
+    {
+        ds = m_playerCamera->getRightVector() * velocity;
+        position -= ds;
+    }
     else
         return;
 

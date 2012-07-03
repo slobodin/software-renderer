@@ -23,7 +23,7 @@ RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> vi
       m_camera(cam),
       m_viewport(viewport)
 {
-    m_camera->setRotation( { 0, 0, 0 } );
+    m_camera->lookTo( { 0, 0, 0 } );
 }
 
 void rend::RenderMgr::makeLight()
@@ -64,8 +64,22 @@ void RenderMgr::update()
     renderList.removeBackfaces(m_camera);
 
     // 4. Lighting.
-    for (auto light : m_lights)
-        light->illuminate(renderList);
+    // temporary:
+    if (m_lights.empty())
+    {
+        auto &triangles = renderList.triangles();
+        for (auto &triangle : triangles)
+        {
+            triangle.v(0).color = triangle.getMaterial()->ambientColor;
+            triangle.v(1).color = triangle.getMaterial()->ambientColor;
+            triangle.v(2).color = triangle.getMaterial()->ambientColor;
+        }
+    }
+    else
+    {
+        for (auto light : m_lights)
+            light->illuminate(renderList);
+    }
 
     // 5. World -> Camera transformation. Cull triangles with negative Z.
     // TODO: frustum culling here.

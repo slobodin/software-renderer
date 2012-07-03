@@ -30,14 +30,14 @@ class Camera
 
     //! Position of the camera in the world.
     math::vec3 m_position;
-//    //! Right vector.
-//    math::vec3 m_right;
-//    //! Up vector.
-//    math::vec3 m_up;
-//    //! Direction vector.
-//    math::vec3 m_dir;
+    //! Right vector.
+    math::vec3 m_right;
+    //! Up vector.
+    math::vec3 m_up;
+    //! Direction vector.
+    math::vec3 m_dir;
 
-    double m_yaw, m_pitch, m_roll;
+//    double m_yaw, m_pitch, m_roll;
 
     //! Field of view. Default is 90 grad.
     double m_fov;
@@ -61,7 +61,7 @@ class Camera
     void toCamera(math::vec3 &v) const;
     void toScreen(math::vec3 &v, const Viewport &viewport) const;
 
-//    void buildCamMatrix();
+    void buildCamMatrix();
 
 public:
     //! Default ctor.
@@ -76,12 +76,13 @@ public:
     void        setPosition(const math::vec3 &pos);
     math::vec3  getPosition() const;
 
-//    void        setDirection(const math::vec3 &dir);
+    void        setDirection(const math::vec3 &dir);
     math::vec3  getDirection() const;
 
-//    void lookTo(const math::vec3 &lookAtPoint);
-//    void lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo);
-    void setRotation(const math::vec3 &eulerAngles);
+    math::vec3  getRightVector() const;
+
+    void lookTo(const math::vec3 &lookAtPoint);
+    void lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo);
 
     void toCamera(RenderList &rendList) const;
     void toScreen(RenderList &rendList, const Viewport &viewport) const;

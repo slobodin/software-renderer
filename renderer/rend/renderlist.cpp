@@ -43,12 +43,8 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.v(1).p = triangle.v(1).p * transform;
             triangle.v(2).p = triangle.v(2).p * transform;
 
-            triangle.setMaterial(vertexBuffer.getMaterial());
-
             // set material
-//            if (!vertexBuffer.getMaterial()->
-//                triangle.material() = mesh.materials()[t];
-//            else
+            triangle.setMaterial(vertexBuffer.getMaterial());
 
             // compute normals
             triangle.computeNormal();
