@@ -31,8 +31,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
     return DefWindowProc(hwnd, msg, wp, lp);
 }
 
-WindowsViewport::WindowsViewport(WindowsApplication *app,
-                                 int width, int height,
+WindowsViewport::WindowsViewport(int width, int height,
                                  boost::shared_ptr<rend::Camera> camera)
     : Viewport(width, height, camera)
 {

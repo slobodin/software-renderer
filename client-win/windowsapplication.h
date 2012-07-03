@@ -37,6 +37,8 @@ public:
 
     HINSTANCE getAppInstance() { return m_hInstance; }
     LRESULT WINAPI handleMessage(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+
+    WindowsApplication *get() { return this; }
 };
 
 #endif // WINDOWSAPPLICATION_H

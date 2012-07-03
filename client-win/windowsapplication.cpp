@@ -69,7 +69,7 @@ WindowsApplication::WindowsApplication(int argc, const char **argv)
     m_clientController = boost::make_shared<base::Controller>(argc, argv);
     m_playerCamera = m_clientController->getCamera();
 
-    m_clientController->setViewport(boost::make_shared<WindowsViewport>(this, 640, 480, m_playerCamera));
+    m_clientController->createViewport<WindowsViewport>();
     m_viewport = boost::dynamic_pointer_cast<WindowsViewport>(m_clientController->getViewport());
 }
 

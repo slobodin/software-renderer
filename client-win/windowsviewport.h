@@ -21,8 +21,7 @@ class WindowsViewport : public rend::Viewport
     HDC m_hDC;
 
 public:
-    WindowsViewport(WindowsApplication *app,
-                    int width, int height,
+    WindowsViewport(int width, int height,
                     boost::shared_ptr<rend::Camera> camera);
     ~WindowsViewport();
 
