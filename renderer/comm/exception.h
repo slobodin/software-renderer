@@ -8,22 +8,21 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-#include <exception>
+//#include <exception>
+#include <stdexcept>
 #include <string>
 
 namespace common
 {
 
 //! Base class for all renderer exceptions.
-class Exception : public std::exception
+class Exception
 {
     //! "What"-string.
     /*! Contains error message. */
     std::string m_what;
 
 public:
-    Exception(const char *text)
-        : m_what(text) { }
     Exception(const std::string &text)
         : m_what(text) { }
     virtual ~Exception() throw() { }
@@ -45,13 +44,5 @@ public: \
     : Exception(text) \
 {} \
 };
-
-namespace common
-{
-
-// Some standart exceptions.
-DECLARE_EXCEPTION(OutOfRangeException)
-
-}
 
 #endif // EXCEPTION_H

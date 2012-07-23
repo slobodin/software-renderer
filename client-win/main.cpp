@@ -15,9 +15,16 @@ int main(int argc, const char **argv) try
 }
 catch (common::Exception &e)
 {
-    std::cerr << "Program terminated with exception " << e.what() << "\n";
+    std::cerr << "Renderer exception: " << e.what() << "\n";
+    return 1;
+}
+catch (std::exception &e)
+{
+    std::cerr << "std exception: " << e.what() << "\n";
+    return 1;
 }
 catch (...)
 {
-    std::cerr << "Something wrong. Aborting.\n";
+    std::cerr << "Unknown exception occurred. Aborting.\n";
+    return 1;
 }

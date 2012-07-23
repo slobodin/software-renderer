@@ -19,6 +19,11 @@ catch (common::Exception &e)
     std::cerr << "Renderer exception: " << e.what() << "\n";
     return 1;
 }
+catch (std::exception &e)
+{
+    std::cerr << "std exception: " << e.what() << "\n";
+    return 1;
+}
 catch (...)
 {
     std::cerr << "Unknown exception occurred. Aborting.\n";

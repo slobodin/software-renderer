@@ -35,7 +35,7 @@ const vertex &Triangle::v(const size_t ind) const
 {
     if (ind > 2)
     {
-        throw common::OutOfRangeException("Bad index passed to triangle->v()");
+        throw std::out_of_range("Bad index passed to triangle->v()");
     }
 
     return m_verts[ind];
@@ -45,7 +45,7 @@ vertex &Triangle::v(const size_t ind)
 {
     if (ind > 2)
     {
-        throw common::OutOfRangeException("Bad index passed to triangle->v()");
+        throw std::out_of_range("Bad index passed to triangle->v()");
     }
 
     return m_verts[ind];

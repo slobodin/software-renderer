@@ -185,7 +185,7 @@ public:
         case BLUE:
             return m_b;
         default:
-            throw common::OutOfRangeException("Invalid color component");
+            throw std::out_of_range("Invalid color component");
         }
     }
     //! Component by-value-getter.
@@ -200,7 +200,7 @@ public:
         case BLUE:
             return m_b;
         default:
-            throw common::OutOfRangeException("Invalid color component");
+            throw std::out_of_range("Invalid color component");
         }
     }
 
