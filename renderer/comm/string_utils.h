@@ -34,8 +34,26 @@ public:
 extern IsSpace isSpacePredicat;
 extern IsNotSpace isNotSpacePredicat;
 
-string upper(const string &str);
-string lower(const string &str);
+string makeUpper(const string &str);
+string makeLower(const string &str);
+
+template<typename T>
+T fromString(const string &str)
+{
+    istringstream is(str);
+    T res;
+    is >> res;
+
+    return res;
+}
+
+template<typename T>
+string toString(const T &item)
+{
+    ostringstream os;
+    os << item;
+    return os.str();
+}
 
 }
 
