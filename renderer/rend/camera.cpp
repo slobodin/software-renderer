@@ -72,12 +72,31 @@ math::vec3 Camera::getUpVector() const
 
 void Camera::setEulerAnglesRotation(double yaw, double pitch, double roll)
 {
+//    m_right.set(1.0, 0.0, 0.0);
+//    m_up.set(0.0, 1.0, 0.0);
+//    m_dir.set(0.0, 0.0, 1.0);
+
+//    math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, roll);
+//    m_right = m_right * rotM;
+//    m_up = m_up * rotM;
+//    m_dir = m_dir * rotM;
+
+//    m_dir.normalize();
+//    m_up -= m_up.dotProduct(m_dir) * m_dir;
+//    m_right = m_up.crossProduct(m_dir);
+
+//    m_up.normalize();
+//    m_right.normalize();
+
+//    rotM.set(m_right.x, m_up.x, m_dir.x,
+//             m_right.y, m_up.y, m_dir.y,
+//             m_right.z, m_up.z, m_dir.z);
 }
 
 void Camera::buildCamMatrix()
 {
     // we must set up and right vectors (in order to create camera basis)
-    // suppose, that we already have proper direction
+    // assume, that we already have proper direction
 
     // up is Y
     m_up.set(0.0, 1.0, 0.0);
