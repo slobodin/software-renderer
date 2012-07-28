@@ -97,6 +97,8 @@ void RenderList::zsort()
 
 void RenderList::removeBackfaces(const sptr(Camera) cam)
 {
+    // TODO: make more functional
+
     auto t = m_triangles.begin();
 
     while (t != m_triangles.end())
