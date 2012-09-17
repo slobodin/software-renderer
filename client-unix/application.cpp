@@ -32,9 +32,11 @@ Application::Application(int argc, const char *argv[])
     // set window title
     setWindowTitle("Nyan");
 
-    auto tank = m_clientController->getResmgr()->getObject<rend::SceneObject>("tank1.plg");
-    auto tower = m_clientController->getResmgr()->getObject<rend::SceneObject>("tower1.plg");
-    auto cube = m_clientController->getResmgr()->getObject<rend::SceneObject>("cube1.plg");
+    sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
+
+    auto tank = rmgr->getObject<rend::SceneObject>("tank1.plg");
+    auto tower = rmgr->getObject<rend::SceneObject>("tower1.plg");
+    auto cube = rmgr->getObject<rend::SceneObject>("cube1.plg");
 
     m_clientController->getRendmgr()->addSceneObject(tank);
     m_clientController->getRendmgr()->addSceneObject(cube);
@@ -69,24 +71,10 @@ void Application::onMouseEvent(const platform::MouseEvent &ev)
         if (abs(yaw) > 360) yaw %= 360;
         if (abs(pitch) > 360) pitch %= 360;
 
-//        m_playerCamera->setEulerAnglesRotation(yaw, pitch, 0);
-
-        math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, 0);
-        math::vec3 camDir = math::vec3(0, 0, 1) * rotM;
-//        m_playerCamera->setDirection(camDir);
         m_playerCamera->setEulerAnglesRotation(yaw, pitch, 0);
     }
 
     prevEvent = ev;
-
-//    if (ev.isLeftPressed())
-//        std::cerr << "Left pressed\n";
-//    if (ev.isRightPressed())
-//        std::cerr << "Right pressed\n";
-//    if (ev.isMiddlePressed())
-//        std::cerr << "Middle pressed\n";
-
-    std::cerr << "y: " << yaw << " p: " << pitch << "\n";
 }
 
 void Application::onKeyPressed(const platform::KeyboardEvent &ev)

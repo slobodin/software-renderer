@@ -47,9 +47,6 @@ void RenderMgr::update()
     // 1. Clear buffer.
     m_rasterizer->beginFrame(m_viewport);
 
-    // update camera
-//    m_camera->buildCamMatrix();
-
     RenderList renderList;
 
     // 2. Cull full meshes and form triangles render list.

@@ -97,50 +97,8 @@ void Camera::buildCamMatrix()
     // compute result matrix
     m_worldToCamera.set(-m_position);
     m_worldToCamera *= mrot;
-
-    /*
-    // we must set up and right vectors (in order to create camera basis)
-    // assume, that we already have proper direction
-
-    // up is Y
-    m_up.set(0.0, 1.0, 0.0);
-    // find right vector
-    m_right = m_up.crossProduct(m_dir);
-    // find up vector
-    m_up = m_dir.crossProduct(m_right);
-
-    // normalize all vectors
-    m_right.normalize();
-    m_up.normalize();
-    m_dir.normalize();
-
-    // create rotation matrix (like Rx-1 * Ry-1 * Rz-1 matrix in camera implementation with Euler angles)
-    math::M33 rotM(m_right.x, m_up.x, m_dir.x,
-                   m_right.y, m_up.y, m_dir.y,
-                   m_right.z, m_up.z, m_dir.z);
-
-    // create inv translation matrix
-    m_worldToCamera.set(-m_position);
-
-    // do not forget to multiply inv translation matrix by rotation matrix
-    m_worldToCamera *= rotM;*/
-}
-/*
-void Camera::lookTo(const math::vec3 &lookAtPoint)
-{
-    // direction = target - camera_poition
-    m_dir = lookAtPoint - m_position;
-    m_dir.normalize();
-
-    buildCamMatrix();
 }
 
-void Camera::lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo)
-{
-    m_position = lookFrom;
-    this->lookTo(lookTo);
-}
-*/
 void Camera::toCamera(RenderList &rendList) const
 {
     list<math::Triangle> &trias = rendList.triangles();
@@ -156,7 +114,7 @@ void Camera::toCamera(RenderList &rendList) const
         p2 = p2 * m_worldToCamera;
         p3 = p3 * m_worldToCamera;
 
-        // FIXME:
+        // delete all triangles, that lies behind z plane
         if (p1.z < m_distance || p2.z < m_distance || p3.z < m_distance)
         {
             t = trias.erase(t);
@@ -187,8 +145,6 @@ bool Camera::culled(const SceneObject &obj) const
 {
     /*math::vec3 spherePos = obj.getPosition();
     double radius = obj.bsphere().radius();
-
-    // APPLY TRANSFORMATION!
 
     if (radius < 0)
         return false;

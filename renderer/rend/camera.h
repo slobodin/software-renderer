@@ -82,8 +82,6 @@ public:
     math::vec3  getUpVector() const;
 
     void setEulerAnglesRotation(double yaw, double pitch, double roll);
-    /*void lookTo(const math::vec3 &lookAtPoint);
-    void lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo);*/
 
     void toCamera(RenderList &rendList) const;
     void toScreen(RenderList &rendList, const Viewport &viewport) const;
