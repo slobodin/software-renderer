@@ -100,7 +100,7 @@ void Camera::buildCamMatrix()
 
     /*
     // we must set up and right vectors (in order to create camera basis)
-    // suppose, that we already have proper direction
+    // assume, that we already have proper direction
 
     // up is Y
     m_up.set(0.0, 1.0, 0.0);

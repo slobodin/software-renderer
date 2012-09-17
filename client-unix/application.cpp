@@ -69,6 +69,8 @@ void Application::onMouseEvent(const platform::MouseEvent &ev)
         if (abs(yaw) > 360) yaw %= 360;
         if (abs(pitch) > 360) pitch %= 360;
 
+//        m_playerCamera->setEulerAnglesRotation(yaw, pitch, 0);
+
         math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, 0);
         math::vec3 camDir = math::vec3(0, 0, 1) * rotM;
 //        m_playerCamera->setDirection(camDir);

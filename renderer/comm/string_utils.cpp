@@ -14,18 +14,22 @@ namespace common
 IsSpace isSpacePredicat;
 IsNotSpace isNotSpacePredicat;
 
-string upper(const string &str)
+string makeUpper(const string &str)
 {
-    string res(str);
-    std::for_each(res.begin(), res.end(), [&](char &c){ c = toupper(c); });
+    string res;
+    std::transform(str.begin(), str.end(),
+                   back_inserter(res),
+                   toupper);
 
     return res;
 }
 
-string lower(const string &str)
+string makeLower(const string &str)
 {
-    string res(str);
-    std::for_each(res.begin(), res.end(), [&](char &c){ c = tolower(c); });
+    string res;
+    std::transform(str.begin(), str.end(),
+                   back_inserter(res),
+                   tolower);
 
     return res;
 }

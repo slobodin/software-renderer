@@ -46,11 +46,15 @@ bool FindValue(const YAML::Node &doc, T &value, string key, const T defaultValue
     if(const YAML::Node *pName = doc.FindValue(key))
     {
         *pName >> value;
+
+        return true;
     }
     else
     {
         syslog << "Can't find" << key << ". Setting to default value" << defaultValue << logwarn;
         value = defaultValue;
+
+        return false;
     }
 }
 
