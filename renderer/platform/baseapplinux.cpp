@@ -250,6 +250,7 @@ XViewport::~XViewport()
         XFree(m_visual);
 }
 
+// TODO: this func is very slooow
 void XViewport::flush(const unsigned char *const pixels)
 {
     if (!m_XScreenBuffer)

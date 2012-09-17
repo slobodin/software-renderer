@@ -23,7 +23,7 @@ RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> vi
       m_camera(cam),
       m_viewport(viewport)
 {
-    m_camera->lookTo( { 0, 0, 0 } );
+    m_camera->setEulerAnglesRotation(0, 0, 0);
 }
 
 void rend::RenderMgr::makeLight()
@@ -53,6 +53,7 @@ void RenderMgr::update()
     RenderList renderList;
 
     // 2. Cull full meshes and form triangles render list.
+    // Also applies world transformation.
     for (auto obj : m_sceneObjects)
     {
         if (!m_camera->culled(*obj))

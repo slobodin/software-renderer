@@ -24,9 +24,9 @@ Camera::Camera(const math::vec3 position,
       m_right(1.0, 0.0, 0.0),
       m_up(0.0, 1.0, 0.0),
       m_dir(0.0, 0.0, 1.0),
-//      m_yaw(0),
-//      m_pitch(0),
-//      m_roll(0),
+      m_yaw(0),
+      m_pitch(0),
+      m_roll(0),
       m_fov(fov),
       m_nearZ(nearZ),
       m_farZ(farZ)
@@ -72,10 +72,33 @@ math::vec3 Camera::getUpVector() const
 
 void Camera::setEulerAnglesRotation(double yaw, double pitch, double roll)
 {
+    m_yaw = yaw;
+    m_pitch = pitch;
+    m_roll = roll;
+
+    buildCamMatrix();
 }
 
 void Camera::buildCamMatrix()
 {
+    // get rotation matrices
+    math::M33 mxinv = math::M33::getRotateXMatrix(m_pitch).invert();
+    math::M33 myinv = math::M33::getRotateYMatrix(m_yaw).invert();
+    math::M33 mzinv = math::M33::getRotateZMatrix(m_roll).invert();
+
+    // perform invert rotation
+    math::M33 mrot = myinv * mxinv * mzinv;     // in y x z order
+
+    // store cam basis
+    m_dir = math::vec3(mrot.x[0][2], mrot.x[1][2], mrot.x[2][2]);
+    m_right = math::vec3(mrot.x[0][0], mrot.x[1][0], mrot.x[2][0]);
+    m_up = math::vec3(mrot.x[0][1], mrot.x[1][1], mrot.x[2][1]);
+
+    // compute result matrix
+    m_worldToCamera.set(-m_position);
+    m_worldToCamera *= mrot;
+
+    /*
     // we must set up and right vectors (in order to create camera basis)
     // suppose, that we already have proper direction
 
@@ -100,9 +123,9 @@ void Camera::buildCamMatrix()
     m_worldToCamera.set(-m_position);
 
     // do not forget to multiply inv translation matrix by rotation matrix
-    m_worldToCamera *= rotM;
+    m_worldToCamera *= rotM;*/
 }
-
+/*
 void Camera::lookTo(const math::vec3 &lookAtPoint)
 {
     // direction = target - camera_poition
@@ -117,7 +140,7 @@ void Camera::lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo)
     m_position = lookFrom;
     this->lookTo(lookTo);
 }
-
+*/
 void Camera::toCamera(RenderList &rendList) const
 {
     list<math::Triangle> &trias = rendList.triangles();
@@ -178,10 +201,6 @@ bool Camera::culled(const SceneObject &obj) const
         return true;*/
 
     return false;
-}
-
-void Camera::toCamera(math::vec3 &v) const
-{
 }
 
 void Camera::toScreen(math::vec3 &v, const Viewport &viewport) const

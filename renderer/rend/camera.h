@@ -37,7 +37,7 @@ class Camera
     //! Direction vector.
     math::vec3 m_dir;
 
-//    double m_yaw, m_pitch, m_roll;
+    double m_yaw, m_pitch, m_roll;
 
     //! Field of view. Default is 90 grad.
     double m_fov;
@@ -58,7 +58,6 @@ class Camera
     math::M44 m_screen;
 
     // helpers
-    void toCamera(math::vec3 &v) const;
     void toScreen(math::vec3 &v, const Viewport &viewport) const;
 
     void buildCamMatrix();
@@ -83,8 +82,8 @@ public:
     math::vec3  getUpVector() const;
 
     void setEulerAnglesRotation(double yaw, double pitch, double roll);
-    void lookTo(const math::vec3 &lookAtPoint);
-    void lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo);
+    /*void lookTo(const math::vec3 &lookAtPoint);
+    void lookFromTo(const math::vec3 &lookFrom, const math::vec3 &lookTo);*/
 
     void toCamera(RenderList &rendList) const;
     void toScreen(RenderList &rendList, const Viewport &viewport) const;

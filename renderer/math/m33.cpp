@@ -214,9 +214,10 @@ M33 M33::getRotateZMatrix(double angle, bool rads)
 
 M33 M33::getRotateYawPitchRollMatrix(double yaw, double pitch, double roll, bool rads)
 {
+    // yxz or zyx!
     return getRotateYMatrix(yaw, rads) *
-           getRotateZMatrix(roll, rads) *
-           getRotateXMatrix(pitch, rads);
+           getRotateXMatrix(pitch, rads) *
+           getRotateZMatrix(roll, rads);
 }
 
 M33 operator+ (const M33 &a, const M33 &b)

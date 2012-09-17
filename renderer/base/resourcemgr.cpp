@@ -33,25 +33,6 @@ ResourceMgr::~ResourceMgr()
 {
 }
 
-sptr(rend::SceneObject) ResourceMgr::getSceneObject(const string &name)
-{
-    sptr(rend::SceneObject) nullSceneObj;
-
-    sptr(Resource) newResource = getResource(name);
-    if (newResource)
-    {
-        if (boost::dynamic_pointer_cast<rend::SceneObject>(newResource))
-            return boost::dynamic_pointer_cast<rend::SceneObject>(newResource);
-        else
-        {
-            syslog << "Trying to get scene object, but getted object of another type." << logwarn;
-            return nullSceneObj;
-        }
-    }
-    else
-        return nullSceneObj;
-}
-
 sptr(Resource) ResourceMgr::getResource(const string &name)
 {
     fs::path p(name);
@@ -177,6 +158,7 @@ catch (fs::filesystem_error &e)
 
 void ResourceMgr::unloadResource(const string &resourcepath)
 {
+    // TODO:
 }
 
 void ResourceMgr::loadAllResources() try
@@ -195,7 +177,7 @@ void ResourceMgr::loadAllResources() try
         }
     }
 
-    syslog << "\nLoaded resources:\n";
+    syslog << "Loaded resources:\n";
     for (auto resource : m_resources)
     {
         syslog << resource.first << "with name" << resource.second->getName() << "\n";

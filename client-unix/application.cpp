@@ -32,9 +32,9 @@ Application::Application(int argc, const char *argv[])
     // set window title
     setWindowTitle("Nyan");
 
-    auto tank = m_clientController->getResmgr()->getSceneObject("tank1.plg");
-    auto tower = m_clientController->getResmgr()->getSceneObject("tower1.plg");
-    auto cube = m_clientController->getResmgr()->getSceneObject("cube1.plg");
+    auto tank = m_clientController->getResmgr()->getObject<rend::SceneObject>("tank1.plg");
+    auto tower = m_clientController->getResmgr()->getObject<rend::SceneObject>("tower1.plg");
+    auto cube = m_clientController->getResmgr()->getObject<rend::SceneObject>("cube1.plg");
 
     m_clientController->getRendmgr()->addSceneObject(tank);
     m_clientController->getRendmgr()->addSceneObject(cube);
@@ -71,7 +71,8 @@ void Application::onMouseEvent(const platform::MouseEvent &ev)
 
         math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(yaw, pitch, 0);
         math::vec3 camDir = math::vec3(0, 0, 1) * rotM;
-        m_playerCamera->setDirection(camDir);
+//        m_playerCamera->setDirection(camDir);
+        m_playerCamera->setEulerAnglesRotation(yaw, pitch, 0);
     }
 
     prevEvent = ev;
@@ -83,7 +84,7 @@ void Application::onMouseEvent(const platform::MouseEvent &ev)
 //    if (ev.isMiddlePressed())
 //        std::cerr << "Middle pressed\n";
 
-//    std::cerr << "x: " << ev.x << " y: " << ev.y << "\n";
+    std::cerr << "y: " << yaw << " p: " << pitch << "\n";
 }
 
 void Application::onKeyPressed(const platform::KeyboardEvent &ev)
@@ -119,17 +120,8 @@ void Application::onKeyPressed(const platform::KeyboardEvent &ev)
         return;
 
     m_playerCamera->setPosition(position);
-
-//    if (ev.keycode() == platform::KEY_NONE)
-//        std::cerr << "Key none!\n";
-
-//    std::cerr << "Getted keycode: " << std::hex << ev.keycode() << std::dec << "\n";
 }
 
 void Application::onKeyReleased(const platform::KeyboardEvent &ev)
 {
-//    if (ev.keycode() == platform::KEY_NONE)
-//        std::cerr << "Key none!\n";
-
-//    std::cerr << "Getted keycode: " << std::hex << ev.keycode() << "\n";
 }

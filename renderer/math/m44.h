@@ -61,6 +61,9 @@ struct M44
     //! Reset to identity matrix.
     void reset();
 
+    M33 getM() const;
+    vec3 getV() const;
+
     //! Matrix addition.
     M44 &operator+= (const M44 &a);
     //! Matrix subtraction.

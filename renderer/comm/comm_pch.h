@@ -68,7 +68,7 @@ using std::istringstream;
 using boost::shared_ptr;
 using boost::make_shared;
 using boost::dynamic_pointer_cast;
-namespace fs = boost::filesystem3;
+namespace fs = boost::filesystem;
 using fs::path;
 
 #ifdef RENDERER_LIBRARY

@@ -52,16 +52,35 @@ public:
     //! Dtor.
     ~ResourceMgr();
 
-    // getMesh
-    // getTexture
-    // etc
-    sptr(rend::SceneObject) getSceneObject(const string &name);
+    /*!
+      * Returns asset (by name or path) from resource contatiner.
+      * For example, mesh, texture, scene object
+      */
+    template<typename T>
+    sptr(T) getObject(const string &name);
 
     void loadAllResources();
 
     void addPath(const string &name);
     void listPath();
 };
+
+template<typename T>
+sptr(T) ResourceMgr::getObject(const string &name)
+{
+    sptr(T) nullobj;
+
+    sptr(Resource) newResource = getResource(name);
+    if (newResource)
+    {
+        if (boost::dynamic_pointer_cast<T>(newResource))
+            return boost::dynamic_pointer_cast<T>(newResource);
+        else
+            return nullobj;
+    }
+    else
+        return nullobj;
+}
 
 }
 

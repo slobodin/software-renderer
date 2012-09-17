@@ -4,7 +4,6 @@ TODO:
 1) Frustum-culling
 2) Lighting
 3) Z-checking with z-buffer
-4) Implement scene graph
-5) vec3 --> Vertex(vector, uv, normal)
-6) Global materials container and pointers from every triangle to it
-7) Make copying of resources with the same path
+4) Scene graph
+5) Copying of resources with the same path
+6) config -> script file

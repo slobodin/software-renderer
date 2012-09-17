@@ -45,14 +45,13 @@ class Config
 
     SceneConfig m_sceneConfig;
     std::stringstream m_sceneConfigData;
+    void parseSceneConfig();
 
 public:
     Config(const string &cfgDir = "");
 
     RendererConfig getRendererConfig() const;
     SceneConfig getSceneConfig() const;
-
-    void configure(Controller *controller);
 };
 
 }

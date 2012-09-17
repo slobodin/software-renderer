@@ -81,7 +81,7 @@ void Viewport::resize(int w, int h)
     m_camera->m_viewPlaneWidth = 2.0;
     m_camera->m_viewPlaneHeight = 2.0 / m_aspect;
 
-    m_camera->m_distance = 0.5 * m_camera->m_viewPlaneWidth * tan(math::DegToRad(m_camera->m_fov / 2));
+    m_camera->m_distance = 0.5 * m_camera->m_viewPlaneWidth * (1.0 / tan(math::DegToRad(m_camera->m_fov / 2.0)));
 }
 
 }

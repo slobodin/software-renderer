@@ -104,6 +104,7 @@ void M44::set(const M33 &rotScale, const vec3 &translation)
 
 void M44::set(const vec3 &translation)
 {
+    // first row
     x[0][0] = 1.0;
     x[0][1] = 0.0;
     x[0][2] = 0.0;
@@ -153,6 +154,18 @@ void M44::reset()
 {
     memset(&x[0], 0, sizeof(double) * 4 * 4);
     x[0][0] = x[1][1] = x[2][2] = x[3][3] = 1.0;
+}
+
+M33 M44::getM() const
+{
+    return M33(x[0][0], x[0][1], x[0][2],
+               x[1][0], x[1][1], x[1][2],
+               x[2][0], x[2][1], x[2][2]);
+}
+
+vec3 M44::getV() const
+{
+    return vec3(x[3][0], x[3][1], x[3][2]);
 }
 
 M44 &M44::operator+= (const M44 &a)

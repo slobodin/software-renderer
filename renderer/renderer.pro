@@ -27,7 +27,6 @@ HEADERS += \
     base/controller.h \
     base/config.h \
     comm/string_utils.h \
-    comm/singleton.h \
     comm/exception.h \
     comm/comm_pch.h \
     comm/comm_macro.h \
