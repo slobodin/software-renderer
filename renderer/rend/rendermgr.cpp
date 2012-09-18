@@ -154,7 +154,11 @@ void RenderMgr::addSceneObject(sptr(SceneObject) node)
 
 sptr(SceneObject) RenderMgr::getSceneObject(const string &name)
 {
-    return sptr(SceneObject)();
+    auto obj = std::find_if(m_sceneObjects.begin(), m_sceneObjects.end(),
+                            [&](sptr(SceneObject) val)
+                            { return val->getName() == name; } );
+
+    return *obj;
 }
 
 }

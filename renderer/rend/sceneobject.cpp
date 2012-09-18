@@ -31,8 +31,15 @@ const sptr(Mesh) SceneObject::getMesh() const
     return m_mesh;
 }
 
-sptr(SceneObject) SceneObject::clone()
+sptr(SceneObject) SceneObject::clone() const
 {
+    sptr(Mesh) newmesh = m_mesh->clone();
+    sptr(SceneObject) newObj = make_shared<SceneObject>(newmesh);
+
+    newObj->m_name = m_name + "_clone";
+    newObj->m_worldTransformation = m_worldTransformation;
+
+    return newObj;
 }
 
 void SceneObject::setMesh(sptr(Mesh) mesh)

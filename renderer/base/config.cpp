@@ -22,7 +22,7 @@ void RendererConfig::makeDefaults()
     camPosition = math::vec3(0, 0, 0);
     width = rend::DEFAULT_WIDTH;
     height = rend::DEFAULT_HEIGHT;
-    pathToTheAssets = fs::complete(fs::current_path()).string();   // executable dir
+    pathToTheAssets = fs::canonical(fs::current_path()).string();   // executable dir
 }
 
 static void operator>> (const YAML::Node &node, math::vec3 &v)
@@ -75,10 +75,10 @@ void Config::parseRendererConfig() try
 
     // if this path exists, then save it
     if (fs::exists(p) && fs::is_directory(p))
-        m_rendererConfig.pathToTheAssets = fs::complete(p).string();
+        m_rendererConfig.pathToTheAssets = fs::canonical(p).string();
     // otherwise save current path (at the time of entry to main())
     else
-        m_rendererConfig.pathToTheAssets = fs::complete(fs::current_path()).string();
+        m_rendererConfig.pathToTheAssets = fs::canonical(fs::current_path()).string();
 }
 catch (YAML::Exception &e)
 {
@@ -145,7 +145,7 @@ Config::Config(const string &cfgDir)
         return;
     }
 
-    string loadPath = fs::complete(mainDir).string();
+    string loadPath = fs::canonical(mainDir).string();
 
     // load renderer config
     std::ifstream rendererConfigFile(loadPath);

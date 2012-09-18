@@ -34,4 +34,16 @@ string makeLower(const string &str)
     return res;
 }
 
+void eraseSpaces(string &str)
+{
+    auto it = str.begin();
+    while (it != str.end())
+    {
+        if (isSpacePredicat(*it))
+            it = str.erase(it);
+        else
+            it++;
+    }
+}
+
 }

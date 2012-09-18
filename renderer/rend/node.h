@@ -61,6 +61,8 @@ inline void Node::setPosition(const math::vec3 &pos)
     m_worldTransformation.x[3][2] = pos.z;
 }
 
+// FIXME: matrix multiplication!
+
 inline void Node::setRotation(const math::vec3 &angles)
 {
     math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(angles.y,
@@ -80,7 +82,7 @@ inline void Node::setRotation(double yaw, double pitch, double roll)
 inline void Node::setScale(const math::vec3 &coeff)
 {
     m_worldTransformation = math::M44(math::M33::getScaleMatrix(coeff) /* setting scale matrix */,
-                                      math::vec3() /* no translation */);
+                                      m_worldTransformation.getV() /* prev translation */);
 }
 
 inline void Node::setTransformation(const math::M44 &tr)

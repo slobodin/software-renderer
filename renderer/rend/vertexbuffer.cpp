@@ -22,7 +22,7 @@ VertexBuffer::~VertexBuffer()
 {
 }
 
-void VertexBuffer::setMaterial(sptr(Material) material)
+void VertexBuffer::setMaterial(boost::shared_ptr<Material> material)
 {
     if (!material)
         return;
@@ -36,6 +36,7 @@ void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const ve
     std::copy(indices.begin(), indices.end(), std::back_inserter(m_indices));
 
     computeBoundingSphere();
+    computeVertexNormals();
 }
 
 void VertexBuffer::computeBoundingSphere()
@@ -51,9 +52,9 @@ void VertexBuffer::computeVertexNormals()
 {
     vector<int> polysTouchVertex(m_vertices.size());
 
-    /*switch(m_type)
+    switch(m_type)
     {
-    case Mesh::MT_MESH_INDEXEDTRIANGLELIST:
+    case INDEXEDTRIANGLELIST:
 
         for(size_t ind = 0, t = 0; ind < m_indices.size(); ind += 3, t++)
         {
@@ -85,9 +86,10 @@ void VertexBuffer::computeVertexNormals()
         }
         break;
 
-    case Mesh::MT_MESH_TRIANGLELIST:
+    case TRIANGLELIST:
 
-        *syslog << "Unsupported" << logerr;
+        syslog << "Unsupported" << logerr;
+        break;
 
         for(size_t v = 0; v < m_vertices.size(); v += 3)
         {
@@ -97,11 +99,14 @@ void VertexBuffer::computeVertexNormals()
         }
         break;
 
-    case Mesh::MT_MESH_UNDEFINED:
-    default:
-        *syslog << "Undefined mesh type" << logwarn;
+    case LINELIST:
         break;
-    }*/
+
+    case UNDEFINED:
+    default:
+        syslog << "Undefined mesh type" << logwarn;
+        break;
+    }
 }
 
 }

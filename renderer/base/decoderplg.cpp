@@ -68,7 +68,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
     unsigned numVertices, numPolys;
 
     // skip obj name and get number of vertices and polygons
-    istringstream token(line);
+    std::istringstream token(line);
     token >> temp >> numVertices >> numPolys;
 
     string resourceName(temp);
@@ -76,7 +76,6 @@ sptr(Resource) DecoderPLG::decode(const string &path)
     vector<math::vertex> vertexList(numVertices);
     for (unsigned vertex = 0; vertex < numVertices; )
     {
-        token.str("");
         temp = plgFile.getLine();
         if (temp.empty())
             continue;
@@ -85,6 +84,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
             continue;
 
         token.str(temp);
+        token.seekg(0);     // HACK:
 
         math::vec3 pt;
         token >> pt.x >> pt.y >> pt.z;
@@ -105,6 +105,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
             continue;
 
         token.str(temp);
+        token.seekg(0);
 
         PlgPolyData newData;
 
@@ -146,6 +147,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
                             std::copy(data.indices, data.indices + 3, std::back_inserter(indices));
                          });
 
+        vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
         vb.appendVertices(vertexList, indices);
 
         auto material = make_shared<rend::Material>();
@@ -197,7 +199,6 @@ sptr(Resource) DecoderPLG::decode(const string &path)
         material->sideType = sideType;
 
         vb.setMaterial(material);
-        vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
         newMesh->appendSubmesh(vb);
 
         if (bounds.second != polysData.end())

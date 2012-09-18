@@ -39,6 +39,8 @@ public:
 
     const list<VertexBuffer> &getSubmeshes() const { return m_submeshes; }
 
+    sptr(Mesh) clone() const;
+
 private:
     Mesh(const Mesh &);
     Mesh &operator= (const Mesh &);

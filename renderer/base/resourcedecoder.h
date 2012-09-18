@@ -9,6 +9,7 @@
 #define RESOURCEDECODER_H
 
 #include "comm_pch.h"
+#include "osfile.h"
 
 namespace base
 {
@@ -25,6 +26,16 @@ class Resource;
   */
 class ResourceDecoder
 {
+protected:
+    //! Helper, that brings some abstraction.
+    /*!
+      * This function gets new line from a file.
+      * If this line contains stopper then function ends,
+      * otherwise calls user callback of type MyDecoder::fun(string &gettedLine).
+      */
+    template<typename T>
+    void parseWhile(void (T::*lambda)(string &line), const string &stopper, TextFile &file);
+
 public:
     //! Default ctor.
     ResourceDecoder() { }
@@ -37,6 +48,29 @@ public:
     //! Returns asset extension.
     virtual string          extension() const = 0;
 };
+
+template<typename T>
+void ResourceDecoder::parseWhile(void (T::*lambda)(string &line), const string &stopper, TextFile &file)
+{
+    string line;
+    do
+    {
+        line = file.getLine();
+
+        if (line.empty())
+            continue;
+
+        if (line.find(stopper) != string::npos)
+            break;
+
+        T *ptr = static_cast<T *>(this);
+
+        (ptr->*lambda)(line);
+
+        line.clear();
+
+    } while (line.empty());
+}
 
 }
 

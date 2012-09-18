@@ -48,13 +48,14 @@ void Light::illuminate(RenderList &renderlist) const
             break;
 
         case Material::SM_GOURAUD:
-//            t.v(0).color = m_shader(this, t.v(0).color, t.v(0).n);
-//            t.v(1).color = m_shader(this, t.v(1).color, t.v(1).n);
-//            t.v(2).color = m_shader(this, t.v(2).color, t.v(2).n);
+            t.v(0).color = m_shader(this, getMaterialColor(material), t.v(0).n);
+            t.v(1).color = m_shader(this, getMaterialColor(material), t.v(1).n);
+            t.v(2).color = m_shader(this, getMaterialColor(material), t.v(2).n);
             break;
 
         case Material::SM_UNDEFINED:
         case Material::SM_WIRE:
+            t.v(0).color = t.v(1).color = t.v(2).color = material->ambientColor;
         case Material::SW_TEXTURE:
         default:
             break;

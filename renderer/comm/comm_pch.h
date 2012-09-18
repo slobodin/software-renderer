@@ -47,6 +47,7 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/lexical_cast.hpp>
 
 // Some useful classes.
 using std::string;

@@ -24,6 +24,10 @@ namespace rend
 
 class Viewport;
 
+//! Performs triangle rasterization.
+/**
+  * Supports line, triangle with color and gouraud rasterization.
+  */
 class Rasterizer
 {
     FrameBuffer m_fb;

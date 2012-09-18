@@ -52,8 +52,13 @@ public:
     TextFile(const string &path);
 
     //! Returns next line from the file.
-    /*! \param delim Lines deliminator. */
+    /*!
+      * If file ends, returns "END_OF_FILE"-string.
+      * \param delim Lines deliminator.
+      */
     string getLine(const char delim = '\n');
+
+    void resetPtr();
 };
 
 //! Binary file.

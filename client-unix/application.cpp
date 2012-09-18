@@ -35,15 +35,23 @@ Application::Application(int argc, const char *argv[])
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
-    rendmgr->addDirectionalLight(rend::Color3(), math::vec3(1, 1, 1));
+    rendmgr->addDirectionalLight(rend::Color3(), math::vec3(0, 1, 0));
 
     /*auto tank = rmgr->getObject<rend::SceneObject>("tank1.plg");
-    auto tower = rmgr->getObject<rend::SceneObject>("tower1.plg");
-    auto cube = rmgr->getObject<rend::SceneObject>("cube1.plg");
+    auto clonedTank = tank->clone();
+    clonedTank->setPosition(math::vec3(0, 500, 0));
+    m_clientController->getRendmgr()->addSceneObject(clonedTank);
 
-    m_clientController->getRendmgr()->addSceneObject(tank);
-    m_clientController->getRendmgr()->addSceneObject(cube);
-    m_clientController->getRendmgr()->addSceneObject(tower);*/
+    auto tower = rendmgr->getSceneObject("tower");
+    auto clonedTower = tower->clone();
+    clonedTower->setPosition(math::vec3(0, 500, -250));
+    m_clientController->getRendmgr()->addSceneObject(clonedTower);*/
+
+    auto sphere = rendmgr->getSceneObject("Sphere");
+    sphere->setScale(math::vec3(5.0, 5.0, 5.0));
+
+    auto hammer = rendmgr->getSceneObject("Hammer");
+    hammer->setScale(math::vec3(15.0, 15.0, 15.0));
 }
 
 Application::~Application()
@@ -115,6 +123,6 @@ void Application::onKeyPressed(const platform::KeyboardEvent &ev)
     m_playerCamera->setPosition(position);
 }
 
-void Application::onKeyReleased(const platform::KeyboardEvent &ev)
+void Application::onKeyReleased(const platform::KeyboardEvent &/*ev*/)
 {
 }

@@ -56,10 +56,28 @@ string TextFile::getLine(const char delim)
         string::iterator it = std::find_if(token.begin(), token.end(), common::isNotSpacePredicat);
         token.erase(token.begin(), it);
 
+        auto rit = std::find_if(token.rbegin(), token.rend(), common::isNotSpacePredicat);
+        token.erase(rit.base(), token.end());
+
         return token;
     }
 
-    return string("");
+    return string("END_OF_FILE");
+}
+
+void TextFile::resetPtr()
+{
+//    m_file.seekg(0);
+//    m_fileData.str("");
+
+//    m_fileData.~stringstream();
+//    new ( (void *) &m_fileData ) std:stringstream;
+
+//    istreambuf_iterator<char> dataBegin(m_file);
+//    istreambuf_iterator<char> dataEnd;
+
+//    string fileDataStr(dataBegin, dataEnd);
+//    m_fileData.str(fileDataStr);
 }
 
 BinaryFile::BinaryFile(const string &path)

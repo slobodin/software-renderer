@@ -442,7 +442,7 @@ bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
 void Rasterizer::drawLine(const math::vertex &p1, const math::vertex &p2)
 {
     math::vec3 pc1(p1.p), pc2(p2.p);
-    Color3 color = p1.color;
+    const Color3 &color = p1.color;
 
     int cols = m_fb.width();
 
@@ -1326,7 +1326,7 @@ Rasterizer::Rasterizer(const int width, const int height)
 
 void Rasterizer::rasterize(const RenderList &rendlist)
 {
-    const list<math::Triangle> &trias = rendlist.triangles();
+    auto &trias = rendlist.triangles();
 
     // painter's algorithm
     BOOST_REVERSE_FOREACH(const math::Triangle &t, trias)
@@ -1352,7 +1352,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
             break;
 
         default:
-            syslog << "Unsupported shading mode." << logdebug;
+//            syslog << "Unsupported shading mode." << logdebug;
             break;
         }
     }

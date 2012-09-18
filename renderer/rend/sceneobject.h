@@ -31,7 +31,11 @@ public:
     sptr(Mesh)          getMesh();
     const sptr(Mesh)    getMesh() const;
 
-    sptr(SceneObject)   clone();
+    sptr(SceneObject)   clone() const;
+
+private:
+    SceneObject(const SceneObject &);
+    SceneObject &operator= (const SceneObject &);
 };
 
 }

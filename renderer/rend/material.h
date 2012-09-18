@@ -11,6 +11,7 @@
 #include "comm_pch.h"
 
 #include "color.h"
+#include "resource.h"
 
 namespace rend
 {
@@ -23,7 +24,7 @@ class Texture;
   * ambient, specular and emissive reflection coefficients,
   * texture and the list goes on.
   */
-struct Material
+struct Material : public base::Resource
 {
     enum ShadeMode
     {
@@ -51,8 +52,6 @@ struct Material
     Color3 emissiveColor;
 
     sptr(Texture) m_texture;
-
-    bool useLighting;
 
     //! Default ctor.
     Material();

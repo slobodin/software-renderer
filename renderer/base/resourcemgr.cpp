@@ -12,6 +12,7 @@
 #include "osfile.h"
 #include "decoderplg.h"
 #include "decoderbspq3.h"
+#include "decoderasc.h"
 #include "mesh.h"
 #include "sceneobject.h"
 
@@ -21,12 +22,14 @@ namespace base
 ResourceMgr::ResourceMgr()
 {
     sptr(ResourceDecoder) plgDecoder(new DecoderPLG);
-    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
+    sptr(ResourceDecoder) ascDecoder(new DecoderASC);
+//    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
     // other decoders
 
     // add all
     m_decoders[plgDecoder->extension()] = plgDecoder;
-    m_decoders[bspDecoder->extension()] = bspDecoder;
+    m_decoders[ascDecoder->extension()] = ascDecoder;
+//    m_decoders[bspDecoder->extension()] = bspDecoder;
 }
 
 ResourceMgr::~ResourceMgr()
@@ -36,7 +39,12 @@ ResourceMgr::~ResourceMgr()
 sptr(Resource) ResourceMgr::getResource(const string &name)
 {
     fs::path p(name);
-    string fullpath = fs::complete(p).string();
+    string fullpath;
+
+    if (fs::is_directory(p))
+        fullpath = fs::canonical(p).string();
+    else
+        fullpath = name;
 
     // Find by full path.
     auto rit = m_resources.find(fullpath);
@@ -56,7 +64,7 @@ sptr(Resource) ResourceMgr::getResource(const string &name)
                 fs::path p(dir);
                 p /= name;
 
-                rit = m_resources.find(fs::complete(p).string());
+                rit = m_resources.find(fs::canonical(p).string());
                 if (rit != m_resources.end())
                 {
                     return rit->second;
@@ -65,7 +73,8 @@ sptr(Resource) ResourceMgr::getResource(const string &name)
 
             // else -> find by name
             rit = std::find_if(m_resources.begin(), m_resources.end(),
-                               [&](map<string, sptr(Resource) >::value_type &val) { return val.second->getName() == name; } );     // do you like C++ too??
+                               [&](map<string, sptr(Resource) >::value_type &val)
+                               { return val.second->getName() == name; } );     // do you like C++ too??
 
             // no such resource
             if (rit == m_resources.end())
@@ -122,7 +131,11 @@ void ResourceMgr::loadResource(const string &resourcepath) try
     }
 
     // if we already have the resource
-    string fullpath = fs::complete(p).string();
+    string fullpath;
+    if (is_directory(p))
+        fullpath = fs::canonical(p).string();
+    else
+        fullpath = p.string();
 
     auto rit = m_resources.find(fullpath);
     if (rit != m_resources.end())
@@ -157,7 +170,7 @@ catch (fs::filesystem_error &e)
     syslog << "Boost filesystem exception occurred:" << e.what() << logerr;
 }
 
-void ResourceMgr::unloadResource(const string &resourcepath)
+void ResourceMgr::unloadResource(const string &/*resourcepath*/)
 {
     // TODO:
 }
@@ -210,7 +223,7 @@ void ResourceMgr::addPath(const string &name) try
 
             auto it = std::find_if(m_loadablePaths.begin(),
                                    m_loadablePaths.end(),
-                                   [&](path &it){ return complete(p).string() == complete(it).string(); } );
+                                   [&](path &it){ return canonical(p).string() == canonical(it).string(); } );
 
             if (it == m_loadablePaths.end())
                 m_loadablePaths.push_back(p);
@@ -235,7 +248,7 @@ void ResourceMgr::listPath()
 {
     syslog << "Path list:\n";
     for (auto p : m_loadablePaths)
-        syslog << fs::complete(p).string() << "\n";
+        syslog << fs::canonical(p).string() << "\n";
 
     syslog << logdebug;
 }

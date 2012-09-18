@@ -43,9 +43,7 @@ public:
 
     void update();
 
-    // TODO: make uniform method `addSceneObject(Node *n);'
     void addSceneObject(sptr(SceneObject) node);
-
     sptr(SceneObject) getSceneObject(const string &name);
 
     // void setAmbientLight(color);

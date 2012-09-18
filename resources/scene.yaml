@@ -2,8 +2,10 @@
   position: [0, 0, 0]
 - model: tower1.plg
   position: [0, 0, -250]
-#  - model: q3ctf1.bsp
-#    position: [0, 0, 0]
-#    order: CW
+- model: sphere01.asc
+  position: [0, 100, 0]
+- model: hammer02.asc
+  position: [0, 300, 0]
+
 
 # LIGHTS!

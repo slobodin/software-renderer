@@ -16,7 +16,7 @@ INCLUDEPATH += ../renderer/base \
 LIBS += ../../bin/renderer/librenderer.a
 LIBS += ../../renderer/third-party/lib/libyaml-cpp.a
 
-LIBS += -lX11 -lboost_system -lboost_filesystem
+LIBS += -lX11 -lboost_system -lboost_filesystem -lboost_regex
 
 PRE_TARGETDEPS += ../../bin/renderer/librenderer.a
 

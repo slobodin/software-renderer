@@ -297,7 +297,7 @@ vec3 operator* (const vec3 &v, const M44 &a)
     res[2] = v.x * a.x[0][2] + v.y * a.x[1][2] + v.z * a.x[2][2] + /*1.0 * */a.x[3][2];
     res[3] = v.x * a.x[0][3] + v.y * a.x[1][3] + v.z * a.x[2][3] + /*1.0 * */a.x[3][3];
 
-    if (fabs(res[4] - 1.0) < std::numeric_limits<double>::epsilon())   // equals to 1.0
+    if (fabs(res[3] - 1.0) < std::numeric_limits<double>::epsilon())   // equals to 1.0
     {
         return vec3(res[0], res[1], res[2]);
     }

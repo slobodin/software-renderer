@@ -55,6 +55,8 @@ string toString(const T &item)
     return os.str();
 }
 
+void eraseSpaces(string &str);
+
 }
 
 #endif // STRING_UTILS_H
