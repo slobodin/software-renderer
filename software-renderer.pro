@@ -13,3 +13,5 @@ unix {
 SUBDIRS += client-unix
 }
 
+client-win.depends = renderer
+client-unix.depends = renderer

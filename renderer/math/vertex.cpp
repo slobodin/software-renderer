@@ -12,6 +12,7 @@ namespace math
 
 vertex::vertex()
 {
+    color.reset();
 }
 
 }

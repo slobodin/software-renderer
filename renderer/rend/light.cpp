@@ -44,13 +44,16 @@ void Light::illuminate(RenderList &renderlist) const
         switch (material->shadeMode)
         {
         case Material::SM_FLAT:
-            t.v(0).color = t.v(1).color = t.v(2).color = m_shader(this, getMaterialColor(material), t.normal());
+//            t.v(0).color = t.v(1).color = t.v(2).color = m_shader(this, getMaterialColor(material), t.normal());
+            t.v(0).color += m_shader(this, getMaterialColor(material), t.normal());
+            t.v(1).color += m_shader(this, getMaterialColor(material), t.normal());
+            t.v(2).color += m_shader(this, getMaterialColor(material), t.normal());
             break;
 
         case Material::SM_GOURAUD:
-            t.v(0).color = m_shader(this, getMaterialColor(material), t.v(0).n);
-            t.v(1).color = m_shader(this, getMaterialColor(material), t.v(1).n);
-            t.v(2).color = m_shader(this, getMaterialColor(material), t.v(2).n);
+            t.v(0).color += m_shader(this, getMaterialColor(material), t.v(0).n);
+            t.v(1).color += m_shader(this, getMaterialColor(material), t.v(1).n);
+            t.v(2).color += m_shader(this, getMaterialColor(material), t.v(2).n);
             break;
 
         case Material::SM_UNDEFINED:
@@ -96,7 +99,7 @@ Color3 DirectionalLight::shader(const Color3 &matColor, const math::vec3 &normal
         shadedColor *= (dp / 256.0);
     }
     else
-        return matColor;
+        return Color3(0, 0, 0);/*matColor*/;
 
     return shadedColor;
 }
