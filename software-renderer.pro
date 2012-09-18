@@ -3,7 +3,7 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS += \
-    renderer \
+    renderer
 
 win32 {
 SUBDIRS += client-win
@@ -11,7 +11,5 @@ SUBDIRS += client-win
 
 unix {
 SUBDIRS += client-unix
+SUBDIRS += client-tk
 }
-
-client-win.depends = renderer
-client-unix.depends = renderer

@@ -18,7 +18,14 @@ namespace rend
 class FrameBuffer
 {
 public:
-    struct rgb { uint8_t r; uint8_t g; uint8_t b; };
+    struct rgb
+    {
+//        uint8_t unused;
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+        rgb() : /*unused(0xFF), */r(0x00), g(0x00), b(0x00) { }
+    }/* __attribute__((packed))*/;
 
 private:
     rgb *m_pixels;
@@ -52,7 +59,7 @@ public:
 
     void resize(int w, int h);
 
-    rgb *pixels() { return m_pixels; }
+//    rgb *pixels() { return m_pixels; }
     operator unsigned char *() { return reinterpret_cast<unsigned char *>(m_pixels); }
 };
 
