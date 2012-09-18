@@ -61,22 +61,30 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             if ((v + 2) >= vertices.size())
                 break;
 
+            // form the triangle
             triangle.v(0) = vertices[v];
             triangle.v(1) = vertices[v + 1];
             triangle.v(2) = vertices[v + 2];
 
-            //triangle.material() = Material();//Material(Color3(255, 0, 0), Material::SM_FLAT);
+            // translate and rotate the triangle
+            triangle.v(0).p = triangle.v(0).p * transform;
+            triangle.v(1).p = triangle.v(1).p * transform;
+            triangle.v(2).p = triangle.v(2).p * transform;
 
-//            triangle.setWindingOrder(mesh.getWindingOrder());
+            // set material
+            triangle.setMaterial(vertexBuffer.getMaterial());
+
+            // compute normals
             triangle.computeNormal();
 
+            // save it
             output.push_back(triangle);
         }
         break;
 
     case VertexBuffer::UNDEFINED:
     default:
-        syslog << "Can't draw this mesh" << logerr;
+        syslog << "Can't draw this mesh." << logerr;
         break;
     }
 }
@@ -97,8 +105,6 @@ void RenderList::zsort()
 
 void RenderList::removeBackfaces(const sptr(Camera) cam)
 {
-    // TODO: make more functional
-
     auto t = m_triangles.begin();
 
     while (t != m_triangles.end())
@@ -109,7 +115,7 @@ void RenderList::removeBackfaces(const sptr(Camera) cam)
             continue;
         }
 
-        if (t->getSideType() == math::Triangle::TWO_SIDE)
+        if (t->getSideType() == rend::Material::TWO_SIDE)
         {
             t++;
             continue;

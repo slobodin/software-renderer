@@ -13,6 +13,7 @@
 #include "resourcemgr.h"
 #include "viewport.h"
 #include "camera.h"
+#include "sceneobject.h"
 
 namespace base
 {
@@ -44,12 +45,6 @@ Controller::Controller(int argc, const char *argv[])
 
     // load all loadable from assets path
     m_resourceMgr->loadAllResources();
-
-    // learn about scene objects (read from the config file)
-
-    // get them all from the resource manager
-
-    // and add to the rendering container
 }
 
 Controller::~Controller()
@@ -79,6 +74,17 @@ std::pair<int, int> Controller::getViewportSize()
 void Controller::createRenderManager()
 {
     m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam, m_viewport);
+
+    // now add to the scene all scene objects, getted from the config file
+    const SceneConfig &scCfg = m_controllerConfig->getSceneConfig();
+
+    for (auto &objInfo : scCfg.objects)
+    {
+        auto obj = m_resourceMgr->getObject<rend::SceneObject>(objInfo.pathToTheModel);
+        obj->setPosition(objInfo.position);
+
+        m_rendmgr->addSceneObject(obj);
+    }
 }
 
 bool Controller::viewportExist()

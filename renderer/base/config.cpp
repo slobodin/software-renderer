@@ -88,8 +88,27 @@ catch (YAML::Exception &e)
     m_rendererConfig.makeDefaults();
 }
 
-void parseSceneConfig()
+void Config::parseSceneConfig() try
 {
+    YAML::Parser cfg(m_sceneConfigData);
+
+    YAML::Node doc;
+    cfg.GetNextDocument(doc);
+
+    for (size_t i = 0;i < doc.size(); i++)
+    {
+        SceneConfig::ObjInfo objInfo;
+        doc[i] >> objInfo;
+
+        m_sceneConfig.objects.push_back(objInfo);
+    }
+}
+catch (YAML::Exception &e)
+{
+    syslog << "Error while parsing scene config file.\nError:"
+           << e.what() << logerr;
+
+    m_rendererConfig.makeDefaults();
 }
 
 Config::Config(const string &cfgDir)
@@ -128,6 +147,7 @@ Config::Config(const string &cfgDir)
 
     string loadPath = fs::complete(mainDir).string();
 
+    // load renderer config
     std::ifstream rendererConfigFile(loadPath);
 
     if (rendererConfigFile)
@@ -136,15 +156,34 @@ Config::Config(const string &cfgDir)
         parseRendererConfig();
     }
     else
+    {
         syslog << "Cannot open config file. Setting defaults." << logwarn;
+        return;
+    }
+
+    loadPath = (mainDir.parent_path() /= DEFAULT_SCENE_CONFIG).string();
+
+    // load scene config
+    std::ifstream sceneConfigFile(loadPath);
+
+    if (sceneConfigFile)
+    {
+        m_sceneConfigData << sceneConfigFile.rdbuf();
+        parseSceneConfig();
+    }
+    else
+    {
+        syslog << "Cannot open scene config file." << logwarn;
+        return;
+    }
 }
 
-RendererConfig Config::getRendererConfig() const
+const RendererConfig &Config::getRendererConfig() const
 {
     return m_rendererConfig;
 }
 
-SceneConfig Config::getSceneConfig() const
+const SceneConfig &Config::getSceneConfig() const
 {
     return m_sceneConfig;
 }

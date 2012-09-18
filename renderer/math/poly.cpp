@@ -10,12 +10,12 @@
 namespace math
 {
 
-Triangle::Triangle(SideType st)
+Triangle::Triangle(rend::Material::SideType st)
     : m_sideType(st)
 {
 }
 
-Triangle::Triangle(const vertex *arr, SideType st)
+Triangle::Triangle(const vertex *arr, rend::Material::SideType st)
     : m_sideType(st)
 {
     if (!arr)
@@ -85,8 +85,8 @@ void Triangle::computeNormal()
 {
     vec3 p1, p2;
 
-    p1.set((m_verts[0].p - m_verts[1].p).normalize());
-    p2.set((m_verts[2].p - m_verts[1].p).normalize());
+    p1.set((m_verts[1].p - m_verts[0].p).normalize());
+    p2.set((m_verts[2].p - m_verts[0].p).normalize());
 
     m_normal = p1.crossProduct(p2);
     m_normal.normalize();
@@ -94,7 +94,14 @@ void Triangle::computeNormal()
 
 double Triangle::square() const
 {
-    // TODO
+    vec3 p1, p2;
+
+    p1.set((m_verts[1].p - m_verts[0].p).normalize());
+    p2.set((m_verts[2].p - m_verts[0].p).normalize());
+
+    vec3 n = p1.crossProduct(p2);
+
+    return 0.5 * n.length();
 }
 
 bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2)

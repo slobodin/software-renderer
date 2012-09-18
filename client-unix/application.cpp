@@ -33,14 +33,17 @@ Application::Application(int argc, const char *argv[])
     setWindowTitle("Nyan");
 
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
+    sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
-    auto tank = rmgr->getObject<rend::SceneObject>("tank1.plg");
+    rendmgr->addDirectionalLight(rend::Color3(), math::vec3(1, 1, 1));
+
+    /*auto tank = rmgr->getObject<rend::SceneObject>("tank1.plg");
     auto tower = rmgr->getObject<rend::SceneObject>("tower1.plg");
     auto cube = rmgr->getObject<rend::SceneObject>("cube1.plg");
 
     m_clientController->getRendmgr()->addSceneObject(tank);
     m_clientController->getRendmgr()->addSceneObject(cube);
-    m_clientController->getRendmgr()->addSceneObject(tower);
+    m_clientController->getRendmgr()->addSceneObject(tower);*/
 }
 
 Application::~Application()

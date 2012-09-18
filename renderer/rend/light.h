@@ -48,6 +48,8 @@ protected:
     Light(const Color3 &intensity);
     virtual ~Light();
 
+    virtual Color3 getMaterialColor(sptr(Material) material) const = 0;
+
 public:
     void turnon() { m_isEnabled = true; }
     void turnoff() { m_isEnabled = false; }
@@ -60,6 +62,7 @@ class AmbientLight : public Light
 {
 protected:
     virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const;
+    virtual Color3 getMaterialColor(sptr(Material) material) const;
 
 public:
     AmbientLight(const Color3 &intensity);
@@ -71,6 +74,7 @@ class DirectionalLight : public Light
     math::vec3 m_dir;
 
     virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const;
+    virtual Color3 getMaterialColor(sptr(Material) material) const;
 
 public:
     DirectionalLight(const Color3 &intensity, const math::vec3 &dir);
@@ -83,6 +87,7 @@ class PointLight : public Light
     double m_kc, m_kl, m_kq;
 
     virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const;
+    virtual Color3 getMaterialColor(sptr(Material) material) const;
 
 public:
     PointLight(const Color3 &intensity, const math::vec3 &pos,
@@ -100,6 +105,7 @@ class SpotLight : public Light
     double m_falloff;
 
     virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const;
+    virtual Color3 getMaterialColor(sptr(Material) material) const;
 
 public:
     SpotLight(const Color3 &intensity, const math::vec3 &pos, const math::vec3 &dir,

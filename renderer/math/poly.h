@@ -18,23 +18,15 @@ namespace math
 
 class Triangle
 {
-public:
-    enum SideType
-    {
-        ONE_SIDE,
-        TWO_SIDE
-    };
-
-private:
     vertex m_verts[3];
     vec3 m_normal;
 
     sptr(rend::Material) m_material;
-    SideType m_sideType;
+    rend::Material::SideType m_sideType;
 
 public:
-    Triangle(SideType st = TWO_SIDE);
-    Triangle(const vertex *arr, SideType st = TWO_SIDE);
+    Triangle(rend::Material::SideType st = rend::Material::ONE_SIDE);
+    Triangle(const vertex *arr, rend::Material::SideType st = rend::Material::ONE_SIDE);
 
     const vertex &v(const size_t ind) const;
     vertex &v(const size_t ind);
@@ -44,10 +36,10 @@ public:
     vector<vec2> uvs() const;
 
     sptr(rend::Material) getMaterial() const { return m_material; }
-    void setMaterial(sptr(rend::Material) material) { m_material = material; }
+    void setMaterial(sptr(rend::Material) material) { m_material = material; m_sideType = material->sideType; }
 
-    void setSideType(SideType st) { m_sideType = st; }
-    SideType getSideType() const { return m_sideType; }
+    void setSideType(rend::Material::SideType st) { m_sideType = st; }
+    rend::Material::SideType getSideType() const { return m_sideType; }
 
     void computeNormal();
     vec3 normal() const { return m_normal; }

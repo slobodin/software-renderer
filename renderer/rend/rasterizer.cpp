@@ -1328,6 +1328,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
 {
     const list<math::Triangle> &trias = rendlist.triangles();
 
+    // painter's algorithm
     BOOST_REVERSE_FOREACH(const math::Triangle &t, trias)
     {
         if (!t.getMaterial())

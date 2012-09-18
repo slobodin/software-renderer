@@ -1,9 +1,9 @@
-Objects:
-  - model: tank1.plg
-    position: [0, 0, 0]
-#  - model: tower1.plg
-#    position: [0, 0, -250]
-#    order: CCW
+- model: tank1.plg
+  position: [0, 0, 0]
+- model: tower1.plg
+  position: [0, 0, -250]
 #  - model: q3ctf1.bsp
 #    position: [0, 0, 0]
 #    order: CW
+
+# LIGHTS!

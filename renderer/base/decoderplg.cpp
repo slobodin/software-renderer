@@ -12,6 +12,7 @@
 #include "mesh.h"
 #include "material.h"
 #include "sceneobject.h"
+#include "poly.h"
 
 namespace base
 {
@@ -148,9 +149,10 @@ sptr(Resource) DecoderPLG::decode(const string &path)
         vb.appendVertices(vertexList, indices);
 
         auto material = make_shared<rend::Material>();
-        // FIXME:
         material->ambientColor = rend::Color3(bounds.first->descriptor & 0x00FFFFFF);
+        material->diffuseColor = rend::Color3(bounds.first->descriptor & 0x00FFFFFF);
 
+        // setting shade mode
         rend::Material::ShadeMode shadeMode;
         int sm = bounds.first->descriptor & 0x0F000000;   // mask to extract shading mode
         switch (sm)
@@ -168,11 +170,31 @@ sptr(Resource) DecoderPLG::decode(const string &path)
             break;
 
         default:
-            syslog << "Bad shade mode in plg-file" << path << ". Setting to defaults." << logwarn;
+            syslog << "Bad shade mode in plg-file" << path << ". Setting defaults." << logwarn;
             shadeMode = rend::Material::SM_WIRE;
         }
 
         material->shadeMode = shadeMode;
+
+        // setting "sideness"
+        rend::Material::SideType sideType;
+        int sides = bounds.first->descriptor & 0xF0000000;
+        switch (sides)
+        {
+        case PLX_1SIDED_FLAG:
+            sideType = rend::Material::ONE_SIDE;
+            break;
+
+        case PLX_2SIDED_FLAG:
+            sideType = rend::Material::TWO_SIDE;
+            break;
+
+        default:
+            syslog << "Bad side flag in plg-file" << path << ". Setting to defaults." << logwarn;
+            sideType = rend::Material::ONE_SIDE;
+        }
+
+        material->sideType = sideType;
 
         vb.setMaterial(material);
         vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
@@ -183,26 +205,6 @@ sptr(Resource) DecoderPLG::decode(const string &path)
         else
             break;
     } while (true);
-
-    /*
-        math::Triangle::SideType sideType;
-        int sides = polyDescriptor & 0xF0000000;
-        switch (sides)
-        {
-        case PLX_1SIDED_FLAG:
-            sideType = math::Triangle::ST_1_SIDED;
-            break;
-
-        case PLX_2SIDED_FLAG:
-            sideType = math::Triangle::ST_2_SIDED;
-            break;
-
-        default:
-            *syslog << "Bad side flag in plg-file" << path.filePath() << ". Setting to defaults." << logwarn;
-            sideType = math::Triangle::ST_2_SIDED;
-        }
-
-    */
 
     auto newObject = make_shared<rend::SceneObject>(newMesh);
 

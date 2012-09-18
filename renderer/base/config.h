@@ -50,8 +50,8 @@ class Config
 public:
     Config(const string &cfgDir = "");
 
-    RendererConfig getRendererConfig() const;
-    SceneConfig getSceneConfig() const;
+    const RendererConfig &getRendererConfig() const;
+    const SceneConfig &getSceneConfig() const;
 };
 
 }

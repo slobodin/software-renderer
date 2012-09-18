@@ -35,7 +35,15 @@ struct Material
         SW_TEXTURE
     };
 
+    //! Triangle side type.
+    enum SideType
+    {
+        ONE_SIDE,
+        TWO_SIDE
+    };
+
     ShadeMode shadeMode;
+    SideType sideType;
 
     Color3 ambientColor;
     Color3 diffuseColor;

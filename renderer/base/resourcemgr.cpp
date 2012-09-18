@@ -109,6 +109,7 @@ void ResourceMgr::loadResource(const string &resourcepath) try
         extension.erase(extension.begin());
     }
 
+    // skip config files
     if (extension == "yaml")
         return;
 

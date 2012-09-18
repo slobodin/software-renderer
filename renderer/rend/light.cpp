@@ -32,25 +32,25 @@ Light::~Light()
 
 void Light::illuminate(RenderList &renderlist) const
 {
-    /*if (!m_isEnabled)
+    if (!m_isEnabled)
         return;
 
-    list<math::Triangle> &trias = renderlist.triangles();
+    auto &trias = renderlist.triangles();
 
-    foreach (math::Triangle &t, trias)
+    for (auto &t : trias)
     {
-        Material &material = t.material();
+        auto material = t.getMaterial();
 
-        switch (material.shadeMode)
+        switch (material->shadeMode)
         {
         case Material::SM_FLAT:
-            material.color() = m_shader(this, material.color(), t.normal());
+            t.v(0).color = t.v(1).color = t.v(2).color = m_shader(this, getMaterialColor(material), t.normal());
             break;
 
         case Material::SM_GOURAUD:
-            t.v(0).color = m_shader(this, t.v(0).color, t.v(0).n);
-            t.v(1).color = m_shader(this, t.v(1).color, t.v(1).n);
-            t.v(2).color = m_shader(this, t.v(2).color, t.v(2).n);
+//            t.v(0).color = m_shader(this, t.v(0).color, t.v(0).n);
+//            t.v(1).color = m_shader(this, t.v(1).color, t.v(1).n);
+//            t.v(2).color = m_shader(this, t.v(2).color, t.v(2).n);
             break;
 
         case Material::SM_UNDEFINED:
@@ -59,16 +59,21 @@ void Light::illuminate(RenderList &renderlist) const
         default:
             break;
         }
-    }*/
+    }
 }
 
 Color3 AmbientLight::shader(const Color3 &matColor, const math::vec3 &/*normal*/) const
 {
     Color3 shadedColor;
     shadedColor = m_intensity * matColor;
-    shadedColor *= (1 / 256.0);
+    shadedColor *= (1 / 255.0);
 
     return shadedColor;
+}
+
+Color3 AmbientLight::getMaterialColor(sptr(Material) material) const
+{
+    return material->ambientColor;
 }
 
 AmbientLight::AmbientLight(const Color3 &intensity)
@@ -79,21 +84,25 @@ AmbientLight::AmbientLight(const Color3 &intensity)
 Color3 DirectionalLight::shader(const Color3 &matColor, const math::vec3 &normal) const
 {
     Color3 shadedColor;
-    const Color3 &originalColor = matColor;
 
     if (normal.isZero())
-        return originalColor;
+        return matColor;
 
     double dp = normal.dotProduct(m_dir);
     if (dp > 0)
     {
-        shadedColor = m_intensity * originalColor;
+        shadedColor = m_intensity * matColor;
         shadedColor *= (dp / 256.0);
     }
     else
-        return originalColor;
+        return matColor;
 
     return shadedColor;
+}
+
+Color3 DirectionalLight::getMaterialColor(sptr(Material) material) const
+{
+    return material->diffuseColor;
 }
 
 DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &dir)
@@ -105,6 +114,8 @@ DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &di
 
 Color3 PointLight::shader(const Color3 &matColor, const math::vec3 &normal) const
 {
+    assert(false);  //  not working yet
+
     Color3 shadedColor;
     /*const Color3 &originalColor = t.material().color();
 
@@ -129,6 +140,11 @@ Color3 PointLight::shader(const Color3 &matColor, const math::vec3 &normal) cons
     return shadedColor;
 }
 
+Color3 PointLight::getMaterialColor(sptr(Material) material) const
+{
+    return Color3();//material->ambientColor;
+}
+
 PointLight::PointLight(const Color3 &intensity, const math::vec3 &pos,
                        double kc, double kl, double kq)
     : Light(intensity),
@@ -141,6 +157,12 @@ PointLight::PointLight(const Color3 &intensity, const math::vec3 &pos,
 
 Color3 SpotLight::shader(const Color3 &matColor, const math::vec3 &normal) const
 {
+    assert(false);  //  not working yet
+}
+
+Color3 SpotLight::getMaterialColor(sptr(Material) material) const
+{
+    return Color3();//material->ambientColor;
 }
 
 SpotLight::SpotLight(const Color3 &intensity, const math::vec3 &pos, const math::vec3 &dir,
