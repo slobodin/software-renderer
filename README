@@ -6,3 +6,4 @@ TODO:
 3) Z-checking with z-buffer
 4) Scene graph
 5) config -> script file
+6) Fix node transformations

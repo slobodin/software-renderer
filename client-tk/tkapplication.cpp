@@ -28,11 +28,16 @@ TkApplication::TkApplication(int argc, const char *argv[])
     clonedTower->setPosition(math::vec3(0, 500, -250));
     m_clientController->getRendmgr()->addSceneObject(clonedTower);*/
 
-    auto sphere = rendmgr->getSceneObject("Sphere");
-    sphere->setScale(math::vec3(5.0, 5.0, 5.0));
+//    auto sphere = rendmgr->getSceneObject("Sphere");
+//    sphere->setScale(math::vec3(5.0, 5.0, 5.0));
 
     auto hammer = rendmgr->getSceneObject("Hammer");
     hammer->setScale(math::vec3(15.0, 15.0, 15.0));
+
+    auto car = rendmgr->getSceneObject("bmain");
+
+    car->setRotation(math::vec3(-90.0, 0.0, 0.0));
+    car->setScale(math::vec3(15.0, 15.0, 15.0));
 }
 
 TkApplication::~TkApplication()

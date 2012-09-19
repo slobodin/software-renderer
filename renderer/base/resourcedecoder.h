@@ -30,8 +30,8 @@ protected:
     //! Helper, that brings some abstraction.
     /*!
       * This function gets new line from a file.
-      * If this line contains stopper then function ends,
-      * otherwise calls user callback of type MyDecoder::fun(string &gettedLine).
+      * Then calls user callback of type MyDecoder::fun(string &gettedLine),
+      * and if this line contains stopper function ends.
       */
     template<typename T>
     void parseWhile(void (T::*lambda)(string &line), const string &stopper, TextFile &file);
@@ -60,12 +60,12 @@ void ResourceDecoder::parseWhile(void (T::*lambda)(string &line), const string &
         if (line.empty())
             continue;
 
-        if (line.find(stopper) != string::npos)
-            break;
-
         T *ptr = static_cast<T *>(this);
 
         (ptr->*lambda)(line);
+
+        if (line.find(stopper) != string::npos)
+            break;
 
         line.clear();
 

@@ -30,6 +30,7 @@ struct Material : public base::Resource
     {
         SM_UNDEFINED,
         SM_WIRE,
+        SM_PLAIN_COLOR,
         SM_FLAT,
         SM_GOURAUD,
         SM_PHONG,
@@ -46,6 +47,7 @@ struct Material : public base::Resource
     ShadeMode shadeMode;
     SideType sideType;
 
+    Color3 plainColor;
     Color3 ambientColor;
     Color3 diffuseColor;
     Color3 specularColor;

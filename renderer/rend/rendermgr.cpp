@@ -117,7 +117,7 @@ sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, ma
 
     return dynamic_pointer_cast<DirectionalLight>(newLight);
 }
-
+/*
 sptr(PointLight) RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 position)
 {
     sptr(Light) newLight;
@@ -134,7 +134,7 @@ sptr(PointLight) RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 pos
 
     return dynamic_pointer_cast<PointLight>(newLight);
 }
-
+*/
 void RenderMgr::resize(int w, int h)
 {
     m_viewport->resize(w, h);

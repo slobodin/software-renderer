@@ -13,6 +13,7 @@
 #include "decoderplg.h"
 #include "decoderbspq3.h"
 #include "decoderasc.h"
+#include "decodercob.h"
 #include "mesh.h"
 #include "sceneobject.h"
 
@@ -23,12 +24,14 @@ ResourceMgr::ResourceMgr()
 {
     sptr(ResourceDecoder) plgDecoder(new DecoderPLG);
     sptr(ResourceDecoder) ascDecoder(new DecoderASC);
+    sptr(ResourceDecoder) cobDecoder(new DecoderCOB);
 //    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
     // other decoders
 
     // add all
     m_decoders[plgDecoder->extension()] = plgDecoder;
     m_decoders[ascDecoder->extension()] = ascDecoder;
+    m_decoders[cobDecoder->extension()] = cobDecoder;
 //    m_decoders[bspDecoder->extension()] = bspDecoder;
 }
 

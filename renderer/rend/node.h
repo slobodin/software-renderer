@@ -81,7 +81,7 @@ inline void Node::setRotation(double yaw, double pitch, double roll)
 
 inline void Node::setScale(const math::vec3 &coeff)
 {
-    m_worldTransformation = math::M44(math::M33::getScaleMatrix(coeff) /* setting scale matrix */,
+    m_worldTransformation = math::M44(m_worldTransformation.getM() * math::M33::getScaleMatrix(coeff) /* setting scale matrix */,
                                       m_worldTransformation.getV() /* prev translation */);
 }
 

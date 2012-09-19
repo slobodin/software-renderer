@@ -45,39 +45,38 @@ void Light::illuminate(RenderList &renderlist) const
         {
         case Material::SM_FLAT:
 //            t.v(0).color = t.v(1).color = t.v(2).color = m_shader(this, getMaterialColor(material), t.normal());
-            t.v(0).color += m_shader(this, getMaterialColor(material), t.normal());
-            t.v(1).color += m_shader(this, getMaterialColor(material), t.normal());
-            t.v(2).color += m_shader(this, getMaterialColor(material), t.normal());
+            t.v(0).color += m_shader(this, material, t.normal());
+            t.v(1).color += m_shader(this, material, t.normal());
+            t.v(2).color += m_shader(this, material, t.normal());
             break;
 
         case Material::SM_GOURAUD:
-            t.v(0).color += m_shader(this, getMaterialColor(material), t.v(0).n);
-            t.v(1).color += m_shader(this, getMaterialColor(material), t.v(1).n);
-            t.v(2).color += m_shader(this, getMaterialColor(material), t.v(2).n);
+            t.v(0).color += m_shader(this, material, t.v(0).n);
+            t.v(1).color += m_shader(this, material, t.v(1).n);
+            t.v(2).color += m_shader(this, material, t.v(2).n);
             break;
 
         case Material::SM_UNDEFINED:
+        case Material::SM_PLAIN_COLOR:
         case Material::SM_WIRE:
-            t.v(0).color = t.v(1).color = t.v(2).color = material->ambientColor;
+            t.v(0).color = t.v(1).color = t.v(2).color = material->plainColor;
+            break;
         case Material::SW_TEXTURE:
+            // texture
+            break;
         default:
             break;
         }
     }
 }
 
-Color3 AmbientLight::shader(const Color3 &matColor, const math::vec3 &/*normal*/) const
+Color3 AmbientLight::shader(const sptr(Material) material, const math::vec3 &/*normal*/) const
 {
     Color3 shadedColor;
-    shadedColor = m_intensity * matColor;
+    shadedColor = m_intensity * material->ambientColor;
     shadedColor *= (1 / 255.0);
 
     return shadedColor;
-}
-
-Color3 AmbientLight::getMaterialColor(sptr(Material) material) const
-{
-    return material->ambientColor;
 }
 
 AmbientLight::AmbientLight(const Color3 &intensity)
@@ -85,17 +84,17 @@ AmbientLight::AmbientLight(const Color3 &intensity)
 {
 }
 
-Color3 DirectionalLight::shader(const Color3 &matColor, const math::vec3 &normal) const
+Color3 DirectionalLight::shader(const sptr(Material) material, const math::vec3 &normal) const
 {
     Color3 shadedColor;
 
     if (normal.isZero())
-        return matColor;
+        return Color3(0, 0, 0);//material->diffuseColor;
 
     double dp = normal.dotProduct(m_dir);
     if (dp > 0)
     {
-        shadedColor = m_intensity * matColor;
+        shadedColor = m_intensity * material->diffuseColor;
         shadedColor *= (dp / 256.0);
     }
     else
@@ -104,18 +103,13 @@ Color3 DirectionalLight::shader(const Color3 &matColor, const math::vec3 &normal
     return shadedColor;
 }
 
-Color3 DirectionalLight::getMaterialColor(sptr(Material) material) const
-{
-    return material->diffuseColor;
-}
-
 DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &dir)
     : Light(intensity),
       m_dir(dir)
 {
     m_dir.normalize();
 }
-
+/*
 Color3 PointLight::shader(const Color3 &matColor, const math::vec3 &normal) const
 {
     assert(false);  //  not working yet
@@ -139,7 +133,7 @@ Color3 PointLight::shader(const Color3 &matColor, const math::vec3 &normal) cons
         shadedColor *= (i / 256.0);
     }
     else
-        return originalColor;*/
+        return originalColor;*
 
     return shadedColor;
 }
@@ -178,6 +172,6 @@ SpotLight::SpotLight(const Color3 &intensity, const math::vec3 &pos, const math:
       m_outerAngle(penumbra),
       m_falloff(falloff)
 {
-}
+}*/
 
 }

@@ -40,15 +40,13 @@ protected:
     bool m_isEnabled;   // on\off
     Color3 m_intensity;
 
-    virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const = 0;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const = 0;
 
-    typedef boost::function<Color3 (const Light*, const Color3 &, const math::vec3 &)> ShaderFunction;
+    typedef boost::function<Color3 (const Light*, const sptr(Material), const math::vec3 &)> ShaderFunction;
     ShaderFunction m_shader;
 
     Light(const Color3 &intensity);
     virtual ~Light();
-
-    virtual Color3 getMaterialColor(sptr(Material) material) const = 0;
 
 public:
     void turnon() { m_isEnabled = true; }
@@ -61,8 +59,7 @@ public:
 class AmbientLight : public Light
 {
 protected:
-    virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const;
-    virtual Color3 getMaterialColor(sptr(Material) material) const;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const;
 
 public:
     AmbientLight(const Color3 &intensity);
@@ -73,20 +70,19 @@ class DirectionalLight : public Light
 {
     math::vec3 m_dir;
 
-    virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const;
-    virtual Color3 getMaterialColor(sptr(Material) material) const;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const;
 
 public:
     DirectionalLight(const Color3 &intensity, const math::vec3 &dir);
 };
-
+/*
 //! Point light
 class PointLight : public Light
 {
     math::vec3 m_pos;
     double m_kc, m_kl, m_kq;
 
-    virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const;
     virtual Color3 getMaterialColor(sptr(Material) material) const;
 
 public:
@@ -104,14 +100,14 @@ class SpotLight : public Light
     double m_outerAngle;    // spot outer angle
     double m_falloff;
 
-    virtual Color3 shader(const Color3 &matColor, const math::vec3 &normal) const;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const;
     virtual Color3 getMaterialColor(sptr(Material) material) const;
 
 public:
     SpotLight(const Color3 &intensity, const math::vec3 &pos, const math::vec3 &dir,
               double umbra, double penumbra, double falloff);
 };
-
+*/
 }
 
 #endif // LIGHT_H

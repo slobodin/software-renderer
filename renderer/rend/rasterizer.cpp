@@ -1343,6 +1343,10 @@ void Rasterizer::rasterize(const RenderList &rendlist)
             drawTriangle(t);
             break;
 
+        case Material::SM_PLAIN_COLOR:
+            drawFillTriangle(t);
+            break;
+
         case Material::SM_FLAT:
             drawFillTriangle(t);
             break;
@@ -1352,7 +1356,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
             break;
 
         default:
-//            syslog << "Unsupported shading mode." << logdebug;
+            syslog << "Unsupported shading mode." << logdebug;
             break;
         }
     }

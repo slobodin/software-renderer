@@ -50,7 +50,6 @@ void DecoderASC::parseVertices(string &line)
 void DecoderASC::parseHeader(string &line)
 {
     // find the name
-//    Named object: "Sphere"
     const string pattern = "Named object:";
 
     auto pos = line.find(pattern);
@@ -182,6 +181,7 @@ sptr(Resource) DecoderASC::decode(const string &path)
         vb.appendVertices(vertexList, indices);
 
         auto material = make_shared<rend::Material>();
+        material->plainColor = bounds.first->color;
         material->ambientColor = bounds.first->color;
         material->diffuseColor = bounds.first->color;
 

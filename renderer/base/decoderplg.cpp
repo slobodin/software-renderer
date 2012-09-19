@@ -151,6 +151,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
         vb.appendVertices(vertexList, indices);
 
         auto material = make_shared<rend::Material>();
+        material->plainColor = rend::Color3(bounds.first->descriptor & 0x00FFFFFF);
         material->ambientColor = rend::Color3(bounds.first->descriptor & 0x00FFFFFF);
         material->diffuseColor = rend::Color3(bounds.first->descriptor & 0x00FFFFFF);
 
@@ -173,7 +174,7 @@ sptr(Resource) DecoderPLG::decode(const string &path)
 
         default:
             syslog << "Bad shade mode in plg-file" << path << ". Setting defaults." << logwarn;
-            shadeMode = rend::Material::SM_WIRE;
+            shadeMode = rend::Material::SM_PLAIN_COLOR;
         }
 
         material->shadeMode = shadeMode;

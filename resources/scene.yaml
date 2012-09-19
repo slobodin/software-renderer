@@ -6,6 +6,7 @@
   position: [0, 100, 0]
 - model: hammer02.asc
   position: [0, 300, 0]
-
+- model: car01.cob
+  position: [200, 100, 0]
 
 # LIGHTS!

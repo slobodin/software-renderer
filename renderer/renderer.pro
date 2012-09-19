@@ -65,7 +65,8 @@ HEADERS += \
     platform/baseapplinux.h \
     third-party/include/cpptk-1.0.2/base/cpptkbase.h \
     third-party/include/cpptk-1.0.2/cpptk.h \
-    platform/baseapptk.h
+    platform/baseapptk.h \
+    base/decodercob.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -105,7 +106,8 @@ SOURCES += \
     platform/baseapplinux.cpp \
     platform/baseapptk.cpp \
     third-party/include/cpptk-1.0.2/cpptk.cc \
-    third-party/include/cpptk-1.0.2/base/cpptkbase.cc
+    third-party/include/cpptk-1.0.2/base/cpptkbase.cc \
+    base/decodercob.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \
