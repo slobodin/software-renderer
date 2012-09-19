@@ -21,10 +21,14 @@ namespace platform
 struct MouseEvent;
 struct KeyboardEvent;
 
+// TODO: make it singletone. Cause we need to call static functions, that will call member functions.
+
 class BaseApp
 {
 protected:
     sptr(base::Controller) m_clientController;
+
+    static void exit() { ::exit(0); }
 
 public:
     BaseApp();
@@ -40,6 +44,7 @@ public:
 
     virtual void onResize(int w, int h) = 0;
 
+    // TODO: rename to run frame
     virtual int run();
 };
 

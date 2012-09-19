@@ -11,12 +11,13 @@ INCLUDEPATH += ../renderer/base \
                 ../renderer/math \
                 ../renderer/rend \
                 ../renderer/third-party/include/ \
-                ../renderer
+                ../renderer \
+                /usr/include/tcl8.5
 
 LIBS += ../../bin/renderer/librenderer.a
 LIBS += ../../renderer/third-party/lib/libyaml-cpp.a
 
-LIBS += -lboost_system -lboost_filesystem -lboost_regex
+LIBS += -lboost_system -lboost_filesystem -lboost_regex -ltcl8.5 -ltk8.5
 
 PRE_TARGETDEPS += ../../bin/renderer/librenderer.a
 

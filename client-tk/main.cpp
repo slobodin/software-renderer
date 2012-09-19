@@ -10,10 +10,9 @@
 int main(int argc, const char **argv)
 try
 {
-//    Application app(argc, argv);
+    TkApplication app(argc, argv);
 
-//    return app.run();
-    return 0;
+    return app.run();
 }
 catch (common::Exception &e)
 {

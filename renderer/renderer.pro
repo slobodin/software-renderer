@@ -11,7 +11,8 @@ DEFINES += USING_PCH
 Debug:DEFINES += DEBUG
 DEFINES += RENDERER_LIBRARY
 win32:DEFINES += WINDOWS_VERSION
-unix:DEFINES += LINUX_VERSION
+#unix:DEFINES += LINUX_VERSION
+DEFINES += TK_VERSION
 
 QMAKE_CXXFLAGS += -std=gnu++0x
 
@@ -61,7 +62,10 @@ HEADERS += \
     base/decoderobj.h \
     base/decoder3ds.h \
     base/decodermd2.h \
-    platform/baseapplinux.h
+    platform/baseapplinux.h \
+    third-party/include/cpptk-1.0.2/base/cpptkbase.h \
+    third-party/include/cpptk-1.0.2/cpptk.h \
+    platform/baseapptk.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -98,15 +102,23 @@ SOURCES += \
     base/decoderobj.cpp \
     base/decoder3ds.cpp \
     base/decodermd2.cpp \
-    platform/baseapplinux.cpp
+    platform/baseapplinux.cpp \
+    platform/baseapptk.cpp \
+    third-party/include/cpptk-1.0.2/cpptk.cc \
+    third-party/include/cpptk-1.0.2/base/cpptkbase.cc
 
 INCLUDEPATH += ./base \
                 ./comm \
                 ./math \
                 ./rend \
+                /usr/include/tcl8.5/ \
                 ./third-party/include/ \
-                $(BOOST_ROOT)
+                $(BOOST_ROOT) \
 
-win32:LIBS += ./third-party/lib/win32/libyaml-cpp.a
+win32:LIBS += ./third-party/lib/mingw/libyaml-cpp.a
 win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_filesystem-mgw46-mt-1_49.a
 win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_system-mgw46-mt-1_49.a
+
+OTHER_FILES += \
+    third-party/include/cpptk-1.0.2/cpptkoptions.x \
+    third-party/include/cpptk-1.0.2/cpptkconstants.x

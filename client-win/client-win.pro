@@ -22,7 +22,7 @@ SOURCES += \
     main.cpp
 
 LIBS += ../../bin/renderer/debug/librenderer.a
-LIBS += ../../renderer/third-party/lib/win32/libyaml-cpp.a
+LIBS += ../../renderer/third-party/lib/mingw/libyaml-cpp.a
 LIBS += $(BOOST_ROOT)/stage/lib/libboost_filesystem-mgw46-1_49.a
 LIBS += $(BOOST_ROOT)/stage/lib/libboost_system-mgw46-1_49.a
 

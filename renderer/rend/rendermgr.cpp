@@ -26,7 +26,7 @@ RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> vi
     m_camera->setEulerAnglesRotation(0, 0, 0);
 
     // add standart white ambient light
-//    addAmbientLight(Color3(255, 255, 255));
+    addAmbientLight(Color3(255 * 0.3, 255 * 0.3, 255 * 0.3));
 }
 
 void rend::RenderMgr::makeLight()

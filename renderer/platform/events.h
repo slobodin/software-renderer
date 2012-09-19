@@ -29,7 +29,7 @@ struct MouseEvent
     bool isRightPressed() const { return buttonsState & RIGHT_PRESSED; }
     bool isMiddlePressed() const { return buttonsState & MIDDLE_PRESSED; }
 
-    MouseEvent() : x(0), y(0), buttonsState(0) { }
+    MouseEvent(int theX = 0, int theY = 0, unsigned state = 0) : x(theX), y(theY), buttonsState(state) { }
 };
 
 enum KEY_CODE

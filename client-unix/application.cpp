@@ -36,7 +36,7 @@ Application::Application(int argc, const char *argv[])
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
     rendmgr->addDirectionalLight(rend::Color3(255, 100, 50), math::vec3(0, 1, 0));
-    rendmgr->addAmbientLight(rend::Color3(255 * 0.3, 255 * 0.3, 255 * 0.3));
+//    rendmgr->addAmbientLight(rend::Color3(255 * 0.3, 255 * 0.3, 255 * 0.3));
 
     /*auto tank = rmgr->getObject<rend::SceneObject>("tank1.plg");
     auto clonedTank = tank->clone();

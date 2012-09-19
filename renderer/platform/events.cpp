@@ -154,6 +154,8 @@ void KeyboardEvent::setKeyCode(unsigned long keycode)
     m_keycode = LinuxKeymap::get().getKeyCode(keycode);
 #elif defined(WINDOWS_VERSION)
     m_keycode = (KEY_CODE)keycode;
+#elif defined(TK_VERSION)
+    m_keycode = (KEY_CODE)keycode;  // windows keycode
 #else
 #error Unsupported OS
 #endif
