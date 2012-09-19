@@ -31,7 +31,7 @@ protected:
     /*!
       * This function gets new line from a file.
       * Then calls user callback of type MyDecoder::fun(string &gettedLine),
-      * and if this line contains stopper function ends.
+      * and, if this line contains stopper, parseWhile ends.
       */
     template<typename T>
     void parseWhile(void (T::*lambda)(string &line), const string &stopper, TextFile &file);

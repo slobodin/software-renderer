@@ -10,6 +10,6 @@ SUBDIRS += \
 #}
 
 unix {
-#SUBDIRS += client-unix
+SUBDIRS += client-unix
 SUBDIRS += client-tk
 }

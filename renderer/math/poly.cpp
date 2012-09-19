@@ -83,7 +83,7 @@ vector<vec2> Triangle::uvs() const
 
 void Triangle::computeNormal()
 {
-    vec3 p1, p2;
+    static vec3 p1, p2;
 
     p1.set((m_verts[1].p - m_verts[0].p).normalize());
     p2.set((m_verts[2].p - m_verts[0].p).normalize());
@@ -94,7 +94,7 @@ void Triangle::computeNormal()
 
 double Triangle::square() const
 {
-    vec3 p1, p2;
+    static vec3 p1, p2;
 
     p1.set((m_verts[1].p - m_verts[0].p).normalize());
     p2.set((m_verts[2].p - m_verts[0].p).normalize());
