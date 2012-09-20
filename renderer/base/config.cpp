@@ -32,10 +32,23 @@ static void operator>> (const YAML::Node &node, math::vec3 &v)
     node[2] >> v.z;
 }
 
+static void operator>> (const YAML::Node &node, rend::Color3 &col)
+{
+    node[0] >> col[rend::RED];
+    node[1] >> col[rend::GREEN];
+    node[2] >> col[rend::BLUE];
+}
+
 static void operator>> (const YAML::Node &node, SceneConfig::ObjInfo &objInfo)
 {
     node["model"] >> objInfo.pathToTheModel;
     node["position"] >> objInfo.position;
+}
+
+static void operator>> (const YAML::Node &node, SceneConfig::DirLightInfo &dirLightInfo)
+{
+    node["direction"] >> dirLightInfo.direction;
+    node["intensity"] >> dirLightInfo.intensity;
 }
 
 //! Finds value by the key and stores it in `value'.
@@ -95,13 +108,18 @@ void Config::parseSceneConfig() try
     YAML::Node doc;
     cfg.GetNextDocument(doc);
 
-    for (size_t i = 0;i < doc.size(); i++)
+    // getting scene objects
+    const YAML::Node &objects = doc["Objects"];
+    for (size_t i = 0; i < objects.size(); i++)
     {
         SceneConfig::ObjInfo objInfo;
-        doc[i] >> objInfo;
+        objects[i] >> objInfo;
 
         m_sceneConfig.objects.push_back(objInfo);
     }
+
+    // getting scene lights
+    parseLights(doc);
 }
 catch (YAML::Exception &e)
 {
@@ -109,6 +127,31 @@ catch (YAML::Exception &e)
            << e.what() << logerr;
 
     m_rendererConfig.makeDefaults();
+}
+
+void Config::parseLights(const YAML::Node &doc) try
+{
+    const YAML::Node &lights = doc["Lights"];
+    const YAML::Node &ambLight = lights["Ambient"];
+
+    for (size_t i = 0; i < ambLight.size(); i++)
+        ambLight[i]["intensity"] >> m_sceneConfig.ambIntensity;
+
+    if (ambLight.size() > 1)
+        syslog << "Number of ambient light sources more than one. Using the last." << logwarn;
+
+    const YAML::Node &dirLight = lights["Directional"];
+    for (size_t i = 0; i < dirLight.size(); i++)
+    {
+        SceneConfig::DirLightInfo light;
+        dirLight[i] >> light;
+
+        m_sceneConfig.dirLights.push_back(light);
+    }
+}
+catch (YAML::Exception &e)
+{
+    // nothing
 }
 
 Config::Config(const string &cfgDir)

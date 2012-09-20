@@ -55,6 +55,14 @@ bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2);
 bool ZCompareMin(const math::Triangle &t1, const math::Triangle &t2);
 bool ZCompareMax(const math::Triangle &t1, const math::Triangle &t2);
 
+// TODO: class Poly, for arbitrary polys support
+// They will be triangulated
+
+class Polygon
+{
+
+};
+
 }
 
 #endif // POLY_H

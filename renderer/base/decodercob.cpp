@@ -64,16 +64,19 @@ void DecoderCOB::parseFaces(string &line)
     temp = "Face verts";
     if (line.find(temp) != string::npos)
     {
+        currFace++;
+        faces.push_back(FaceInfo());
+
         string vertCountStr(line.begin() + temp.length() + 1, line.end());
 
         vertCountStr = string(vertCountStr.begin(), vertCountStr.begin() + vertCountStr.find(' '));
 
         int vertCount = common::fromString<int>(vertCountStr);
         if (vertCount != 3)
-        {
-            syslog << "Invalid face in cob file" << logwarn;
-            return;
-        }
+            /*return*/throw COBFileFormatExcetion("Invalid face in cob file.");       // nahui
+
+        string matIndStr(line.begin() + line.find("mat") + 4, line.end());
+        faces.at(currFace).materialIndex = common::fromString<int>(matIndStr);
 
         return;
     }
@@ -87,8 +90,50 @@ void DecoderCOB::parseFaces(string &line)
             string indStr = string(line.begin(), line.begin() + line.find(','));
             int ind = common::fromString<int>(indStr);
 
-            indices.push_back(ind);
+            faces.at(currFace).indices[i] = ind;
         }
+
+        return;
+    }
+}
+
+void DecoderCOB::parseMaterials(string &line)
+{
+    // check for material index
+    if (line.find("mat#") != string::npos)
+    {
+        currMaterial++;
+        materials.push_back(MaterialInfo());
+
+        string matInd = string(line.begin() + line.find(' ') + 1, line.end());
+        materials.at(currMaterial).matIndex = common::fromString<int>(matInd);
+
+        return;
+    }
+
+    // check for material color
+    if (line.find("rgb") != string::npos)
+    {
+        string col = string(line.begin() + line.find(' ') + 1, line.end());
+        std::istringstream is(col);
+
+        double r, g, b;
+        is >> r; is.ignore(1, ',');
+        is >> g; is.ignore(1, ',');
+        is >> b; is.ignore(1, ',');
+
+        rend::Color3 matColor;
+        matColor[rend::RED] = r * 255.0;
+        matColor[rend::GREEN] = g * 255.0;;
+        matColor[rend::BLUE] = b * 255.0;;
+
+        materials.at(currMaterial).color = matColor;
+
+        return;
+    }
+
+    if (line.find("Shader class: color") != string::npos)
+    {
 
         return;
     }
@@ -100,7 +145,12 @@ void DecoderCOB::clear()
     currVertex = 0;
 
     vertexList.clear();
-    indices.clear();
+
+    materials.clear();
+    currMaterial = -1;
+
+    faces.clear();
+    currFace = -1;
 }
 
 DecoderCOB::DecoderCOB()
@@ -136,34 +186,61 @@ sptr(Resource) DecoderCOB::decode(const string &path)
     parseWhile(&DecoderCOB::parseVertices, "Texture Vertices", cobFile);
     parseWhile(&DecoderCOB::parseUV, "Faces", cobFile);
     parseWhile(&DecoderCOB::parseFaces, "DrawFlags", cobFile);
+    parseWhile(&DecoderCOB::parseMaterials, "END", cobFile);
+
+    std::sort(faces.begin(), faces.end());
 
     auto newMesh = make_shared<rend::Mesh>();
+    auto bounds = std::equal_range(faces.begin(), faces.end(), faces.front());
+    do
+    {
+        rend::VertexBuffer vb;
+        vector<int> indices;
 
-    rend::VertexBuffer vb;
+        std::for_each(bounds.first, bounds.second, [&indices](const FaceInfo &data)
+                      { std::copy(data.indices, data.indices + 3, std::back_inserter(indices)); });
 
-    vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
-    vb.appendVertices(vertexList, indices);
+        vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
+        vb.appendVertices(vertexList, indices);
 
-    auto material = make_shared<rend::Material>();
-    material->plainColor = rend::Color3(255, 255, 255);
-    material->ambientColor = rend::Color3(255, 255, 255);
-    material->diffuseColor = rend::Color3(255, 255, 255);
-    material->shadeMode = rend::Material::SM_FLAT;
-    material->sideType = rend::Material::TWO_SIDE;
+        auto material = make_shared<rend::Material>();
+        int materialIndex = bounds.first->materialIndex;
 
-    vb.setMaterial(material);
+        auto mt = std::find(materials.begin(), materials.end(), MaterialInfo(materialIndex));
 
-    newMesh->appendSubmesh(vb);
+        material->plainColor = materials.at(mt->matIndex).color;
+        material->ambientColor = materials.at(mt->matIndex).color;
+        material->diffuseColor = materials.at(mt->matIndex).color;
 
-    // create scene object
+        // setting shade mode
+        rend::Material::ShadeMode shadeMode;
+        shadeMode = rend::Material::SM_PLAIN_COLOR;
+
+        material->shadeMode = shadeMode;
+
+        // setting "sideness"
+        rend::Material::SideType sideType;
+        sideType = rend::Material::TWO_SIDE;
+
+        material->sideType = sideType;
+
+        vb.setMaterial(material);
+        newMesh->appendSubmesh(vb);
+
+        if (bounds.second != faces.end())
+            bounds = std::equal_range(bounds.second, faces.end(), *bounds.second);
+        else
+            break;
+    } while (true);
+
     auto newObject = make_shared<rend::SceneObject>(newMesh);
 
     if (!m_name.empty())
         newObject->setName(m_name);
 
     syslog << "Decoded cob-model \"" << newObject->getName()
-            << "\". Number of vertices:" << newMesh->numVertices() << logmess;
-//            << ". Number of faces:" << faces.size() << logmess;
+            << "\". Number of vertices:" << newMesh->numVertices()
+            << ". Number of faces:" << faces.size() << logmess;
 
     return newObject;
 }

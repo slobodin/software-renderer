@@ -9,6 +9,12 @@
 #define CONFIG_H
 
 #include "vec3.h"
+#include "color.h"
+
+namespace YAML
+{
+class Node;
+}
 
 namespace base
 {
@@ -34,7 +40,22 @@ struct SceneConfig
         string pathToTheModel;
     };
 
+    // scene objects
     vector<ObjInfo> objects;
+
+    // ambient light intensity
+    rend::Color3 ambIntensity;
+
+    struct DirLightInfo
+    {
+        math::vec3 direction;
+        rend::Color3 intensity;
+    };
+
+    // directional lights
+    vector<DirLightInfo> dirLights;
+
+    SceneConfig() { ambIntensity.reset(); }
 };
 
 class Config
@@ -46,6 +67,7 @@ class Config
     SceneConfig m_sceneConfig;
     std::stringstream m_sceneConfigData;
     void parseSceneConfig();
+    void parseLights(const YAML::Node &doc);
 
 public:
     Config(const string &cfgDir = "");

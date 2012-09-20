@@ -106,8 +106,8 @@ class Color4
 
 public:
     //! Default ctor.
-    Color4(int red = 255, int green = 255,
-           int blue = 255, int alpha = 255)
+    Color4(int red = 0, int green = 0,
+           int blue = 0, int alpha = 255)
     {
         m_color[1] = red;
         m_color[2] = green;
@@ -149,7 +149,7 @@ class Color3
 public:
     //! Default ctor.
     Color3()
-        : m_r(255), m_g(255), m_b(255)
+        : m_r(0), m_g(0), m_b(0)
     { }
     //! Component ctor.
     Color3(uint32_t red, uint32_t green, uint32_t blue)
@@ -215,6 +215,8 @@ public:
 
     //! Resets color to zero (black).
     void reset() { m_r = m_g = m_b = 0; }
+    //! Checks for zero color.
+    bool isBlack() const { return m_r == 0 && m_g == 0 && m_b == 0; }
 };
 
 Color3 operator* (const Color3 &a, const Color3 &b);

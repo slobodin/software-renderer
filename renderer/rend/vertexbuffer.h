@@ -76,6 +76,7 @@ public:
 
     //! Appends vertices to this submesh.
     void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices);
+    void appendVertices(const vector<math::vertex> &vertices);
 
     //! How many vertices in the buffer?
     int numVertices() const { return m_vertices.size(); }

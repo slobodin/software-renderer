@@ -85,6 +85,18 @@ void Controller::createRenderManager()
 
         m_rendmgr->addSceneObject(obj);
     }
+
+    if (scCfg.dirLights.empty() && scCfg.ambIntensity.isBlack())
+    {
+        syslog << "No lights setted in scene config." << logwarn;
+        return;
+    }
+
+    if (!scCfg.ambIntensity.isBlack())
+        m_rendmgr->addAmbientLight(scCfg.ambIntensity);
+
+    for (auto &dirLightInfo : scCfg.dirLights)
+        m_rendmgr->addDirectionalLight(dirLightInfo.intensity, dirLightInfo.direction);
 }
 
 bool Controller::viewportExist()

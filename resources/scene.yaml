@@ -1,12 +1,20 @@
-- model: tank1.plg
-  position: [0, 0, 0]
-- model: tower1.plg
-  position: [0, 0, -250]
-- model: sphere01.asc
-  position: [0, 100, 0]
-- model: hammer02.asc
-  position: [0, 300, 0]
-- model: car01.cob
-  position: [200, 100, 0]
+Objects:
+  - model: tank1.plg
+    position: [0, 0, 0]
+  - model: tower1.plg
+    position: [0, 0, -250]
+  - model: sphere01.asc
+    position: [0, 100, 0]
+  - model: hammer02.asc
+    position: [0, 300, 0]
+  - model: car01.cob
+    position: [200, 100, 0]
 
-# LIGHTS!
+Lights:
+  Ambient:
+    - intensity: [70, 70, 70]
+  Directional:
+    - direction: [1, 1, 0]
+      intensity: [255, 10, 50]
+    - direction: [0, 1, 0]
+      intensity: [30, 255, 255]
