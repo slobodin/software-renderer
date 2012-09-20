@@ -74,7 +74,7 @@ public:
     //! Gets the type.
     VertexBufferType    getType() const { return m_type; }
 
-    //! Appends vertices to this submesh.
+    //! Appends vertices to this submesh. Also computes vertex normals and bounding sphere.
     void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices);
     void appendVertices(const vector<math::vertex> &vertices);
 

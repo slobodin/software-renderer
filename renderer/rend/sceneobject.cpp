@@ -42,6 +42,31 @@ sptr(SceneObject) SceneObject::clone() const
     return newObj;
 }
 
+void SceneObject::setPosition(const math::vec3 &pos)
+{
+    Node::setPosition(pos);
+}
+
+void SceneObject::setRotation(const math::vec3 &angles)
+{
+    Node::setRotation(angles);
+}
+
+void SceneObject::setRotation(double yaw, double pitch, double roll)
+{
+    Node::setRotation(yaw, pitch, roll);
+}
+
+void SceneObject::setScale(const math::vec3 &coeff)
+{
+    Node::setScale(coeff);
+}
+
+void SceneObject::setTransformation(const math::M44 &tr)
+{
+    Node::setTransformation(tr);
+}
+
 void SceneObject::setMesh(sptr(Mesh) mesh)
 {
     if (!mesh)

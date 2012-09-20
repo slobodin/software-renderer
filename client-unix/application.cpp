@@ -24,6 +24,36 @@ void Application::setWindowTitle(const string &title)
     XSetIconName(d, m_viewport->getWindow(), title_c);
 }
 
+void Application::update(float dt)
+{
+    static int yaw, roll;
+
+    yaw += 1;
+    roll += 1;
+    if (abs(yaw) > 360) yaw %= 360;
+    if (abs(roll) > 360) roll %= 360;
+
+    // hammer
+    math::vec3 transl = m_hammer->getPosition();
+
+    m_hammer->resetTransformation();
+
+    math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(yaw, 0, 0);
+    math::M33 scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
+
+    m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
+
+    // sphere
+    transl = m_sphere->getPosition();
+
+    m_sphere->resetTransformation();
+
+    rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, roll);
+    scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
+
+    m_sphere->setTransformation(math::M44(rotM * scaleM, transl));
+}
+
 Application::Application(int argc, const char *argv[])
     : platform::BaseAppLinux(argc, argv)
 {
@@ -35,9 +65,6 @@ Application::Application(int argc, const char *argv[])
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
-    rendmgr->addDirectionalLight(rend::Color3(255, 100, 50), math::vec3(0, 1, 0));
-//    rendmgr->addAmbientLight(rend::Color3(255 * 0.3, 255 * 0.3, 255 * 0.3));
-
     /*auto tank = rmgr->getObject<rend::SceneObject>("tank1.plg");
     auto clonedTank = tank->clone();
     clonedTank->setPosition(math::vec3(0, 500, 0));
@@ -48,16 +75,16 @@ Application::Application(int argc, const char *argv[])
     clonedTower->setPosition(math::vec3(0, 500, -250));
     m_clientController->getRendmgr()->addSceneObject(clonedTower);*/
 
-    auto sphere = rendmgr->getSceneObject("Sphere");
-    sphere->setScale(math::vec3(15.0, 15.0, 15.0));
+    m_sphere = rendmgr->getSceneObject("Sphere");
+    m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
 
-    auto hammer = rendmgr->getSceneObject("Hammer");
-    hammer->setScale(math::vec3(15.0, 15.0, 15.0));
+    m_hammer = rendmgr->getSceneObject("Hammer");
+    m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
 
-    auto car = rendmgr->getSceneObject("bmain");
+    auto tie = rendmgr->getSceneObject("TIEFIGTH");
 
-    car->setRotation(math::vec3(-90.0, 0.0, 0.0));
-    car->setScale(math::vec3(15.0, 15.0, 15.0));
+    tie->setRotation(math::vec3(-90.0, 0.0, 0.0));
+    tie->setScale(math::vec3(15.0, 15.0, 15.0));
 }
 
 Application::~Application()

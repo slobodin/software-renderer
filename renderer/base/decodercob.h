@@ -24,14 +24,16 @@ class DecoderCOB : public ResourceDecoder
     string m_name;
     int currVertex;
 
+    // vertices
     vector<math::vertex> vertexList;
 
     struct FaceInfo
     {
         int indices[3];
         int materialIndex;
+        int uvIndices[3];
 
-        FaceInfo() : materialIndex(-1) { memset(indices, 0, 3 * sizeof(int)); }
+        FaceInfo() : materialIndex(-1) { memset(indices, 0, 3 * sizeof(int)); memset(uvIndices, 0, 3 * sizeof(int)); }
 
         // we need to sort all polygon data and create particular vertex buffers (with same material)
         // all vertex buffers will form the mesh
@@ -45,6 +47,7 @@ class DecoderCOB : public ResourceDecoder
         }
     };
 
+    // polys
     vector<FaceInfo> faces;
     int currFace;
 
@@ -63,8 +66,12 @@ class DecoderCOB : public ResourceDecoder
         }
     };
 
+    // materials
     vector<MaterialInfo> materials;
     int currMaterial;
+
+    // texture coords
+    vector<math::vec2> uv;
 
     void parseHeader(string &line);
     void parseTransform(string &line);
@@ -76,8 +83,8 @@ class DecoderCOB : public ResourceDecoder
     void clear();
 
 public:
-    DecoderCOB();
-    ~DecoderCOB();
+    DecoderCOB() { }
+    ~DecoderCOB() { }
 
     sptr(Resource)  decode(const string &path);
     string          extension() const;

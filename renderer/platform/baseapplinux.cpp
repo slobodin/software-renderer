@@ -43,6 +43,8 @@ int BaseAppLinux::run()
 
     while (1)
     {
+        BaseApp::run();
+
         XNextEvent(m_viewport->getXDisplay(), &report);
 
         switch (report.type)
@@ -138,8 +140,6 @@ int BaseAppLinux::run()
         default:
             break;
         }
-
-        BaseApp::run();
     }
 
     return 0;

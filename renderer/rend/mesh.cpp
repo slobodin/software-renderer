@@ -25,7 +25,6 @@ Mesh::~Mesh()
 void Mesh::appendSubmesh(const VertexBuffer &submesh)
 {
     m_submeshes.push_back(submesh);
-    m_submeshes.back().computeVertexNormals();
 }
 
 int Mesh::numVertices() const

@@ -46,8 +46,9 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             // set material
             triangle.setMaterial(vertexBuffer.getMaterial());
 
-            // compute normals
+            // compute normal for triangle
             triangle.computeNormal();
+            // TODO: where to compute vertex normals? Here?? Maybe when we apply transformation for model only?
 
             // save it
             output.push_back(triangle);

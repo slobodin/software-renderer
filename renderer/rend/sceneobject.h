@@ -33,6 +33,12 @@ public:
 
     sptr(SceneObject)   clone() const;
 
+    virtual void setPosition(const math::vec3 &pos);
+    virtual void setRotation(const math::vec3 &angles);
+    virtual void setRotation(double yaw, double pitch, double roll);
+    virtual void setScale(const math::vec3 &coeff);
+    virtual void setTransformation(const math::M44 &tr);
+
 private:
     SceneObject(const SceneObject &);
     SceneObject &operator= (const SceneObject &);

@@ -13,8 +13,13 @@
 class Application : public platform::BaseAppLinux
 {
     sptr(rend::Camera) m_playerCamera;
+    sptr(rend::SceneObject) m_hammer;
+    sptr(rend::SceneObject) m_sphere;
 
     void setWindowTitle(const string &title);
+
+protected:
+    void update(float dt);
 
 public:
     Application(int argc, const char *argv[]);

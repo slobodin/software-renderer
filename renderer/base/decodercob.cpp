@@ -49,9 +49,17 @@ void DecoderCOB::parseVertices(string &line)
     vertexList.at(currVertex++) = v;
 }
 
-void DecoderCOB::parseUV(string &/*line*/)
+void DecoderCOB::parseUV(string &line)
 {
-    // nothing
+    if (line.find("Faces") != string::npos)
+        return;
+
+    std::istringstream is(line);
+
+    math::vec2 u_v;
+    is >> u_v.x >> u_v.y;
+
+    uv.push_back(u_v);
 }
 
 void DecoderCOB::parseFaces(string &line)
@@ -91,6 +99,11 @@ void DecoderCOB::parseFaces(string &line)
             int ind = common::fromString<int>(indStr);
 
             faces.at(currFace).indices[i] = ind;
+
+            string uvStr = string(line.begin() + line.find(',') + 1, line.begin() + line.find('>'));
+            int uvInd = common::fromString<int>(uvStr);
+
+            faces.at(currFace).uvIndices[i] = uvInd;
         }
 
         return;
@@ -151,14 +164,8 @@ void DecoderCOB::clear()
 
     faces.clear();
     currFace = -1;
-}
 
-DecoderCOB::DecoderCOB()
-{
-}
-
-DecoderCOB::~DecoderCOB()
-{
+    uv.clear();
 }
 
 sptr(Resource) DecoderCOB::decode(const string &path)
@@ -187,6 +194,13 @@ sptr(Resource) DecoderCOB::decode(const string &path)
     parseWhile(&DecoderCOB::parseUV, "Faces", cobFile);
     parseWhile(&DecoderCOB::parseFaces, "DrawFlags", cobFile);
     parseWhile(&DecoderCOB::parseMaterials, "END", cobFile);
+
+    for (auto f : faces)
+    {
+        vertexList.at(f.indices[0]).t = uv.at(f.uvIndices[0]);
+        vertexList.at(f.indices[1]).t = uv.at(f.uvIndices[1]);
+        vertexList.at(f.indices[2]).t = uv.at(f.uvIndices[2]);
+    }
 
     std::sort(faces.begin(), faces.end());
 
@@ -231,6 +245,7 @@ sptr(Resource) DecoderCOB::decode(const string &path)
             bounds = std::equal_range(bounds.second, faces.end(), *bounds.second);
         else
             break;
+
     } while (true);
 
     auto newObject = make_shared<rend::SceneObject>(newMesh);

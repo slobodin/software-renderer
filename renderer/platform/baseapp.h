@@ -30,6 +30,9 @@ protected:
 
     static void exit() { ::exit(0); }
 
+    //! This func calls every frame.
+    virtual void update(float dt) = 0;
+
 public:
     BaseApp();
     virtual ~BaseApp();

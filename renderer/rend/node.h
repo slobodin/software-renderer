@@ -33,19 +33,21 @@ public:
     virtual ~Node() { }
 
     //! Sets position in world space.
-    void setPosition(const math::vec3 &pos);
+    virtual void setPosition(const math::vec3 &pos);
 
     //! Sets rotation in world space by (x, y, z)-angles.
-    void setRotation(const math::vec3 &angles);
+    virtual void setRotation(const math::vec3 &angles);
 
     //! Sets rotation in world space by yaw pitch roll angles.
-    void setRotation(double yaw, double pitch, double roll);
+    virtual void setRotation(double yaw, double pitch, double roll);
 
     //! Scales the model.
-    void setScale(const math::vec3 &coeff);
+    virtual void setScale(const math::vec3 &coeff);
 
     //! Sets the whole affine transformation.
-    void setTransformation(const math::M44 &tr);
+    virtual void setTransformation(const math::M44 &tr);
+
+    virtual void resetTransformation();
 
     //! Returns model position.
     math::vec3 getPosition() const;
@@ -68,10 +70,10 @@ inline void Node::setRotation(const math::vec3 &angles)
     math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(angles.y,
                                                             angles.x,
                                                             angles.z);
-    math::M44 affTr(rotM, /* setting rotation */
-                    math::vec3() /* no translation */);
 
-    m_worldTransformation *= affTr;
+    rotM *= m_worldTransformation.getM();
+
+    m_worldTransformation = math::M44(rotM, m_worldTransformation.getV());
 }
 
 inline void Node::setRotation(double yaw, double pitch, double roll)
@@ -88,6 +90,11 @@ inline void Node::setScale(const math::vec3 &coeff)
 inline void Node::setTransformation(const math::M44 &tr)
 {
     m_worldTransformation = tr;
+}
+
+inline void Node::resetTransformation()
+{
+    m_worldTransformation.reset();
 }
 
 inline math::vec3 Node::getPosition() const

@@ -31,6 +31,7 @@ int BaseApp::run()
     onFrameStart();
 
     m_clientController->update();
+    update(0.0f);       // update user callback
 
     onFrameEnd();
 
