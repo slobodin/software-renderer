@@ -143,7 +143,7 @@ void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
 
 bool Camera::culled(const SceneObject &obj) const
 {
-    /*math::vec3 spherePos = obj.getPosition();
+    math::vec3 spherePos = obj.getPosition();
     double radius = obj.bsphere().radius();
 
     if (radius < 0)
@@ -154,7 +154,7 @@ bool Camera::culled(const SceneObject &obj) const
     // check Z plane
     if (((spherePos.z - radius) > m_farZ)
             || ((spherePos.z + radius) < m_nearZ))
-        return true;*/
+        return true;
 
     return false;
 }

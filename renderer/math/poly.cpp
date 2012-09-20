@@ -143,4 +143,46 @@ bool ZCompareMax(const Triangle &t1, const Triangle &t2)
     return false;
 }
 
+Polygon::Polygon()
+{
+}
+
+Polygon::Polygon(const vector<vertex> &vertices)
+{
+    if (vertices.size() < 3)
+        throw std::runtime_error("Invalid poly.");
+
+    copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
+}
+
+void Polygon::set(const vector<vertex> &vertices)
+{
+    m_vertices.clear();
+    copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
+}
+
+void Polygon::split(Polygon &poly1, Polygon &poly2) const
+{
+    poly1.set(vector<vertex>(m_vertices.begin(), m_vertices.begin() + 3));
+    poly2.set(vector<vertex>(m_vertices.begin() + 2, m_vertices.end()));
+    poly2.m_vertices.push_back(m_vertices[0]);
+}
+
+void Triangulate(const Polygon &poly, vector<Triangle> &resultList)
+{
+    if (poly.m_vertices.size() == 3)
+    {
+        resultList.push_back(Triangle(&poly.m_vertices[0]));
+        return;
+    }
+    else
+    {
+        Polygon p1, p2;
+
+        poly.split(p1, p2);
+        Triangulate(p1, resultList);
+        Triangulate(p2, resultList);
+    }
+}
+
 }

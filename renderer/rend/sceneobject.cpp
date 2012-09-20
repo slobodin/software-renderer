@@ -15,10 +15,16 @@ namespace rend
 SceneObject::SceneObject(sptr(Mesh) mesh)
     : m_mesh(mesh)
 {
+    m_mesh->computeBoundingSphere(m_worldTransformation);
 }
 
 SceneObject::~SceneObject()
 {
+}
+
+const BoundingSphere &SceneObject::bsphere() const
+{
+    return m_mesh->getBoundingSphere();
 }
 
 sptr(Mesh) SceneObject::getMesh()
@@ -60,11 +66,17 @@ void SceneObject::setRotation(double yaw, double pitch, double roll)
 void SceneObject::setScale(const math::vec3 &coeff)
 {
     Node::setScale(coeff);
+
+    // sphere changes only when we scaling the object.
+    m_mesh->computeBoundingSphere(m_worldTransformation);
 }
 
 void SceneObject::setTransformation(const math::M44 &tr)
 {
     Node::setTransformation(tr);
+
+    // sphere changes only when we scaling the object.
+    m_mesh->computeBoundingSphere(m_worldTransformation);
 }
 
 void SceneObject::setMesh(sptr(Mesh) mesh)
@@ -76,6 +88,7 @@ void SceneObject::setMesh(sptr(Mesh) mesh)
     }
 
     m_mesh = mesh;
+    m_mesh->computeBoundingSphere(m_worldTransformation);
 }
 
 }

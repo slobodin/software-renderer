@@ -12,6 +12,7 @@
 
 #include "node.h"
 #include "resource.h"
+#include "boundingsphere.h"
 
 namespace rend
 {
@@ -27,6 +28,8 @@ public:
     ~SceneObject();
 
     void                setMesh(sptr(Mesh) mesh);
+
+    const BoundingSphere &bsphere() const;
 
     sptr(Mesh)          getMesh();
     const sptr(Mesh)    getMesh() const;

@@ -35,25 +35,14 @@ void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const ve
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
     std::copy(indices.begin(), indices.end(), std::back_inserter(m_indices));
 
-    computeBoundingSphere();
-    computeVertexNormals();
+//    computeVertexNormals();
 }
 
 void VertexBuffer::appendVertices(const vector<math::vertex> &vertices)
 {
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
 
-    computeBoundingSphere();
-    computeVertexNormals();
-}
-
-void VertexBuffer::computeBoundingSphere()
-{
-    vector<math::vec3> points;
-    for (size_t i = 0; i < m_vertices.size(); i++)
-        points.push_back(m_vertices[i].p);
-
-    m_boundingSphere.calculate(points);
+//    computeVertexNormals();
 }
 
 void VertexBuffer::computeVertexNormals()

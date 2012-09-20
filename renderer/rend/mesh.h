@@ -11,6 +11,7 @@
 #include "comm_pch.h"
 
 #include "vertexbuffer.h"
+#include "m44.h"
 
 namespace rend
 {
@@ -24,6 +25,9 @@ class Mesh
     //! Mesh consists of some submeshes, which holds vertex data and one material.
     list<VertexBuffer> m_submeshes;
 
+    //! Bounding sphere.
+    BoundingSphere m_boundingSphere;
+
 public:
     //! Default ctor.
     Mesh();
@@ -32,6 +36,9 @@ public:
 
     //! Appends submesh to this mesh.
     void appendSubmesh(const VertexBuffer &submesh);
+
+    void computeBoundingSphere(const math::M44 &transform);
+    const BoundingSphere &getBoundingSphere() const;
 
     //! Returns vertex count of all submeshes.
     int numVertices() const;

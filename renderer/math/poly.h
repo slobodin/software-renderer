@@ -58,10 +58,31 @@ bool ZCompareMax(const math::Triangle &t1, const math::Triangle &t2);
 // TODO: class Poly, for arbitrary polys support
 // They will be triangulated
 
+//! Arbitrary poly.
+/*!
+  * Only for polygons triangulation support.
+  */
 class Polygon
 {
+    vector<vertex> m_vertices;
 
+public:
+    Polygon();
+    Polygon(const vector<vertex> &vertices);
+
+    //! Set poly with new data.
+    void set(const vector<vertex> &vertices);
+
+    const vector<vertex> &vertices() const { return m_vertices; }
+
+    //! Splits this poly into two polys.
+    void split(Polygon &poly1, Polygon &poly2) const;
+
+    //! Performs triangulation of poly into resultList.
+    friend void Triangulate(const Polygon &poly, vector<Triangle> &resultList);
 };
+
+void Triangulate(const Polygon &poly, vector<Triangle> &resultList);
 
 }
 

@@ -14,6 +14,7 @@
 #include "decoderbspq3.h"
 #include "decoderasc.h"
 #include "decodercob.h"
+#include "decoderobj.h"
 #include "mesh.h"
 #include "sceneobject.h"
 
@@ -25,6 +26,7 @@ ResourceMgr::ResourceMgr()
     sptr(ResourceDecoder) plgDecoder(new DecoderPLG);
     sptr(ResourceDecoder) ascDecoder(new DecoderASC);
     sptr(ResourceDecoder) cobDecoder(new DecoderCOB);
+    sptr(ResourceDecoder) objDecoder(new DecoderOBJ);
 //    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
     // other decoders
 
@@ -32,6 +34,7 @@ ResourceMgr::ResourceMgr()
     m_decoders[plgDecoder->extension()] = plgDecoder;
     m_decoders[ascDecoder->extension()] = ascDecoder;
     m_decoders[cobDecoder->extension()] = cobDecoder;
+    m_decoders[objDecoder->extension()] = objDecoder;
 //    m_decoders[bspDecoder->extension()] = bspDecoder;
 }
 

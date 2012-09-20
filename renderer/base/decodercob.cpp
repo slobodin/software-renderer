@@ -59,6 +59,8 @@ void DecoderCOB::parseUV(string &line)
     math::vec2 u_v;
     is >> u_v.x >> u_v.y;
 
+    u_v.y = 1. - u_v.y;     // inverted v coord in .cob files
+
     uv.push_back(u_v);
 }
 
@@ -106,6 +108,9 @@ void DecoderCOB::parseFaces(string &line)
             faces.at(currFace).uvIndices[i] = uvInd;
         }
 
+        // ccw -> cw. FIXME: cob models not uniform in vertex bypass order?
+        std::swap(faces.at(currFace).indices[0], faces.at(currFace).indices[1]);
+
         return;
     }
 }
@@ -145,11 +150,114 @@ void DecoderCOB::parseMaterials(string &line)
         return;
     }
 
-    if (line.find("Shader class: color") != string::npos)
+    if (line.find("constant") != string::npos)
     {
-
+        materials.at(currMaterial).shaderMode = MaterialInfo::CONSTANT;
         return;
     }
+
+    if (line.find("matte") != string::npos)
+    {
+        materials.at(currMaterial).shaderMode = MaterialInfo::MATTE;
+        return;
+    }
+
+    if (line.find("plastic") != string::npos)
+    {
+        materials.at(currMaterial).shaderMode = MaterialInfo::PLASTIC;
+        return;
+    }
+
+    if (line.find("phong") != string::npos)
+    {
+        materials.at(currMaterial).shaderMode = MaterialInfo::PHONG;
+        return;
+    }
+
+    if (line.find("texture map") != string::npos)
+    {
+        materials.at(currMaterial).shaderMode = MaterialInfo::TEXTURE;
+        return;
+    }
+}
+
+sptr(rend::Mesh) DecoderCOB::createMesh()
+{
+    std::sort(faces.begin(), faces.end());
+
+    auto newMesh = make_shared<rend::Mesh>();
+    auto bounds = std::equal_range(faces.begin(), faces.end(), faces.front());
+    do
+    {
+        rend::VertexBuffer vb;
+        vector<int> indices;
+
+        std::for_each(bounds.first, bounds.second, [&indices](const FaceInfo &data)
+                      { std::copy(data.indices, data.indices + 3, std::back_inserter(indices)); });
+
+        vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
+        vb.appendVertices(vertexList, indices);
+
+        auto material = make_shared<rend::Material>();
+        int materialIndex = bounds.first->materialIndex;
+
+        auto mt = std::find(materials.begin(), materials.end(), MaterialInfo(materialIndex));
+
+        material->plainColor = materials.at(mt->matIndex).color;
+        material->ambientColor = materials.at(mt->matIndex).color;
+        material->diffuseColor = materials.at(mt->matIndex).color;
+
+        // setting shade mode
+        rend::Material::ShadeMode shadeMode;
+
+        switch (materials.at(mt->matIndex).shaderMode)
+        {
+        case MaterialInfo::CONSTANT:
+            shadeMode = rend::Material::SM_PLAIN_COLOR;
+            break;
+        case MaterialInfo::MATTE:
+            shadeMode = rend::Material::SM_FLAT;
+            break;
+        case MaterialInfo::PLASTIC:
+//            shadeMode = rend::Material::SM_GOURAUD;
+            syslog << "Gouraud unsupported yet" << logwarn;
+            shadeMode = rend::Material::SM_FLAT;
+            break;
+        case MaterialInfo::PHONG:
+//            shadeMode = rend::Material::SM_PHONG;
+            syslog << "Phong unsupported yet" << logwarn;
+            shadeMode = rend::Material::SM_FLAT;
+            break;
+        case MaterialInfo::TEXTURE:
+//            shadeMode = rend::Material::SM_TEXTURE;
+            syslog << "Textures unsupported yet" << logwarn;
+            shadeMode = rend::Material::SM_FLAT;
+            break;
+        default:
+            syslog << "Unknown shading mode in .cob file" << logwarn;
+            shadeMode = rend::Material::SM_PLAIN_COLOR;
+            break;
+        }
+
+        material->shadeMode = shadeMode;
+
+        // setting "sideness"
+        rend::Material::SideType sideType;
+        sideType = rend::Material::ONE_SIDE;
+
+        material->sideType = sideType;
+
+        vb.setMaterial(material);
+        newMesh->appendSubmesh(vb);
+
+        if (bounds.second != faces.end())
+            bounds = std::equal_range(bounds.second, faces.end(), *bounds.second);
+        else
+            break;
+
+    } while (true);
+
+    return newMesh;
 }
 
 void DecoderCOB::clear()
@@ -202,52 +310,7 @@ sptr(Resource) DecoderCOB::decode(const string &path)
         vertexList.at(f.indices[2]).t = uv.at(f.uvIndices[2]);
     }
 
-    std::sort(faces.begin(), faces.end());
-
-    auto newMesh = make_shared<rend::Mesh>();
-    auto bounds = std::equal_range(faces.begin(), faces.end(), faces.front());
-    do
-    {
-        rend::VertexBuffer vb;
-        vector<int> indices;
-
-        std::for_each(bounds.first, bounds.second, [&indices](const FaceInfo &data)
-                      { std::copy(data.indices, data.indices + 3, std::back_inserter(indices)); });
-
-        vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
-        vb.appendVertices(vertexList, indices);
-
-        auto material = make_shared<rend::Material>();
-        int materialIndex = bounds.first->materialIndex;
-
-        auto mt = std::find(materials.begin(), materials.end(), MaterialInfo(materialIndex));
-
-        material->plainColor = materials.at(mt->matIndex).color;
-        material->ambientColor = materials.at(mt->matIndex).color;
-        material->diffuseColor = materials.at(mt->matIndex).color;
-
-        // setting shade mode
-        rend::Material::ShadeMode shadeMode;
-        shadeMode = rend::Material::SM_PLAIN_COLOR;
-
-        material->shadeMode = shadeMode;
-
-        // setting "sideness"
-        rend::Material::SideType sideType;
-        sideType = rend::Material::TWO_SIDE;
-
-        material->sideType = sideType;
-
-        vb.setMaterial(material);
-        newMesh->appendSubmesh(vb);
-
-        if (bounds.second != faces.end())
-            bounds = std::equal_range(bounds.second, faces.end(), *bounds.second);
-        else
-            break;
-
-    } while (true);
-
+    auto newMesh = createMesh();
     auto newObject = make_shared<rend::SceneObject>(newMesh);
 
     if (!m_name.empty())

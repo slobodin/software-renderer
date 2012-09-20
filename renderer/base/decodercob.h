@@ -14,6 +14,11 @@
 #include "vertex.h"
 #include "color.h"
 
+namespace rend
+{
+class Mesh;
+}
+
 namespace base
 {
 
@@ -33,7 +38,8 @@ class DecoderCOB : public ResourceDecoder
         int materialIndex;
         int uvIndices[3];
 
-        FaceInfo() : materialIndex(-1) { memset(indices, 0, 3 * sizeof(int)); memset(uvIndices, 0, 3 * sizeof(int)); }
+        FaceInfo() : materialIndex(-1)
+        { memset(indices, 0, 3 * sizeof(int)); memset(uvIndices, 0, 3 * sizeof(int)); }
 
         // we need to sort all polygon data and create particular vertex buffers (with same material)
         // all vertex buffers will form the mesh
@@ -53,12 +59,15 @@ class DecoderCOB : public ResourceDecoder
 
     struct MaterialInfo
     {
+        enum ShaderMode { CONSTANT, MATTE, PLASTIC, PHONG, TEXTURE  };
+
+        ShaderMode shaderMode;
         int matIndex;
         rend::Color3 color;
         // TODO:
         // shading mode
 
-        MaterialInfo(int ind = -1) : matIndex(ind) { }
+        MaterialInfo(int ind = -1) : shaderMode(CONSTANT), matIndex(ind) { }
 
         bool operator== (const MaterialInfo &other) const
         {
@@ -79,6 +88,8 @@ class DecoderCOB : public ResourceDecoder
     void parseUV(string &line);
     void parseFaces(string &line);
     void parseMaterials(string &line);
+
+    sptr(rend::Mesh) createMesh();
 
     void clear();
 

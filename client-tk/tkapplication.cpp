@@ -62,9 +62,17 @@ TkApplication::TkApplication(int argc, const char *argv[])
     m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
 
     auto tie = rendmgr->getSceneObject("TIEFIGTH");
-
     tie->setRotation(math::vec3(-90.0, 0.0, 0.0));
     tie->setScale(math::vec3(15.0, 15.0, 15.0));
+
+    auto cube = rendmgr->getSceneObject("Cube");
+    cube->setScale(math::vec3(15.0, 15.0, 15.0));
+
+    auto cessna = rendmgr->getSceneObject("cessna.obj");
+    cessna->setScale(math::vec3(15.0, 15.0, 15.0));
+
+    auto al = rendmgr->getSceneObject("al.obj");
+    al->setScale(math::vec3(35.0, 35.0, 35.0));
 }
 
 TkApplication::~TkApplication()

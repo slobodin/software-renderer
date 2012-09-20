@@ -45,6 +45,8 @@ public:
 
     void zsort();
     void removeBackfaces(const sptr(Camera) cam);
+
+    size_t getSize() const { return m_triangles.size(); }
 };
 
 }

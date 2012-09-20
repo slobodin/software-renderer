@@ -1362,7 +1362,7 @@ void Rasterizer::rasterize(const RenderList &rendlist)
     }
 }
 
-void Rasterizer::beginFrame(sptr(Viewport) viewport)
+void Rasterizer::beginFrame(sptr(Viewport) /*viewport*/)
 {
     m_fb.clear();
 }

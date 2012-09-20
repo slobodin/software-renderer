@@ -50,11 +50,6 @@ private:
     //! Indices for the vertices.
     IndexArray m_indices;
 
-    //! Bounding sphere.
-    BoundingSphere m_boundingSphere;
-
-    //! Helper to compute bounding sphere.
-    void computeBoundingSphere();
     //! Helper to compute vertex normals.
     void computeVertexNormals();
 

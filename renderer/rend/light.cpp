@@ -61,7 +61,7 @@ void Light::illuminate(RenderList &renderlist) const
         case Material::SM_WIRE:
             t.v(0).color = t.v(1).color = t.v(2).color = material->plainColor;
             break;
-        case Material::SW_TEXTURE:
+        case Material::SM_TEXTURE:
             // texture
             break;
         default:

@@ -34,7 +34,7 @@ struct Material : public base::Resource
         SM_FLAT,
         SM_GOURAUD,
         SM_PHONG,
-        SW_TEXTURE
+        SM_TEXTURE
     };
 
     //! Triangle side type.

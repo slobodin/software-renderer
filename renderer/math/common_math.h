@@ -22,12 +22,13 @@ const double EPSILON_E3 = 1E-3;
 const double EPSILON_E4 = 1E-4;
 const double EPSILON_E5 = 1E-5;
 const double EPSILON_E6 = 1E-6;
+const double EPSILON_E12 = 1E-12;
 
 //! Float point comparsion of two values.
 /*!
   * \returns true if x == y with some imprecision.
   */
-inline bool DCMP(double x, double y, double pres = EPSILON_E6)
+inline bool DCMP(double x, double y, double pres = EPSILON_E12)
 {
     return (fabs(x - y) < pres);
 }

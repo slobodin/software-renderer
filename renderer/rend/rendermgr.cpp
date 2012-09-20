@@ -150,6 +150,8 @@ void RenderMgr::addSceneObject(sptr(SceneObject) node)
     }
 
     m_sceneObjects.push_back(node);
+
+    // TODO: check names
 }
 
 sptr(SceneObject) RenderMgr::getSceneObject(const string &name)
