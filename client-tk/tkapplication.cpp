@@ -73,11 +73,11 @@ TkApplication::TkApplication(int argc, const char *argv[])
 //    auto cube = rendmgr->getSceneObject("Cube");
 //    cube->setScale(math::vec3(15.0, 15.0, 15.0));
 
-//    auto cessna = rendmgr->getSceneObject("cessna.obj");
-//    cessna->setScale(math::vec3(15.0, 15.0, 15.0));
+    auto cessna = rendmgr->getSceneObject("cessna.obj");
+    cessna->setScale(math::vec3(15.0, 15.0, 15.0));
 
-//    auto al = rendmgr->getSceneObject("al.obj");
-//    al->setScale(math::vec3(35.0, 35.0, 35.0));
+    auto al = rendmgr->getSceneObject("al.obj");
+    al->setScale(math::vec3(35.0, 35.0, 35.0));
 }
 
 TkApplication::~TkApplication()

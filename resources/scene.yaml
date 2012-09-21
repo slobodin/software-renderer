@@ -11,10 +11,10 @@ Objects:
     position: [200, 100, 0]
 #  - model: cube_flat_textured_01.cob
 #    position: [100, 100, 100]
-#  - model: cessna.obj
-#    position: [100, 200, 600]
-#  - model: al.obj
-#    position: [100, 600, 600]
+  - model: cessna.obj
+    position: [100, 200, 600]
+  - model: al.obj
+    position: [100, 600, 600]
   - model: water_gouraud_01.cob
     position: [-200, 300, 0]
 

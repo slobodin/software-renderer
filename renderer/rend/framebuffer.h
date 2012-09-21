@@ -20,12 +20,12 @@ class FrameBuffer
 public:
     struct rgb
     {
-//        uint8_t unused;
         uint8_t r;
         uint8_t g;
         uint8_t b;
-        rgb() : /*unused(0xFF), */r(0x00), g(0x00), b(0x00) { }
-    }/* __attribute__((packed))*/;
+        uint8_t unused;
+        rgb(uint8_t R = 0x00, uint8_t G = 0x00, uint8_t B = 0x00) : r(R), g(G), b(B), unused(0xFF) { }
+    } __attribute__((packed));
 
 private:
     rgb *m_pixels;
@@ -59,17 +59,29 @@ public:
 
     void resize(int w, int h);
 
-//    rgb *pixels() { return m_pixels; }
     operator unsigned char *() { return reinterpret_cast<unsigned char *>(m_pixels); }
 };
+
+inline void memset32(void *dest, uint32_t data, int count)
+{
+    asm ("cld\n\t"
+         "rep\n\t"
+         "stosl"
+         :
+         : "c" (count), "a" (data), "D" (dest)
+         );
+}
 
 inline void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color3 &color)
 {
     if (x1 > x2)
         return;
 
-    for (int x = x1; x <= x2; x++)
-        wpixel(x, y, color);            // TODO: block putting!
+    memset32(m_pixels + m_width * y + x1,
+             RgbToInt(color[BLUE], color[GREEN], color[RED]),
+             x2 - x1 + 1);
+/*    for (int x = x1; x <= x2; x++)
+        wpixel(x, y, color);*/
 }
 
 inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)

@@ -176,8 +176,8 @@ void TkViewport::flush(const unsigned char *const pixels)
     block.pixelPtr = (unsigned char *)pixels;
     block.width = m_width;
     block.height = m_height;
-    block.pitch = 3 * m_width;
-    block.pixelSize = 3;
+    block.pitch = 4 * m_width;
+    block.pixelSize = 4;
     block.offset[0] = 0;
     block.offset[1] = 1;
     block.offset[2] = 2;

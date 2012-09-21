@@ -43,6 +43,8 @@ class Rasterizer
 
     void drawBottomTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const Color3 &color);
     void drawTopTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const Color3 &color);
+    void rasterizeTopOrBottomTriangle(int x1, int y1, int x2, int x3, int y3,
+                                      double dxLeft, double dxRight, double xs, double xe, const Color3 &color);
 
     void drawBottomTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3);
     void drawTopTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3);
