@@ -65,6 +65,8 @@ TkApplication::TkApplication(int argc, const char *argv[])
     tie->setRotation(math::vec3(-90.0, 0.0, 0.0));
     tie->setScale(math::vec3(15.0, 15.0, 15.0));
 
+    tie->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+
     auto s = rendmgr->getSceneObject("Sphere,4");
     s->setScale(math::vec3(35.0, 35.0, 35.0));
 

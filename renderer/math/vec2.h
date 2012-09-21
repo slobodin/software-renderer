@@ -225,6 +225,11 @@ inline std::ostream &operator<< (std::ostream &os, const vec2 &v)
     return os;
 }
 
+inline vec2 lerp(const vec2 &a, const vec2 &b, double t)
+{
+    return a + t * (b - a);
+}
+
 }
 
 #endif // VEC2_H

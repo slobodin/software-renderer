@@ -264,6 +264,11 @@ inline bool comparez(const vec3 &a, const vec3 &b)
     return a.z < b.z;
 }
 
+inline vec3 lerp(const vec3 &a, const vec3 &b, double t)
+{
+    return a + t * (b - a);
+}
+
 }
 
 #endif // vector3_H

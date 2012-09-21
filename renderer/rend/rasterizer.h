@@ -44,6 +44,9 @@ class Rasterizer
     void drawBottomTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const Color3 &color);
     void drawTopTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const Color3 &color);
 
+    void drawBottomTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3);
+    void drawTopTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3);
+
     bool clipLine(math::vec3 &p1, math::vec3 &p2);
     void drawLine(const math::vertex &p1, const math::vertex &p2);
 

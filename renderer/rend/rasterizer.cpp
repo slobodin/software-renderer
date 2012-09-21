@@ -202,6 +202,267 @@ void Rasterizer::drawTopTriangle(int x1, int y1,
     }
 }
 
+void Rasterizer::drawBottomTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3)
+{
+    // make ccw order
+    if (v3.p.x < v2.p.x )
+        std::swap(v2, v3);
+
+    double height = v3.p.y - v1.p.y;
+    double dx_left  = (v2.p.x - v1.p.x) / height;
+    double dx_right = (v3.p.x - v1.p.x) / height;
+    double dr_left  = ((int)v2.color[RED] - (int)v1.color[RED]) / height;
+    double dr_right = ((int)v3.color[RED] - (int)v1.color[RED]) / height;
+    double dg_left  = ((int)v2.color[GREEN] - (int)v1.color[GREEN]) / height;
+    double dg_right = ((int)v3.color[GREEN] - (int)v1.color[GREEN]) / height;
+    double db_left  = ((int)v2.color[BLUE] - (int)v1.color[BLUE]) / height;
+    double db_right = ((int)v3.color[BLUE] - (int)v1.color[BLUE]) / height;
+
+    double xs = v1.p.x;
+    double xe = v1.p.x;
+    double rs = v1.color[RED];
+    double re = v1.color[RED];
+    double gs = v1.color[GREEN];
+    double ge = v1.color[GREEN];
+    double bs = v1.color[BLUE];
+    double be = v1.color[BLUE];
+
+
+    int iy1 = 0, iy3 = 0;
+
+    // top of screen clipping
+    if (v1.p.y < m_fb.yorig())
+    {
+        xs = xs + dx_left * (-v1.p.y  + m_fb.yorig());
+        xe = xe + dx_right * (-v1.p.y  + m_fb.yorig());
+
+        v1.p.y  = m_fb.yorig();
+        iy1 = m_fb.yorig();     // ceiling
+    }
+    else
+        iy1 = v1.p.y ;
+
+    // bottom screen clipping
+    if (v3.p.y  > m_fb.height())
+    {
+        v3.p.y = m_fb.height();
+        iy3 = v3.p.y - 1;
+    }
+    else
+    {
+        iy3 = v3.p.y - 1;
+    }
+
+    // if no x clipping (left right screen borders)
+    if (v1.p.x >= m_fb.xorig() && v1.p.x <= m_fb.width() &&
+        v2.p.x >= m_fb.xorig() && v2.p.x <= m_fb.width() &&
+        v3.p.x >= m_fb.xorig() && v3.p.x <= m_fb.width())
+    {
+        for (int y = iy1; y <= iy3; y++)
+        {
+            int ri = rs, gi = gs, bi = bs;
+
+            double dx = xe - xs;
+            double dr = (re - rs) / dx;
+            double dg = (ge - gs) / dx;
+            double db = (be - bs) / dx;
+
+            for (int x = xs; x < xe; x++)
+            {
+                ri += dr;
+                gi += dg;
+                bi += db;
+
+//                syslog << "r:" << ri << "g:" << gi << "b:" << bi << logdebug;
+
+                m_fb.wpixel(x, y, Color3(ri, gi, bi));
+            }
+
+//            m_fb.wscanline(xs, xe, y, Color3(rs, gs, bs));
+
+            xs += dx_left;
+            xe += dx_right;
+            rs += dr_left;
+            re += dr_right;
+            gs += dg_left;
+            ge += dg_right;
+            bs += db_left;
+            be += db_right;
+        }
+    }
+    else    // have x clipping
+    {
+        for (int y = iy1; y <= iy3; y++)
+        {
+            double left = xs, right = xe;
+
+            xs += dx_left;
+            xe += dx_right;
+
+            if (left < m_fb.xorig())
+            {
+                left = m_fb.xorig();
+
+                if (right < m_fb.xorig())
+                    continue;
+            }
+
+            if (right > m_fb.width())
+            {
+                right = m_fb.width();
+
+                if (left > m_fb.width())
+                    continue;
+            }
+
+            m_fb.wscanline(left, right, y, v1.color);
+        }
+    }
+}
+
+void Rasterizer::drawTopTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3)
+{
+    if (v2.p.x < v1.p.x)
+    {
+        std::swap(v1, v2);
+    }
+
+    double height = v3.p.y - v1.p.y;
+
+    double dx_left  = (v3.p.x - v1.p.x) / height;
+    double dx_right = (v3.p.x - v2.p.x) / height;
+    double dr_left  = ((int)v3.color[RED] - (int)v1.color[RED]) / height;
+    double dr_right = ((int)v3.color[RED] - (int)v2.color[RED]) / height;
+    double dg_left  = ((int)v3.color[GREEN] - (int)v1.color[GREEN]) / height;
+    double dg_right = ((int)v3.color[GREEN] - (int)v2.color[GREEN]) / height;
+    double db_left  = ((int)v3.color[BLUE] - (int)v1.color[BLUE]) / height;
+    double db_right = ((int)v3.color[BLUE] - (int)v2.color[BLUE]) / height;
+
+    double xs = v1.p.x;
+    double xe = v2.p.x;
+    double rs = v1.color[RED];
+    double re = v2.color[RED];
+    double gs = v1.color[GREEN];
+    double ge = v2.color[GREEN];
+    double bs = v1.color[BLUE];
+    double be = v2.color[BLUE];
+
+    int iy1 = 0, iy3 = 0;
+
+    if (v1.p.y < m_fb.yorig())
+    {
+        double dy = (m_fb.yorig() - v1.p.y);
+
+        xs = xs + dx_left * dy;
+        xe = xe + dx_right *dy;
+
+        rs = rs + dr_left * dy;
+        re = re + dr_right * dy;
+        gs = gs + dg_left * dy;
+        ge = ge + dg_right * dy;
+        bs = bs + db_left * dy;
+        be = be + db_right * dy;
+
+        v1.p.y = m_fb.yorig();
+
+        iy1 = v1.p.y;
+    }
+    else
+    {
+        iy1 = v1.p.y;
+    }
+
+    if (v3.p.y > m_fb.height())
+    {
+        v3.p.y  = m_fb.height();
+
+        iy3 = v3.p.y - 1;
+    }
+    else
+    {
+        iy3 = v3.p.y - 1;
+    }
+
+    if (v1.p.x >= m_fb.xorig() && v1.p.x <= m_fb.width() &&
+        v2.p.x >= m_fb.xorig() && v2.p.x <= m_fb.width() &&
+        v3.p.x >= m_fb.xorig() && v3.p.x <= m_fb.width())
+    {
+        for (int y = iy1; y <= iy3; y++)
+        {
+            int ri = rs, gi = gs, bi = bs;
+
+            double dx = xe - xs;
+            double dr = (re - rs) / dx;
+            double dg = (ge - gs) / dx;
+            double db = (be - bs) / dx;
+
+            for (int x = xs; x < xe; x++)
+            {
+                ri += dr;
+                gi += dg;
+                bi += db;
+
+//                syslog << "r:" << ri << "g:" << gi << "b:" << bi << logdebug;
+
+                m_fb.wpixel(x, y, Color3(ri, gi, bi));
+            }
+
+//            m_fb.wscanline(xs, xe, y, Color3(rs, gs, bs));
+
+            xs += dx_left;
+            xe += dx_right;
+            rs += dr_left;
+            re += dr_right;
+            gs += dg_left;
+            ge += dg_right;
+            bs += db_left;
+            be += db_right;
+        }
+
+    }
+    else
+    {
+        for (int y = iy1; y <= iy3; y++)
+        {
+            double left = xs;
+            double right = xe;
+            double lr = rs;
+            double rr = re;
+            double lg = gs;
+            double rg = ge;
+            double lb = bs;
+            double rb = be;
+
+            xs += dx_left;
+            xe += dx_right;
+            lr += dr_left;
+            rr += dr_right;
+            lg += dg_left;
+            rg += dg_right;
+            lb += db_left;
+            rb += db_right;
+
+            if (left < m_fb.xorig())
+            {
+                left = m_fb.xorig();
+
+                if (right < m_fb.xorig())
+                    continue;
+            }
+
+            if (right > m_fb.width())
+            {
+                right = m_fb.width();
+
+                if (left > m_fb.width())
+                   continue;
+            }
+
+            m_fb.wscanline(left, right, y, v1.color);
+        }
+    }
+}
+
 bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
 {
     // internal clipping codes
@@ -595,731 +856,6 @@ void Rasterizer::drawTriangle(const math::Triangle &tr)
 
 void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex &v2, const math::vertex &v3)
 {
-    math::vec3 p0(v1.p), p1(v2.p), p2(v3.p);
-
-    if (((p0.y < m_fb.yorig()) && (p1.y < m_fb.yorig()) && (p2.y < m_fb.yorig()))
-            || ((p0.y > m_fb.height()) && (p1.y > m_fb.height()) && (p2.y > m_fb.height()))
-            || ((p0.x < m_fb.xorig()) && (p1.x < m_fb.xorig()) && (p2.x < m_fb.xorig()))
-            || ((p0.x > m_fb.width()) && (p1.x > m_fb.width()) && (p2.x > m_fb.width())))
-        return;
-
-    // degenerate triangle
-    if ((math::DCMP(p0.x, p1.x) && math::DCMP(p1.x, p2.x))
-            || (math::DCMP(p0.y, p1.y) && math::DCMP(p1.y, p2.y)))
-        return;
-
-    // sort vertices (CCW)
-    if (p1.y < p0.y)
-        std::swap(p0, p1);
-    if (p2.y < p0.y)
-        std::swap(p0, p2);
-    if (p2.y < p1.y)
-        std::swap(p1, p2);
-
-    TriangleType triangleType;
-    if (math::DCMP(p0.y, p1.y))
-    {
-        triangleType = TT_FLAT_TOP;
-        if (p1.x < p0.x)
-            std::swap(p0, p1);
-    }
-    else if (math::DCMP(p1.y, p2.y))
-    {
-        triangleType = TT_FLAT_BOTTOM;
-        if (p2.x < p1.x)
-            std::swap(p1, p2);
-    }
-    else
-    {
-        triangleType = TT_FLAT_GENERAL;
-    }
-
-    int x0 = (int)(p0.x + 0.5);
-    int y0 = (int)(p0.y + 0.5);
-    int x1 = (int)(p1.x + 0.5);
-    int y1 = (int)(p1.y + 0.5);
-    int x2 = (int)(p2.x + 0.5);
-    int y2 = (int)(p2.y + 0.5);
-
-    int yStart;
-    int xl, xr, rl, gl, bl, rr, gr, br;
-    // Maybe double???
-    double dxdyl, drdyl, dgdyl, dbdyl;
-    double dxdyr, drdyr, dgdyr, dbdyr;
-    double dy, dyl, dyr;
-    int yEnd;
-
-    const int INTERP_LHS = 0;
-    const int INTERP_RHS = 1;
-
-    int irestart = INTERP_LHS;
-    int yrestart = y1;
-
-    // FIXME:
-    int tr0 = v1.color[RED], tg0 = v1.color[GREEN], tb0 = v1.color[BLUE];
-    int tr1 = v2.color[RED], tg1 = v2.color[GREEN], tb1 = v2.color[BLUE];
-    int tr2 = v3.color[RED], tg2 = v3.color[GREEN], tb2 = v3.color[BLUE];
-
-    if (triangleType != TT_FLAT_GENERAL)
-    {
-        if (triangleType == TT_FLAT_TOP)
-        {
-            dy = y2 - y0;
-
-            dxdyl = (x2 - x0) / dy;
-            drdyl = (tr2 - tr0) / dy;
-            dgdyl = (tg2 - tg0) / dy;
-            dbdyl = (tb2 - tb0) / dy;
-
-            dxdyr = (x2 - x1) / dy;
-            drdyr = (tr2 - tr1) / dy;
-            dgdyr = (tg2 - tg1) / dy;
-            dbdyr = (tb2 - tb1) / dy;
-
-            // test for y clipping
-            if (y0 < m_fb.yorig())
-            {
-                dy = (m_fb.yorig() - y0);
-
-                xl = dxdyl * dy + x0;
-                xr = dxdyr * dy + x1;
-
-                rl = drdyl * dy + tr0;
-                gl = dgdyl * dy + tg0;
-                bl = dbdyl * dy + tb0;
-
-                rr = drdyr * dy + tr1;
-                gr = dgdyr * dy + tg1;
-                br = dbdyr * dy + tb1;
-
-                yStart = m_fb.yorig();
-            }
-            else
-            {
-                xl = x0;
-                xr = x1;
-
-                rl = tr0;
-                gl = tg0;
-                bl = tb0;
-
-                rr = tr1;
-                gr = tg1;
-                br = tb1;
-
-                yStart = y0;
-            }
-        }
-        else    // flat bottom
-        {
-            dy = y1 - y0;
-
-            dxdyl = (x1 - x0) / dy;
-            drdyl = (tr1 - tr0) / dy;
-            dgdyl = (tg1 - tg0) / dy;
-            dbdyl = (tb1 - tb0) / dy;
-
-            dxdyr = (x2 - x0) / dy;
-            drdyr = (tr2 - tr0) / dy;
-            dgdyr = (tg2 - tg0) / dy;
-            dbdyr = (tb2 - tb0) / dy;
-
-            // test for y clipping
-            if (y0 < m_fb.yorig())
-            {
-                // compute overclip
-                dy = m_fb.yorig() - y0;
-
-                xl = dxdyl * dy + x0;
-                xr = dxdyr * dy + x0;
-
-                rl = drdyl * dy + tr0;
-                gl = dgdyl * dy + tg0;
-                bl = dbdyl * dy + tb0;
-
-                rr = drdyr * dy + tr0;
-                gr = dgdyr * dy + tg0;
-                br = dbdyr * dy + tb0;
-
-                // compute new starting y
-                yStart = m_fb.yorig();
-            }
-            else // no clipping
-            {
-                // set starting values
-                xl = x0;
-                xr = x0;
-
-                rl = tr0;
-                gl = tg0;
-                bl = tb0;
-
-                rr = tr0;
-                gr = tg0;
-                br = tb0;
-
-                // set starting y
-                yStart = y0;
-            }
-        }
-
-        // test for bottom clip, always
-        yEnd = y2;
-        if (yEnd > m_fb.height())
-            yEnd = m_fb.height();
-
-        // test for horizontal clipping
-        if ((x0 < m_fb.xorig()) || (x0 > m_fb.width()) ||
-            (x1 < m_fb.xorig()) || (x1 > m_fb.width()) ||
-            (x2 < m_fb.xorig()) || (x2 > m_fb.width()))
-        {
-            // clip version
-            for (int yi = yStart; yi </*=*/ yEnd; yi++)
-            {
-                // compute span endpoints
-                int xStart = xl;
-                int xEnd = xr;
-
-                // compute starting points for u,v,w interpolants
-                int ri = rl;
-                int gi = gl;
-                int bi = bl;
-
-                int dx = xEnd - xStart;
-                int dr, dg, db;
-
-                // compute u, v interpolants
-                if (dx > 0)
-                {
-                    dr = (rr - rl) / dx;
-                    dg = (gr - gl) / dx;
-                    db = (br - bl) / dx;
-                }
-                else
-                {
-                    dr = rr - rl;
-                    dg = gr - gl;
-                    db = br - bl;
-                }
-
-                // test for x clipping, LHS
-                if (xStart < m_fb.xorig())
-                {
-                    // compute x overlap
-                    dx = m_fb.xorig() - xStart;
-
-                    // slide interpolants over
-                    ri += dx * dr;
-                    gi += dx * dg;
-                    bi += dx * db;
-
-                    // reset vars
-                    xStart = m_fb.xorig();
-                }
-
-                // test for x clipping RHS
-                if (xEnd > m_fb.width())
-                    xEnd = m_fb.width();
-
-                // draw span
-                for (int xi = xStart; xi </*=*/ xEnd; xi++)
-                {
-                    m_fb.wpixel(xi, yi, Color3(ri, gi, bi));
-
-                    // interpolate u, v
-                    ri += dr;
-                    gi += dg;
-                    bi += db;
-                }
-
-                // interpolate r, g, b, x along right and left edge
-                xl += dxdyl;
-                rl += drdyl;
-                gl += dgdyl;
-                bl += dbdyl;
-
-                xr += dxdyr;
-                rr += drdyr;
-                gr += dgdyr;
-                br += dbdyr;
-            }
-        }
-        else
-        {
-            // non-clip version
-            for (int yi = yStart; yi </*=*/ yEnd; yi++)
-            {
-                // compute span endpoints
-                int xStart = xl;
-                int xEnd = xr;
-
-                // compute starting points for u,v,w interpolants
-                int ri = rl;
-                int gi = gl;
-                int bi = bl;
-
-                // compute u, v interpolants
-                int dx = xEnd - xStart;
-                int dr, dg, db;
-
-                if (dx > 0)
-                {
-                    dr = (rr - rl) / dx;
-                    dg = (gr - gl) / dx;
-                    db = (br - bl) / dx;
-                }
-                else
-                {
-                    dr = rr - rl;
-                    dg = gr - gl;
-                    db = br - bl;
-                }
-
-                // draw span
-                for (int xi = xStart; xi </*=*/ xEnd; xi++)
-                {
-                    m_fb.wpixel(xi, yi, Color3(ri, gi, bi));
-
-                    // interpolate u,v
-                    ri += dr;
-                    gi += dg;
-                    bi += db;
-                }
-
-                // interpolate r, g, b, x along right and left edge
-                xl += dxdyl;
-                rl += drdyl;
-                gl += dgdyl;
-                bl += dbdyl;
-
-                xr += dxdyr;
-                rr += drdyr;
-                gr += dgdyr;
-                br += dbdyr;
-            }
-        }
-    }
-    else
-    {
-        // first test for bottom clip, always
-        yEnd = y2;
-        if (yEnd > m_fb.height())
-            yEnd = m_fb.height();
-
-        // pre-test y clipping status
-        if (y1 < m_fb.yorig())
-        {
-            // compute all deltas
-            // LHS
-            dyl = y2 - y1;
-
-            dxdyl = (x2 - x1) / dyl;
-            drdyl = (tr2 - tr1) / dyl;
-            dgdyl = (tg2 - tg1) / dyl;
-            dbdyl = (tb2 - tb1) / dyl;
-
-            // RHS
-            dyr = y2 - y0;
-
-            dxdyr = (x2 - x0) / dyr;
-            drdyr = (tr2 - tr0) / dyr;
-            dgdyr = (tg2 - tg0) / dyr;
-            dbdyr = (tb2 - tb0) / dyr;
-
-            // compute overclip
-            dyr = m_fb.yorig() - y0;
-            dyl = m_fb.yorig() - y1;
-
-            // computer new LHS starting values
-            xl = dxdyl * dyl + x1;
-
-            rl = drdyl * dyl + tr1;
-            gl = dgdyl * dyl + tg1;
-            bl = dbdyl * dyl + tb1;
-
-            // compute new RHS starting values
-            xr = dxdyr * dyr + x0;
-
-            rr = drdyr * dyr + tr0;
-            gr = dgdyr * dyr + tg0;
-            br = dbdyr * dyr + tb0;
-
-            // compute new starting y
-            yStart = m_fb.yorig();
-
-            // test if we need swap to keep rendering left to right
-            if (dxdyr > dxdyl)
-            {
-                std::swap(dxdyl, dxdyr);
-                std::swap(drdyl, drdyr);
-                std::swap(dgdyl, dgdyr);
-                std::swap(dbdyl, dbdyr);
-                std::swap(xl, xr);
-                std::swap(rl, rr);
-                std::swap(gl, gr);
-                std::swap(bl, br);
-                std::swap(x1, x2);
-                std::swap(y1, y2);
-                std::swap(tr1, tr2);
-                std::swap(tg1, tg2);
-                std::swap(tb1, tb2);
-
-                // set interpolation restart
-                irestart = INTERP_RHS;
-            }
-        }
-        else if (y0 < m_fb.yorig())
-        {
-            // compute all deltas
-            // LHS
-            dyl = y1 - y0;
-
-            dxdyl = (x1  - x0) / dyl;
-            drdyl = (tr1 - tr0) / dyl;
-            dgdyl = (tg1 - tg0) / dyl;
-            dbdyl = (tb1 - tb0) / dyl;
-
-            // RHS
-            dyr = y2 - y0;
-
-            dxdyr = (x2  - x0) / dyr;
-            drdyr = (tr2 - tr0) / dyr;
-            dgdyr = (tg2 - tg0) / dyr;
-            dbdyr = (tb2 - tb0) / dyr;
-
-            // compute overclip
-            dy = (m_fb.yorig() - y0);
-
-            // computer new LHS starting values
-            xl = dxdyl * dy + x0;
-            rl = drdyl * dy + tr0;
-            gl = dgdyl * dy + tg0;
-            bl = dbdyl * dy + tb0;
-
-            // compute new RHS starting values
-            xr = dxdyr * dy + x0;
-            rr = drdyr * dy + tr0;
-            gr = dgdyr * dy + tg0;
-            br = dbdyr * dy + tb0;
-
-            // compute new starting y
-            yStart = m_fb.yorig();
-
-            // test if we need swap to keep rendering left to right
-            if (dxdyr < dxdyl)
-            {
-                std::swap(dxdyl, dxdyr);
-                std::swap(drdyl, drdyr);
-                std::swap(dgdyl, dgdyr);
-                std::swap(dbdyl, dbdyr);
-                std::swap(xl, xr);
-                std::swap(rl, rr);
-                std::swap(gl, gr);
-                std::swap(bl, br);
-                std::swap(x1, x2);
-                std::swap(y1, y2);
-                std::swap(tr1, tr2);
-                std::swap(tg1, tg2);
-                std::swap(tb1, tb2);
-
-                // set interpolation restart
-                irestart = INTERP_RHS;
-            }
-        }
-        else
-        {
-            // no initial y clipping
-
-            // compute all deltas
-            // LHS
-            dyl = y1 - y0;
-
-            dxdyl = (x1  - x0) / dyl;
-            drdyl = (tr1 - tr0) / dyl;
-            dgdyl = (tg1 - tg0) / dyl;
-            dbdyl = (tb1 - tb0) / dyl;
-
-            // RHS
-            dyr = (y2 - y0);
-
-            dxdyr = (x2 - x0) / dyr;
-            drdyr = (tr2 - tr0) / dyr;
-            dgdyr = (tg2 - tg0) / dyr;
-            dbdyr = (tb2 - tb0) / dyr;
-
-            // no clipping y
-
-            // set starting values
-            xl = x0;
-            xr = x0;
-
-            rl = tr0;
-            gl = tg0;
-            bl = tb0;
-
-            rr = tr0;
-            gr = tg0;
-            br = tb0;
-
-            // set starting y
-            yStart = y0;
-
-            // test if we need swap to keep rendering left to right
-            if (dxdyr < dxdyl)
-            {
-                std::swap(dxdyl, dxdyr);
-                std::swap(drdyl, drdyr);
-                std::swap(dgdyl, dgdyr);
-                std::swap(dbdyl, dbdyr);
-                std::swap(xl, xr);
-                std::swap(rl, rr);
-                std::swap(gl, gr);
-                std::swap(bl, br);
-                std::swap(x1, x2);
-                std::swap(y1, y2);
-                std::swap(tr1, tr2);
-                std::swap(tg1, tg2);
-                std::swap(tb1, tb2);
-
-                // set interpolation restart
-                irestart = INTERP_RHS;
-            }
-        }
-
-        // test for horizontal clipping
-        if ((x0 < m_fb.xorig()) || (x0 > m_fb.width()) ||
-            (x1 < m_fb.xorig()) || (x1 > m_fb.width()) ||
-            (x2 < m_fb.xorig()) || (x2 > m_fb.width()))
-        {
-            // clip version
-            // x clipping
-
-            for (int yi = yStart; yi </*=*/ yEnd; yi++)
-            {
-                // compute span endpoints
-                int xStart = xl;
-                int xEnd = xr;
-
-                // compute starting points for r, g, b interpolants
-                int ri = rl;
-                int gi = gl;
-                int bi = bl;
-
-                int dx = xEnd - xStart;
-                int dr, dg, db;
-                // compute u, v interpolants
-                if (dx > 0)
-                {
-                    dr = (rr - rl) / dx;
-                    dg = (gr - gl) / dx;
-                    db = (br - bl) / dx;
-                }
-                else
-                {
-                    dr = (rr - rl);
-                    dg = (gr - gl);
-                    db = (br - bl);
-                }
-
-                // test for x clipping, LHS
-                if (xStart < m_fb.xorig())
-                {
-                    // compute x overlap
-                    dx = m_fb.xorig() - xStart;
-
-                    // slide interpolants over
-                    ri += dx * dr;
-                    gi += dx * dg;
-                    bi += dx * db;
-
-                    // set x to left clip edge
-                    xStart = m_fb.xorig();
-                }
-
-                // test for x clipping RHS
-                if (xEnd > m_fb.width())
-                    xEnd = m_fb.width();
-
-                // draw span
-                for (int xi = xStart; xi </*=*/ xEnd; xi++)
-                {
-                    m_fb.wpixel(xi, yi, Color3(ri, gi, bi));
-
-                    // interpolate r, g, b
-                    ri += dr;
-                    gi += dg;
-                    bi += db;
-                }
-
-                // interpolate r, g, b, x along right and left edge
-                xl += dxdyl;
-                rl += drdyl;
-                gl += dgdyl;
-                bl += dbdyl;
-
-                xr += dxdyr;
-                rr += drdyr;
-                gr += dgdyr;
-                br += dbdyr;
-
-                // test for yi hitting second region, if so change interpolant
-                if (yi == yrestart)
-                {
-                    // test interpolation side change flag
-
-                    if (irestart == INTERP_LHS)
-                    {
-                        // LHS
-                        dyl = (y2 - y1);
-
-                        dxdyl = (x2 - x1) / dyl;
-                        drdyl = (tr2 - tr1) / dyl;
-                        dgdyl = (tg2 - tg1) / dyl;
-                        dbdyl = (tb2 - tb1) / dyl;
-
-                        // set starting values
-                        xl = x1;
-                        rl = tr1;
-                        gl = tg1;
-                        bl = tb1;
-
-                        // interpolate down on LHS to even up
-                        xl += dxdyl;
-                        rl += drdyl;
-                        gl += dgdyl;
-                        bl += dbdyl;
-                    }
-                    else
-                    {
-                        // RHS
-                        dyr = (y1 - y2);
-
-                        dxdyr = (x1 - x2) / dyr;
-                        drdyr = (tr1 - tr2) / dyr;
-                        dgdyr = (tg1 - tg2) / dyr;
-                        dbdyr = (tb1 - tb2) / dyr;
-
-                        // set starting values
-                        xr = x2;
-                        rr = tr2;
-                        gr = tg2;
-                        br = tb2;
-
-                        // interpolate down on RHS to even up
-                        xr += dxdyr;
-                        rr += drdyr;
-                        gr += dgdyr;
-                        br += dbdyr;
-                    }
-                }
-            }
-        }
-        else
-        {
-            // no x clipping
-
-            for (int yi = yStart; yi </*=*/ yEnd; yi++)
-            {
-                // compute span endpoints
-                int xStart = xl;
-                int xEnd = xr;
-
-                // compute starting points for u,v,w interpolants
-                int ri = rl;
-                int gi = gl;
-                int bi = bl;
-
-                // compute u,v interpolants
-                int dx = xEnd - xStart;
-                int dr, dg, db;
-                if (dx > 0)
-                {
-                    dr = (rr - rl) / dx;
-                    dg = (gr - gl) / dx;
-                    db = (br - bl) / dx;
-                }
-                else
-                {
-                    dr = (rr - rl);
-                    dg = (gr - gl);
-                    db = (br - bl);
-                }
-
-                // draw span
-                for (int xi = xStart; xi </*=*/ xEnd; xi++)
-                {
-                    m_fb.wpixel(xi, yi, Color3(ri, gi, bi));
-
-                    // interpolate r, g, b
-                    ri += dr;
-                    gi += dg;
-                    bi += db;
-                }
-
-                // interpolate r, g, b, r along right and left edge
-                xl += dxdyl;
-                rl += drdyl;
-                gl += dgdyl;
-                bl += dbdyl;
-
-                xr += dxdyr;
-                rr += drdyr;
-                gr += dgdyr;
-                br += dbdyr;
-
-                // test for yi hitting second region, if so change interpolant
-                if (yi == yrestart)
-                {
-                    // test interpolation side change flag
-
-                    if (irestart == INTERP_LHS)
-                    {
-                        // LHS
-                        dyl = y2 - y1;
-
-                        dxdyl = (x2 - x1) / dyl;
-                        drdyl = (tr2 - tr1) / dyl;
-                        dgdyl = (tg2 - tg1) / dyl;
-                        dbdyl = (tb2 - tb1) / dyl;
-
-                        // set starting values
-                        xl = x1;
-                        rl = tr1;
-                        gl = tg1;
-                        bl = tb1;
-
-                        // interpolate down on LHS to even up
-                        xl += dxdyl;
-                        rl += drdyl;
-                        gl += dgdyl;
-                        bl += dbdyl;
-                    }
-                    else
-                    {
-                        // RHS
-                        dyr = (y1 - y2);
-
-                        dxdyr = (x1 - x2) / dyr;
-                        drdyr = (tr1 - tr2) / dyr;
-                        dgdyr = (tg1 - tg2) / dyr;
-                        dbdyr = (tb1 - tb2) / dyr;
-
-                        // set starting values
-                        xr = x2;
-                        rr = tr2;
-                        gr = tg2;
-                        br = tb2;
-
-                        // interpolate down on RHS to even up
-                        xr += dxdyr;
-                        rr += drdyr;
-                        gr += dgdyr;
-                        br += dbdyr;
-                    }
-                }
-            }
-        }
-    }
 }
 
 void Rasterizer::drawGouraudTriangle(const math::Triangle &tr)
