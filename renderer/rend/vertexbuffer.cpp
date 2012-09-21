@@ -35,14 +35,14 @@ void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const ve
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
     std::copy(indices.begin(), indices.end(), std::back_inserter(m_indices));
 
-//    computeVertexNormals();
+    computeVertexNormals();
 }
 
 void VertexBuffer::appendVertices(const vector<math::vertex> &vertices)
 {
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
 
-//    computeVertexNormals();
+    computeVertexNormals();
 }
 
 void VertexBuffer::computeVertexNormals()

@@ -27,6 +27,7 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
                                     int x3, int y3,
                                     const Color3 &color)
 {
+    // make ccw order
     if (x3 < x2)
         std::swap(x2, x3);
 
@@ -38,13 +39,14 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
 
     int iy1 = 0, iy3 = 0;
 
+    // top of screen clipping
     if (y1 < m_fb.yorig())
     {
         xs = xs + dxLeft * (-y1 + m_fb.yorig());
         xe = xe + dxRight * (-y1 + m_fb.yorig());
 
         y1 = m_fb.yorig();
-        iy1 = m_fb.yorig();
+        iy1 = m_fb.yorig();     // ceiling
     }
     else
     {
@@ -53,6 +55,8 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
         xs = xs + dxLeft * (iy1 - y1);
         xe = xe + dxRight * (iy1 - y1);
     }
+
+    // bottom screen clipping
     if (y3 > m_fb.height())
     {
         y3 = m_fb.height();
@@ -63,6 +67,7 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
         iy3 = y3 - 1;
     }
 
+    // if no x clipping (left right screen borders)
     if (x1 >= m_fb.xorig() && x1 <= m_fb.width() &&
         x2 >= m_fb.xorig() && x2 <= m_fb.width() &&
         x3 >= m_fb.xorig() && x3 <= m_fb.width())
@@ -75,7 +80,7 @@ void Rasterizer::drawBottomTriangle(int x1, int y1,
             xe += dxRight;
         }
     }
-    else
+    else    // have x clipping
     {
         for (int y = y1; y <= iy3; y++)
         {
@@ -525,10 +530,11 @@ void Rasterizer::drawFillTriangle(const math::vertex &p1,
     int y1 = p1.p.y, y2 = p2.p.y, y3 = p3.p.y;
     const Color3 &color = p1.color;
 
+    // check degenerate triangle
     if ((x1 == x2 && x2 == x3) || (y1 == y2 && y2 == y3))
         return;
 
-    // sort vertices
+    // sort vertices (CCW order: p1 (top), p2, p3 (bottom))
     if (y2 < y1)
     {
         std::swap(x1, x2);
@@ -547,6 +553,7 @@ void Rasterizer::drawFillTriangle(const math::vertex &p1,
         std::swap(y2, y3);
     }
 
+    // if triangle isn't on a screen
     if (y3 < m_fb.yorig() || y1 > m_fb.height()
             || (x1 < m_fb.xorig() && x2 < m_fb.xorig() && x3 < m_fb.xorig())
             || (x1 > m_fb.width() && x2 > m_fb.width() && x3 > m_fb.width()))
@@ -562,7 +569,7 @@ void Rasterizer::drawFillTriangle(const math::vertex &p1,
     }
     else
     {
-        double newX = x1 + (y2 - y1) * (x3 - x1) / (y3 - y1);
+        double newX = x1 + (y2 - y1) * (x3 - x1) / (y3 - y1);   // ctg * dy
 
         drawBottomTriangle(x1, y1, newX, y2, x2, y2, color);
         drawTopTriangle(x2, y2, newX, y2, x3, y3, color);
@@ -601,7 +608,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             || (math::DCMP(p0.y, p1.y) && math::DCMP(p1.y, p2.y)))
         return;
 
-    // sort vertices
+    // sort vertices (CCW)
     if (p1.y < p0.y)
         std::swap(p0, p1);
     if (p2.y < p0.y)
@@ -610,13 +617,13 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
         std::swap(p1, p2);
 
     TriangleType triangleType;
-    if (p0.y == p1.y)
+    if (math::DCMP(p0.y, p1.y))
     {
         triangleType = TT_FLAT_TOP;
         if (p1.x < p0.x)
             std::swap(p0, p1);
     }
-    else if (p1.y == p2.y)
+    else if (math::DCMP(p1.y, p2.y))
     {
         triangleType = TT_FLAT_BOTTOM;
         if (p2.x < p1.x)
@@ -757,20 +764,21 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
         }
 
         // test for bottom clip, always
-        if ((yEnd = y2) > m_fb.height())
+        yEnd = y2;
+        if (yEnd > m_fb.height())
             yEnd = m_fb.height();
 
         // test for horizontal clipping
-        if ((x0 < m_fb.xorig()) || (x0 > m_fb.width())
-                || (x1 < m_fb.xorig()) || (x1 > m_fb.width())
-                || (x2 < m_fb.xorig()) || (x2 > m_fb.width()))
+        if ((x0 < m_fb.xorig()) || (x0 > m_fb.width()) ||
+            (x1 < m_fb.xorig()) || (x1 > m_fb.width()) ||
+            (x2 < m_fb.xorig()) || (x2 > m_fb.width()))
         {
             // clip version
-            for (int yi = yStart; yi <= yEnd; yi++)
+            for (int yi = yStart; yi </*=*/ yEnd; yi++)
             {
                 // compute span endpoints
                 int xStart = xl;
-                int xEnd = xr; // + FIXP16_ROUND_UP
+                int xEnd = xr;
 
                 // compute starting points for u,v,w interpolants
                 int ri = rl;
@@ -814,7 +822,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                     xEnd = m_fb.width();
 
                 // draw span
-                for (int xi = xStart; xi <= xEnd; xi++)
+                for (int xi = xStart; xi </*=*/ xEnd; xi++)
                 {
                     m_fb.wpixel(xi, yi, Color3(ri, gi, bi));
 
@@ -839,7 +847,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
         else
         {
             // non-clip version
-            for (int yi = yStart; yi <= yEnd; yi++)
+            for (int yi = yStart; yi </*=*/ yEnd; yi++)
             {
                 // compute span endpoints
                 int xStart = xl;
@@ -868,9 +876,8 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                 }
 
                 // draw span
-                for (int xi = xStart; xi <= xEnd; xi++)
+                for (int xi = xStart; xi </*=*/ xEnd; xi++)
                 {
-                    // write textel 5.6.5
                     m_fb.wpixel(xi, yi, Color3(ri, gi, bi));
 
                     // interpolate u,v
@@ -895,7 +902,8 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
     else
     {
         // first test for bottom clip, always
-        if ((yEnd = y2) > m_fb.height())
+        yEnd = y2;
+        if (yEnd > m_fb.height())
             yEnd = m_fb.height();
 
         // pre-test y clipping status
@@ -905,7 +913,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             // LHS
             dyl = y2 - y1;
 
-            dxdyl = (x2  - x1) / dyl;
+            dxdyl = (x2 - x1) / dyl;
             drdyl = (tr2 - tr1) / dyl;
             dgdyl = (tg2 - tg1) / dyl;
             dbdyl = (tb2 - tb1) / dyl;
@@ -913,9 +921,9 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             // RHS
             dyr = y2 - y0;
 
-            dxdyr = (x2  - x0) / dyr;
+            dxdyr = (x2 - x0) / dyr;
             drdyr = (tr2 - tr0) / dyr;
-            dgdyr = (tg2 - tb0) / dyr;
+            dgdyr = (tg2 - tg0) / dyr;
             dbdyr = (tb2 - tb0) / dyr;
 
             // compute overclip
@@ -1086,7 +1094,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
             // clip version
             // x clipping
 
-            for (int yi = yStart; yi <= yEnd; yi++)
+            for (int yi = yStart; yi </*=*/ yEnd; yi++)
             {
                 // compute span endpoints
                 int xStart = xl;
@@ -1133,7 +1141,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                     xEnd = m_fb.width();
 
                 // draw span
-                for (int xi = xStart; xi <= xEnd; xi++)
+                for (int xi = xStart; xi </*=*/ xEnd; xi++)
                 {
                     m_fb.wpixel(xi, yi, Color3(ri, gi, bi));
 
@@ -1210,7 +1218,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
         {
             // no x clipping
 
-            for (int yi = yStart; yi <= yEnd; yi++)
+            for (int yi = yStart; yi </*=*/ yEnd; yi++)
             {
                 // compute span endpoints
                 int xStart = xl;
@@ -1238,7 +1246,7 @@ void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex 
                 }
 
                 // draw span
-                for (int xi = xStart; xi <= xEnd; xi++)
+                for (int xi = xStart; xi </*=*/ xEnd; xi++)
                 {
                     m_fb.wpixel(xi, yi, Color3(ri, gi, bi));
 

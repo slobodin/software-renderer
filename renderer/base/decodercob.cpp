@@ -219,9 +219,9 @@ sptr(rend::Mesh) DecoderCOB::createMesh()
             shadeMode = rend::Material::SM_FLAT;
             break;
         case MaterialInfo::PLASTIC:
-//            shadeMode = rend::Material::SM_GOURAUD;
-            syslog << "Gouraud unsupported yet" << logwarn;
-            shadeMode = rend::Material::SM_FLAT;
+            shadeMode = rend::Material::SM_GOURAUD;
+//            syslog << "Gouraud unsupported yet" << logwarn;
+//            shadeMode = rend::Material::SM_FLAT;
             break;
         case MaterialInfo::PHONG:
 //            shadeMode = rend::Material::SM_PHONG;

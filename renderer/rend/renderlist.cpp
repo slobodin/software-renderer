@@ -48,7 +48,6 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
 
             // compute normal for triangle
             triangle.computeNormal();
-            // TODO: where to compute vertex normals? Here?? Maybe when we apply transformation for model only?
 
             // save it
             output.push_back(triangle);
@@ -96,7 +95,10 @@ void RenderList::append(const SceneObject &obj)
     math::M44 worldTransform = obj.getTransformation();
 
     foreach (const VertexBuffer &vb, subMeshes)
+    {
+        // TODO: where to compute vertex normals? Here?? Maybe when we apply transformation for model only?
         RenderList::createTriangles(vb, worldTransform, m_triangles);
+    }
 }
 
 void RenderList::zsort()

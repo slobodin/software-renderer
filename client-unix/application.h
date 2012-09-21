@@ -10,6 +10,8 @@
 
 #include "renderer.h"
 
+//! IT'S ALL DEPRECATED!
+
 class Application : public platform::BaseAppLinux
 {
     sptr(rend::Camera) m_playerCamera;

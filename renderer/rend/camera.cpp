@@ -156,6 +156,18 @@ bool Camera::culled(const SceneObject &obj) const
             || ((spherePos.z + radius) < m_nearZ))
         return true;
 
+    // check X plane
+    float zTest = 0.5 * m_viewPlaneWidth * spherePos.z / m_distance;
+    if (((spherePos.x - radius) > zTest) ||
+            ((spherePos.x + radius) < -zTest))
+        return true;
+
+    // check Y plane
+    zTest = 0.5 * m_viewPlaneHeight * spherePos.z / m_distance;
+    if (((spherePos.y - radius) > zTest) ||
+            ((spherePos.y + radius) < -zTest))
+        return true;
+
     return false;
 }
 

@@ -12,6 +12,7 @@
 
 #include "vertexbuffer.h"
 #include "m44.h"
+#include "material.h"
 
 namespace rend
 {
@@ -38,13 +39,18 @@ public:
     void appendSubmesh(const VertexBuffer &submesh);
 
     void computeBoundingSphere(const math::M44 &transform);
+//    void computeVertexNormals
+
     const BoundingSphere &getBoundingSphere() const;
 
     //! Returns vertex count of all submeshes.
     int numVertices() const;
     int numSubMeshes() const;
 
+    void setShadingMode(Material::ShadeMode shMode);
+
     const list<VertexBuffer> &getSubmeshes() const { return m_submeshes; }
+    list<VertexBuffer> &getSubmeshes() { return m_submeshes; }
 
     sptr(Mesh) clone() const;
 

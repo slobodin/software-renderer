@@ -23,6 +23,8 @@
 #include "rend/camera.h"
 #include "rend/rendermgr.h"
 #include "rend/sceneobject.h"
+#include "rend/material.h"
+#include "rend/mesh.h"
 
 #include "math/common_math.h"
 #include "math/m22.h"

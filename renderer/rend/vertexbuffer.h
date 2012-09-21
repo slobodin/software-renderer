@@ -12,6 +12,7 @@
 
 #include "vertex.h"
 #include "boundingsphere.h"
+#include "m44.h"
 
 namespace rend
 {
@@ -50,9 +51,6 @@ private:
     //! Indices for the vertices.
     IndexArray m_indices;
 
-    //! Helper to compute vertex normals.
-    void computeVertexNormals();
-
 public:
     //! Default ctor.
     VertexBuffer(VertexBufferType type = UNDEFINED);
@@ -72,6 +70,9 @@ public:
     //! Appends vertices to this submesh. Also computes vertex normals and bounding sphere.
     void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices);
     void appendVertices(const vector<math::vertex> &vertices);
+
+    //! Helper to compute vertex normals.
+    void computeVertexNormals();
 
     //! How many vertices in the buffer?
     int numVertices() const { return m_vertices.size(); }

@@ -69,6 +69,14 @@ int Mesh::numSubMeshes() const
     return m_submeshes.size();
 }
 
+void Mesh::setShadingMode(Material::ShadeMode shMode)
+{
+    for (auto vb : m_submeshes)
+    {
+        vb.getMaterial()->shadeMode = shMode;      // ?
+    }
+}
+
 sptr(Mesh) Mesh::clone() const
 {
     sptr(Mesh) objMesh = make_shared<Mesh>();
