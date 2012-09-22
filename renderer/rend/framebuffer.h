@@ -15,7 +15,7 @@
 namespace rend
 {
 
-class FrameBuffer
+class FrameBuffer : boost::noncopyable
 {
 public:
     struct rgb

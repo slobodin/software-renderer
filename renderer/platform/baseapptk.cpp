@@ -7,8 +7,6 @@
 
 #include "baseapptk.h"
 
-#ifdef TK_VERSION
-
 #include "camera.h"
 #include "controller.h"
 
@@ -187,5 +185,3 @@ void TkViewport::flush(const unsigned char *const pixels)
 }
 
 }
-
-#endif

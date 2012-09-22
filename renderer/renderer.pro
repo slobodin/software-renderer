@@ -10,9 +10,6 @@ DEFINES += USING_PCH
 
 Debug:DEFINES += DEBUG
 DEFINES += RENDERER_LIBRARY
-#win32:DEFINES += WINDOWS_VERSION
-#unix:DEFINES += LINUX_VERSION
-DEFINES += TK_VERSION
 
 QMAKE_CXXFLAGS += -std=gnu++0x
 
@@ -116,10 +113,6 @@ INCLUDEPATH += ./base \
                 /usr/include/tcl8.5/ \
                 ./third-party/include/ \
                 $(BOOST_ROOT) \
-
-win32:LIBS += ./third-party/lib/mingw/libyaml-cpp.a
-win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_filesystem-mgw46-mt-1_49.a
-win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_system-mgw46-mt-1_49.a
 
 OTHER_FILES += \
     third-party/include/cpptk-1.0.2/cpptkoptions.x \

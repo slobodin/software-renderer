@@ -8,8 +8,6 @@
 #ifndef BASEAPPTK_H
 #define BASEAPPTK_H
 
-#ifdef TK_VERSION
-
 #include "comm_pch.h"
 
 #include "baseapp.h"
@@ -67,7 +65,5 @@ public:
 };
 
 }
-
-#endif
 
 #endif // BASEAPPTK_H

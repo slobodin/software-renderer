@@ -50,13 +50,12 @@ public:
     void setShadingMode(Material::ShadeMode shMode);
 
     const list<VertexBuffer> &getSubmeshes() const { return m_submeshes; }
-    list<VertexBuffer> &getSubmeshes() { return m_submeshes; }
+    list<VertexBuffer>       &getSubmeshes() { return m_submeshes; }
 
     sptr(Mesh) clone() const;
 
-private:
-    Mesh(const Mesh &);
-    Mesh &operator= (const Mesh &);
+    Mesh(const Mesh &) = delete;
+    Mesh &operator= (const Mesh &) = delete;
 };
 
 }

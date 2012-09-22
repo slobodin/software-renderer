@@ -24,7 +24,7 @@ class VertexBuffer;
 class SceneObject;
 class Camera;
 
-class RenderList
+class RenderList : boost::noncopyable
 {
     list<math::Triangle> m_triangles;
 

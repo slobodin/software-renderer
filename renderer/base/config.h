@@ -74,6 +74,9 @@ public:
 
     const RendererConfig &getRendererConfig() const;
     const SceneConfig &getSceneConfig() const;
+
+    Config(const Config &) = delete;
+    Config &operator= (const Config &) = delete;
 };
 
 }
