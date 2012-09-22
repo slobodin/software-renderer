@@ -957,8 +957,13 @@ details::Expr eval(std::string const &str);
 // for initializing Tcl environment
 void init(char *argv0);
 
-#include <tcl/tcl.h>
+#ifdef __linux__
 #include <tcl/tk.h>
+#include <tcl/tcl.h>
+#elif WIN32
+#include <tcl8.5/tk.h>
+#include <tcl8.5/tcl.h>
+#endif
 
 extern Tcl_Interp *globalTclInterpret;
 

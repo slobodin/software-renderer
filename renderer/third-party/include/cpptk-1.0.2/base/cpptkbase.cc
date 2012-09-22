@@ -8,8 +8,13 @@
 //
 
 #include "cpptkbase.h"
-#include <tcl/tcl.h>
+#ifdef __linux__
 #include <tcl/tk.h>
+#include <tcl/tcl.h>
+#elif WIN32
+#include <tcl8.5/tk.h>
+#include <tcl8.5/tcl.h>
+#endif
 #include <map>
 #include <ostream>
 #include <iostream>
