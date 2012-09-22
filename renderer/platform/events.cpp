@@ -10,6 +10,8 @@
 namespace platform
 {
 
+// DEPRECATED
+#if 0
 #if defined(LINUX_VERSION)
 
 #include <X11/Xlib.h>
@@ -142,6 +144,7 @@ LinuxKeymap::LinuxKeymap()
 }
 
 #endif
+#endif
 
 KeyboardEvent::KeyboardEvent(unsigned long keycode)
 {
@@ -150,15 +153,15 @@ KeyboardEvent::KeyboardEvent(unsigned long keycode)
 
 void KeyboardEvent::setKeyCode(unsigned long keycode)
 {
-#if defined(LINUX_VERSION)
+/*#if defined(LINUX_VERSION)
     m_keycode = LinuxKeymap::get().getKeyCode(keycode);
 #elif defined(WINDOWS_VERSION)
     m_keycode = (KEY_CODE)keycode;
-#elif defined(TK_VERSION)
+#elif defined(TK_VERSION)*/
     m_keycode = (KEY_CODE)keycode;  // windows keycode
-#else
-#error Unsupported OS
-#endif
+//#else
+//#error Unsupported OS
+//#endif
 }
 
 KEY_CODE KeyboardEvent::keycode() const

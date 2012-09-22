@@ -8,6 +8,8 @@
 #ifndef BASEAPPLINUX_H
 #define BASEAPPLINUX_H
 
+// DEPRECATED
+#if 0
 #ifdef LINUX_VERSION
 
 #include "comm_pch.h"
@@ -60,6 +62,7 @@ public:
 
 }
 
+#endif
 #endif
 
 #endif // BASEAPPLINUX_H
