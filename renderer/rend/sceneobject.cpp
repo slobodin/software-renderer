@@ -8,6 +8,8 @@
 #include "sceneobject.h"
 
 #include "mesh.h"
+#include "resourcemgr.h"
+#include "texture.h"
 
 namespace rend
 {
@@ -77,6 +79,20 @@ void SceneObject::setTransformation(const math::M44 &tr)
 
     // sphere changes only when we scaling the object.
     m_mesh->computeBoundingSphere(m_worldTransformation);
+}
+
+void SceneObject::additionalLoading(base::ResourceMgr *const rm)
+{
+    auto &vbs = m_mesh->getSubmeshes();
+
+    for (auto &vb : vbs)
+    {
+        auto material = vb.getMaterial();
+        if (material->textureName.empty())
+            continue;
+
+        material->texture = rm->getObject<rend::Texture>(material->textureName);
+    }
 }
 
 void SceneObject::setMesh(sptr(Mesh) mesh)

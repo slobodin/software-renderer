@@ -1,13 +1,13 @@
 /*
- * tkapplication.cpp
+ * example1application.cpp
  *
  *      Author: flamingo
  *      E-mail: epiforce57@gmail.com
  */
 
-#include "tkapplication.h"
+#include "example1application.h"
 
-void TkApplication::update(float dt)
+void Example1Application::update(float /*dt*/)
 {
     static int yaw, roll;
 
@@ -15,8 +15,6 @@ void TkApplication::update(float dt)
     roll += 1;
     if (abs(yaw) > 360) yaw %= 360;
     if (abs(roll) > 360) roll %= 360;
-
-    static int lightdy = 10;
 
     // hammer
     math::vec3 transl;
@@ -57,33 +55,16 @@ void TkApplication::update(float dt)
 
         ptL->setPosition(transl);
         m_lightPoint->setPosition(transl);
-
-//        transl.y += lightdy;
-
-//        if (transl.y < -1500) lightdy = 10;
-//        if (transl.y > 1500) lightdy = -10;
-
-//        ptL->setPosition(transl);
     }
 }
 
-TkApplication::TkApplication(int argc, const char *argv[])
+Example1Application::Example1Application(int argc, const char *argv[])
     : platform::BaseAppTk(argc, argv)
 {
     m_playerCamera = m_clientController->getCamera();
 
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
-
-    /*auto tank = rmgr->getObject<rend::SceneObject>("tank1.plg");
-    auto clonedTank = tank->clone();
-    clonedTank->setPosition(math::vec3(0, 500, 0));
-    m_clientController->getRendmgr()->addSceneObject(clonedTank);
-
-    auto tower = rendmgr->getSceneObject("tower");
-    auto clonedTower = tower->clone();
-    clonedTower->setPosition(math::vec3(0, 500, -250));
-    m_clientController->getRendmgr()->addSceneObject(clonedTower);*/
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
@@ -102,41 +83,19 @@ TkApplication::TkApplication(int argc, const char *argv[])
         m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
     }
 
-
-//    auto tie = rendmgr->getSceneObject("TIEFIGTH");
-//    tie->setRotation(math::vec3(-90.0, 0.0, 0.0));
-//    tie->setScale(math::vec3(15.0, 15.0, 15.0));
-
-//    tie->getMesh()->setSideType(rend::Material::TWO_SIDE);
-
-//    auto s = rendmgr->getSceneObject("Sphere,4");
-//    s->setScale(math::vec3(35.0, 35.0, 35.0));
-
     auto cube = rendmgr->getSceneObject("Cube");
-    cube->setScale(math::vec3(15.0, 15.0, 15.0));
-
-/*    auto cessna = rendmgr->getSceneObject("cessna.obj");
-    if (cessna)
-        cessna->setScale(math::vec3(15.0, 15.0, 15.0));*/
+    if (cube)
+        cube->setScale(math::vec3(15.0, 15.0, 15.0));
 
     auto al = rendmgr->getSceneObject("al.obj");
     if (al)
         al->setScale(math::vec3(35.0, 35.0, 35.0));
+
+    if (!al || !cube || !m_sphere || !m_hammer)
+        std::cerr << "Error: Missing some resources.\n";
 }
 
-TkApplication::~TkApplication()
-{
-}
-
-void TkApplication::onFrameStart()
-{
-}
-
-void TkApplication::onFrameEnd()
-{
-}
-
-void TkApplication::onMouseEvent(const platform::MouseEvent &ev)
+void Example1Application::onMouseEvent(const platform::MouseEvent &ev)
 {
     static int yaw, pitch;
 
@@ -152,7 +111,7 @@ void TkApplication::onMouseEvent(const platform::MouseEvent &ev)
     }
 }
 
-void TkApplication::onKeyPressed(const platform::KeyboardEvent &ev)
+void Example1Application::onKeyPressed(const platform::KeyboardEvent &ev)
 {
     static const double velocity = 10.0;
     static math::vec3 ds;
@@ -185,8 +144,4 @@ void TkApplication::onKeyPressed(const platform::KeyboardEvent &ev)
         return;
 
     m_playerCamera->setPosition(position);
-}
-
-void TkApplication::onKeyReleased(const platform::KeyboardEvent &ev)
-{
 }

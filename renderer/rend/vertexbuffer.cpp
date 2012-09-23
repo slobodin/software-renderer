@@ -85,7 +85,7 @@ void VertexBuffer::computeVertexNormals()
 
     case TRIANGLELIST:
 
-        syslog << "Unsupported" << logerr;
+        syslog << "Unsupported triangle list for computing normals" << logerr;
         break;
 
         for(size_t v = 0; v < m_vertices.size(); v += 3)

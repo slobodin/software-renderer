@@ -63,7 +63,8 @@ HEADERS += \
     third-party/include/cpptk-1.0.2/base/cpptkbase.h \
     third-party/include/cpptk-1.0.2/cpptk.h \
     platform/baseapptk.h \
-    base/decodercob.h
+    base/decodercob.h \
+    base/decoderimage.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -104,7 +105,8 @@ SOURCES += \
     platform/baseapptk.cpp \
     third-party/include/cpptk-1.0.2/cpptk.cc \
     third-party/include/cpptk-1.0.2/base/cpptkbase.cc \
-    base/decodercob.cpp
+    base/decodercob.cpp \
+    base/decoderimage.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

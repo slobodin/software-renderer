@@ -81,9 +81,12 @@ void Controller::createRenderManager()
     for (auto &objInfo : scCfg.objects)
     {
         auto obj = m_resourceMgr->getObject<rend::SceneObject>(objInfo.pathToTheModel);
-        obj->setPosition(objInfo.position);
+        if (obj)
+        {
+            obj->setPosition(objInfo.position);
 
-        m_rendmgr->addSceneObject(obj);
+            m_rendmgr->addSceneObject(obj);
+        }
     }
 
     if (scCfg.dirLights.empty() && scCfg.ambIntensity.isBlack())
@@ -95,8 +98,14 @@ void Controller::createRenderManager()
     if (!scCfg.ambIntensity.isBlack())
         m_rendmgr->addAmbientLight(scCfg.ambIntensity);
 
+    // add directional lights
     for (auto &dirLightInfo : scCfg.dirLights)
         m_rendmgr->addDirectionalLight(dirLightInfo.intensity, dirLightInfo.direction);
+
+    // add point lights
+    for (auto &ptLightInfo : scCfg.pointLights)
+        m_rendmgr->addPointLight(ptLightInfo.intensity, ptLightInfo.position,
+                                 ptLightInfo.kc, ptLightInfo.kl, ptLightInfo.kq);
 }
 
 bool Controller::viewportExist()

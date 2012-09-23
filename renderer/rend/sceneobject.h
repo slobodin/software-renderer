@@ -14,6 +14,8 @@
 #include "resource.h"
 #include "boundingsphere.h"
 
+namespace base { class ResourceMgr; }
+
 namespace rend
 {
 
@@ -41,6 +43,8 @@ public:
     virtual void setRotation(double yaw, double pitch, double roll);
     virtual void setScale(const math::vec3 &coeff);
     virtual void setTransformation(const math::M44 &tr);
+
+    void additionalLoading(base::ResourceMgr * const rm);
 
 private:
     SceneObject(const SceneObject &);

@@ -51,6 +51,15 @@ static void operator>> (const YAML::Node &node, SceneConfig::DirLightInfo &dirLi
     node["intensity"] >> dirLightInfo.intensity;
 }
 
+static void operator>> (const YAML::Node &node, SceneConfig::PointLightInfo &pointLightInfo)
+{
+    node["position"] >> pointLightInfo.position;
+    node["intensity"] >> pointLightInfo.intensity;
+    node["kc"] >> pointLightInfo.kc;
+    node["kl"] >> pointLightInfo.kl;
+    node["kq"] >> pointLightInfo.kq;
+}
+
 //! Finds value by the key and stores it in `value'.
 /** If can't find value - sets it to default. */
 template<typename T>
@@ -129,29 +138,50 @@ catch (YAML::Exception &e)
     m_rendererConfig.makeDefaults();
 }
 
-void Config::parseLights(const YAML::Node &doc) try
+void Config::parseLights(const YAML::Node &doc)
 {
     const YAML::Node &lights = doc["Lights"];
-    const YAML::Node &ambLight = lights["Ambient"];
 
-    for (size_t i = 0; i < ambLight.size(); i++)
-        ambLight[i]["intensity"] >> m_sceneConfig.ambIntensity;
-
-    if (ambLight.size() > 1)
-        syslog << "Number of ambient light sources more than one. Using the last." << logwarn;
-
-    const YAML::Node &dirLight = lights["Directional"];
-    for (size_t i = 0; i < dirLight.size(); i++)
+    // ambient lights
+    try
     {
-        SceneConfig::DirLightInfo light;
-        dirLight[i] >> light;
+        const YAML::Node &ambLight = lights["Ambient"];
 
-        m_sceneConfig.dirLights.push_back(light);
+        for (size_t i = 0; i < ambLight.size(); i++)
+            ambLight[i]["intensity"] >> m_sceneConfig.ambIntensity;
+
+        if (ambLight.size() > 1)
+            syslog << "Number of ambient light sources more than one. Using the last." << logwarn;
     }
-}
-catch (YAML::Exception &e)
-{
-    // nothing
+    catch (YAML::Exception &e) { syslog << "No ambient light" << logmess; }
+
+    // directional lights
+    try
+    {
+        const YAML::Node &dirLight = lights["Directional"];
+        for (size_t i = 0; i < dirLight.size(); i++)
+        {
+            SceneConfig::DirLightInfo light;
+            dirLight[i] >> light;
+
+            m_sceneConfig.dirLights.push_back(light);
+        }
+    }
+    catch (YAML::Exception &e) { syslog << "No directional lights" << logmess; }
+
+    // point lights
+    try
+    {
+        const YAML::Node &pointLight = lights["Point"];
+        for (size_t i = 0; i < pointLight.size(); i++)
+        {
+            SceneConfig::PointLightInfo light;
+            pointLight[i] >> light;
+
+            m_sceneConfig.pointLights.push_back(light);
+        }
+    }
+    catch (YAML::Exception &e) { syslog << "No point lights" << logmess; }
 }
 
 Config::Config(const string &cfgDir)

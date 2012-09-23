@@ -46,14 +46,12 @@ public:
     void addSceneObject(sptr(SceneObject) node);
     sptr(SceneObject) getSceneObject(const string &name);
 
-    // void setAmbientLight(color);
-    // light* addLight....
-
-
+    sptr(Light) getLight(int id) const;
 
     sptr(AmbientLight)      addAmbientLight(Color3 intensity);
     sptr(DirectionalLight)  addDirectionalLight(Color3 intensity, math::vec3 direction);
-//    sptr(PointLight)        addPointLight(Color3 intensity, math::vec3 position /* Coeffs */);
+    sptr(PointLight)        addPointLight(Color3 intensity, math::vec3 position,
+                                          double kc, double kl, double kq);
 
     void resize(int w, int h);
 };

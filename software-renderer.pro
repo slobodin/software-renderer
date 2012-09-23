@@ -3,6 +3,7 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS += \
-    renderer
+    renderer \
+    example-1
 
-SUBDIRS += client-tk
+#SUBDIRS += client-tk

@@ -89,7 +89,7 @@ sptr(Mesh) Mesh::clone() const
     {
         VertexBuffer vb;
         vb.m_type = submesh.m_type;
-        vb.m_material = submesh.m_material;
+        vb.m_material = submesh.m_material->clone();
         vb.m_vertices = submesh.m_vertices;
         vb.m_indices = submesh.m_indices;
 

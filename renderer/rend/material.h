@@ -53,10 +53,13 @@ struct Material : public base::Resource
     Color3 specularColor;
     Color3 emissiveColor;
 
-    sptr(Texture) m_texture;
+    string textureName;
+    sptr(Texture) texture;
 
     //! Default ctor.
     Material();
+
+    sptr(Material) clone() const;
 };
 
 }

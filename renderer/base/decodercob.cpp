@@ -179,6 +179,12 @@ void DecoderCOB::parseMaterials(string &line)
         materials.at(currMaterial).shaderMode = MaterialInfo::TEXTURE;
         return;
     }
+
+    if (line.find("file name") != string::npos)
+    {
+        materials.at(currMaterial).texturePath = string(line.begin() + 1 + line.find_last_of('\\'), line.end() - 1);
+        return;
+    }
 }
 
 sptr(rend::Mesh) DecoderCOB::createMesh()
@@ -220,17 +226,12 @@ sptr(rend::Mesh) DecoderCOB::createMesh()
             break;
         case MaterialInfo::PLASTIC:
             shadeMode = rend::Material::SM_GOURAUD;
-//            syslog << "Gouraud unsupported yet" << logwarn;
-//            shadeMode = rend::Material::SM_FLAT;
             break;
         case MaterialInfo::PHONG:
-//            shadeMode = rend::Material::SM_PHONG;
             syslog << "Phong unsupported yet" << logwarn;
             shadeMode = rend::Material::SM_FLAT;
             break;
         case MaterialInfo::TEXTURE:
-//            shadeMode = rend::Material::SM_TEXTURE;
-            syslog << "Textures unsupported yet" << logwarn;
             shadeMode = rend::Material::SM_FLAT;
             break;
         default:
@@ -240,6 +241,12 @@ sptr(rend::Mesh) DecoderCOB::createMesh()
         }
 
         material->shadeMode = shadeMode;
+        // having texture
+        if (!materials.at(mt->matIndex).texturePath.empty())
+        {
+            material->shadeMode = rend::Material::SM_TEXTURE;
+            material->textureName = materials.at(mt->matIndex).texturePath;
+        }
 
         // setting "sideness"
         rend::Material::SideType sideType;

@@ -10,6 +10,7 @@
 #include "vec2.h"
 #include "poly.h"
 #include "viewport.h"
+#include "texture.h"
 
 namespace rend
 {
@@ -143,11 +144,11 @@ void Rasterizer::rasterizeTopOrBottomTriangle(int x1, int y1, int x2, int x3, in
 
 void Rasterizer::drawBottomTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3)
 {
-    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
-    int y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
+    if (v3.p.x < v2.p.x)
+        std::swap(v2, v3);
 
-    if (x3 < x2)
-        std::swap(x2, x3);
+    /*int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
+    int y1 = v1.p.y, y3 = v3.p.y;       // y2 equals to y2 (bottom flat triangle)
 
     double height = y3 - y1;
     double dxLeft = (x2 - x1) / height;
@@ -155,24 +156,28 @@ void Rasterizer::drawBottomTriangleGouraud(math::vertex &v1, math::vertex &v2, m
     double xs = x1;
     double xe = x1;
 
-    rasterizeTopOrBottomTriangle(x1, y1, x2, x3, y3, dxLeft, dxRight, xs, xe, v1.color);
+    double rs = v1.color[RED];
+    double re = v1.color[RED];
+    double gs = v1.color[GREEN];
+    double ge = v1.color[GREEN];
+    double bs = v1.color[BLUE];
+    double be = v1.color[BLUE];
+
+    // horisontal interpolating
+    int r = ir1, g = ig1, b = ib1;
+    double dx = xe - xs;
+    double dirx = (double)(re - rs) / dx;
+    double digx = (double)(ge - gs) / dx;
+    double dibx = (double)(be - bs) / dx;*/
 }
 
 void Rasterizer::drawTopTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3)
 {
-    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
-    int y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
+    if (v2.p.x < v1.p.x)
+        std::swap(v1, v2);
 
-    if (x2 < x1)
-        std::swap(x1, x2);
-
-    double height = y3 - y1;
-    double dx_left  = (x3 - x1) / height;
-    double dx_right = (x3 - x2) / height;
-    double xs = x1;
-    double xe = x2;
-
-    rasterizeTopOrBottomTriangle(x1, y1, x2, x3, y3, dx_left, dx_right, xs, xe, v1.color);
+//    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
+//    int y1 = v1.p.y, y3 = v3.p.y;
 }
 
 bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
@@ -596,6 +601,111 @@ void Rasterizer::drawGouraudTriangle(const math::Triangle &tr)
     drawGouraudTriangle(v1, v2, v3);
 }
 
+void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
+{
+    math::vertex v0 = tr.v(0);
+    math::vertex v1 = tr.v(1);
+    math::vertex v2 = tr.v(2);
+
+    v0.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
+    v0.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
+    v1.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
+    v1.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
+    v2.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
+    v2.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
+
+    // first trivial clipping rejection tests
+    if (((v0.p.y < m_fb.yorig())  &&
+         (v1.p.y < m_fb.yorig())  &&
+         (v2.p.y < m_fb.yorig())) ||
+
+        ((v0.p.y > m_fb.height())  &&
+         (v1.p.y > m_fb.height())  &&
+         (v2.p.y > m_fb.height())) ||
+
+        ((v0.p.x < m_fb.xorig())  &&
+         (v1.p.x < m_fb.xorig())  &&
+         (v2.p.x < m_fb.xorig())) ||
+
+        ((v0.p.x > m_fb.width())  &&
+         (v1.p.x > m_fb.width())  &&
+         (v2.p.x > m_fb.width())))
+       return;
+
+    // degenerate triangle
+    if ( ((v0.p.x==v1.p.x) && (v1.p.x==v2.p.x)) ||
+         ((v0.p.y==v1.p.y) && (v1.p.y==v2.p.y)))
+       return;
+
+    // sort vertices
+    if (v1.p.y < v0.p.y)
+        std::swap(v1, v0);
+    if (v2.p.y < v0.p.y)
+        std::swap(v2, v0);
+    if (v2.p.y < v1.p.y)
+        std::swap(v2, v1);
+
+    TriangleType tri_type;
+
+    // now test for trivial flat sided cases
+    if (v0.p.y==v1.p.y)
+    {
+        tri_type = TT_FLAT_TOP;
+        if (v1.p.x < v0.p.x)
+            std::swap(v1, v0);
+    }
+    else
+    // now test for trivial flat sided cases
+    if (v1.p.y==v2.p.y)
+        {
+        // set triangle type
+        tri_type = TT_FLAT_BOTTOM;
+
+        // sort vertices left to right
+        if (v2.p.x < v1.p.x)
+            std::swap(v2, v1);
+
+        } // end if
+    else
+        {
+        // must be a general triangle
+        tri_type = TT_FLAT_GENERAL;
+
+        } // end else
+
+    // extract base color of lit poly, so we can modulate texture a bit
+    // for lighting
+    int r_base = v0.color[RED];
+    int g_base = v0.color[GREEN];
+    int b_base = v0.color[BLUE];
+
+    // extract vertices for processing, now that we have order
+    double x0  = (double)(v0.p.x+0.5);
+    double y0  = (double)(v0.p.y+0.5);
+    double tu0 = (double)(v0.t.x);
+    double tv0 = (double)(v0.t.y);
+
+    double x1  = (double)(v1.p.x+0.5);
+    double y1  = (double)(v1.p.y+0.5);
+    double tu1 = (double)(v1.t.x);
+    double tv1 = (double)(v1.t.y);
+
+    double x2  = (double)(v2.p.x+0.5);
+    double y2  = (double)(v2.p.y+0.5);
+    double tu2 = (double)(v2.t.x);
+    double tv2 = (double)(v2.t.y);
+
+    // set interpolation restart value
+    double yrestart = y1;
+
+    // what kind of triangle
+    double dy, dxdyl, dudyl, dvdyl;
+    double dxdyr, dudyr, dvdyr;
+    double xl, ul, vl, xr, ur, vr;
+    double ystart, yend;
+
+}
+
 Rasterizer::Rasterizer(const int width, const int height)
     : m_fb(width, height)
 {
@@ -630,6 +740,10 @@ void Rasterizer::rasterize(const RenderList &rendlist)
 
         case Material::SM_GOURAUD:
             drawGouraudTriangle(t);
+            break;
+
+        case Material::SM_TEXTURE:
+            drawTexturedTriangle(t);
             break;
 
         default:

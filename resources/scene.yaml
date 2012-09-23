@@ -9,20 +9,26 @@ Objects:
     position: [0, 300, 0]
 #  - model: tie04.cob
 #    position: [200, 100, 0]
-#  - model: cube_flat_textured_01.cob
-#    position: [100, 100, 100]
-  - model: cessna.obj
-    position: [100, 200, 600]
+  - model: cube_flat_textured_01.cob
+    position: [100, 100, 100]
+#  - model: cessna.obj
+#    position: [100, 200, 600]
   - model: al.obj
-    position: [100, 600, 600]
+    position: [0, 0, -200]
 #  - model: water_gouraud_01.cob
 #    position: [-200, 300, 0]
 
 Lights:
   Ambient:
-    - intensity: [70, 70, 70]
-  Directional:
-    - direction: [1, 1, 0]
+    - intensity: [150, 150, 150]
+#  Directional:
+#    - direction: [1, 1, 0]
+#      intensity: [255, 10, 50]
+    - direction: [0, 1, 1]
+      intensity: [30, 5, 150]
+  Point:
+    - position: [0, 0, 500]
       intensity: [255, 10, 50]
-    - direction: [0, 1, 0]
-      intensity: [30, 255, 255]
+      kc: 0
+      kl: 0.001
+      kq: 0

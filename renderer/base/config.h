@@ -52,8 +52,17 @@ struct SceneConfig
         rend::Color3 intensity;
     };
 
+    struct PointLightInfo
+    {
+        math::vec3 position;
+        rend::Color3 intensity;
+        double kc, kl, kq;
+    };
+
     // directional lights
     vector<DirLightInfo> dirLights;
+    // point lights
+    vector<PointLightInfo> pointLights;
 
     SceneConfig() { ambIntensity.reset(); }
 };

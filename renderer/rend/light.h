@@ -35,14 +35,15 @@ public:
 
 private:
     static size_t NumLights;
+    size_t m_lightId;
 
 protected:
     bool m_isEnabled;   // on\off
     Color3 m_intensity;
 
-    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const = 0;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const = 0;
 
-    typedef boost::function<Color3 (const Light*, const sptr(Material), const math::vec3 &)> ShaderFunction;
+    typedef boost::function<Color3 (const Light*, const sptr(Material), const math::vec3 &, const math::vec3 &)> ShaderFunction;
     ShaderFunction m_shader;
 
     Light(const Color3 &intensity);
@@ -52,6 +53,8 @@ public:
     void turnon() { m_isEnabled = true; }
     void turnoff() { m_isEnabled = false; }
 
+    int getId() const { return m_lightId; }
+
     virtual void illuminate(RenderList &renderlist) const;
 };
 
@@ -59,7 +62,7 @@ public:
 class AmbientLight : public Light
 {
 protected:
-    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
 
 public:
     AmbientLight(const Color3 &intensity);
@@ -70,26 +73,24 @@ class DirectionalLight : public Light
 {
     math::vec3 m_dir;
 
-    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
 
 public:
     DirectionalLight(const Color3 &intensity, const math::vec3 &dir);
 };
-/*
+
 //! Point light
 class PointLight : public Light
 {
-    math::vec3 m_pos;
     double m_kc, m_kl, m_kq;
 
-    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal) const;
-    virtual Color3 getMaterialColor(sptr(Material) material) const;
+    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
 
 public:
     PointLight(const Color3 &intensity, const math::vec3 &pos,
                double kc, double kl, double kq);
 };
-
+/*
 //! Spot light
 class SpotLight : public Light
 {

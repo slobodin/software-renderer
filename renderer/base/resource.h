@@ -13,6 +13,8 @@
 namespace base
 {
 
+class ResourceMgr;
+
 //! Abstract base for resources, that can be loaded.
 /*!
   *
@@ -36,6 +38,8 @@ public:
     void    setName(const string &name) { m_name = name; }
     //! Gets the name.
     string  getName() const { return m_name; }
+
+    virtual void additionalLoading(ResourceMgr * const /*rm*/) { }
 };
 
 }

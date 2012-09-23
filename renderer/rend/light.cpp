@@ -20,6 +20,7 @@ Light::Light(const Color3 &intensity)
     if (NumLights >= MAX_LIGHTS)
         throw LightException("Light limit is reached");
 
+    m_lightId = NumLights;
     NumLights++;
 
     m_shader = &Light::shader;
@@ -45,15 +46,15 @@ void Light::illuminate(RenderList &renderlist) const
         {
         case Material::SM_FLAT:
 //            t.v(0).color = t.v(1).color = t.v(2).color = m_shader(this, getMaterialColor(material), t.normal());
-            t.v(0).color += m_shader(this, material, t.normal());
-            t.v(1).color += m_shader(this, material, t.normal());
-            t.v(2).color += m_shader(this, material, t.normal());
+            t.v(0).color += m_shader(this, material, t.normal(), t.v(0).p);
+            t.v(1).color += m_shader(this, material, t.normal(), t.v(0).p);
+            t.v(2).color += m_shader(this, material, t.normal(), t.v(0).p);
             break;
 
         case Material::SM_GOURAUD:
-            t.v(0).color += m_shader(this, material, t.v(0).n);
-            t.v(1).color += m_shader(this, material, t.v(1).n);
-            t.v(2).color += m_shader(this, material, t.v(2).n);
+            t.v(0).color += m_shader(this, material, t.v(0).n, t.v(0).p);
+            t.v(1).color += m_shader(this, material, t.v(1).n, t.v(0).p);
+            t.v(2).color += m_shader(this, material, t.v(2).n, t.v(0).p);
             break;
 
         case Material::SM_UNDEFINED:
@@ -62,7 +63,10 @@ void Light::illuminate(RenderList &renderlist) const
             t.v(0).color = t.v(1).color = t.v(2).color = material->plainColor;
             break;
         case Material::SM_TEXTURE:
-            // texture
+            // texture - performing standart flat shading. On rasterizing phaze we modulate texture texels with this color
+            t.v(0).color += m_shader(this, material, t.normal(), t.v(0).p);
+            t.v(1).color += m_shader(this, material, t.normal(), t.v(0).p);
+            t.v(2).color += m_shader(this, material, t.normal(), t.v(0).p);
             break;
         default:
             break;
@@ -70,7 +74,7 @@ void Light::illuminate(RenderList &renderlist) const
     }
 }
 
-Color3 AmbientLight::shader(const sptr(Material) material, const math::vec3 &/*normal*/) const
+Color3 AmbientLight::shader(const sptr(Material) material, const math::vec3 &/*normal*/, const math::vec3 &/*pt*/) const
 {
     Color3 shadedColor;
     shadedColor = m_intensity * material->ambientColor;
@@ -84,12 +88,12 @@ AmbientLight::AmbientLight(const Color3 &intensity)
 {
 }
 
-Color3 DirectionalLight::shader(const sptr(Material) material, const math::vec3 &normal) const
+Color3 DirectionalLight::shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &/*pt*/) const
 {
     Color3 shadedColor;
 
     if (normal.isZero())
-        return Color3(0, 0, 0);//material->diffuseColor;
+        return Color3(0, 0, 0);
 
     double dp = normal.dotProduct(m_dir);
     if (dp > 0)
@@ -109,50 +113,42 @@ DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &di
 {
     m_dir.normalize();
 }
-/*
-Color3 PointLight::shader(const Color3 &matColor, const math::vec3 &normal) const
+
+Color3 PointLight::shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const
 {
-    assert(false);  //  not working yet
-
     Color3 shadedColor;
-    /*const Color3 &originalColor = t.material().color();
 
-    if (t.normal().isZero())
-        return originalColor;
+    if (normal.isZero())
+        return Color3(0, 0, 0);
 
-    math::vec3 l = m_pos - t.v(0).p;
+    math::vec3 l = getPosition() - pt;
     double dist = l.length();
 
-    double dp = t.normal().dotProduct(l);
+    double dp = normal.dotProduct(l);
     if (dp > 0)
     {
         double atten = m_kc + m_kl * dist + m_kq * dist * dist;
-        double i = dp / (/*dist* atten);
+        double i = dp / (dist * atten);
 
-        shadedColor = m_intensity * originalColor;
+        shadedColor = m_intensity * material->diffuseColor;
         shadedColor *= (i / 256.0);
     }
     else
-        return originalColor;*
+        return Color3(0, 0, 0);
 
     return shadedColor;
-}
-
-Color3 PointLight::getMaterialColor(sptr(Material) material) const
-{
-    return Color3();//material->ambientColor;
 }
 
 PointLight::PointLight(const Color3 &intensity, const math::vec3 &pos,
                        double kc, double kl, double kq)
     : Light(intensity),
-      m_pos(pos),
       m_kc(kc),
       m_kl(kl),
       m_kq(kq)
 {
+    setPosition(pos);
 }
-
+/*
 Color3 SpotLight::shader(const Color3 &matColor, const math::vec3 &normal) const
 {
     assert(false);  //  not working yet

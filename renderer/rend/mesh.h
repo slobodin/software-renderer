@@ -39,8 +39,6 @@ public:
     void appendSubmesh(const VertexBuffer &submesh);
 
     void computeBoundingSphere(const math::M44 &transform);
-//    void computeVertexNormals
-
     const BoundingSphere &getBoundingSphere() const;
 
     //! Returns vertex count of all submeshes.

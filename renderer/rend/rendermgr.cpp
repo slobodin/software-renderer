@@ -117,13 +117,14 @@ sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, ma
 
     return dynamic_pointer_cast<DirectionalLight>(newLight);
 }
-/*
-sptr(PointLight) RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 position)
+
+sptr(PointLight) RenderMgr::addPointLight(Color3 intensity, math::vec3 position,
+                                          double kc, double kl, double kq)
 {
     sptr(Light) newLight;
     try
     {
-        newLight = make_shared<PointLight>(intensity, position, 0, 1, 0);
+        newLight = make_shared<PointLight>(intensity, position, kc, kl, kq);
         m_lights.push_back(newLight);
     }
     catch(LightException)
@@ -134,7 +135,7 @@ sptr(PointLight) RenderMgr::addPointLight(rend::Color3 intensity, math::vec3 pos
 
     return dynamic_pointer_cast<PointLight>(newLight);
 }
-*/
+
 void RenderMgr::resize(int w, int h)
 {
     m_viewport->resize(w, h);
@@ -159,6 +160,21 @@ sptr(SceneObject) RenderMgr::getSceneObject(const string &name)
     auto obj = std::find_if(m_sceneObjects.begin(), m_sceneObjects.end(),
                             [&](sptr(SceneObject) val)
                             { return val->getName() == name; } );
+
+    if (obj == m_sceneObjects.end())
+        return sptr(SceneObject)();
+
+    return *obj;
+}
+
+sptr(Light) RenderMgr::getLight(int id) const
+{
+    auto obj = std::find_if(m_lights.begin(), m_lights.end(),
+                            [&](sptr(Light) val)
+                            { return val->getId() == id; } );
+
+    if (obj == m_lights.end())
+        return sptr(Light)();
 
     return *obj;
 }

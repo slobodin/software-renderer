@@ -15,6 +15,7 @@
 #include "decoderasc.h"
 #include "decodercob.h"
 #include "decoderobj.h"
+#include "decoderimage.h"
 #include "mesh.h"
 #include "sceneobject.h"
 
@@ -27,6 +28,7 @@ ResourceMgr::ResourceMgr()
     sptr(ResourceDecoder) ascDecoder(new DecoderASC);
     sptr(ResourceDecoder) cobDecoder(new DecoderCOB);
     sptr(ResourceDecoder) objDecoder(new DecoderOBJ);
+    sptr(ResourceDecoder) imgDecoder(new DecoderImage);
 //    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
     // other decoders
 
@@ -35,6 +37,7 @@ ResourceMgr::ResourceMgr()
     m_decoders[ascDecoder->extension()] = ascDecoder;
     m_decoders[cobDecoder->extension()] = cobDecoder;
     m_decoders[objDecoder->extension()] = objDecoder;
+    m_decoders[imgDecoder->extension()] = imgDecoder;
 //    m_decoders[bspDecoder->extension()] = bspDecoder;
 }
 
@@ -70,11 +73,14 @@ sptr(Resource) ResourceMgr::getResource(const string &name)
                 fs::path p(dir);
                 p /= name;
 
-                rit = m_resources.find(fs::canonical(p).string());
-                if (rit != m_resources.end())
-                {
-                    return rit->second;
+                try {
+                    rit = m_resources.find(fs::canonical(p).string());
+                    if (rit != m_resources.end())
+                    {
+                        return rit->second;
+                    }
                 }
+                catch (...) { }
             }
 
             // else -> find by name
@@ -154,14 +160,15 @@ void ResourceMgr::loadResource(const string &resourcepath) try
         return;
 
     sptr(Resource) newResource;
-    try
-    {
-        newResource = dit->second->decode(fullpath);
-    }
-    catch(FileException)
-    {
-        return;
-    }
+//    try
+//    {
+    newResource = dit->second->decode(fullpath);
+    newResource->additionalLoading(this);       // if we have textures, need to load them too. Bad design, actually...
+//    }
+//    catch(FileException)
+//    {
+//        return;
+//    }
 
     if (newResource)
         m_resources[fullpath] = newResource;

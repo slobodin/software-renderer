@@ -20,4 +20,21 @@ Material::Material()
 {
 }
 
+sptr(Material) Material::clone() const
+{
+    sptr(Material) newMat = make_shared<Material>();
+
+    newMat->shadeMode = shadeMode;
+    newMat->sideType = sideType;
+    newMat->plainColor = plainColor;
+    newMat->ambientColor = ambientColor;
+    newMat->diffuseColor = diffuseColor;
+    newMat->specularColor = specularColor;
+    newMat->emissiveColor = emissiveColor;
+    newMat->textureName = textureName;
+
+    // TODO: clone texture!!
+    return newMat;
+}
+
 }

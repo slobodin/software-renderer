@@ -73,6 +73,8 @@ sptr(T) ResourceMgr::getObject(const string &name)
     sptr(Resource) newResource = getResource(name);
     if (newResource)
     {
+//        if (boost::dynamic_pointer_cast<)
+
         if (boost::dynamic_pointer_cast<T>(newResource))
             return boost::dynamic_pointer_cast<T>(newResource);
         else
