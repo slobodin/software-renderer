@@ -31,10 +31,10 @@ Otherwise you'll get nothing.
 
 Compile
 =======
-This software uses qmake build system (I'm using Qt creator) and have .pro files with qt-creator project description.
-Also you need boost (at least 1.51), tk/tcl and CImg library.
+This renderer works well on Linux and Windows systems because it uses qmake build system. It has .pro files with qt creator project description.
+Also you need boost (at least 1.51), tk/tcl (ActiveTcl for Windows) and CImg library.
 Another libraries (cpptk and yamlcpp) included in project.
-This renderer works well on Linux and Windows systems.
+On Windows you also should set BOOST_ROOT and TCL_ROOT environment variables (for example, in Qt creator "build environment" tab)
 
 Package structure
 ===========
