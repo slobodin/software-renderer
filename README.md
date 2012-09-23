@@ -1,5 +1,5 @@
 Here is simple software renderer. It means, that it doesn't use OpenGL or DirectX to perform rendering. 
-All that it use is tk (gui library) functions to put image block on a screen (window).
+All that it use is tk gui library functions to put image block on a screen (window).
 
 Why software rendering?
 ========
@@ -17,7 +17,7 @@ Now it supports:
 * Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
    Also you can setup position of objects through scene config file.
 
-TODO: gouraud shading, textures and animation.
+**TODO**: gouraud shading, textures and animation. Also, renderer needs some optimizations.
 
 Usage
 =====
@@ -46,8 +46,8 @@ The main directory is organized as follows:
 * renderer/ - main part: renderer code, that compiles into static library.
 * resources/ - some mesh data and renderer config files (.yaml extention)
 * www/ - images for future wiki.
-* README - this file
-* software-renderer.pro - qt creator project
+* README.md - this file.
+* software-renderer.pro - qt creator project.
 
 License
 =======
