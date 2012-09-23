@@ -110,10 +110,10 @@ INCLUDEPATH += ./base \
                 ./comm \
                 ./math \
                 ./rend \
+                /usr/include/tcl8.5 \
                 ./third-party/include/ \
                 $(BOOST_ROOT) \
 
-unix:INCLUDEPATH += /usr/include/tcl8.5
 win32:INCLUDEPATH += $(TCL_ROOT)/include
 
 OTHER_FILES += \

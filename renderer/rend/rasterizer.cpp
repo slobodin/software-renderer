@@ -22,6 +22,19 @@ enum TriangleType
     TT_FLAT_GENERAL
 };
 
+void Rasterizer::makeCCWTriangle(math::vertex &p1, math::vertex &p2, math::vertex &p3)
+{
+    // sort vertices (CCW order: p1 (top), p2, p3 (bottom))
+    if (p2.p.y < p1.p.y)
+        std::swap(p1, p2);
+
+    if (p3.p.y < p1.p.y)
+        std::swap(p1, p3);
+
+    if (p3.p.y < p2.p.y)
+        std::swap(p2, p3);
+}
+
 void Rasterizer::drawBottomTriangle(int x1, int y1,
                                     int x2, int /*y2*/,
                                     int x3, int y3,
@@ -130,10 +143,36 @@ void Rasterizer::rasterizeTopOrBottomTriangle(int x1, int y1, int x2, int x3, in
 
 void Rasterizer::drawBottomTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3)
 {
+    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
+    int y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
+
+    if (x3 < x2)
+        std::swap(x2, x3);
+
+    double height = y3 - y1;
+    double dxLeft = (x2 - x1) / height;
+    double dxRight = (x3 - x1) / height;
+    double xs = x1;
+    double xe = x1;
+
+    rasterizeTopOrBottomTriangle(x1, y1, x2, x3, y3, dxLeft, dxRight, xs, xe, v1.color);
 }
 
 void Rasterizer::drawTopTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3)
 {
+    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
+    int y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
+
+    if (x2 < x1)
+        std::swap(x1, x2);
+
+    double height = y3 - y1;
+    double dx_left  = (x3 - x1) / height;
+    double dx_right = (x3 - x2) / height;
+    double xs = x1;
+    double xe = x2;
+
+    rasterizeTopOrBottomTriangle(x1, y1, x2, x3, y3, dx_left, dx_right, xs, xe, v1.color);
 }
 
 bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
@@ -456,36 +495,20 @@ void Rasterizer::drawLine(const math::vertex &p1, const math::vertex &p2)
     }
 }
 
-void Rasterizer::drawFillTriangle(const math::vertex &p1,
-                                  const math::vertex &p2,
-                                  const math::vertex &p3)
+void Rasterizer::drawFillTriangle(math::vertex &p1,
+                                  math::vertex &p2,
+                                  math::vertex &p3)
 {
+    // check degenerate triangle
+    if ((p1.p.x == p2.p.x && p2.p.x == p3.p.x) ||
+        (p1.p.y == p2.p.y && p2.p.y == p3.p.y))
+        return;
+
+    makeCCWTriangle(p1, p2, p3);
+
     int x1 = p1.p.x, x2 = p2.p.x, x3 = p3.p.x;
     int y1 = p1.p.y, y2 = p2.p.y, y3 = p3.p.y;
     const Color3 &color = p1.color;
-
-    // check degenerate triangle
-    if ((x1 == x2 && x2 == x3) || (y1 == y2 && y2 == y3))
-        return;
-
-    // sort vertices (CCW order: p1 (top), p2, p3 (bottom))
-    if (y2 < y1)
-    {
-        std::swap(x1, x2);
-        std::swap(y1, y2);
-    }
-
-    if (y3 < y1)
-    {
-        std::swap(x1, x3);
-        std::swap(y1, y3);
-    }
-
-    if (y3 < y2)
-    {
-        std::swap(x2, x3);
-        std::swap(y2, y3);
-    }
 
     // if triangle isn't on a screen
     if (y3 < m_fb.yorig() || y1 > m_fb.height() ||
@@ -508,7 +531,11 @@ void Rasterizer::drawFillTriangle(const math::vertex &p1,
 
 void Rasterizer::drawFillTriangle(const math::Triangle &tr)
 {
-    drawFillTriangle(tr.v(0), tr.v(1), tr.v(2));
+    math::vertex v1 = tr.v(0);
+    math::vertex v2 = tr.v(1);
+    math::vertex v3 = tr.v(2);
+
+    drawFillTriangle(v1, v2, v3);
 }
 
 void Rasterizer::drawTriangle(const math::vertex &p1, const math::vertex &p2, const math::vertex &p3)
@@ -523,13 +550,50 @@ void Rasterizer::drawTriangle(const math::Triangle &tr)
     drawTriangle(tr.v(0), tr.v(1), tr.v(2));
 }
 
-void Rasterizer::drawGouraudTriangle(const math::vertex &v1, const math::vertex &v2, const math::vertex &v3)
+void Rasterizer::drawGouraudTriangle(math::vertex &v1, math::vertex &v2, math::vertex &v3)
 {
+    // check degenerate triangle
+    if ((v1.p.x == v2.p.x && v2.p.x == v3.p.x) ||
+        (v1.p.y == v2.p.y && v2.p.y == v3.p.y))
+        return;
+
+    makeCCWTriangle(v1, v2, v3);
+
+    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
+    int y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
+
+    // if triangle isn't on a screen
+    if (y3 < m_fb.yorig() || y1 > m_fb.height() ||
+       (x1 < m_fb.xorig() && x2 < m_fb.xorig() && x3 < m_fb.xorig()) ||
+       (x1 > m_fb.width() && x2 > m_fb.width() && x3 > m_fb.width()))
+        return;
+
+    if (y1 == y2)
+        drawTopTriangleGouraud(v1, v2, v3);
+    else if (y2 == y3)
+        drawBottomTriangleGouraud(v1, v2, v3);
+    else
+    {
+        math::vertex newV = v2;
+
+        double dy = ((double)y2 - y1) / ((double)y3 - y1);
+        double newX = x1 + dy * (x3 - x1);
+
+        newV.p.x = newX;
+        newV.color = Color3::lerp(v1.color, v3.color, dy);
+
+        drawBottomTriangleGouraud(v1, newV, v2);
+        drawTopTriangleGouraud(v2, newV, v3);
+    }
 }
 
 void Rasterizer::drawGouraudTriangle(const math::Triangle &tr)
 {
-    drawGouraudTriangle(tr.v(0), tr.v(1), tr.v(2));
+    math::vertex v1 = tr.v(0);
+    math::vertex v2 = tr.v(1);
+    math::vertex v3 = tr.v(2);
+
+    drawGouraudTriangle(v1, v2, v3);
 }
 
 Rasterizer::Rasterizer(const int width, const int height)

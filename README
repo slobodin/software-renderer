@@ -1,10 +1,15 @@
 Here will be simple software renderer.
 
 TODO:
-1) Frustum-culling
+1) Frustum-culling (only near-z plane)
 2) Lighting
 3) Z-checking with z-buffer
 4) Scene graph
 5) config -> script file
 6) Fix node transformations
 7) Scriptable scene objects
+
+note: resources need to be in the executable directory, or this dir may be passed explicitly to the renderer through command line
+for example:
+$ ./client-tk ../../resources
+Otherwise you'll get nothing

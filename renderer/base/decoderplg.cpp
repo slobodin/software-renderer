@@ -143,9 +143,8 @@ sptr(Resource) DecoderPLG::decode(const string &path)
         rend::VertexBuffer vb;
         vector<int> indices;
 
-        std::for_each(bounds.first, bounds.second, [&indices](const PlgPolyData &data) {
-                            std::copy(data.indices, data.indices + 3, std::back_inserter(indices));
-                         });
+        std::for_each(bounds.first, bounds.second, [&indices](const PlgPolyData &data)
+        { std::copy(data.indices, data.indices + 3, std::back_inserter(indices)); });
 
         vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
         vb.appendVertices(vertexList, indices);

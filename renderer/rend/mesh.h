@@ -48,6 +48,7 @@ public:
     int numSubMeshes() const;
 
     void setShadingMode(Material::ShadeMode shMode);
+    void setSideType(Material::SideType side);
 
     const list<VertexBuffer> &getSubmeshes() const { return m_submeshes; }
     list<VertexBuffer>       &getSubmeshes() { return m_submeshes; }

@@ -72,9 +72,13 @@ int Mesh::numSubMeshes() const
 void Mesh::setShadingMode(Material::ShadeMode shMode)
 {
     for (auto vb : m_submeshes)
-    {
         vb.getMaterial()->shadeMode = shMode;      // ?
-    }
+}
+
+void Mesh::setSideType(Material::SideType side)
+{
+    for (auto vb : m_submeshes)
+        vb.getMaterial()->sideType = side;      // ?
 }
 
 sptr(Mesh) Mesh::clone() const

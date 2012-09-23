@@ -17,24 +17,33 @@ void TkApplication::update(float dt)
     if (abs(roll) > 360) roll %= 360;
 
     // hammer
-    math::vec3 transl = m_hammer->getPosition();
+    math::vec3 transl;
+    math::M33 rotM, scaleM;
 
-    m_hammer->resetTransformation();
+    if (m_hammer)
+    {
+        transl = m_hammer->getPosition();
 
-    math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(yaw, 0, 0);
-    math::M33 scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
+        m_hammer->resetTransformation();
 
-    m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
+        rotM = math::M33::getRotateYawPitchRollMatrix(yaw, 0, 0);
+        scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
+
+        m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
+    }
 
     // sphere
-    transl = m_sphere->getPosition();
+    if (m_sphere)
+    {
+        transl = m_sphere->getPosition();
 
-    m_sphere->resetTransformation();
+        m_sphere->resetTransformation();
 
-    rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, roll);
-    scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
+        rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, roll);
+        scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
 
-    m_sphere->setTransformation(math::M44(rotM * scaleM, transl));
+        m_sphere->setTransformation(math::M44(rotM * scaleM, transl));
+    }
 }
 
 TkApplication::TkApplication(int argc, const char *argv[])
@@ -56,28 +65,37 @@ TkApplication::TkApplication(int argc, const char *argv[])
     m_clientController->getRendmgr()->addSceneObject(clonedTower);*/
 
     m_sphere = rendmgr->getSceneObject("Sphere");
-    m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
+    if (m_sphere)
+    {
+        m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
+        m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+    }
 
     m_hammer = rendmgr->getSceneObject("Hammer");
-    m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
+    if (m_hammer)
+    {
+        m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
+    }
 
-    auto tie = rendmgr->getSceneObject("TIEFIGTH");
-    tie->setRotation(math::vec3(-90.0, 0.0, 0.0));
-    tie->setScale(math::vec3(15.0, 15.0, 15.0));
+//    auto tie = rendmgr->getSceneObject("TIEFIGTH");
+//    tie->setRotation(math::vec3(-90.0, 0.0, 0.0));
+//    tie->setScale(math::vec3(15.0, 15.0, 15.0));
 
-    tie->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+//    tie->getMesh()->setSideType(rend::Material::TWO_SIDE);
 
-    auto s = rendmgr->getSceneObject("Sphere,4");
-    s->setScale(math::vec3(35.0, 35.0, 35.0));
+//    auto s = rendmgr->getSceneObject("Sphere,4");
+//    s->setScale(math::vec3(35.0, 35.0, 35.0));
 
 //    auto cube = rendmgr->getSceneObject("Cube");
 //    cube->setScale(math::vec3(15.0, 15.0, 15.0));
 
     auto cessna = rendmgr->getSceneObject("cessna.obj");
-    cessna->setScale(math::vec3(15.0, 15.0, 15.0));
+    if (cessna)
+        cessna->setScale(math::vec3(15.0, 15.0, 15.0));
 
     auto al = rendmgr->getSceneObject("al.obj");
-    al->setScale(math::vec3(35.0, 35.0, 35.0));
+    if (al)
+        al->setScale(math::vec3(35.0, 35.0, 35.0));
 }
 
 TkApplication::~TkApplication()

@@ -213,6 +213,8 @@ public:
     //! Color modulation.
     friend Color3 operator* (const Color3 &a, const Color3 &b);
 
+    static Color3 lerp(const Color3 &a, const Color3 &b, double t);
+
     //! Resets color to zero (black).
     void reset() { m_r = m_g = m_b = 0; }
     //! Checks for zero color.
@@ -220,6 +222,16 @@ public:
 };
 
 Color3 operator* (const Color3 &a, const Color3 &b);
+
+inline Color3 Color3::lerp(const Color3 &a, const Color3 &b, double t)
+{
+    double red = (double)a[RED] + t * ((double)b[RED] - (double)a[RED]);
+    double green = (double)a[GREEN] + t * ((double)b[GREEN] - (double)a[GREEN]);
+    double blue = (double)a[BLUE] + t * ((double)b[BLUE] - (double)a[BLUE]);
+
+    return Color3(red, green, blue);
+}
+
 
 }
 

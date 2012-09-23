@@ -32,13 +32,15 @@ class Rasterizer
 {
     FrameBuffer m_fb;
 
-    void drawFillTriangle(const math::vertex &p1, const math::vertex &p2, const math::vertex &p3);
+    void makeCCWTriangle(math::vertex &p1, math::vertex &p2, math::vertex &p3);
+
+    void drawFillTriangle(math::vertex &p1, math::vertex &p2, math::vertex &p3);
     void drawFillTriangle(const math::Triangle &tr);
 
     void drawTriangle(const math::vertex &p1, const math::vertex &p2, const math::vertex &p3);
     void drawTriangle(const math::Triangle &tr);
 
-    void drawGouraudTriangle(const math::vertex &v1, const math::vertex &v2, const math::vertex &v3);
+    void drawGouraudTriangle(math::vertex &v1, math::vertex &v2, math::vertex &v3);
     void drawGouraudTriangle(const math::Triangle &tr);
 
     void drawBottomTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const Color3 &color);
