@@ -43,7 +43,9 @@ The main directory is organized as follows:
 * client-tk/ - test project, uses renderer library
 * dist/ - compiled binaries
 * example-1/ - project, that shows renderer features
+* renderer/ - main part: renderer code, that compiles into static library.
 * resources/ - some mesh data and renderer config files (.yaml extention)
+* www/ - images for future wiki.
 * README - this file
 * software-renderer.pro - qt creator project
 
