@@ -45,7 +45,7 @@ void Example1Application::update(float /*dt*/)
         m_sphere->setTransformation(math::M44(rotM * scaleM, transl));
     }
 
-    sptr(rend::Light) ptL = m_clientController->getRendmgr()->getLight(1);
+    sptr(rend::Light) ptL = m_clientController->getRendmgr()->getFirstPointLight();
     if (ptL)
     {
         transl = ptL->getPosition();

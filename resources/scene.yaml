@@ -19,16 +19,16 @@ Objects:
 #    position: [-200, 300, 0]
 
 Lights:
-  Ambient:
-    - intensity: [150, 150, 150]
-#  Directional:
-#    - direction: [1, 1, 0]
-#      intensity: [255, 10, 50]
-    - direction: [0, 1, 1]
+  Ambient:				# note: id = 0
+    - intensity: [50, 50, 50]
+  Directional:
+    - direction: [1, 1, 0]
+      intensity: [255, 10, 50]
+    - direction: [0, 1, 0]		# note: id = 1
       intensity: [30, 5, 150]
   Point:
-    - position: [0, 0, 500]
-      intensity: [255, 10, 50]
+    - position: [0, 0, 500]		# note: id = 2
+      intensity: [10, 255, 50]
       kc: 0
       kl: 0.001
       kq: 0

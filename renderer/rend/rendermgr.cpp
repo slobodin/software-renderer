@@ -179,4 +179,15 @@ sptr(Light) RenderMgr::getLight(int id) const
     return *obj;
 }
 
+sptr(Light) RenderMgr::getFirstPointLight() const
+{
+    for (auto light : m_lights)
+    {
+        if (dynamic_pointer_cast<PointLight>(light))
+            return dynamic_pointer_cast<PointLight>(light);
+    }
+
+    return sptr(Light)();
+}
+
 }
