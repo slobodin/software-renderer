@@ -8,13 +8,13 @@ Just educatonal and kind of research goals.
 Features
 ========
 Now it supports:
-1) Loading some graphics files with mesh data(.obj, .cob, .asc). Also it can load bmp files.
-2) Lighting (ambient, directional and point).
-3) Constant, wireframe and flat shading.
-4) Simple material support.
-5) Mathematical operations with scene nodes like scaling, translating and rotation.
-6) Customizable camera.
-7) Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
+* Loading some graphics files with mesh data(.obj, .cob, .asc). Also it can load bmp files.
+* Lighting (ambient, directional and point).
+* Constant, wireframe and flat shading.
+* Simple material support.
+* Mathematical operations with scene nodes like scaling, translating and rotation.
+* Customizable camera.
+* Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
    Also you can setup position of objects through scene config file.
 
 TODO: gouraud shading, textures and animation.
@@ -22,13 +22,11 @@ TODO: gouraud shading, textures and animation.
 Usage
 =====
 Check out distr directory to get compiled examples (actually, one example).
-wasd - move, mouse + left mouse button - cam control.
+Use wasd to  perform camera moving, mouse + left mouse button - cam control.
 
 **Note**: resources need to be in the executable directory, 
 or this dir may be passed explicitly to the renderer through command line.
-
-for example:
-$ ./client-tk ../../resources
+For example: $ ./client-tk ../../resources
 Otherwise you'll get nothing.
 
 Compile
@@ -42,12 +40,12 @@ Package structure
 ===========
 The main directory is organized as follows:
 
-client-tk/ - test project, uses renderer library
-dist/ - compiled binaries
-example-1/ - project, that shows renderer features
-resources/ - some mesh data and renderer config files (.yaml extention)
-README - this file
-software-renderer.pro - qt creator project
+* client-tk/ - test project, uses renderer library
+* dist/ - compiled binaries
+* example-1/ - project, that shows renderer features
+* resources/ - some mesh data and renderer config files (.yaml extention)
+* README - this file
+* software-renderer.pro - qt creator project
 
 License
 =======
