@@ -21,7 +21,8 @@ Now it supports:
 
 Usage
 =====
-Check out distr directory to get compiled examples (actually, one example).
+Check out [this](https://github.com/downloads/flaming0/software-renderer/soft-rend-win.zip) to get compiled examples (actually, one example).
+Or [this](https://github.com/downloads/flaming0/software-renderer/soft-ren-linux.tar.gz) for Linux version.
 Use wasd to  perform camera moving, mouse + left mouse button - cam control.
 
 **Note**: resources need to be in the executable directory, 
