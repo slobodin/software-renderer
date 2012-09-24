@@ -17,7 +17,7 @@ Now it supports:
 * Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
    Also you can setup position of objects through scene config file.
 
-**TODO**: gouraud shading, textures and animation. Also, renderer needs some optimizations.
+**TODO**: gouraud shading, textures, z buffer and animation. Also, renderer needs some optimizations.
 
 Usage
 =====
