@@ -16,7 +16,13 @@ INCLUDEPATH += ../renderer/base \
                 /usr/include/tcl8.5
 
 unix:LIBS += ../../bin/renderer/librenderer.a
-win32:LIBS += ../../bin/renderer/release/librenderer.a        # if debug
+
+CONFIG(debug, debug|release) {
+win32:LIBS += ../../bin/renderer/debug/librenderer.a        # if debug
+}
+CONFIG(release, debug|release) {
+win32:LIBS += ../../bin/renderer/release/librenderer.a        # if release
+}
 
 win32:INCLUDEPATH += $(TCL_ROOT)/include
 
@@ -28,10 +34,14 @@ win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_filesystem-mgw46-mt-1_49.a
 win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_system-mgw46-mt-1_49.a
 win32:LIBS += $(TCL_ROOT)/lib/tcl85.lib
 win32:LIBS += $(TCL_ROOT)/lib/tk85.lib
-win32:LIBS += -lgdi32
 
 unix:PRE_TARGETDEPS += ../../bin/renderer/librenderer.a
+CONFIG(debug, debug|release) {
+win32:PRE_TARGETDEPS += ../../bin/renderer/debug/librenderer.a
+}
+CONFIG(release, debug|release) {
 win32:PRE_TARGETDEPS += ../../bin/renderer/release/librenderer.a
+}
 
 SOURCES += \
     main.cpp \

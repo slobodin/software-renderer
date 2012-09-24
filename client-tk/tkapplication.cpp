@@ -16,8 +16,6 @@ void TkApplication::update(float dt)
     if (abs(yaw) > 360) yaw %= 360;
     if (abs(roll) > 360) roll %= 360;
 
-    static int lightdy = 10;
-
     // hammer
     math::vec3 transl;
     math::M33 rotM, scaleM;
