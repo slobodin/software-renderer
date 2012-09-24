@@ -68,11 +68,6 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (m_sphere)
     {
         m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
-
-        m_lightPoint = m_sphere->clone();
-        m_lightPoint->resetTransformation();
-        m_lightPoint->getMesh()->setShadingMode(rend::Material::SM_WIRE);
-        rendmgr->addSceneObject(m_lightPoint);
     }
 
     m_hammer = rendmgr->getSceneObject("Hammer");

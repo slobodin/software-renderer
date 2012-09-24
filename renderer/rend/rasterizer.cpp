@@ -603,106 +603,187 @@ void Rasterizer::drawGouraudTriangle(const math::Triangle &tr)
 
 void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
 {
-    math::vertex v0 = tr.v(0);
-    math::vertex v1 = tr.v(1);
-    math::vertex v2 = tr.v(2);
+    math::vertex v1 = tr.v(0);
+    math::vertex v2 = tr.v(1);
+    math::vertex v3 = tr.v(2);
 
-    v0.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
-    v0.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
+    // check degenerate triangle
+    if ((math::DCMP(v1.p.x, v2.p.x) && math::DCMP(v2.p.x, v3.p.x)) ||
+        (math::DCMP(v1.p.y, v2.p.y) && math::DCMP(v2.p.y, v3.p.y)))
+        return;
+
+    // scale texture coords from normalized coords
     v1.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
     v1.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
     v2.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
     v2.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
+    v3.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
+    v3.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
 
-    // first trivial clipping rejection tests
-    if (((v0.p.y < m_fb.yorig())  &&
-         (v1.p.y < m_fb.yorig())  &&
-         (v2.p.y < m_fb.yorig())) ||
+    makeCCWTriangle(v1, v2, v3);
 
-        ((v0.p.y > m_fb.height())  &&
-         (v1.p.y > m_fb.height())  &&
-         (v2.p.y > m_fb.height())) ||
+    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
+    int y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
 
-        ((v0.p.x < m_fb.xorig())  &&
-         (v1.p.x < m_fb.xorig())  &&
-         (v2.p.x < m_fb.xorig())) ||
+    // if triangle isn't on a screen
+    if (y3 < m_fb.yorig() || y1 > m_fb.height() ||
+       (x1 < m_fb.xorig() && x2 < m_fb.xorig() && x3 < m_fb.xorig()) ||
+       (x1 > m_fb.width() && x2 > m_fb.width() && x3 > m_fb.width()))
+        return;
 
-        ((v0.p.x > m_fb.width())  &&
-         (v1.p.x > m_fb.width())  &&
-         (v2.p.x > m_fb.width())))
-       return;
+    Texture *texture = tr.getMaterial()->texture.get();     // weak ref
 
-    // degenerate triangle
-    if ( ((v0.p.x==v1.p.x) && (v1.p.x==v2.p.x)) ||
-         ((v0.p.y==v1.p.y) && (v1.p.y==v2.p.y)))
-       return;
-
-    // sort vertices
-    if (v1.p.y < v0.p.y)
-        std::swap(v1, v0);
-    if (v2.p.y < v0.p.y)
-        std::swap(v2, v0);
-    if (v2.p.y < v1.p.y)
-        std::swap(v2, v1);
-
-    TriangleType tri_type;
-
-    // now test for trivial flat sided cases
-    if (v0.p.y==v1.p.y)
+    if (y1 == y2)
+        drawTopTriangleTexture(v1, v2, v3, texture);
+    else if (y2 == y3)
+        drawBottomTriangleTexture(v1, v2, v3, texture);
+    else
     {
-        tri_type = TT_FLAT_TOP;
-        if (v1.p.x < v0.p.x)
-            std::swap(v1, v0);
+        math::vertex newV = v2;
+
+        double dy = ((double)y2 - y1) / ((double)y3 - y1);
+        double newX = x1 + dy * (x3 - x1);
+
+        newV.p.x = newX;
+        newV.t = math::lerp(v1.t, v3.t, dy);
+
+        drawBottomTriangleTexture(v1, newV, v2, texture);
+        drawTopTriangleTexture(v2, newV, v3, texture);
+    }
+}
+
+void Rasterizer::drawBottomTriangleTexture(math::vertex &v1, math::vertex &v2, math::vertex &v3, Texture *texture)
+{
+    // make ccw order
+    if (v3.p.x < v2.p.x)
+        std::swap(v2, v3);
+
+    double height = v3.p.y - v1.p.y;
+
+    // left interpolants
+    double dxdyl = (v2.p.x - v1.p.x) / height;
+    double dudyl = (v2.t.x - v1.t.x) / height;
+    double dvdyl = (v2.t.y - v1.t.y) / height;
+
+    // right side interpolants
+    double dxdyr = (v3.p.x - v1.p.x) / height;
+    double dudyr = (v3.t.x - v1.t.x) / height;
+    double dvdyr = (v3.t.y - v1.t.y) / height;
+
+    double xl = v1.p.x;
+    double xr = v1.p.x;
+    double ul = v1.t.x;
+    double ur = v1.t.x;
+    double vl = v1.t.y;
+    double vr = v1.t.y;
+
+    int iy1 = 0, iy3 = 0;
+
+    double x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
+    double y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
+
+    // top of screen clipping
+    if (y1 < m_fb.yorig())
+    {
+        // TODO:
+        /*double dy = m_fb.yorig() - y1;
+        xs = xs + dxLeft * dy;
+        xe = xe + dxRight * dy;
+        us = us + duLeft * dy;
+        ue = ue + duRight * dy;
+        ts = ts + dtLeft * dy;
+        te = te + dtRight * dy;
+
+        y1 = m_fb.yorig();*/
+        iy1 = y1;     // ceiling
     }
     else
-    // now test for trivial flat sided cases
-    if (v1.p.y==v2.p.y)
+        iy1 = y1;
+
+    // bottom screen clipping
+    // TODO:
+//    if (y3 > m_fb.height())
+//    {
+//        y3 = m_fb.height();
+//        iy3 = y3 - 1;
+//    }
+//    else
+        iy3 = y3 - 1;
+
+        xl += dxdyl;
+        ul += dudyl;
+        vl += dvdyl;
+        xr += dxdyr;
+        ur += dudyr;
+        vr += dvdyr;
+
+    // if no x clipping (left right screen borders)
+    if (x1 >= m_fb.xorig() && x1 <= m_fb.width() &&
+        x2 >= m_fb.xorig() && x2 <= m_fb.width() &&
+        x3 >= m_fb.xorig() && x3 <= m_fb.width())
+    {
+        for (int y = iy1; y <= iy3; y++)
         {
-        // set triangle type
-        tri_type = TT_FLAT_BOTTOM;
+            double xstart = xl;
+            double xend = xr;
 
-        // sort vertices left to right
-        if (v2.p.x < v1.p.x)
-            std::swap(v2, v1);
+            double dx = xend - xstart;
 
-        } // end if
-    else
+            double du = (ul - ur) / dx;
+            double dv = (vl - vr) / dx;
+
+            int ui = ul;
+            int vi = vl;
+            for (int x = xstart; x < (int)xend; x++)
+            {
+                Color3 color = texture->at(ui, vi);
+
+                ui += du;
+                vi += dv;
+
+                m_fb.wpixel(x, y, color);
+            }
+
+            xl += dxdyl;
+            ul += dudyl;
+            vl += dvdyl;
+            xr += dxdyr;
+            ur += dudyr;
+            vr += dvdyr;
+        }
+    }
+    else    // have x clipping
+    {
+        /*for (int y = iy1; y <= iy3; y++)
         {
-        // must be a general triangle
-        tri_type = TT_FLAT_GENERAL;
+            double left = xs, right = xe;
 
-        } // end else
+            xs += dxLeft;
+            xe += dxRight;
 
-    // extract base color of lit poly, so we can modulate texture a bit
-    // for lighting
-    int r_base = v0.color[RED];
-    int g_base = v0.color[GREEN];
-    int b_base = v0.color[BLUE];
+            if (left < m_fb.xorig())
+            {
+                left = m_fb.xorig();
 
-    // extract vertices for processing, now that we have order
-    double x0  = (double)(v0.p.x+0.5);
-    double y0  = (double)(v0.p.y+0.5);
-    double tu0 = (double)(v0.t.x);
-    double tv0 = (double)(v0.t.y);
+                if (right < m_fb.xorig())
+                    continue;
+            }
 
-    double x1  = (double)(v1.p.x+0.5);
-    double y1  = (double)(v1.p.y+0.5);
-    double tu1 = (double)(v1.t.x);
-    double tv1 = (double)(v1.t.y);
+            if (right > m_fb.width())
+            {
+                right = m_fb.width();
 
-    double x2  = (double)(v2.p.x+0.5);
-    double y2  = (double)(v2.p.y+0.5);
-    double tu2 = (double)(v2.t.x);
-    double tv2 = (double)(v2.t.y);
+                if (left > m_fb.width())
+                    continue;
+            }
 
-    // set interpolation restart value
-    double yrestart = y1;
+            m_fb.wscanline(left, right, y, color);
+        }*/
+    }
+}
 
-    // what kind of triangle
-    double dy, dxdyl, dudyl, dvdyl;
-    double dxdyr, dudyr, dvdyr;
-    double xl, ul, vl, xr, ur, vr;
-    double ystart, yend;
+void Rasterizer::drawTopTriangleTexture(math::vertex &v1, math::vertex &v2, math::vertex &v3, Texture *texture)
+{
 
 }
 
