@@ -46,25 +46,6 @@ void TkApplication::update(float dt)
 
         m_sphere->setTransformation(math::M44(rotM * scaleM, transl));
     }
-
-    sptr(rend::Light) ptL = m_clientController->getRendmgr()->getLight(1);
-    if (ptL)
-    {
-        transl = ptL->getPosition();
-        rotM = math::M33::getRotateYawPitchRollMatrix(3, 0, 0);
-
-        transl = transl * rotM;
-
-        ptL->setPosition(transl);
-        m_lightPoint->setPosition(transl);
-
-//        transl.y += lightdy;
-
-//        if (transl.y < -1500) lightdy = 10;
-//        if (transl.y > 1500) lightdy = -10;
-
-//        ptL->setPosition(transl);
-    }
 }
 
 TkApplication::TkApplication(int argc, const char *argv[])
