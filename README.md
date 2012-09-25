@@ -25,6 +25,7 @@ Usage
 Check out [this](https://github.com/downloads/flaming0/software-renderer/soft-rend-win.zip) to get compiled examples, or 
 [this](https://github.com/downloads/flaming0/software-renderer/soft-ren-linux.tar.gz) for Linux version.
 Use wasd to perform camera movement, mouse + left mouse button - cam control.
+On windows version you need to install tcl/tk binaries.
 
 **Note**: resources need to be in the executable directory, 
 or this dir may be passed explicitly to the renderer through command line.
