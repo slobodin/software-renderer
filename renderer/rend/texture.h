@@ -21,9 +21,10 @@ class Texture : public base::Resource
     unsigned char *m_pixels;
 
     int m_width, m_height;
+    int m_bpp;
 
 public:
-    Texture(unsigned char *pixels, int width, int height);
+    Texture(unsigned char *pixels, int width, int height, int bpp);
     ~Texture();
 
     Color3 at(int x, int y) const;

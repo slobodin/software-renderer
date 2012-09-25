@@ -1,27 +1,26 @@
 /*
- * tkapplication.h
+ * example3application.h
  *
  *      Author: flamingo
  *      E-mail: epiforce57@gmail.com
  */
 
-#ifndef TKAPPLICATION_H
-#define TKAPPLICATION_H
+#ifndef EXAMPLE3APPLICATION_H
+#define EXAMPLE3APPLICATION_H
 
 #include "renderer.h"
 
-class TkApplication : public platform::BaseAppTk
+class Example3Application : public platform::BaseAppTk
 {
     sptr(rend::Camera) m_playerCamera;
-//    sptr(rend::SceneObject) m_hammer;
     sptr(rend::SceneObject) m_sphere;
 
 protected:
     void update(float dt);
 
 public:
-    TkApplication(int argc, const char *argv[]);
-    ~TkApplication();
+    Example3Application(int argc, const char *argv[]);
+    ~Example3Application();
 
     virtual void onFrameStart();
     virtual void onFrameEnd();
@@ -34,4 +33,4 @@ public:
     virtual void onKeyReleased(const platform::KeyboardEvent &ev);
 };
 
-#endif // TKAPPLICATION_H
+#endif // EXAMPLE3APPLICATION_H

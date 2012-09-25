@@ -51,6 +51,7 @@ void RenderMgr::update()
     m_rasterizer->beginFrame(m_viewport);
 
     RenderList renderList;
+    FrameInfo frInfo;
 
     // 2. Cull full meshes and form triangles render list.
     // Also applies world transformation.
@@ -62,6 +63,8 @@ void RenderMgr::update()
         if (!m_camera->culled(*obj))
             renderList.append(*obj);
     }
+
+    frInfo.trianglesOnFrameStart = renderList.getSize();
 
     // 3. Cull backfaces.
     renderList.removeBackfaces(m_camera);
@@ -79,6 +82,8 @@ void RenderMgr::update()
 
     // 7. Camera -> Perspective -> Screen transformation.
     m_camera->toScreen(renderList, *m_viewport);
+
+    frInfo.trianglesForRaster = renderList.getSize();
 
     // 8. Rasterize triangles.
     m_rasterizer->rasterize(renderList);

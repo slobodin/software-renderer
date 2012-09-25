@@ -10,13 +10,14 @@
 namespace rend
 {
 
-Texture::Texture(unsigned char *pixels, int width, int height)
+Texture::Texture(unsigned char *pixels, int width, int height, int bpp)
     : m_pixels(0),
       m_width(0),
-      m_height(0)
+      m_height(0),
+      m_bpp(bpp)
 {
     // allocate mem
-    int size = sizeof(unsigned char) * width * height * 3;
+    int size = sizeof(unsigned char) * width * height * bpp;
 
     m_pixels = new unsigned char[size];
 
@@ -40,7 +41,12 @@ Color3 Texture::at(int x, int y) const
 
     unsigned char *col = m_pixels + y * m_width + x;
 
-    return Color3(col[0], col[1], col[2]);
+    if (m_bpp == 3)
+        return Color3(col[0], col[1], col[2]);
+    else if (m_bpp == 1)
+        return Color3(col[0], col[0], col[0]);      // !!!!
+    else
+        throw std::exception();
 }
 
 Color3 Texture::at(int pos) const

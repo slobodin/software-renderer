@@ -1,13 +1,13 @@
 /*
- * tkapplication.cpp
+ * example3application.cpp
  *
  *      Author: flamingo
  *      E-mail: epiforce57@gmail.com
  */
 
-#include "tkapplication.h"
+#include "example3application.h"
 
-void TkApplication::update(float dt)
+void Example3Application::update(float dt)
 {
     static int yaw, roll;
 
@@ -16,27 +16,11 @@ void TkApplication::update(float dt)
     if (abs(yaw) > 360) yaw %= 360;
     if (abs(roll) > 360) roll %= 360;
 
-    // hammer
-    math::vec3 transl;
-    math::M33 rotM, scaleM;
-
-//    if (m_hammer)
-//    {
-//        transl = m_hammer->getPosition();
-
-//        m_hammer->resetTransformation();
-
-//        rotM = math::M33::getRotateYawPitchRollMatrix(yaw, 0, 0);
-//        scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
-
-//        m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
-//    }
-
     sptr(rend::Light) ptL = m_clientController->getRendmgr()->getFirstPointLight();
     if (ptL)
     {
-        transl = ptL->getPosition();
-        rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, 3);
+        auto transl = ptL->getPosition();
+        auto rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, 3);
 
         transl = transl * rotM;
 
@@ -46,19 +30,13 @@ void TkApplication::update(float dt)
     }
 }
 
-TkApplication::TkApplication(int argc, const char *argv[])
+Example3Application::Example3Application(int argc, const char *argv[])
     : platform::BaseAppTk(argc, argv)
 {
     m_playerCamera = m_clientController->getCamera();
 
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
-
-//    m_hammer = rendmgr->getSceneObject("Hammer");
-//    if (m_hammer)
-//    {
-//        m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
-//    }
 
     // create terrain
     auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
@@ -68,24 +46,22 @@ TkApplication::TkApplication(int argc, const char *argv[])
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
-    {
         m_sphere->getMesh()->setShadingMode(rend::Material::SM_WIRE);
-    }
 }
 
-TkApplication::~TkApplication()
+Example3Application::~Example3Application()
 {
 }
 
-void TkApplication::onFrameStart()
+void Example3Application::onFrameStart()
 {
 }
 
-void TkApplication::onFrameEnd()
+void Example3Application::onFrameEnd()
 {
 }
 
-void TkApplication::onMouseEvent(const platform::MouseEvent &ev)
+void Example3Application::onMouseEvent(const platform::MouseEvent &ev)
 {
     static int yaw, pitch;
 
@@ -101,7 +77,7 @@ void TkApplication::onMouseEvent(const platform::MouseEvent &ev)
     }
 }
 
-void TkApplication::onKeyPressed(const platform::KeyboardEvent &ev)
+void Example3Application::onKeyPressed(const platform::KeyboardEvent &ev)
 {
     static const double velocity = 10.0;
     static math::vec3 ds;
@@ -136,6 +112,6 @@ void TkApplication::onKeyPressed(const platform::KeyboardEvent &ev)
     m_playerCamera->setPosition(position);
 }
 
-void TkApplication::onKeyReleased(const platform::KeyboardEvent &ev)
+void Example3Application::onKeyReleased(const platform::KeyboardEvent &ev)
 {
 }

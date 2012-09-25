@@ -160,18 +160,14 @@ void ResourceMgr::loadResource(const string &resourcepath) try
         return;
 
     sptr(Resource) newResource;
-//    try
-//    {
+
     newResource = dit->second->decode(fullpath);
-    newResource->additionalLoading(this);       // if we have textures, need to load them too. Bad design, actually...
-//    }
-//    catch(FileException)
-//    {
-//        return;
-//    }
 
     if (newResource)
+    {
+        newResource->additionalLoading(this);       // if we have textures, need to load them too. Bad design, actually...
         m_resources[fullpath] = newResource;
+    }
     else
     {
         syslog << error << "Can't decode resource:" << resourcepath << logerr;

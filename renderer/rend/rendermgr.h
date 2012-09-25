@@ -25,6 +25,13 @@ class DirectionalLight;
 class PointLight;
 class SceneObject;
 
+//! Some debug stats about a frame.
+struct FrameInfo
+{
+    int trianglesOnFrameStart;      //
+    int trianglesForRaster;
+};
+
 class RenderMgr : boost::noncopyable
 {
     sptr(Rasterizer) m_rasterizer;

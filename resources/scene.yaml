@@ -5,8 +5,8 @@ Objects:
 #    position: [0, 0, -250]
   - model: sphere01.asc
     position: [0, 1500, 0]
-  - model: hammer02.asc
-    position: [0, 300, 0]
+#  - model: hammer02.asc
+#    position: [0, 300, 0]
 #  - model: tie04.cob
 #    position: [200, 100, 0]
 #  - model: cube_flat_textured_01.cob
@@ -24,8 +24,8 @@ Lights:
   Directional:
 #    - direction: [1, 1, 0]
 #      intensity: [255, 10, 50]
-#    - direction: [0, 1, 0]		# note: id = 1
-#      intensity: [30, 5, 150]
+    - direction: [1, 1, 0]		# note: id = 1
+      intensity: [30, 5, 150]
   Point:
     - position: [0, 1500, 0]		# note: id = 2
       intensity: [255, 255, 50]

@@ -16,13 +16,13 @@ namespace base
 sptr(Resource) DecoderImage::decode(const string &path)
 {
     cimg_library::CImg<unsigned char> image(path.c_str());
-    if (image.depth() != 1 || image.spectrum() != 3)
+    if (image.depth() != 1)// || image.spectrum() != 3 || image.spectrum() != 1)
     {
         syslog << "Invalid image" << path << logwarn;
         return sptr(Resource)();
     }
 
-    auto texture = make_shared<rend::Texture>(image.data(), image.width(), image.height());
+    auto texture = make_shared<rend::Texture>(image.data(), image.width(), image.height(), image.spectrum());
 
     boost::filesystem::path p(path);
     texture->setName(string("texture_") + boost::filesystem::basename(p));
