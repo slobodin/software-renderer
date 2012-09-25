@@ -52,6 +52,10 @@ The main directory is organized as follows:
 * README.md - this file.
 * software-renderer.pro - qt creator project.
 
+Wiki
+====
+Is [here](https://github.com/flaming0/software-renderer/wiki).
+
 License
 =======
 This tool is provided under the MIT license.
