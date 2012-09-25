@@ -43,6 +43,8 @@ CONFIG(release, debug|release) {
 win32:PRE_TARGETDEPS += ../../bin/renderer/release/librenderer.a
 }
 
+win32:LIBS += -lgdi32
+
 SOURCES += \
     main.cpp \
     tkapplication.cpp
