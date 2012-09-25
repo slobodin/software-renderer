@@ -46,6 +46,7 @@ The main directory is organized as follows:
 * client-tk/ - project for library testing.
 * example-1/ - project, that shows renderer features.
 * example-2/ - example of affine texture mapping, flat shading and movable point light.
+* example-3/ - example of terrain rendering.
 * renderer/ - main part: renderer code, that compiles into static library.
 * resources/ - some mesh data and renderer config files (.yaml extention).
 * www/ - images for future wiki.
