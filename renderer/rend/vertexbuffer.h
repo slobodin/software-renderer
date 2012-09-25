@@ -51,6 +51,11 @@ private:
     //! Indices for the vertices.
     IndexArray m_indices;
 
+    //! UV coords of the submesh.
+    vector<math::vec2> m_uvs;
+    //! Indices for uv coords.
+    IndexArray m_uvsIndices;
+
 public:
     //! Default ctor.
     VertexBuffer(VertexBufferType type = UNDEFINED);
@@ -68,6 +73,8 @@ public:
     VertexBufferType    getType() const { return m_type; }
 
     //! Appends vertices to this submesh. Also computes vertex normals and bounding sphere.
+    void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices,
+                        const vector<math::vec2> &uvs, const vector<int> &uvinds);
     void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices);
     void appendVertices(const vector<math::vertex> &vertices);
 
@@ -88,6 +95,11 @@ public:
     const VertexArray&  getVertices() const { return m_vertices; }
     //! Returns reference to all indices of the submesh.
     const IndexArray&   getIndices() const { return m_indices; }
+
+    //!
+    const vector<math::vec2> &getUVs() const { return m_uvs; }
+    //!
+    const IndexArray &getUVIndices() const { return m_uvsIndices; }
 };
 
 }

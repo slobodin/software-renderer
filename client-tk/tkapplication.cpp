@@ -87,7 +87,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
 //    s->setScale(math::vec3(35.0, 35.0, 35.0));
 
     auto cube = rendmgr->getSceneObject("Cube");
-    cube->setScale(math::vec3(15.0, 15.0, 15.0));
+    cube->setScale(math::vec3(45.0, 45.0, 45.0));
 
 /*    auto cessna = rendmgr->getSceneObject("cessna.obj");
     if (cessna)

@@ -13,8 +13,8 @@ Objects:
     position: [100, 100, 100]
 #  - model: cessna.obj
 #    position: [100, 200, 600]
-  - model: al.obj
-    position: [0, 0, -200]
+#  - model: al.obj
+#    position: [0, 0, -200]
 #  - model: water_gouraud_01.cob
 #    position: [-200, 300, 0]
 
@@ -24,11 +24,11 @@ Lights:
   Directional:
     - direction: [1, 1, 0]
       intensity: [255, 10, 50]
-    - direction: [0, 1, 0]		# note: id = 1
-      intensity: [30, 5, 150]
-#  Point:
-#    - position: [0, 0, 500]		# note: id = 2
-#      intensity: [10, 255, 50]
-#      kc: 0
-#      kl: 0.001
-#      kq: 0
+#    - direction: [0, 1, 0]		# note: id = 1
+#      intensity: [30, 5, 150]
+  Point:
+    - position: [0, 0, 500]		# note: id = 2
+      intensity: [10, 255, 50]
+      kc: 0
+      kl: 0.001
+      kq: 0

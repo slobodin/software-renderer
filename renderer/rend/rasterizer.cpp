@@ -603,188 +603,169 @@ void Rasterizer::drawGouraudTriangle(const math::Triangle &tr)
 
 void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
 {
-    math::vertex v1 = tr.v(0);
-    math::vertex v2 = tr.v(1);
-    math::vertex v3 = tr.v(2);
+    math::vertex v0 = tr.v(0);
+    math::vertex v1 = tr.v(1);
+    math::vertex v2 = tr.v(2);
 
-    // check degenerate triangle
-    if ((math::DCMP(v1.p.x, v2.p.x) && math::DCMP(v2.p.x, v3.p.x)) ||
-        (math::DCMP(v1.p.y, v2.p.y) && math::DCMP(v2.p.y, v3.p.y)))
-        return;
+    Texture *texture = tr.getMaterial()->texture.get();
 
-    // scale texture coords from normalized coords
-    v1.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
-    v1.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
-    v2.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
-    v2.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
-    v3.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
-    v3.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
+    if (v1.p.y < v0.p.y)
+        std::swap(v1, v0);
+    if (v2.p.y < v0.p.y)
+        std::swap(v0, v2);
+    if (v1.p.y < v2.p.y)
+        std::swap(v1, v2);
 
-    makeCCWTriangle(v1, v2, v3);
+    double dxdy1 = v2.p.x - v0.p.x;
+    double dxdu1 = v2.t.x - v0.t.x;
+    double dxdv1 = v2.t.y - v0.t.y;
 
-    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
-    int y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
+    double dxdy2 = v1.p.x - v0.p.x;
+    double dxdu2 = v1.t.x - v0.t.x;
+    double dxdv2 = v1.t.y - v0.t.y;
 
-    // if triangle isn't on a screen
-    if (y3 < m_fb.yorig() || y1 > m_fb.height() ||
-       (x1 < m_fb.xorig() && x2 < m_fb.xorig() && x3 < m_fb.xorig()) ||
-       (x1 > m_fb.width() && x2 > m_fb.width() && x3 > m_fb.width()))
-        return;
+    double sdx,sdu,sdv;
+    double edx,edu,edv;
+    double pu, pv;
+    int x, y;
 
-    Texture *texture = tr.getMaterial()->texture.get();     // weak ref
+    double dy1 = v2.p.y - v0.p.y;
+    double dy2 = v1.p.y - v0.p.y;
 
-    if (y1 == y2)
-        drawTopTriangleTexture(v1, v2, v3, texture);
-    else if (y2 == y3)
-        drawBottomTriangleTexture(v1, v2, v3, texture);
-    else
+    if (!math::DCMP(v2.p.y, v0.p.y))
     {
-        math::vertex newV = v2;
-
-        double dy = ((double)y2 - y1) / ((double)y3 - y1);
-        double newX = x1 + dy * (x3 - x1);
-
-        newV.p.x = newX;
-        newV.t = math::lerp(v1.t, v3.t, dy);
-
-        drawBottomTriangleTexture(v1, newV, v2, texture);
-        drawTopTriangleTexture(v2, newV, v3, texture);
+        dxdy1 /= dy1;
+        dxdu1 /= dy1;
+        dxdv1 /= dy1;
     }
-}
 
-void Rasterizer::drawBottomTriangleTexture(math::vertex &v1, math::vertex &v2, math::vertex &v3, Texture *texture)
-{
-    // make ccw order
-    if (v3.p.x < v2.p.x)
-        std::swap(v2, v3);
-
-    double height = v3.p.y - v1.p.y;
-
-    // left interpolants
-    double dxdyl = (v2.p.x - v1.p.x) / height;
-    double dudyl = (v2.t.x - v1.t.x) / height;
-    double dvdyl = (v2.t.y - v1.t.y) / height;
-
-    // right side interpolants
-    double dxdyr = (v3.p.x - v1.p.x) / height;
-    double dudyr = (v3.t.x - v1.t.x) / height;
-    double dvdyr = (v3.t.y - v1.t.y) / height;
-
-    double xl = v1.p.x;
-    double xr = v1.p.x;
-    double ul = v1.t.x;
-    double ur = v1.t.x;
-    double vl = v1.t.y;
-    double vr = v1.t.y;
-
-    int iy1 = 0, iy3 = 0;
-
-    double x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
-    double y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
-
-    // top of screen clipping
-    if (y1 < m_fb.yorig())
+    if (!math::DCMP(v1.p.y, v0.p.y))
     {
-        // TODO:
-        /*double dy = m_fb.yorig() - y1;
-        xs = xs + dxLeft * dy;
-        xe = xe + dxRight * dy;
-        us = us + duLeft * dy;
-        ue = ue + duRight * dy;
-        ts = ts + dtLeft * dy;
-        te = te + dtRight * dy;
+        dxdy2 /= dy2;
+        dxdu2 /= dy2;
+        dxdv2 /= dy2;
+    }
 
-        y1 = m_fb.yorig();*/
-        iy1 = y1;     // ceiling
+    double dxldy, dxrdy;
+    double dxldu, dxrdu;
+    double dxldv, dxrdv;
+
+    if (dxdy1 < dxdy2)
+    {
+        dxldy = dxdy1; dxrdy = dxdy2;
+        dxldu = dxdu1; dxrdu = dxdu2;
+        dxldv = dxdv1; dxrdv = dxdv2;
     }
     else
-        iy1 = y1;
-
-    // bottom screen clipping
-    // TODO:
-//    if (y3 > m_fb.height())
-//    {
-//        y3 = m_fb.height();
-//        iy3 = y3 - 1;
-//    }
-//    else
-        iy3 = y3 - 1;
-
-        xl += dxdyl;
-        ul += dudyl;
-        vl += dvdyl;
-        xr += dxdyr;
-        ur += dudyr;
-        vr += dvdyr;
-
-    // if no x clipping (left right screen borders)
-    if (x1 >= m_fb.xorig() && x1 <= m_fb.width() &&
-        x2 >= m_fb.xorig() && x2 <= m_fb.width() &&
-        x3 >= m_fb.xorig() && x3 <= m_fb.width())
     {
-        for (int y = iy1; y <= iy3; y++)
+        dxldy = dxdy2; dxrdy = dxdy1;
+        dxldu = dxdu2; dxrdu = dxdu1;
+        dxldv = dxdv2; dxrdv = dxdv1;
+    }
+
+    sdx = v0.p.x; sdu = v0.t.x; sdv = v0.t.y;
+    edx = v0.p.x; edu = v0.t.x; edv = v0.t.y;
+    pu = v0.t.x; pv = v0.t.y;
+
+    double p_delta_u;
+    double p_delta_v;
+
+    for (y = (int)v0.p.y; y < (int)v2.p.y; y++)
+    {
+        p_delta_u = edu - sdu;
+        p_delta_v = edv - sdv;
+
+        if (!math::DCMP(edx - sdx, 0.))
         {
-            double xstart = xl;
-            double xend = xr;
-
-            double dx = xend - xstart;
-
-            double du = (ul - ur) / dx;
-            double dv = (vl - vr) / dx;
-
-            int ui = ul;
-            int vi = vl;
-            for (int x = xstart; x < (int)xend; x++)
-            {
-                Color3 color = texture->at(ui, vi);
-
-                ui += du;
-                vi += dv;
-
-                m_fb.wpixel(x, y, color);
-            }
-
-            xl += dxdyl;
-            ul += dudyl;
-            vl += dvdyl;
-            xr += dxdyr;
-            ur += dudyr;
-            vr += dvdyr;
+            p_delta_u /= edx - sdx;
+            p_delta_v /= edx - sdx;
         }
-    }
-    else    // have x clipping
-    {
-        /*for (int y = iy1; y <= iy3; y++)
+
+        pu = sdu; pv = sdv;
+        for (x = (int)sdx; x < (int)edx; x++)
         {
-            double left = xs, right = xe;
+            int ww = (int)(pu * (texture->width() - 1));
+            int hh = (int)(pv * (texture->height() - 1));
 
-            xs += dxLeft;
-            xe += dxRight;
+            Color3 textel = texture->at(ww, hh);
 
-            if (left < m_fb.xorig())
-            {
-                left = m_fb.xorig();
+            // modulate byu rgb of first vertex (flat shading)
+            textel = textel * v0.color;
+            textel *= (1.0 / 256.0);        // no /= operator in Color3
 
-                if (right < m_fb.xorig())
-                    continue;
-            }
+            m_fb.wpixel(x, y, textel);
 
-            if (right > m_fb.width())
-            {
-                right = m_fb.width();
+            pu += p_delta_u;
+            pv += p_delta_v;
+        }
 
-                if (left > m_fb.width())
-                    continue;
-            }
-
-            m_fb.wscanline(left, right, y, color);
-        }*/
+        sdx += dxldy; sdu += dxldu; sdv += dxldv;
+        edx += dxrdy; edu += dxrdu; edv += dxrdv;
     }
-}
 
-void Rasterizer::drawTopTriangleTexture(math::vertex &v1, math::vertex &v2, math::vertex &v3, Texture *texture)
-{
+    // Now for the bottom of the triangle
+    if (dxdy1 < dxdy2)
+    {
+        dxldy = v1.p.x - v2.p.x;
+        dxldu = v1.t.x - v2.t.x;
+        dxldv = v1.t.y - v2.t.y;
 
+        if (!math::DCMP(v1.p.y, v2.p.y))
+        {
+            dxldy /= v1.p.y - v2.p.y;
+            dxldu /= v1.p.y - v2.p.y;
+            dxldv /= v1.p.y - v2.p.y;
+        }
+
+        sdx = v2.p.x; sdu = v2.t.x; sdv = v2.t.y;
+    }
+    else
+    {
+        dxrdy = v1.p.x - v2.p.x;
+        dxrdu = v1.t.x - v2.t.x;
+        dxrdv = v1.t.y - v2.t.y;
+
+        if (!math::DCMP(v1.p.y, v2.p.y))
+        {
+            dxrdy /= v1.p.y - v2.p.y;
+            dxrdu /= v1.p.y - v2.p.y;
+            dxrdv /= v1.p.y - v2.p.y;
+        }
+
+        edx = v2.p.x; edu = v2.t.x; edv = v2.t.y;
+    }
+
+    pu = v2.t.x; pv = v2.t.y;
+    for (y = (int)v2.p.y; y<= (int)v1.p.y; y++)
+    {
+        p_delta_u = edu - sdu;
+        p_delta_v = edv - sdv;
+
+        if (!math::DCMP(edx, sdx))
+        {
+            p_delta_u /= edx - sdx;
+            p_delta_v /= edx - sdx;
+        }
+
+        pu = sdu; pv = sdv;
+        for ( x= (int)sdx; x <= (int)edx; x++)
+        {
+            int ww = (int)(pu * (texture->width() - 1));
+            int hh = (int)(pv * (texture->height() - 1));
+
+            Color3 textel = texture->at(ww, hh);
+
+            textel = textel * v0.color;
+            textel *= (1.0 / 256.0);        // no /= operator in Color3
+
+            m_fb.wpixel(x, y, textel);
+
+            pu += p_delta_u;
+            pv += p_delta_v;
+        }
+        sdx += dxldy;  sdu+=dxldu;  sdv+=dxldv;
+        edx += dxrdy;  edu+=dxrdu;  edv+=dxrdv;
+    }
 }
 
 Rasterizer::Rasterizer(const int width, const int height)

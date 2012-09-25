@@ -24,6 +24,9 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
     // mesh indices
     auto indices = vertexBuffer.getIndices();
 
+    auto uvs = vertexBuffer.getUVs();
+    auto uvind = vertexBuffer.getUVIndices();
+
     switch(vertexBuffer.getType())
     {
     case VertexBuffer::INDEXEDTRIANGLELIST:
@@ -42,6 +45,13 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.v(0).p = triangle.v(0).p * transform;
             triangle.v(1).p = triangle.v(1).p * transform;
             triangle.v(2).p = triangle.v(2).p * transform;
+
+            if (!uvs.empty() && !uvind.empty())
+            {
+                triangle.v(0).t = uvs[uvind[ind]];
+                triangle.v(1).t = uvs[uvind[ind + 1]];
+                triangle.v(2).t = uvs[uvind[ind + 2]];
+            }
 
             // set material
             triangle.setMaterial(vertexBuffer.getMaterial());
@@ -94,7 +104,26 @@ void RenderList::append(const SceneObject &obj)
     const list<VertexBuffer> &subMeshes = obj.getMesh()->getSubmeshes();
     math::M44 worldTransform = obj.getTransformation();
 
-    foreach (const VertexBuffer &vb, subMeshes)
+    /*size_t trianglesCount = 0;
+
+    for (auto &vb : subMeshes)
+    {
+        switch (vb->getType())
+        {
+        case VertexBuffer::INDEXEDTRIANGLELIST:
+            trianglesCount += vertexBuffer.getIndices() / 3;
+            break;
+
+        case VertexBuffer::TRIANGLELIST:
+            trianglesCount += vertexBuffer.getVertices() / 3;
+            break;
+
+        default:
+            break;
+        }
+    }*/
+
+    for (const auto &vb : subMeshes)
     {
         // TODO: where to compute vertex normals? Here?? Maybe when we apply transformation for model only?
         RenderList::createTriangles(vb, worldTransform, m_triangles);

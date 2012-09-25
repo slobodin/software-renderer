@@ -44,8 +44,6 @@ class Rasterizer
     void drawGouraudTriangle(const math::Triangle &tr);
 
     void drawTexturedTriangle(const math::Triangle &tr);
-    void drawBottomTriangleTexture(math::vertex &v1, math::vertex &v2, math::vertex &v3, Texture *texture);
-    void drawTopTriangleTexture(math::vertex &v1, math::vertex &v2, math::vertex &v3, Texture *texture);
 
     void drawBottomTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const Color3 &color);
     void drawTopTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const Color3 &color);

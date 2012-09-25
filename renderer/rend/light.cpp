@@ -78,7 +78,7 @@ Color3 AmbientLight::shader(const sptr(Material) material, const math::vec3 &/*n
 {
     Color3 shadedColor;
     shadedColor = m_intensity * material->ambientColor;
-    shadedColor *= (1 / 255.0);
+    shadedColor *= (1 / 256.0);     // no /= operator in Color3
 
     return shadedColor;
 }

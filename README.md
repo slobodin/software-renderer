@@ -13,17 +13,18 @@ Now it supports:
 * Constant, wireframe and flat shading.
 * Simple material support.
 * Mathematical operations with scene nodes like scaling, translating and rotation.
+* Affine texture mapping.
 * Customizable camera.
 * Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
    Also you can setup position of objects through scene config file.
 
-**TODO**: gouraud shading, textures, z buffer and animation. Also, renderer needs some optimizations.
+**TODO**: gouraud shading, perspective texture mapping, z buffer and animation. Also, renderer needs some optimizations.
 
 Usage
 =====
-Check out [this](https://github.com/downloads/flaming0/software-renderer/soft-rend-win.zip) to get compiled examples (actually, one example).
-Or [this](https://github.com/downloads/flaming0/software-renderer/soft-ren-linux.tar.gz) for Linux version.
-Use wasd to  perform camera moving, mouse + left mouse button - cam control.
+Check out [this](https://github.com/downloads/flaming0/software-renderer/soft-rend-win.zip) to get compiled examples, or 
+[this](https://github.com/downloads/flaming0/software-renderer/soft-ren-linux.tar.gz) for Linux version.
+Use wasd to perform camera movement, mouse + left mouse button - cam control.
 
 **Note**: resources need to be in the executable directory, 
 or this dir may be passed explicitly to the renderer through command line.
@@ -41,10 +42,11 @@ Package structure
 ===========
 The main directory is organized as follows:
 
-* client-tk/ - test project, uses renderer library
-* example-1/ - project, that shows renderer features
+* client-tk/ - project for library testing.
+* example-1/ - project, that shows renderer features.
+* example-2/ - example of affine texture mapping, flat shading and movable point light.
 * renderer/ - main part: renderer code, that compiles into static library.
-* resources/ - some mesh data and renderer config files (.yaml extention)
+* resources/ - some mesh data and renderer config files (.yaml extention).
 * www/ - images for future wiki.
 * README.md - this file.
 * software-renderer.pro - qt creator project.

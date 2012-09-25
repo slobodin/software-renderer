@@ -43,4 +43,11 @@ Color3 Texture::at(int x, int y) const
     return Color3(col[0], col[1], col[2]);
 }
 
+Color3 Texture::at(int pos) const
+{
+    unsigned char *col = m_pixels + pos;
+
+    return Color3(col[0], col[1], col[2]);
+}
+
 }
