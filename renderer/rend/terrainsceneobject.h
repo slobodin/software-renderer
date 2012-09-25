@@ -21,7 +21,8 @@ class TerrainSceneObject : public SceneObject
 {
 public:
     TerrainSceneObject(double width, double height, double vertScale,
-                       const shared_ptr<Texture> heightMap);
+                       const shared_ptr<Texture> heightMap,
+                       const shared_ptr<Texture> texture = shared_ptr<Texture>());
 };
 
 }

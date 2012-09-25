@@ -62,7 +62,8 @@ TkApplication::TkApplication(int argc, const char *argv[])
 
     // create terrain
     auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
-    auto terrain = boost::make_shared<rend::TerrainSceneObject>(4000, 4000, 700, heightMapTexture);
+    auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
+    auto terrain = boost::make_shared<rend::TerrainSceneObject>(6000, 6000, 1000, heightMapTexture, texture);
 
     rendmgr->addSceneObject(terrain);
 

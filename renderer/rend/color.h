@@ -221,7 +221,10 @@ public:
     bool isBlack() const { return m_r == 0 && m_g == 0 && m_b == 0; }
 };
 
-Color3 operator* (const Color3 &a, const Color3 &b);
+inline Color3 operator* (const Color3 &a, const Color3 &b)
+{
+    return Color3(a.m_r * b.m_r, a.m_g * b.m_g, a.m_b * b.m_b);
+}
 
 inline Color3 Color3::lerp(const Color3 &a, const Color3 &b, double t)
 {

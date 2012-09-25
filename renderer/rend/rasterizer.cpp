@@ -607,7 +607,15 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
     math::vertex v1 = tr.v(1);
     math::vertex v2 = tr.v(2);
 
+    // if triangle isn't on a screen
+    if (v2.p.y < m_fb.yorig() || v0.p.y > m_fb.height() ||
+       (v0.p.x < m_fb.xorig() && v1.p.x < m_fb.xorig() && v2.p.x < m_fb.xorig()) ||
+       (v0.p.x > m_fb.width() && v1.p.x > m_fb.width() && v2.p.x > m_fb.width()))
+        return;
+
     Texture *texture = tr.getMaterial()->texture.get();
+    int texWidth = texture->width();
+    int texHeight = texture->height();
 
     if (v1.p.y < v0.p.y)
         std::swap(v1, v0);
@@ -632,19 +640,19 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
     double dy1 = v2.p.y - v0.p.y;
     double dy2 = v1.p.y - v0.p.y;
 
-    if (!math::DCMP(v2.p.y, v0.p.y))
-    {
+//    if (!math::DCMP(v2.p.y, v0.p.y))
+//    {
         dxdy1 /= dy1;
         dxdu1 /= dy1;
         dxdv1 /= dy1;
-    }
+//    }
 
-    if (!math::DCMP(v1.p.y, v0.p.y))
-    {
+//    if (!math::DCMP(v1.p.y, v0.p.y))
+//    {
         dxdy2 /= dy2;
         dxdu2 /= dy2;
         dxdv2 /= dy2;
-    }
+//    }
 
     double dxldy, dxrdy;
     double dxldu, dxrdu;
@@ -675,21 +683,21 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
         p_delta_u = edu - sdu;
         p_delta_v = edv - sdv;
 
-        if (!math::DCMP(edx - sdx, 0.))
-        {
+//        if (!math::DCMP(edx - sdx, 0.))
+//        {
             p_delta_u /= edx - sdx;
             p_delta_v /= edx - sdx;
-        }
+//        }
 
         pu = sdu; pv = sdv;
         for (x = (int)sdx; x < (int)edx; x++)
         {
-            int ww = (int)(pu * (texture->width() - 1));
-            int hh = (int)(pv * (texture->height() - 1));
+            int ww = pu * (texWidth - 1);
+            int hh = pv * (texHeight - 1);
 
             Color3 textel = texture->at(ww, hh);
 
-            // modulate byu rgb of first vertex (flat shading)
+            // modulate by rgb of first vertex (flat shading)
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3
 
@@ -710,12 +718,12 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
         dxldu = v1.t.x - v2.t.x;
         dxldv = v1.t.y - v2.t.y;
 
-        if (!math::DCMP(v1.p.y, v2.p.y))
-        {
+//        if (!math::DCMP(v1.p.y, v2.p.y))
+//        {
             dxldy /= v1.p.y - v2.p.y;
             dxldu /= v1.p.y - v2.p.y;
             dxldv /= v1.p.y - v2.p.y;
-        }
+//        }
 
         sdx = v2.p.x; sdu = v2.t.x; sdv = v2.t.y;
     }
@@ -725,33 +733,33 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
         dxrdu = v1.t.x - v2.t.x;
         dxrdv = v1.t.y - v2.t.y;
 
-        if (!math::DCMP(v1.p.y, v2.p.y))
-        {
+//        if (!math::DCMP(v1.p.y, v2.p.y))
+//        {
             dxrdy /= v1.p.y - v2.p.y;
             dxrdu /= v1.p.y - v2.p.y;
             dxrdv /= v1.p.y - v2.p.y;
-        }
+//        }
 
         edx = v2.p.x; edu = v2.t.x; edv = v2.t.y;
     }
 
     pu = v2.t.x; pv = v2.t.y;
-    for (y = (int)v2.p.y; y<= (int)v1.p.y; y++)
+    for (y = (int)v2.p.y; y< (int)v1.p.y; y++)
     {
         p_delta_u = edu - sdu;
         p_delta_v = edv - sdv;
 
-        if (!math::DCMP(edx, sdx))
-        {
+//        if (!math::DCMP(edx, sdx))
+//        {
             p_delta_u /= edx - sdx;
             p_delta_v /= edx - sdx;
-        }
+//        }
 
         pu = sdu; pv = sdv;
-        for ( x= (int)sdx; x <= (int)edx; x++)
+        for (x = (int)sdx; x < (int)edx; x++)
         {
-            int ww = (int)(pu * (texture->width() - 1));
-            int hh = (int)(pv * (texture->height() - 1));
+            int ww = pu * (texWidth - 1);
+            int hh = pv * (texHeight - 1);
 
             Color3 textel = texture->at(ww, hh);
 
@@ -763,8 +771,8 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
             pu += p_delta_u;
             pv += p_delta_v;
         }
-        sdx += dxldy;  sdu+=dxldu;  sdv+=dxldv;
-        edx += dxrdy;  edu+=dxrdu;  edv+=dxrdv;
+        sdx += dxldy; sdu+=dxldu; sdv+=dxldv;
+        edx += dxrdy; edu+=dxrdu; edv+=dxrdv;
     }
 }
 

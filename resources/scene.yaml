@@ -25,7 +25,7 @@ Lights:
 #    - direction: [1, 1, 0]
 #      intensity: [255, 10, 50]
     - direction: [1, 1, 0]		# note: id = 1
-      intensity: [30, 5, 150]
+      intensity: [80, 80, 80]
   Point:
     - position: [0, 1500, 0]		# note: id = 2
       intensity: [255, 255, 50]
