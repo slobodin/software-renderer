@@ -26,12 +26,13 @@ class SceneObject : public Node, public base::Resource
     sptr(Mesh) m_mesh;
 
 public:
+    SceneObject() { }
     SceneObject(sptr(Mesh) mesh);
     ~SceneObject();
 
     void                setMesh(sptr(Mesh) mesh);
 
-    const BoundingSphere &bsphere() const;
+    BoundingSphere      bsphere() const;
 
     sptr(Mesh)          getMesh();
     const sptr(Mesh)    getMesh() const;

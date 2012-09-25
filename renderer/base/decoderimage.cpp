@@ -24,6 +24,9 @@ sptr(Resource) DecoderImage::decode(const string &path)
 
     auto texture = make_shared<rend::Texture>(image.data(), image.width(), image.height());
 
+    boost::filesystem::path p(path);
+    texture->setName(string("texture_") + boost::filesystem::basename(p));
+
     return texture;
 }
 

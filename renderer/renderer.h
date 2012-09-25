@@ -26,6 +26,8 @@
 #include "rend/material.h"
 #include "rend/mesh.h"
 #include "rend/light.h"
+#include "rend/terrainsceneobject.h"
+#include "rend/texture.h"
 
 #include "math/common_math.h"
 #include "math/m22.h"

@@ -32,17 +32,17 @@ void TkApplication::update(float dt)
         m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
     }
 
-    // sphere
-    if (m_sphere)
+    sptr(rend::Light) ptL = m_clientController->getRendmgr()->getFirstPointLight();
+    if (ptL)
     {
-        transl = m_sphere->getPosition();
+        transl = ptL->getPosition();
+        rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, 3);
 
-        m_sphere->resetTransformation();
+        transl = transl * rotM;
 
-        rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, roll);
-        scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
-
-        m_sphere->setTransformation(math::M44(rotM * scaleM, transl));
+        ptL->setPosition(transl);
+        if (m_sphere)
+            m_sphere->setPosition(transl);
     }
 }
 
@@ -54,48 +54,23 @@ TkApplication::TkApplication(int argc, const char *argv[])
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
-    /*auto tank = rmgr->getObject<rend::SceneObject>("tank1.plg");
-    auto clonedTank = tank->clone();
-    clonedTank->setPosition(math::vec3(0, 500, 0));
-    m_clientController->getRendmgr()->addSceneObject(clonedTank);
-
-    auto tower = rendmgr->getSceneObject("tower");
-    auto clonedTower = tower->clone();
-    clonedTower->setPosition(math::vec3(0, 500, -250));
-    m_clientController->getRendmgr()->addSceneObject(clonedTower);*/
-
-    m_sphere = rendmgr->getSceneObject("Sphere");
-    if (m_sphere)
-    {
-        m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
-    }
-
     m_hammer = rendmgr->getSceneObject("Hammer");
     if (m_hammer)
     {
         m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
     }
 
+    // create terrain
+    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain");
+    auto terrain = boost::make_shared<rend::TerrainSceneObject>(4000, 4000, 700, heightMapTexture);
 
-//    auto tie = rendmgr->getSceneObject("TIEFIGTH");
-//    tie->setRotation(math::vec3(-90.0, 0.0, 0.0));
-//    tie->setScale(math::vec3(15.0, 15.0, 15.0));
+    rendmgr->addSceneObject(terrain);
 
-//    tie->getMesh()->setSideType(rend::Material::TWO_SIDE);
-
-//    auto s = rendmgr->getSceneObject("Sphere,4");
-//    s->setScale(math::vec3(35.0, 35.0, 35.0));
-
-    auto cube = rendmgr->getSceneObject("Cube");
-    cube->setScale(math::vec3(45.0, 45.0, 45.0));
-
-/*    auto cessna = rendmgr->getSceneObject("cessna.obj");
-    if (cessna)
-        cessna->setScale(math::vec3(15.0, 15.0, 15.0));*/
-
-    auto al = rendmgr->getSceneObject("al.obj");
-    if (al)
-        al->setScale(math::vec3(35.0, 35.0, 35.0));
+    m_sphere = rendmgr->getSceneObject("Sphere");
+    if (m_sphere)
+    {
+        m_sphere->getMesh()->setShadingMode(rend::Material::SM_WIRE);
+    }
 }
 
 TkApplication::~TkApplication()

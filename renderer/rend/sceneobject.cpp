@@ -24,8 +24,11 @@ SceneObject::~SceneObject()
 {
 }
 
-const BoundingSphere &SceneObject::bsphere() const
+BoundingSphere SceneObject::bsphere() const
 {
+    if (!m_mesh)
+        return BoundingSphere();        // return invalid sphere.
+
     return m_mesh->getBoundingSphere();
 }
 

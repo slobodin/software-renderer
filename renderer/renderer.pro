@@ -64,7 +64,8 @@ HEADERS += \
     third-party/include/cpptk-1.0.2/cpptk.h \
     platform/baseapptk.h \
     base/decodercob.h \
-    base/decoderimage.h
+    base/decoderimage.h \
+    rend/terrainsceneobject.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -106,7 +107,8 @@ SOURCES += \
     third-party/include/cpptk-1.0.2/cpptk.cc \
     third-party/include/cpptk-1.0.2/base/cpptkbase.cc \
     base/decodercob.cpp \
-    base/decoderimage.cpp
+    base/decoderimage.cpp \
+    rend/terrainsceneobject.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

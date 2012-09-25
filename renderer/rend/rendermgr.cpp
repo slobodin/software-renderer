@@ -56,6 +56,9 @@ void RenderMgr::update()
     // Also applies world transformation.
     for (auto obj : m_sceneObjects)
     {
+        if (!obj)
+            continue;
+
         if (!m_camera->culled(*obj))
             renderList.append(*obj);
     }

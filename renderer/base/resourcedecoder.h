@@ -46,6 +46,7 @@ public:
     virtual sptr(Resource)  decode(const string &path) = 0;
 
     //! Returns asset extension.
+    // TODO: return something like container. One decoder may load more than one files.
     virtual string          extension() const = 0;
 };
 

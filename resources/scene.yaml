@@ -4,13 +4,13 @@ Objects:
 #  - model: tower1.plg
 #    position: [0, 0, -250]
   - model: sphere01.asc
-    position: [0, 100, 0]
+    position: [0, 1500, 0]
   - model: hammer02.asc
     position: [0, 300, 0]
 #  - model: tie04.cob
 #    position: [200, 100, 0]
-  - model: cube_flat_textured_01.cob
-    position: [100, 100, 100]
+#  - model: cube_flat_textured_01.cob
+#    position: [0, 0, 0]
 #  - model: cessna.obj
 #    position: [100, 200, 600]
 #  - model: al.obj
@@ -22,13 +22,13 @@ Lights:
   Ambient:				# note: id = 0
     - intensity: [50, 50, 50]
   Directional:
-    - direction: [1, 1, 0]
-      intensity: [255, 10, 50]
+#    - direction: [1, 1, 0]
+#      intensity: [255, 10, 50]
 #    - direction: [0, 1, 0]		# note: id = 1
 #      intensity: [30, 5, 150]
   Point:
-    - position: [0, 0, 500]		# note: id = 2
-      intensity: [10, 255, 50]
+    - position: [0, 1500, 0]		# note: id = 2
+      intensity: [255, 255, 50]
       kc: 0
       kl: 0.001
       kq: 0

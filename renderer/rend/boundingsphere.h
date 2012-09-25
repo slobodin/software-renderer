@@ -29,6 +29,8 @@ public:
     double      radius() const { return m_radius; }
 
     void        calculate(const vector<math::vec3> &vertices);
+
+    bool valid() const { return m_radius > 0.; }
 };
 
 }

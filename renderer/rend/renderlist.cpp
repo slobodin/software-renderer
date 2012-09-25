@@ -101,6 +101,9 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
 
 void RenderList::append(const SceneObject &obj)
 {
+    if (!obj.getMesh())
+        return;
+
     const list<VertexBuffer> &subMeshes = obj.getMesh()->getSubmeshes();
     math::M44 worldTransform = obj.getTransformation();
 
