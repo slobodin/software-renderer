@@ -16,7 +16,7 @@ INCLUDEPATH += ../renderer/base \
                 /usr/include/tcl8.5
 
 unix:LIBS += ../../bin/renderer/librenderer.a
-win32:LIBS += ../../bin/renderer/release/librenderer.a        # if debug
+win32:LIBS += ../../bin/renderer/debug/librenderer.a        # if debug
 
 win32:INCLUDEPATH += $(TCL_ROOT)/include
 
@@ -31,7 +31,7 @@ win32:LIBS += $(TCL_ROOT)/lib/tk85.lib
 win32:LIBS += -lgdi32
 
 unix:PRE_TARGETDEPS += ../../bin/renderer/librenderer.a
-win32:PRE_TARGETDEPS += ../../bin/renderer/release/librenderer.a
+win32:PRE_TARGETDEPS += ../../bin/renderer/debug/librenderer.a
 
 SOURCES += \
     main.cpp \

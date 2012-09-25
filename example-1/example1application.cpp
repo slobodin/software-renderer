@@ -66,6 +66,8 @@ Example1Application::Example1Application(int argc, const char *argv[])
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
+
+
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
     {
@@ -93,6 +95,7 @@ Example1Application::Example1Application(int argc, const char *argv[])
 
     if (!al || !cube || !m_sphere || !m_hammer)
         std::cerr << "Error: Missing some resources.\n";
+
 }
 
 void Example1Application::onMouseEvent(const platform::MouseEvent &ev)
