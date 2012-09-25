@@ -16,6 +16,7 @@ INCLUDEPATH += ../renderer/base \
                 /usr/include/tcl8.5
 
 unix:LIBS += ../../bin/renderer/librenderer.a
+
 CONFIG(debug, debug|release) {
 win32:LIBS += ../../bin/renderer/debug/librenderer.a        # if debug
 }
@@ -44,7 +45,7 @@ win32:PRE_TARGETDEPS += ../../bin/renderer/release/librenderer.a
 
 SOURCES += \
     main.cpp \
-    example1application.cpp
+    example2application.cpp
 
 HEADERS += \
-    example1application.h
+    example2application.h

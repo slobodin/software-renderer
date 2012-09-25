@@ -16,8 +16,6 @@ void TkApplication::update(float dt)
     if (abs(yaw) > 360) yaw %= 360;
     if (abs(roll) > 360) roll %= 360;
 
-    static int lightdy = 10;
-
     // hammer
     math::vec3 transl;
     math::M33 rotM, scaleM;
@@ -46,25 +44,6 @@ void TkApplication::update(float dt)
 
         m_sphere->setTransformation(math::M44(rotM * scaleM, transl));
     }
-
-    sptr(rend::Light) ptL = m_clientController->getRendmgr()->getLight(1);
-    if (ptL)
-    {
-        transl = ptL->getPosition();
-        rotM = math::M33::getRotateYawPitchRollMatrix(3, 0, 0);
-
-        transl = transl * rotM;
-
-        ptL->setPosition(transl);
-        m_lightPoint->setPosition(transl);
-
-//        transl.y += lightdy;
-
-//        if (transl.y < -1500) lightdy = 10;
-//        if (transl.y > 1500) lightdy = -10;
-
-//        ptL->setPosition(transl);
-    }
 }
 
 TkApplication::TkApplication(int argc, const char *argv[])
@@ -89,11 +68,6 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (m_sphere)
     {
         m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
-
-        m_lightPoint = m_sphere->clone();
-        m_lightPoint->resetTransformation();
-        m_lightPoint->getMesh()->setShadingMode(rend::Material::SM_WIRE);
-        rendmgr->addSceneObject(m_lightPoint);
     }
 
     m_hammer = rendmgr->getSceneObject("Hammer");
@@ -113,7 +87,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
 //    s->setScale(math::vec3(35.0, 35.0, 35.0));
 
     auto cube = rendmgr->getSceneObject("Cube");
-    cube->setScale(math::vec3(15.0, 15.0, 15.0));
+    cube->setScale(math::vec3(45.0, 45.0, 45.0));
 
 /*    auto cessna = rendmgr->getSceneObject("cessna.obj");
     if (cessna)

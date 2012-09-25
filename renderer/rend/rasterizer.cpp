@@ -607,103 +607,165 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
     math::vertex v1 = tr.v(1);
     math::vertex v2 = tr.v(2);
 
-    v0.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
-    v0.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
-    v1.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
-    v1.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
-    v2.t.x *= (double)tr.getMaterial()->texture->width() - 1.;
-    v2.t.y *= (double)tr.getMaterial()->texture->height() - 1.;
+    Texture *texture = tr.getMaterial()->texture.get();
 
-    // first trivial clipping rejection tests
-    if (((v0.p.y < m_fb.yorig())  &&
-         (v1.p.y < m_fb.yorig())  &&
-         (v2.p.y < m_fb.yorig())) ||
-
-        ((v0.p.y > m_fb.height())  &&
-         (v1.p.y > m_fb.height())  &&
-         (v2.p.y > m_fb.height())) ||
-
-        ((v0.p.x < m_fb.xorig())  &&
-         (v1.p.x < m_fb.xorig())  &&
-         (v2.p.x < m_fb.xorig())) ||
-
-        ((v0.p.x > m_fb.width())  &&
-         (v1.p.x > m_fb.width())  &&
-         (v2.p.x > m_fb.width())))
-       return;
-
-    // degenerate triangle
-    if ( ((v0.p.x==v1.p.x) && (v1.p.x==v2.p.x)) ||
-         ((v0.p.y==v1.p.y) && (v1.p.y==v2.p.y)))
-       return;
-
-    // sort vertices
     if (v1.p.y < v0.p.y)
         std::swap(v1, v0);
     if (v2.p.y < v0.p.y)
-        std::swap(v2, v0);
-    if (v2.p.y < v1.p.y)
-        std::swap(v2, v1);
+        std::swap(v0, v2);
+    if (v1.p.y < v2.p.y)
+        std::swap(v1, v2);
 
-    TriangleType tri_type;
+    double dxdy1 = v2.p.x - v0.p.x;
+    double dxdu1 = v2.t.x - v0.t.x;
+    double dxdv1 = v2.t.y - v0.t.y;
 
-    // now test for trivial flat sided cases
-    if (v0.p.y==v1.p.y)
+    double dxdy2 = v1.p.x - v0.p.x;
+    double dxdu2 = v1.t.x - v0.t.x;
+    double dxdv2 = v1.t.y - v0.t.y;
+
+    double sdx,sdu,sdv;
+    double edx,edu,edv;
+    double pu, pv;
+    int x, y;
+
+    double dy1 = v2.p.y - v0.p.y;
+    double dy2 = v1.p.y - v0.p.y;
+
+    if (!math::DCMP(v2.p.y, v0.p.y))
     {
-        tri_type = TT_FLAT_TOP;
-        if (v1.p.x < v0.p.x)
-            std::swap(v1, v0);
+        dxdy1 /= dy1;
+        dxdu1 /= dy1;
+        dxdv1 /= dy1;
+    }
+
+    if (!math::DCMP(v1.p.y, v0.p.y))
+    {
+        dxdy2 /= dy2;
+        dxdu2 /= dy2;
+        dxdv2 /= dy2;
+    }
+
+    double dxldy, dxrdy;
+    double dxldu, dxrdu;
+    double dxldv, dxrdv;
+
+    if (dxdy1 < dxdy2)
+    {
+        dxldy = dxdy1; dxrdy = dxdy2;
+        dxldu = dxdu1; dxrdu = dxdu2;
+        dxldv = dxdv1; dxrdv = dxdv2;
     }
     else
-    // now test for trivial flat sided cases
-    if (v1.p.y==v2.p.y)
+    {
+        dxldy = dxdy2; dxrdy = dxdy1;
+        dxldu = dxdu2; dxrdu = dxdu1;
+        dxldv = dxdv2; dxrdv = dxdv1;
+    }
+
+    sdx = v0.p.x; sdu = v0.t.x; sdv = v0.t.y;
+    edx = v0.p.x; edu = v0.t.x; edv = v0.t.y;
+    pu = v0.t.x; pv = v0.t.y;
+
+    double p_delta_u;
+    double p_delta_v;
+
+    for (y = (int)v0.p.y; y < (int)v2.p.y; y++)
+    {
+        p_delta_u = edu - sdu;
+        p_delta_v = edv - sdv;
+
+        if (!math::DCMP(edx - sdx, 0.))
         {
-        // set triangle type
-        tri_type = TT_FLAT_BOTTOM;
+            p_delta_u /= edx - sdx;
+            p_delta_v /= edx - sdx;
+        }
 
-        // sort vertices left to right
-        if (v2.p.x < v1.p.x)
-            std::swap(v2, v1);
+        pu = sdu; pv = sdv;
+        for (x = (int)sdx; x < (int)edx; x++)
+        {
+            int ww = (int)(pu * (texture->width() - 1));
+            int hh = (int)(pv * (texture->height() - 1));
 
-        } // end if
+            Color3 textel = texture->at(ww, hh);
+
+            // modulate byu rgb of first vertex (flat shading)
+            textel = textel * v0.color;
+            textel *= (1.0 / 256.0);        // no /= operator in Color3
+
+            m_fb.wpixel(x, y, textel);
+
+            pu += p_delta_u;
+            pv += p_delta_v;
+        }
+
+        sdx += dxldy; sdu += dxldu; sdv += dxldv;
+        edx += dxrdy; edu += dxrdu; edv += dxrdv;
+    }
+
+    // Now for the bottom of the triangle
+    if (dxdy1 < dxdy2)
+    {
+        dxldy = v1.p.x - v2.p.x;
+        dxldu = v1.t.x - v2.t.x;
+        dxldv = v1.t.y - v2.t.y;
+
+        if (!math::DCMP(v1.p.y, v2.p.y))
+        {
+            dxldy /= v1.p.y - v2.p.y;
+            dxldu /= v1.p.y - v2.p.y;
+            dxldv /= v1.p.y - v2.p.y;
+        }
+
+        sdx = v2.p.x; sdu = v2.t.x; sdv = v2.t.y;
+    }
     else
+    {
+        dxrdy = v1.p.x - v2.p.x;
+        dxrdu = v1.t.x - v2.t.x;
+        dxrdv = v1.t.y - v2.t.y;
+
+        if (!math::DCMP(v1.p.y, v2.p.y))
         {
-        // must be a general triangle
-        tri_type = TT_FLAT_GENERAL;
+            dxrdy /= v1.p.y - v2.p.y;
+            dxrdu /= v1.p.y - v2.p.y;
+            dxrdv /= v1.p.y - v2.p.y;
+        }
 
-        } // end else
+        edx = v2.p.x; edu = v2.t.x; edv = v2.t.y;
+    }
 
-    // extract base color of lit poly, so we can modulate texture a bit
-    // for lighting
-    int r_base = v0.color[RED];
-    int g_base = v0.color[GREEN];
-    int b_base = v0.color[BLUE];
+    pu = v2.t.x; pv = v2.t.y;
+    for (y = (int)v2.p.y; y<= (int)v1.p.y; y++)
+    {
+        p_delta_u = edu - sdu;
+        p_delta_v = edv - sdv;
 
-    // extract vertices for processing, now that we have order
-    double x0  = (double)(v0.p.x+0.5);
-    double y0  = (double)(v0.p.y+0.5);
-    double tu0 = (double)(v0.t.x);
-    double tv0 = (double)(v0.t.y);
+        if (!math::DCMP(edx, sdx))
+        {
+            p_delta_u /= edx - sdx;
+            p_delta_v /= edx - sdx;
+        }
 
-    double x1  = (double)(v1.p.x+0.5);
-    double y1  = (double)(v1.p.y+0.5);
-    double tu1 = (double)(v1.t.x);
-    double tv1 = (double)(v1.t.y);
+        pu = sdu; pv = sdv;
+        for ( x= (int)sdx; x <= (int)edx; x++)
+        {
+            int ww = (int)(pu * (texture->width() - 1));
+            int hh = (int)(pv * (texture->height() - 1));
 
-    double x2  = (double)(v2.p.x+0.5);
-    double y2  = (double)(v2.p.y+0.5);
-    double tu2 = (double)(v2.t.x);
-    double tv2 = (double)(v2.t.y);
+            Color3 textel = texture->at(ww, hh);
 
-    // set interpolation restart value
-    double yrestart = y1;
+            textel = textel * v0.color;
+            textel *= (1.0 / 256.0);        // no /= operator in Color3
 
-    // what kind of triangle
-    double dy, dxdyl, dudyl, dvdyl;
-    double dxdyr, dudyr, dvdyr;
-    double xl, ul, vl, xr, ur, vr;
-    double ystart, yend;
+            m_fb.wpixel(x, y, textel);
 
+            pu += p_delta_u;
+            pv += p_delta_v;
+        }
+        sdx += dxldy;  sdu+=dxldu;  sdv+=dxldv;
+        edx += dxrdy;  edu+=dxrdu;  edv+=dxrdv;
+    }
 }
 
 Rasterizer::Rasterizer(const int width, const int height)

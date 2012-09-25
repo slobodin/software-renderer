@@ -30,19 +30,28 @@ void VertexBuffer::setMaterial(boost::shared_ptr<Material> material)
     m_material = material;
 }
 
+void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices,
+                                  const vector<math::vec2> &uvs, const vector<int> &uvinds)
+{
+    std::copy(uvs.begin(), uvs.end(), std::back_inserter(m_uvs));
+    std::copy(uvinds.begin(), uvinds.end(), std::back_inserter(m_uvsIndices));
+
+    appendVertices(vertices, indices);
+}
+
 void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices)
 {
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
     std::copy(indices.begin(), indices.end(), std::back_inserter(m_indices));
 
-    computeVertexNormals();
+//    computeVertexNormals();
 }
 
 void VertexBuffer::appendVertices(const vector<math::vertex> &vertices)
 {
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
 
-    computeVertexNormals();
+//    computeVertexNormals();
 }
 
 void VertexBuffer::computeVertexNormals()

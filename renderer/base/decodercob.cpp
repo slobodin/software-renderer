@@ -110,6 +110,7 @@ void DecoderCOB::parseFaces(string &line)
 
         // ccw -> cw. FIXME: cob models not uniform in vertex bypass order?
         std::swap(faces.at(currFace).indices[0], faces.at(currFace).indices[1]);
+        std::swap(faces.at(currFace).uvIndices[0], faces.at(currFace).uvIndices[1]);
 
         return;
     }
@@ -197,12 +198,16 @@ sptr(rend::Mesh) DecoderCOB::createMesh()
     {
         rend::VertexBuffer vb;
         vector<int> indices;
+        vector<int> uvinds;
 
         std::for_each(bounds.first, bounds.second, [&indices](const FaceInfo &data)
                       { std::copy(data.indices, data.indices + 3, std::back_inserter(indices)); });
+        std::for_each(bounds.first, bounds.second, [&uvinds](const FaceInfo &data)
+                      { std::copy(data.uvIndices, data.uvIndices + 3, std::back_inserter(uvinds)); });
+
 
         vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
-        vb.appendVertices(vertexList, indices);
+        vb.appendVertices(vertexList, indices, uv, uvinds);
 
         auto material = make_shared<rend::Material>();
         int materialIndex = bounds.first->materialIndex;
@@ -309,13 +314,6 @@ sptr(Resource) DecoderCOB::decode(const string &path)
     parseWhile(&DecoderCOB::parseUV, "Faces", cobFile);
     parseWhile(&DecoderCOB::parseFaces, "DrawFlags", cobFile);
     parseWhile(&DecoderCOB::parseMaterials, "END", cobFile);
-
-    for (auto f : faces)
-    {
-        vertexList.at(f.indices[0]).t = uv.at(f.uvIndices[0]);
-        vertexList.at(f.indices[1]).t = uv.at(f.uvIndices[1]);
-        vertexList.at(f.indices[2]).t = uv.at(f.uvIndices[2]);
-    }
 
     auto newMesh = createMesh();
     auto newObject = make_shared<rend::SceneObject>(newMesh);

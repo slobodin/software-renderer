@@ -27,6 +27,7 @@ public:
     ~Texture();
 
     Color3 at(int x, int y) const;
+    Color3 at(int pos) const;
 
     int width() const { return m_width; }
     int height() const { return m_height; }
