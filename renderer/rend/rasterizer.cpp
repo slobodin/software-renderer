@@ -555,40 +555,174 @@ void Rasterizer::drawTriangle(const math::Triangle &tr)
     drawTriangle(tr.v(0), tr.v(1), tr.v(2));
 }
 
-void Rasterizer::drawGouraudTriangle(math::vertex &v1, math::vertex &v2, math::vertex &v3)
+void Rasterizer::drawGouraudTriangle(math::vertex &v0, math::vertex &v1, math::vertex &v2)
 {
-    // check degenerate triangle
-    if ((v1.p.x == v2.p.x && v2.p.x == v3.p.x) ||
-        (v1.p.y == v2.p.y && v2.p.y == v3.p.y))
-        return;
-
-    makeCCWTriangle(v1, v2, v3);
-
-    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
-    int y1 = v1.p.y, y2 = v2.p.y, y3 = v3.p.y;
-
     // if triangle isn't on a screen
-    if (y3 < m_fb.yorig() || y1 > m_fb.height() ||
-       (x1 < m_fb.xorig() && x2 < m_fb.xorig() && x3 < m_fb.xorig()) ||
-       (x1 > m_fb.width() && x2 > m_fb.width() && x3 > m_fb.width()))
+    if (v2.p.y < m_fb.yorig() || v0.p.y > m_fb.height() ||
+       (v0.p.x < m_fb.xorig() && v1.p.x < m_fb.xorig() && v2.p.x < m_fb.xorig()) ||
+       (v0.p.x > m_fb.width() && v1.p.x > m_fb.width() && v2.p.x > m_fb.width()))
         return;
 
-    if (y1 == y2)
-        drawTopTriangleGouraud(v1, v2, v3);
-    else if (y2 == y3)
-        drawBottomTriangleGouraud(v1, v2, v3);
+    if (v1.p.y < v0.p.y)
+        std::swap(v1, v0);
+    if (v2.p.y < v0.p.y)
+        std::swap(v0, v2);
+    if (v1.p.y < v2.p.y)
+        std::swap(v1, v2);
+
+    double dxdy1 = v2.p.x - v0.p.x;
+    double dxdr1 = (double)v2.color[RED] - (double)v0.color[RED];
+    double dxdg1 = (double)v2.color[GREEN] - (double)v0.color[GREEN];
+    double dxdb1 = (double)v2.color[BLUE] - (double)v0.color[BLUE];
+
+    double dxdy2 = v1.p.x - v0.p.x;
+    double dxdr2 = (double)v1.color[RED] - (double)v0.color[RED];
+    double dxdg2 = (double)v1.color[GREEN] - (double)v0.color[GREEN];
+    double dxdb2 = (double)v1.color[BLUE] - (double)v0.color[BLUE];
+
+    double sdx, sdu, sdv, sdw;
+    double edx, edu, edv, edw;
+    double pu, pv, pw;
+    int x, y;
+
+    double dy1 = v2.p.y - v0.p.y;
+    double dy2 = v1.p.y - v0.p.y;
+
+    if (!math::DCMP(v2.p.y, v0.p.y))
+    {
+        dxdy1 /= dy1;
+        dxdr1 /= dy1;
+        dxdg1 /= dy1;
+        dxdb1 /= dy1;
+    }
+
+    if (!math::DCMP(v1.p.y, v0.p.y))
+    {
+        dxdy2 /= dy2;
+        dxdr2 /= dy2;
+        dxdg2 /= dy2;
+        dxdb2 /= dy2;
+    }
+
+    double dxldy, dxrdy;
+    double dxldu, dxrdu;
+    double dxldv, dxrdv;
+    double dxldw, dxrdw;
+
+    if (dxdy1 < dxdy2)
+    {
+        dxldy = dxdy1; dxrdy = dxdy2;
+        dxldu = dxdr1; dxrdu = dxdr2;
+        dxldv = dxdg1; dxrdv = dxdg2;
+        dxldw = dxdb1; dxrdw = dxdb2;
+    }
     else
     {
-        math::vertex newV = v2;
+        dxldy = dxdy2; dxrdy = dxdy1;
+        dxldu = dxdr2; dxrdu = dxdr1;
+        dxldv = dxdg2; dxrdv = dxdg1;
+        dxldw = dxdb2; dxrdw = dxdb1;
+    }
 
-        double dy = ((double)y2 - y1) / ((double)y3 - y1);
-        double newX = x1 + dy * (x3 - x1);
+    sdx = v0.p.x; sdu = v0.color[RED]; sdv = v0.color[GREEN]; sdw = v0.color[BLUE];
+    edx = v0.p.x; edu = v0.color[RED]; edv = v0.color[GREEN]; edw = v0.color[BLUE];
+    pu = v0.color[RED]; pv = v0.color[GREEN]; pw = v0.color[BLUE];
 
-        newV.p.x = newX;
-        newV.color = Color3::lerp(v1.color, v3.color, dy);
+    double p_delta_u;
+    double p_delta_v;
+    double p_delta_w;
 
-        drawBottomTriangleGouraud(v1, newV, v2);
-        drawTopTriangleGouraud(v2, newV, v3);
+    for (y = (int)v0.p.y; y < (int)v2.p.y; y++)
+    {
+        p_delta_u = edu - sdu;
+        p_delta_v = edv - sdv;
+        p_delta_w = edw - sdw;
+
+        if (!math::DCMP(edx - sdx, 0.))
+        {
+            p_delta_u /= edx - sdx;
+            p_delta_v /= edx - sdx;
+            p_delta_w /= edw - sdw;
+        }
+
+        pu = sdu; pv = sdv; pw = sdw;
+
+        for (x = (int)sdx; x < (int)edx; x++)
+        {
+            m_fb.wpixel(x, y, Color3(pu, pv, pw));
+
+            pu += p_delta_u;
+            pv += p_delta_v;
+            pw += p_delta_w;
+        }
+
+        sdx += dxldy; sdu += dxldu; sdv += dxldv; sdw += dxldw;
+        edx += dxrdy; edu += dxrdu; edv += dxrdv; edw += dxrdw;
+    }
+
+    // Now for the bottom of the triangle
+    if (dxdy1 < dxdy2)
+    {
+        dxldy = v1.p.x - v2.p.x;
+        dxldu = (double)v1.color[RED] - (double)v2.color[RED];
+        dxldv = (double)v1.color[GREEN] - (double)v2.color[GREEN];
+        dxldw = (double)v1.color[BLUE] - (double)v2.color[BLUE];
+
+        if (!math::DCMP(v1.p.y, v2.p.y))
+        {
+            double h = v1.p.y - v2.p.y;
+            dxldy /= h;
+            dxldu /= h;
+            dxldv /= h;
+            dxldw /= h;
+        }
+
+        sdx = v2.p.x; sdu = v2.color[RED]; sdv = v2.color[GREEN]; sdw = v2.color[BLUE];
+    }
+    else
+    {
+        dxrdy = v1.p.x - v2.p.x;
+        dxrdu = (double)v1.color[RED] - (double)v2.color[RED];
+        dxrdv = (double)v1.color[GREEN] - (double)v2.color[GREEN];
+        dxrdw = (double)v1.color[BLUE] - (double)v2.color[BLUE];
+
+        if (!math::DCMP(v1.p.y, v2.p.y))
+        {
+            double h = v1.p.y - v2.p.y;
+            dxrdy /= h;
+            dxrdu /= h;
+            dxrdv /= h;
+            dxrdw /= h;
+        }
+
+        edx = v2.p.x; edu = v2.color[RED]; edv = v2.color[GREEN]; edw = v2.color[BLUE];
+    }
+
+    pu = v2.color[RED]; pv = v2.color[GREEN]; pw = v2.color[BLUE];
+    for (y = (int)v2.p.y; y< (int)v1.p.y; y++)
+    {
+        p_delta_u = edu - sdu;
+        p_delta_v = edv - sdv;
+        p_delta_w = edw - sdw;
+
+        if (!math::DCMP(edx, sdx))
+        {
+            p_delta_u /= edx - sdx;
+            p_delta_v /= edx - sdx;
+            p_delta_w /= edx - sdx;
+        }
+
+        pu = sdu; pv = sdv; pw = sdw;
+        for (x = (int)sdx; x < (int)edx; x++)
+        {
+            m_fb.wpixel(x, y, Color3(pu, pv, pw));
+
+            pu += p_delta_u;
+            pv += p_delta_v;
+            pw += p_delta_w;
+        }
+        sdx += dxldy; sdu += dxldu; sdv += dxldv; sdw += dxldw;
+        edx += dxrdy; edu += dxrdu; edv += dxrdv; edw += dxrdw;
     }
 }
 
@@ -606,6 +740,8 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
     math::vertex v0 = tr.v(0);
     math::vertex v1 = tr.v(1);
     math::vertex v2 = tr.v(2);
+
+    static Color3 textel;
 
     // if triangle isn't on a screen
     if (v2.p.y < m_fb.yorig() || v0.p.y > m_fb.height() ||
@@ -640,19 +776,19 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
     double dy1 = v2.p.y - v0.p.y;
     double dy2 = v1.p.y - v0.p.y;
 
-//    if (!math::DCMP(v2.p.y, v0.p.y))
-//    {
+    if (!math::DCMP(v2.p.y, v0.p.y))
+    {
         dxdy1 /= dy1;
         dxdu1 /= dy1;
         dxdv1 /= dy1;
-//    }
+    }
 
-//    if (!math::DCMP(v1.p.y, v0.p.y))
-//    {
+    if (!math::DCMP(v1.p.y, v0.p.y))
+    {
         dxdy2 /= dy2;
         dxdu2 /= dy2;
         dxdv2 /= dy2;
-//    }
+    }
 
     double dxldy, dxrdy;
     double dxldu, dxrdu;
@@ -683,19 +819,20 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
         p_delta_u = edu - sdu;
         p_delta_v = edv - sdv;
 
-//        if (!math::DCMP(edx - sdx, 0.))
-//        {
+        if (!math::DCMP(edx - sdx, 0.))
+        {
             p_delta_u /= edx - sdx;
             p_delta_v /= edx - sdx;
-//        }
+        }
 
         pu = sdu; pv = sdv;
+
         for (x = (int)sdx; x < (int)edx; x++)
         {
             int ww = pu * (texWidth - 1);
             int hh = pv * (texHeight - 1);
 
-            Color3 textel = texture->at(ww, hh);
+            textel = texture->at(ww, hh);
 
             // modulate by rgb of first vertex (flat shading)
             textel = textel * v0.color;
@@ -718,12 +855,12 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
         dxldu = v1.t.x - v2.t.x;
         dxldv = v1.t.y - v2.t.y;
 
-//        if (!math::DCMP(v1.p.y, v2.p.y))
-//        {
+        if (!math::DCMP(v1.p.y, v2.p.y))
+        {
             dxldy /= v1.p.y - v2.p.y;
             dxldu /= v1.p.y - v2.p.y;
             dxldv /= v1.p.y - v2.p.y;
-//        }
+        }
 
         sdx = v2.p.x; sdu = v2.t.x; sdv = v2.t.y;
     }
@@ -733,12 +870,12 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
         dxrdu = v1.t.x - v2.t.x;
         dxrdv = v1.t.y - v2.t.y;
 
-//        if (!math::DCMP(v1.p.y, v2.p.y))
-//        {
+        if (!math::DCMP(v1.p.y, v2.p.y))
+        {
             dxrdy /= v1.p.y - v2.p.y;
             dxrdu /= v1.p.y - v2.p.y;
             dxrdv /= v1.p.y - v2.p.y;
-//        }
+        }
 
         edx = v2.p.x; edu = v2.t.x; edv = v2.t.y;
     }
@@ -749,11 +886,11 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
         p_delta_u = edu - sdu;
         p_delta_v = edv - sdv;
 
-//        if (!math::DCMP(edx, sdx))
-//        {
+        if (!math::DCMP(edx, sdx))
+        {
             p_delta_u /= edx - sdx;
             p_delta_v /= edx - sdx;
-//        }
+        }
 
         pu = sdu; pv = sdv;
         for (x = (int)sdx; x < (int)edx; x++)
@@ -761,7 +898,7 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
             int ww = pu * (texWidth - 1);
             int hh = pv * (texHeight - 1);
 
-            Color3 textel = texture->at(ww, hh);
+            textel = texture->at(ww, hh);
 
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3

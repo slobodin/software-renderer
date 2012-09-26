@@ -40,7 +40,7 @@ class Rasterizer
     void drawTriangle(const math::vertex &p1, const math::vertex &p2, const math::vertex &p3);
     void drawTriangle(const math::Triangle &tr);
 
-    void drawGouraudTriangle(math::vertex &v1, math::vertex &v2, math::vertex &v3);
+    void drawGouraudTriangle(math::vertex &v0, math::vertex &v1, math::vertex &v2);
     void drawGouraudTriangle(const math::Triangle &tr);
 
     void drawTexturedTriangle(const math::Triangle &tr);

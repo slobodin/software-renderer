@@ -31,19 +31,6 @@ void TkApplication::update(float dt)
 
 //        m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
 //    }
-
-    sptr(rend::Light) ptL = m_clientController->getRendmgr()->getFirstPointLight();
-    if (ptL)
-    {
-        transl = ptL->getPosition();
-        rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, 3);
-
-        transl = transl * rotM;
-
-        ptL->setPosition(transl);
-        if (m_sphere)
-            m_sphere->setPosition(transl);
-    }
 }
 
 TkApplication::TkApplication(int argc, const char *argv[])
@@ -54,23 +41,25 @@ TkApplication::TkApplication(int argc, const char *argv[])
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
-//    m_hammer = rendmgr->getSceneObject("Hammer");
-//    if (m_hammer)
-//    {
-//        m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
-//    }
+    m_hammer = rendmgr->getSceneObject("Hammer");
+    if (m_hammer)
+    {
+        m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
+        m_hammer->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+    }
 
     // create terrain
-    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
+    /*auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
     auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
-    auto terrain = boost::make_shared<rend::TerrainSceneObject>(6000, 6000, 1000, heightMapTexture, texture);
+    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 1500, heightMapTexture, texture);*/
 
-    rendmgr->addSceneObject(terrain);
+//    rendmgr->addSceneObject(terrain);
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
     {
-        m_sphere->getMesh()->setShadingMode(rend::Material::SM_WIRE);
+        m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
+        m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
     }
 }
 

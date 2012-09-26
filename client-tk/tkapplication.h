@@ -13,7 +13,7 @@
 class TkApplication : public platform::BaseAppTk
 {
     sptr(rend::Camera) m_playerCamera;
-//    sptr(rend::SceneObject) m_hammer;
+    sptr(rend::SceneObject) m_hammer;
     sptr(rend::SceneObject) m_sphere;
 
 protected:
