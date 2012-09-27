@@ -20,17 +20,17 @@ void TkApplication::update(float dt)
     math::vec3 transl;
     math::M33 rotM, scaleM;
 
-//    if (m_hammer)
-//    {
-//        transl = m_hammer->getPosition();
+    if (m_hammer)
+    {
+        transl = m_hammer->getPosition();
 
-//        m_hammer->resetTransformation();
+        m_hammer->resetTransformation();
 
-//        rotM = math::M33::getRotateYawPitchRollMatrix(yaw, 0, 0);
-//        scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
+        rotM = math::M33::getRotateYawPitchRollMatrix(yaw, 0, 0);
+        scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
 
-//        m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
-//    }
+        m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
+    }
 }
 
 TkApplication::TkApplication(int argc, const char *argv[])
