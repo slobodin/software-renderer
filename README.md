@@ -16,7 +16,7 @@ Now it supports:
 * Affine texture mapping.
 * Customizable camera.
 * Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
-   Also you can setup position of objects through scene config file.
+   Also you can setup position of objects through the scene config file.
 
 **TODO**: gouraud shading, perspective texture mapping, z buffer and animation. Also, renderer needs some optimizations.
 
@@ -36,7 +36,7 @@ Compile
 =======
 This renderer works well on Linux and Windows systems because it uses qmake build system. It has .pro files with qt creator project description.
 Also you need boost (at least 1.51), tk/tcl (ActiveTcl for Windows) and CImg library.
-Another libraries (cpptk and yamlcpp) included in project.
+Another libraries (cpptk and yamlcpp) included in the project.
 On Windows you also should set BOOST_ROOT and TCL_ROOT environment variables (for example, in Qt creator "build environment" tab)
 
 Package structure
@@ -55,7 +55,7 @@ The main directory is organized as follows:
 
 Wiki
 ====
-Is [here](https://github.com/flaming0/software-renderer/wiki).
+Is [here](https://github.com/flaming0/software-renderer/wiki). There you can see some screenshots.
 
 License
 =======
