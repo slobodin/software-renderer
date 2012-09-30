@@ -809,7 +809,7 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
 
     sdx = v0.p.x; sdu = v0.t.x; sdv = v0.t.y;
     edx = v0.p.x; edu = v0.t.x; edv = v0.t.y;
-    pu = v0.t.x; pv = v0.t.y;
+//    pu = v0.t.x; pv = v0.t.y;
 
     double p_delta_u;
     double p_delta_v;
@@ -880,7 +880,7 @@ void Rasterizer::drawTexturedTriangle(const math::Triangle &tr)
         edx = v2.p.x; edu = v2.t.x; edv = v2.t.y;
     }
 
-    pu = v2.t.x; pv = v2.t.y;
+//    pu = v2.t.x; pv = v2.t.y;
     for (y = (int)v2.p.y; y< (int)v1.p.y; y++)
     {
         p_delta_u = edu - sdu;
