@@ -27,7 +27,7 @@ win32:LIBS += ../../bin/renderer/release/librenderer.a        # if release
 win32:INCLUDEPATH += $(TCL_ROOT)/include
 
 unix:LIBS += ../../renderer/third-party/lib/libyaml-cpp.a
-unix:LIBS += -lboost_system -lboost_filesystem -ltcl8.5 -ltk8.5
+unix:LIBS += -lboost_system -lboost_filesystem -ltcl8.5 -ltk8.5 -lGL -lGLU
 
 win32:LIBS += ../../renderer/third-party/lib/mingw/libyaml-cpp.a
 win32:LIBS += $(BOOST_ROOT)/stage/lib/libboost_filesystem-mgw46-mt-1_49.a

@@ -11,6 +11,7 @@
 #include "viewport.h"
 #include "camera.h"
 #include "rasterizer.h"
+#include "openglrenderer.h"
 #include "mesh.h"
 #include "light.h"
 #include "sceneobject.h"
@@ -18,12 +19,25 @@
 namespace rend
 {
 
-RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport)
-    : m_rasterizer(new Rasterizer(viewport->getWidth(), viewport->getHeight())),
-      m_camera(cam),
+RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode)
+    : m_camera(cam),
       m_viewport(viewport)
 {
     m_camera->setEulerAnglesRotation(0, 0, 0);
+
+    switch (mode)
+    {
+    case RM_SOFTWARE:
+        m_renderer = make_shared<Rasterizer>(viewport->getWidth(), viewport->getHeight());
+        break;
+
+    case RM_OPENGL:
+        m_renderer = make_shared<OpenGLRenderer>(viewport);
+        break;
+
+    default:
+        throw RenderMgrException("Unknown renderer");
+    }
 
     // add standart white ambient light
 //    addAmbientLight(Color3(255 * 0.3, 255 * 0.3, 255 * 0.3));
@@ -39,19 +53,19 @@ RenderMgr::~RenderMgr()
 
 }
 
-void RenderMgr::update()
+FrameInfo RenderMgr::update()
 {
+    RenderList renderList;
+    FrameInfo frInfo;
+
     if (!m_viewport)
     {
         syslog << "Viewport is not setted" << logdebug;
-        return;
+        return frInfo;
     }
 
     // 1. Clear buffer.
-    m_rasterizer->beginFrame(m_viewport);
-
-    RenderList renderList;
-    FrameInfo frInfo;
+    m_renderer->beginFrame(m_viewport);
 
     // 2. Cull full meshes and form triangles render list.
     // Also applies world transformation.
@@ -86,10 +100,12 @@ void RenderMgr::update()
     frInfo.trianglesForRaster = renderList.getSize();
 
     // 8. Rasterize triangles.
-    m_rasterizer->rasterize(renderList);
+    m_renderer->render(renderList);
 
     // 9. Flush buffer to the screen.
-    m_rasterizer->endFrame(m_viewport);
+    m_renderer->endFrame(m_viewport);
+
+    return frInfo;
 }
 
 sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)
@@ -147,7 +163,7 @@ sptr(PointLight) RenderMgr::addPointLight(Color3 intensity, math::vec3 position,
 void RenderMgr::resize(int w, int h)
 {
     m_viewport->resize(w, h);
-    m_rasterizer->resize(w, h);
+    m_renderer->resize(w, h);
 }
 
 void RenderMgr::addSceneObject(sptr(SceneObject) node)

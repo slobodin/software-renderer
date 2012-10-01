@@ -92,28 +92,15 @@ void BaseAppTk::tkKeyD()
 BaseAppTk::BaseAppTk(int argc, const char *argv[])
     : BaseApp()
 {
+    m_instance = this;      // FIXME: not really singletone
+
+    Tk::init((char *)argv[0]);
+    Tk::wm(Tk::title, ".", "Nyan");
+
     m_clientController = boost::make_shared<base::Controller>(argc, argv);
 
     m_clientController->createViewport<TkViewport>();
     m_viewport = boost::dynamic_pointer_cast<TkViewport>(m_clientController->getViewport());
-
-    Tk::init((char *)argv[0]);
-
-    Tk::wm(Tk::title, ".", "Nyan");
-
-    // create rendering canvas
-    Tk::images(Tk::create, Tk::photo, "canvas_photo")
-            -Tk::width(m_viewport->getWidth())
-            -Tk::height(m_viewport->getHeight());
-    Tk::canvas(".c") -Tk::highlightthickness(0)
-            -Tk::width(m_viewport->getWidth())
-            -Tk::height(m_viewport->getHeight());
-    Tk::pack(".c") -Tk::fill(Tk::both) -Tk::expand(true);
-    (".c" << Tk::create(Tk::image, 0, 0)) -Tk::image("canvas_photo") -Tk::anchor(nw);
-
-    m_viewport->setFrameName("canvas_photo");
-
-    m_instance = this;      // FIXME: not really singletone
 
     // setup update event
     m_updateCallback = Tk::callback(&BaseAppTk::tkUpdate);
@@ -154,6 +141,17 @@ void TkViewport::resize(int w, int h)
 TkViewport::TkViewport(int width, int height, boost::shared_ptr<rend::Camera> camera)
     : Viewport(width, height, camera)
 {
+    // create rendering canvas
+    Tk::images(Tk::create, Tk::photo, "canvas_photo")
+            -Tk::width(getWidth())
+            -Tk::height(getHeight());
+    Tk::canvas(".c") -Tk::highlightthickness(0)
+            -Tk::width(getWidth())
+            -Tk::height(getHeight());
+    Tk::pack(".c") -Tk::fill(Tk::both) -Tk::expand(true);
+    (".c" << Tk::create(Tk::image, 0, 0)) -Tk::image("canvas_photo") -Tk::anchor(nw);
+
+    setFrameName("canvas_photo");
 }
 
 TkViewport::~TkViewport()

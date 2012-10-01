@@ -28,6 +28,7 @@ struct RendererConfig
     int         width;
     int         height;
     string      pathToTheAssets;
+    string      rendererMode;           // "software" or "opengl"
 
     void makeDefaults();
 };

@@ -11,6 +11,16 @@
 #include "poly.h"
 #include "viewport.h"
 #include "texture.h"
+#include "mesh.h"
+#include "camera.h"
+#include "color.h"
+#include "material.h"
+#include "poly.h"
+#include "renderlist.h"
+#include "vertex.h"
+
+// LOT OF BOILERPLATE HERE
+// don't have enough time to refactor this
 
 namespace rend
 {
@@ -140,44 +150,6 @@ void Rasterizer::rasterizeTopOrBottomTriangle(int x1, int y1, int x2, int x3, in
             m_fb.wscanline(left, right, y, color);
         }
     }
-}
-
-void Rasterizer::drawBottomTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3)
-{
-    if (v3.p.x < v2.p.x)
-        std::swap(v2, v3);
-
-    /*int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
-    int y1 = v1.p.y, y3 = v3.p.y;       // y2 equals to y2 (bottom flat triangle)
-
-    double height = y3 - y1;
-    double dxLeft = (x2 - x1) / height;
-    double dxRight = (x3 - x1) / height;
-    double xs = x1;
-    double xe = x1;
-
-    double rs = v1.color[RED];
-    double re = v1.color[RED];
-    double gs = v1.color[GREEN];
-    double ge = v1.color[GREEN];
-    double bs = v1.color[BLUE];
-    double be = v1.color[BLUE];
-
-    // horisontal interpolating
-    int r = ir1, g = ig1, b = ib1;
-    double dx = xe - xs;
-    double dirx = (double)(re - rs) / dx;
-    double digx = (double)(ge - gs) / dx;
-    double dibx = (double)(be - bs) / dx;*/
-}
-
-void Rasterizer::drawTopTriangleGouraud(math::vertex &v1, math::vertex &v2, math::vertex &v3)
-{
-    if (v2.p.x < v1.p.x)
-        std::swap(v1, v2);
-
-//    int x1 = v1.p.x, x2 = v2.p.x, x3 = v3.p.x;
-//    int y1 = v1.p.y, y3 = v3.p.y;
 }
 
 bool Rasterizer::clipLine(math::vec3 &p1, math::vec3 &p2)
@@ -918,7 +890,7 @@ Rasterizer::Rasterizer(const int width, const int height)
 {
 }
 
-void Rasterizer::rasterize(const RenderList &rendlist)
+void Rasterizer::render(const RenderList &rendlist)
 {
     auto &trias = rendlist.triangles();
 

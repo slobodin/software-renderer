@@ -966,6 +966,7 @@ void init(char *argv0);
 #endif
 
 extern Tcl_Interp *globalTclInterpret;
+Tcl_Interp * getInterp();
 
 // for falling into the event loop
 void runEventLoop();

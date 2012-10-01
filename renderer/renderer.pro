@@ -59,13 +59,14 @@ HEADERS += \
     base/decoderobj.h \
     base/decoder3ds.h \
     base/decodermd2.h \
-    platform/baseapplinux.h \
     third-party/include/cpptk-1.0.2/base/cpptkbase.h \
     third-party/include/cpptk-1.0.2/cpptk.h \
     platform/baseapptk.h \
     base/decodercob.h \
     base/decoderimage.h \
-    rend/terrainsceneobject.h
+    rend/terrainsceneobject.h \
+    rend/abstractrenderer.h \
+    rend/openglrenderer.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -102,13 +103,13 @@ SOURCES += \
     base/decoderobj.cpp \
     base/decoder3ds.cpp \
     base/decodermd2.cpp \
-    platform/baseapplinux.cpp \
     platform/baseapptk.cpp \
     third-party/include/cpptk-1.0.2/cpptk.cc \
     third-party/include/cpptk-1.0.2/base/cpptkbase.cc \
     base/decodercob.cpp \
     base/decoderimage.cpp \
-    rend/terrainsceneobject.cpp
+    rend/terrainsceneobject.cpp \
+    rend/openglrenderer.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

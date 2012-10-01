@@ -16,8 +16,10 @@
 namespace rend
 {
 
+DECLARE_EXCEPTION(RenderMgrException)
+
 class Camera;
-class Rasterizer;
+class AbstractRenderer;
 class Light;
 class Viewport;
 class AmbientLight;
@@ -32,9 +34,15 @@ struct FrameInfo
     int trianglesForRaster;
 };
 
+enum RendererMode
+{
+    RM_SOFTWARE,
+    RM_OPENGL
+};
+
 class RenderMgr : boost::noncopyable
 {
-    sptr(Rasterizer) m_rasterizer;
+    sptr(AbstractRenderer) m_renderer;
     sptr(Camera) m_camera;
     sptr(Viewport) m_viewport;
 
@@ -45,10 +53,10 @@ class RenderMgr : boost::noncopyable
     void makeLight();
 
 public:
-    RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport);
+    RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode);
     ~RenderMgr();
 
-    void update();
+    FrameInfo update();
 
     void addSceneObject(sptr(SceneObject) node);
     sptr(SceneObject) getSceneObject(const string &name);

@@ -62,7 +62,9 @@ void Controller::update()
     }
 
     // m_inputManager->capture() ???
-    m_rendmgr->update();
+    rend::FrameInfo frInfo = m_rendmgr->update();
+
+    // do something with fps and other
 }
 
 std::pair<int, int> Controller::getViewportSize()
@@ -73,7 +75,14 @@ std::pair<int, int> Controller::getViewportSize()
 
 void Controller::createRenderManager()
 {
-    m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam, m_viewport);
+    string rendererMode = m_controllerConfig->getRendererConfig().rendererMode;
+
+    if (rendererMode == "software")
+        m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam, m_viewport, rend::RM_SOFTWARE);
+    else if (rendererMode == "opengl")
+        m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam, m_viewport, rend::RM_OPENGL);
+    else
+        throw ControllerException(string(string("Invalid renderer ") + rendererMode).c_str());
 
     // now add to the scene all scene objects, getted from the config file
     const SceneConfig &scCfg = m_controllerConfig->getSceneConfig();

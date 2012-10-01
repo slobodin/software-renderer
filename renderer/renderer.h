@@ -12,7 +12,6 @@
 #include "comm/string_utils.h"
 
 #include "platform/baseapp.h"
-#include "platform/baseapplinux.h"
 #include "platform/baseapptk.h"
 #include "platform/events.h"
 

@@ -9,6 +9,7 @@
 
 #include <yaml-cpp/yaml.h>
 #include "viewport.h"
+#include "string_utils.h"
 
 namespace base
 {
@@ -23,6 +24,7 @@ void RendererConfig::makeDefaults()
     width = rend::DEFAULT_WIDTH;
     height = rend::DEFAULT_HEIGHT;
     pathToTheAssets = fs::canonical(fs::current_path()).string();   // executable dir
+    rendererMode = "software";
 }
 
 static void operator>> (const YAML::Node &node, math::vec3 &v)
@@ -91,6 +93,9 @@ void Config::parseRendererConfig() try
     FindValue(doc, m_rendererConfig.height, "height", rend::DEFAULT_HEIGHT);
     FindValue(doc, m_rendererConfig.camPosition, "campos", math::vec3(0, 0, 0));
     FindValue(doc, m_rendererConfig.pathToTheAssets, "assets", string(""));
+    FindValue(doc, m_rendererConfig.rendererMode, "renderer", string("software"));
+
+    common::eraseSpaces(m_rendererConfig.rendererMode);
 
     // check resources path
     fs::path p(m_rendererConfig.pathToTheAssets);

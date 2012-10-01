@@ -54,12 +54,11 @@ class TkViewport : public rend::Viewport
     std::string m_frameName;
 
     virtual void resize(int w, int h);
+    void setFrameName(const std::string &name);
 
 public:
     TkViewport(int width, int height, boost::shared_ptr<rend::Camera> camera);
     virtual ~TkViewport();
-
-    void setFrameName(const std::string &name);
 
     void flush(const unsigned char * const pixels);
 };

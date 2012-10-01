@@ -47,6 +47,8 @@ public:
     int                 getAspect() const;
     std::pair<int, int> getCenter() const;
 
+    boost::shared_ptr<Camera> getCamera() const { return m_camera; }
+
     virtual void flush(const unsigned char *const pixels) = 0;
 };
 

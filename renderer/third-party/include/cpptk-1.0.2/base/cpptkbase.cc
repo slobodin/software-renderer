@@ -67,12 +67,18 @@ private:
      Tcl_Interp * interp_;
 };
 
+}
+
+namespace Tk {
 // lazy-initialization of Tcl interpreter
 Tcl_Interp * getInterp()
 {
      static Interp interp;
      return interp.get();
 }
+}
+
+namespace { // anonymous
 
 // output stream for dumping Tk commands
 // (useful for automated testing)
