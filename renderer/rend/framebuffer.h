@@ -36,8 +36,7 @@ private:
     int m_yOrigin;
 
 public:
-    FrameBuffer(const int witdh,
-                const int height);
+    FrameBuffer(int witdh, int height);
     ~FrameBuffer();
 
     void clear();

@@ -45,7 +45,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (m_hammer)
     {
         m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
-        m_hammer->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+//        m_hammer->getMesh()->setShadingMode(rend::Material::SM_WIRE);
     }
 
     // create terrain
@@ -59,7 +59,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (m_sphere)
     {
         m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
-        m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+//        m_sphere->getMesh()->setShadingMode(rend::Material::SM_WIRE);
     }
 }
 

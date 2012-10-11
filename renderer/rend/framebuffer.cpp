@@ -7,13 +7,10 @@
 
 #include "framebuffer.h"
 
-#include <QImage>
-#include <QRgb>
-
 namespace rend
 {
 
-FrameBuffer::FrameBuffer(const int witdh, const int height)
+FrameBuffer::FrameBuffer(int witdh, int height)
     : m_pixels(0),
       m_width(witdh),
       m_height(height),

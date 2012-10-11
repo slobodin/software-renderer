@@ -44,7 +44,6 @@ HEADERS += \
     rend/sceneobject.h \
     rend/rendermgr.h \
     rend/renderlist.h \
-    rend/rasterizer.h \
     rend/node.h \
     rend/mesh.h \
     rend/material.h \
@@ -66,7 +65,12 @@ HEADERS += \
     base/decoderimage.h \
     rend/terrainsceneobject.h \
     rend/abstractrenderer.h \
-    rend/openglrenderer.h
+    rend/opengl/openglrenderer.h \
+    rend/software/rasterizer.h \
+    rend/software/softwarerenderer.h \
+    rend/software/wireframetrianglerasterizer.h \
+    rend/software/trianglerasterizer.h \
+    rend/software/flattrianglerasterizer.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -90,7 +94,6 @@ SOURCES += \
     rend/sceneobject.cpp \
     rend/rendermgr.cpp \
     rend/renderlist.cpp \
-    rend/rasterizer.cpp \
     rend/mesh.cpp \
     rend/material.cpp \
     rend/light.cpp \
@@ -109,7 +112,12 @@ SOURCES += \
     base/decodercob.cpp \
     base/decoderimage.cpp \
     rend/terrainsceneobject.cpp \
-    rend/openglrenderer.cpp
+    rend/opengl/openglrenderer.cpp \
+    rend/software/rasterizer.cpp \
+    rend/software/softwarerenderer.cpp \
+    rend/software/wireframetrianglerasterizer.cpp \
+    rend/software/trianglerasterizer.cpp \
+    rend/software/flattrianglerasterizer.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

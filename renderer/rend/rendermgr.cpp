@@ -10,11 +10,11 @@
 #include "vec3.h"
 #include "viewport.h"
 #include "camera.h"
-#include "rasterizer.h"
-#include "openglrenderer.h"
 #include "mesh.h"
 #include "light.h"
 #include "sceneobject.h"
+#include "software/softwarerenderer.h"
+#include "opengl/openglrenderer.h"
 
 namespace rend
 {
@@ -28,7 +28,7 @@ RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> vi
     switch (mode)
     {
     case RM_SOFTWARE:
-        m_renderer = make_shared<Rasterizer>(viewport->getWidth(), viewport->getHeight());
+        m_renderer = make_shared<SoftwareRenderer>(viewport->getWidth(), viewport->getHeight());
         break;
 
     case RM_OPENGL:
