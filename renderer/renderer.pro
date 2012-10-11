@@ -66,11 +66,12 @@ HEADERS += \
     rend/terrainsceneobject.h \
     rend/abstractrenderer.h \
     rend/opengl/openglrenderer.h \
-    rend/software/rasterizer.h \
     rend/software/softwarerenderer.h \
     rend/software/wireframetrianglerasterizer.h \
     rend/software/trianglerasterizer.h \
-    rend/software/flattrianglerasterizer.h
+    rend/software/flattrianglerasterizer.h \
+    rend/software/gouraudtrianglerasterizer.h \
+    rend/software/texturedtrianglerasterizer.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -113,11 +114,11 @@ SOURCES += \
     base/decoderimage.cpp \
     rend/terrainsceneobject.cpp \
     rend/opengl/openglrenderer.cpp \
-    rend/software/rasterizer.cpp \
     rend/software/softwarerenderer.cpp \
     rend/software/wireframetrianglerasterizer.cpp \
-    rend/software/trianglerasterizer.cpp \
-    rend/software/flattrianglerasterizer.cpp
+    rend/software/flattrianglerasterizer.cpp \
+    rend/software/gouraudtrianglerasterizer.cpp \
+    rend/software/texturedtrianglerasterizer.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

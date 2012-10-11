@@ -20,12 +20,12 @@ Objects:
 
 Lights:
   Ambient:				# note: id = 0
-    - intensity: [50, 50, 50]
+    - intensity: [150, 150, 150]
   Directional:
 #    - direction: [1, 1, 0]
 #      intensity: [255, 10, 50]
-    - direction: [1, 1, 0]		# note: id = 1
-      intensity: [255, 80, 80]
+#    - direction: [1, 1, 0]		# note: id = 1
+#      intensity: [255, 80, 80]
 #  Point:
 #    - position: [0, 1500, 0]		# note: id = 2
 #     intensity: [255, 255, 50]

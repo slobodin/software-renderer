@@ -7,7 +7,7 @@
 
 #include "tkapplication.h"
 
-void TkApplication::update(float dt)
+void TkApplication::update(float /*dt*/)
 {
     static int yaw, roll;
 
@@ -45,21 +45,21 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (m_hammer)
     {
         m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
-//        m_hammer->getMesh()->setShadingMode(rend::Material::SM_WIRE);
+        m_hammer->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
     }
 
     // create terrain
-    /*auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
+    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
     auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
-    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 1500, heightMapTexture, texture);*/
+    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 500, heightMapTexture, texture);
 
-//    rendmgr->addSceneObject(terrain);
+    rendmgr->addSceneObject(terrain);
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
     {
         m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
-//        m_sphere->getMesh()->setShadingMode(rend::Material::SM_WIRE);
+        m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
     }
 }
 
@@ -126,6 +126,6 @@ void TkApplication::onKeyPressed(const platform::KeyboardEvent &ev)
     m_playerCamera->setPosition(position);
 }
 
-void TkApplication::onKeyReleased(const platform::KeyboardEvent &ev)
+void TkApplication::onKeyReleased(const platform::KeyboardEvent &/*ev*/)
 {
 }

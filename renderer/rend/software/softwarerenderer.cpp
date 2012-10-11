@@ -12,6 +12,8 @@
 #include "framebuffer.h"
 #include "wireframetrianglerasterizer.h"
 #include "flattrianglerasterizer.h"
+#include "gouraudtrianglerasterizer.h"
+#include "texturedtrianglerasterizer.h"
 
 namespace rend
 {
@@ -19,7 +21,9 @@ namespace rend
 SoftwareRenderer::SoftwareRenderer(int width, int height)
     : m_fb(new FrameBuffer(width, height)),
       m_wire(new WireframeTriangleRasterizer()),
-      m_flat(new FlatTriangleRasterizer())
+      m_flat(new FlatTriangleRasterizer()),
+      m_gouraud(new GouraudTriangleRasterizer()),
+      m_text(new TexturedTriangleRasterizer())
 {
 }
 
@@ -31,6 +35,10 @@ SoftwareRenderer::~SoftwareRenderer()
         delete m_wire;
     if (m_flat)
         delete m_flat;
+    if (m_gouraud)
+        delete m_gouraud;
+    if (m_text)
+        delete m_text;
 }
 
 void SoftwareRenderer::render(const RenderList &rendlist)
@@ -58,11 +66,11 @@ void SoftwareRenderer::render(const RenderList &rendlist)
             rasterizer = m_flat;
 
         case Material::SM_GOURAUD:
-//            drawGouraudTriangle(t);
+            rasterizer = m_gouraud;
             break;
 
         case Material::SM_TEXTURE:
-//            drawTexturedTriangle(t);
+            rasterizer = m_text;
             break;
 
         default:

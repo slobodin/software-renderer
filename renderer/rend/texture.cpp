@@ -34,26 +34,4 @@ Texture::~Texture()
         delete [] m_pixels;
 }
 
-Color3 Texture::at(int x, int y) const
-{
-    if (x >= m_width || y >= m_height/* || x < 0 || y < 0*/)
-        return Color3();//throw TextureException("Out of range while getting texel.");
-
-    unsigned char *col = m_pixels + y * m_width + x;
-
-    if (m_bpp == 3)
-        return Color3(col[0], col[1], col[2]);
-    else if (m_bpp == 1)
-        return Color3(col[0], col[0], col[0]);      // !!!!
-    else
-        throw std::exception();
-}
-
-Color3 Texture::at(int pos) const
-{
-    unsigned char *col = m_pixels + pos;
-
-    return Color3(col[0], col[1], col[2]);
-}
-
 }

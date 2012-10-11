@@ -18,7 +18,7 @@ Decoder3DS::~Decoder3DS()
 {
 }
 
-sptr(Resource) Decoder3DS::decode(const string &path)
+sptr(Resource) Decoder3DS::decode(const string &/*path*/)
 {
     syslog << "3DS files not supported yet" << logerr;
     return sptr(Resource)();

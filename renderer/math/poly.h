@@ -28,8 +28,8 @@ public:
     Triangle(rend::Material::SideType st = rend::Material::ONE_SIDE);
     Triangle(const vertex *arr, rend::Material::SideType st = rend::Material::ONE_SIDE);
 
-    const vertex &v(const size_t ind) const;
-    vertex &v(const size_t ind);
+    const vertex &v(size_t ind) const { return m_verts[ind]; }
+    vertex &v(size_t ind) { return m_verts[ind]; }
 
     vector<vec3> points() const;
     vector<vec3> normals() const;

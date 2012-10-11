@@ -19,12 +19,17 @@ class Viewport;
 class FrameBuffer;
 class WireframeTriangleRasterizer;
 class FlatTriangleRasterizer;
+class GouraudTriangleRasterizer;
+class TexturedTriangleRasterizer;
 
 class SoftwareRenderer : public AbstractRenderer
 {
     FrameBuffer *m_fb;
-    WireframeTriangleRasterizer *m_wire;
-    FlatTriangleRasterizer *m_flat;
+
+    WireframeTriangleRasterizer     *m_wire;
+    FlatTriangleRasterizer          *m_flat;
+    GouraudTriangleRasterizer       *m_gouraud;
+    TexturedTriangleRasterizer      *m_text;
 
 public:
     SoftwareRenderer(int width, int height);

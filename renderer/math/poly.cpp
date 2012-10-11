@@ -31,7 +31,7 @@ Triangle::Triangle(const vertex *arr, rend::Material::SideType st)
     computeNormal();
 }
 
-const vertex &Triangle::v(const size_t ind) const
+/*const vertex &Triangle::v(const size_t ind) const
 {
     if (ind > 2)
     {
@@ -49,7 +49,7 @@ vertex &Triangle::v(const size_t ind)
     }
 
     return m_verts[ind];
-}
+}*/
 
 vector<vec3> Triangle::points() const
 {
