@@ -38,78 +38,116 @@ static int attrListDbl[] =
 
 OpenGLRenderer::OpenGLRenderer(const shared_ptr<Viewport> viewport)
 {
+    Tk::getInterp();
     auto tkViewport = boost::dynamic_pointer_cast<platform::TkViewport>(viewport);
 
     if (!tkViewport)
         throw RendererException("Only tk widgets supported");       // x11 and win32 deprecated
 
-    int windowId = Tk::winfo(Tk::id, ".c");
-    m_xWindowId = windowId;
-    string scrStr = Tk::winfo(Tk::screen, ".c");
+//    Display *display = XOpenDisplay(getenv("DISPLAY"));
 
+//    string windowId = Tk::winfo(Tk::id, ".");
+//    stringstream ss(windowId);
+//    ss >> std::hex >> m_xWindowId;
+////    m_xWindowId = windowId;
 
-    Display *d = XOpenDisplay(scrStr.c_str());
-    Tk_Window tkwin = Tk_IdToWindow(d, m_xWindowId);
-
-//    Visual *vi = Tk_Visual(tkwin);
-
-    Tk_Window mainwin = Tk_MainWindow(Tk::getInterp());
-
-
-
-//    /* fill in flags normally passed in that affect behavior */
-//    (void) glXGetConfig(dpy, visinfo, GLX_RGBA, &togl->RgbaFlag);
-//    (void) glXGetConfig(dpy, visinfo, GLX_DOUBLEBUFFER,
-//            &togl->DoubleFlag);
-//    (void) glXGetConfig(dpy, visinfo, GLX_STEREO, &togl->StereoFlag);
-
-
-
-
-
-
-
-
-
-    // displayName.screenIndex.
-//    string scr = Tk::winfo(Tk::screen, ".c");
-
-//             // FIXME: need to get display from Window, how??
-//    int screen = DefaultScreen(d);
-
-//    XVisualInfo *vi = glXChooseVisual(d, screen, attrListDbl);
-//    if (vi == NULL)
-//        throw RendererException("Can't create context.");
-
-    XVisualInfo templ;
-    int     count = 1;
-
-    templ.visualid = (int)Tk::winfo(Tk::visualid, ".c");
-    XVisualInfo *vi = XGetVisualInfo(d, VisualIDMask, &templ, &count);
-    if (vi == NULL) {
-            throw RendererException("Only tk widgets supported");
-    }
-
-    GLXContext context = glXGetCurrentContext();// glXCreateContext(d, vi, 0, GL_TRUE);
-    glXMakeCurrent(d, m_xWindowId, context);
+//    XWindowAttributes wndAttrib;
+//    XGetWindowAttributes(display, m_xWindowId, &wndAttrib);
 
     int a;
-    a = 4;
+    a = 5;
 
-//    (void) glXMakeCurrent(togl->display,
-//            togl->TkWin ? Tk_WindowId(togl->TkWin) : None, togl->GlCtx);
-//    Tcl_Interp *interp = Tk::getInterp();
-//    if (Togl_Init(interp) == TCL_ERROR)
-//    {
-//        syslog << "Can't init Togl" << logerr;
-//        throw RendererException("Uninitialized");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    string scrStr = Tk::winfo(Tk::screen, ".c");
+
+
+//    Display *d = XOpenDisplay(scrStr.c_str());
+//    Tk_Window tkwin = Tk_IdToWindow(d, m_xWindowId);
+
+////    Visual *vi = Tk_Visual(tkwin);
+
+//    Tk_Window mainwin = Tk_MainWindow(Tk::getInterp());
+
+
+
+////    /* fill in flags normally passed in that affect behavior */
+////    (void) glXGetConfig(dpy, visinfo, GLX_RGBA, &togl->RgbaFlag);
+////    (void) glXGetConfig(dpy, visinfo, GLX_DOUBLEBUFFER,
+////            &togl->DoubleFlag);
+////    (void) glXGetConfig(dpy, visinfo, GLX_STEREO, &togl->StereoFlag);
+
+
+
+
+
+
+
+
+
+//    // displayName.screenIndex.
+////    string scr = Tk::winfo(Tk::screen, ".c");
+
+////             // FIXME: need to get display from Window, how??
+////    int screen = DefaultScreen(d);
+
+////    XVisualInfo *vi = glXChooseVisual(d, screen, attrListDbl);
+////    if (vi == NULL)
+////        throw RendererException("Can't create context.");
+
+//    XVisualInfo templ;
+//    int     count = 1;
+
+//    templ.visualid = (int)Tk::winfo(Tk::visualid, ".c");
+//    XVisualInfo *vi = XGetVisualInfo(d, VisualIDMask, &templ, &count);
+//    if (vi == NULL) {
+//            throw RendererException("Only tk widgets supported");
 //    }
 
-//    Togl_DisplayFunc(OpenGLRenderer::ondisplay);
-//    Togl_ReshapeFunc(OpenGLRenderer::onreshape);
+//    GLXContext context = glXGetCurrentContext();// glXCreateContext(d, vi, 0, GL_TRUE);
+//    glXMakeCurrent(d, m_xWindowId, context);
+
+//    int a;
+//    a = 4;
+
+////    (void) glXMakeCurrent(togl->display,
+////            togl->TkWin ? Tk_WindowId(togl->TkWin) : None, togl->GlCtx);
+////    Tcl_Interp *interp = Tk::getInterp();
+////    if (Togl_Init(interp) == TCL_ERROR)
+////    {
+////        syslog << "Can't init Togl" << logerr;
+////        throw RendererException("Uninitialized");
+////    }
+
+////    Togl_DisplayFunc(OpenGLRenderer::ondisplay);
+////    Togl_ReshapeFunc(OpenGLRenderer::onreshape);
 
 
-//    Tk_IdToWindow(Display *display, Window window);
+////    Tk_IdToWindow(Display *display, Window window);
 }
 
 void OpenGLRenderer::onreshape(Togl *togl)

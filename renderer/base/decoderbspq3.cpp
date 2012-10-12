@@ -13,6 +13,7 @@
 #include "material.h"
 #include "mesh.h"
 #include "sceneobject.h"
+#include "vertexbuffer.h"
 
 namespace base
 {
@@ -106,18 +107,35 @@ sptr(Resource) DecoderBSPQ3::decode(const string &path)
         }
     }
 
-    auto newMesh = make_shared<rend::Mesh>(/*vertexList,
-                                           rend::Mesh::MT_MESH_TRIANGLELIST*/);
-    auto newSceneObject = make_shared<rend::SceneObject>(newMesh);
-    newSceneObject->setName(path);  // FIXME:! not path!
+    rend::VertexBuffer vb;
+    vb.setType(rend::VertexBuffer::TRIANGLELIST);
+    vb.appendVertices(vertexList);
+
+    auto material = make_shared<rend::Material>();
+    material->plainColor = rend::Color3(255, 50, 50);
+    material->ambientColor = rend::Color3(255, 50, 50);
+    material->diffuseColor = rend::Color3(255, 50, 50);
+
+    material->shadeMode = rend::Material::SM_FLAT;
+    material->sideType = rend::Material::ONE_SIDE;
+
+    vb.setMaterial(material);
+
+    auto newMesh = make_shared<rend::Mesh>();
+    newMesh->appendSubmesh(vb);
+
+    auto newObject = make_shared<rend::SceneObject>(newMesh);
+    newObject->setName(path + "q3");  // FIXME:! not path!
 
     delete [] vertices;
     delete [] faces;
     delete [] meshVerts;
 
-//    *syslog << "Decoded q3-bsp model \"" << newMesh->name() << "\". Number of vertices:" << newMesh->numVertices() << logmess;
+    syslog << "Decoded q3 bsp-model \"" << newObject->getName()
+            << "\". Number of vertices:" << newMesh->numVertices()
+            << ". Number of faces:" << numFaces << logmess;
 
-    return newSceneObject;
+    return newObject;
 }
 
 string DecoderBSPQ3::extension() const

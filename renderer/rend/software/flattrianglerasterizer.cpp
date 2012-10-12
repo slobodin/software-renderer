@@ -16,7 +16,7 @@
 namespace rend
 {
 
-void makeCCWTriangle(math::vertex &p1, math::vertex &p2, math::vertex &p3)
+inline void makeCCWTriangle(math::vertex &p1, math::vertex &p2, math::vertex &p3)
 {
     // sort vertices (CCW order: p1 (top), p2, p3 (bottom))
     if (p2.p.y < p1.p.y)
@@ -71,35 +71,34 @@ void FlatTriangleRasterizer::rasterizeTopOrBottomTriangle(int x1, int y1, int x2
                                                           double dxLeft, double dxRight, double xs, double xe,
                                                           const Color3 &color, FrameBuffer *fb)
 {
-    int iy1 = 0, iy3 = 0;
+    int yorig = fb->yorig();
+    int xorig = fb->xorig();
+    int height = fb->height();
+    int width = fb->width();
 
     // top of screen clipping
-    if (y1 < fb->yorig())
+    if (y1 < yorig)
     {
-        xs = xs + dxLeft * (-y1 + fb->yorig());
-        xe = xe + dxRight * (-y1 + fb->yorig());
+        xs = xs + dxLeft * (-y1 + yorig);
+        xe = xe + dxRight * (-y1 + yorig);
 
-        y1 = fb->yorig();
-        iy1 = y1;     // ceiling
+        y1 = yorig;
     }
-    else
-        iy1 = y1;
 
     // bottom screen clipping
-    if (y3 > fb->height())
+    if (y3 > height)
     {
-        y3 = fb->height();
-        iy3 = y3 - 1;
+        y3 = height - 1;
     }
     else
-        iy3 = y3 - 1;
+        y3 = y3 - 1;
 
     // if no x clipping (left right screen borders)
-    if (x1 >= fb->xorig() && x1 <= fb->width() &&
-        x2 >= fb->xorig() && x2 <= fb->width() &&
-        x3 >= fb->xorig() && x3 <= fb->width())
+    if (x1 >= xorig && x1 <= width &&
+        x2 >= xorig && x2 <= width &&
+        x3 >= xorig && x3 <= width)
     {
-        for (int y = iy1; y <= iy3; y++)
+        for (int y = y1; y <= y3; y++)
         {
             fb->wscanline(xs, xe, y, color);
 
@@ -109,26 +108,27 @@ void FlatTriangleRasterizer::rasterizeTopOrBottomTriangle(int x1, int y1, int x2
     }
     else    // have x clipping
     {
-        for (int y = iy1; y <= iy3; y++)
+        double left, right;
+        for (int y = y1; y <= y3; y++)
         {
-            double left = xs, right = xe;
+            left = xs; right = xe;
 
             xs += dxLeft;
             xe += dxRight;
 
-            if (left < fb->xorig())
+            if (left < xorig)
             {
-                left = fb->xorig();
+                left = xorig;
 
-                if (right < fb->xorig())
+                if (right < xorig)
                     continue;
             }
 
-            if (right > fb->width())
+            if (right > width)
             {
-                right = fb->width();
+                right = width;
 
-                if (left > fb->width())
+                if (left > width)
                     continue;
             }
 

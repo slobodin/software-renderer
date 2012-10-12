@@ -15,6 +15,19 @@
 #include "camera.h"
 #include "sceneobject.h"
 
+
+#ifdef __linux__
+#include <tcl/tk.h>
+#include <tcl/tcl.h>
+#include <GL/gl.h>
+#include <GL/glx.h>
+#elif WIN32
+#include <tcl8.5/tk.h>
+#include <tcl8.5/tcl.h>
+#endif
+#include <cpptk-1.0.2/cpptk.h>
+#include <cpptk-1.0.2/base/cpptkbase.h>
+
 namespace base
 {
 
@@ -22,6 +35,24 @@ void Controller::resize(int w, int h)
 {
     if (m_rendmgr)
         m_rendmgr->resize(w, h);
+}
+
+void Controller::test()
+{
+
+    Display *display = XOpenDisplay(getenv("DISPLAY"));
+    Window m_xWindowId;
+
+    string windowId = Tk::winfo(Tk::id, ".c");
+    stringstream ss(windowId);
+    ss >> std::hex >> m_xWindowId;
+//    m_xWindowId = windowId;
+
+    XWindowAttributes wndAttrib;
+    XGetWindowAttributes(display, m_xWindowId, &wndAttrib);
+
+    int a;
+    a = 5;
 }
 
 Controller::Controller(int argc, const char *argv[])

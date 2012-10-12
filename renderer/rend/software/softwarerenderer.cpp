@@ -66,6 +66,7 @@ void SoftwareRenderer::renderWorld(const RenderList &rendlist)
         case Material::SM_PLAIN_COLOR:
         case Material::SM_FLAT:
             rasterizer = m_flat;
+            break;
 
         case Material::SM_GOURAUD:
             rasterizer = m_gouraud;

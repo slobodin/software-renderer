@@ -29,7 +29,7 @@ ResourceMgr::ResourceMgr()
     sptr(ResourceDecoder) cobDecoder(new DecoderCOB);
     sptr(ResourceDecoder) objDecoder(new DecoderOBJ);
     sptr(ResourceDecoder) imgDecoder(new DecoderImage);
-//    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
+    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
     // other decoders
 
     // add all
@@ -38,7 +38,7 @@ ResourceMgr::ResourceMgr()
     m_decoders[cobDecoder->extension()] = cobDecoder;
     m_decoders[objDecoder->extension()] = objDecoder;
     m_decoders[imgDecoder->extension()] = imgDecoder;
-//    m_decoders[bspDecoder->extension()] = bspDecoder;
+    m_decoders[bspDecoder->extension()] = bspDecoder;
 }
 
 ResourceMgr::~ResourceMgr()

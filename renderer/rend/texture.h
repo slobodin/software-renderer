@@ -33,11 +33,18 @@ public:
         return m_pixels[y * m_width + x];
     }
 
-//    Color3 at(int pos) const
-//    {
-//        unsigned char *col = m_pixels + pos;
-//        return Color3(col[0], col[1], col[2]);
-//    }
+    Color3 at(int pos) const
+    {
+        if (pos < 0 || pos >= (m_width * m_height))
+            return Color3();
+
+        return m_pixels[pos];
+    }
+
+    const Color3 *raw() const
+    {
+        return &m_pixels[0];
+    }
 
     int width() const { return m_width; }
     int height() const { return m_height; }

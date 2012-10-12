@@ -88,7 +88,7 @@ FrameInfo RenderMgr::update()
     for (auto light : m_lights)
         light->illuminate(renderList);
 
-    // 5. World -> Camera transformation. Cull triangles with negative Z.
+    // 5. World -> Camera transformation. Also cull triangles with negative Z.
     // TODO: frustum culling here.
     m_camera->toCamera(renderList);
 

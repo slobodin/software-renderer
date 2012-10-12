@@ -60,6 +60,8 @@ public:
     sptr(rend::Viewport)    getViewport();
 
     void resize(int w, int h);
+
+    void test();
 };
 
 // because there is no `export' keyword
@@ -71,7 +73,9 @@ void Controller::createViewport()
 
     auto size = getViewportSize();
 
+    // creating the viewport
     m_viewport = boost::make_shared<T>(size.first, size.second, m_mainCam);
+    // initializing the rendering manager
     createRenderManager();
 }
 

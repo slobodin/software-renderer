@@ -43,7 +43,7 @@ class DecoderBSPQ3 : public ResourceDecoder
     struct __attribute__ ((__packed__)) BSPHeader
     {
         int ID;         // == IBSP
-        int version;    // == 0x2E  - 46v
+        int version;    // == 0x2E - 46v
     };
 
     struct __attribute__ ((__packed__)) BSPLump
