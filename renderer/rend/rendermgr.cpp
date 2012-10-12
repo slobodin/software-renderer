@@ -13,6 +13,7 @@
 #include "mesh.h"
 #include "light.h"
 #include "sceneobject.h"
+#include "guiobject.h"
 #include "software/softwarerenderer.h"
 #include "opengl/openglrenderer.h"
 
@@ -99,10 +100,13 @@ FrameInfo RenderMgr::update()
 
     frInfo.trianglesForRaster = renderList.getSize();
 
-    // 8. Rasterize triangles.
-    m_renderer->render(renderList);
+    // 8. Rasterize world triangles.
+    m_renderer->renderWorld(renderList);
 
-    // 9. Flush buffer to the screen.
+    // 9. Render post effects.
+    m_renderer->renderGui(m_guiObjects);
+
+    // 10. Flush buffer to the screen.
     m_renderer->endFrame(m_viewport);
 
     return frInfo;
@@ -189,6 +193,11 @@ sptr(SceneObject) RenderMgr::getSceneObject(const string &name)
         return sptr(SceneObject)();
 
     return *obj;
+}
+
+void RenderMgr::addGuiObject(sptr(GuiObject) obj)
+{
+    m_guiObjects.push_back(obj);
 }
 
 sptr(Light) RenderMgr::getLight(int id) const

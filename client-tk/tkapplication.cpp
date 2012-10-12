@@ -54,6 +54,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 500, heightMapTexture, texture);
 
     rendmgr->addSceneObject(terrain);
+    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)

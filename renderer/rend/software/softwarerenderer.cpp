@@ -10,6 +10,8 @@
 #include "viewport.h"
 #include "renderlist.h"
 #include "framebuffer.h"
+#include "guiobject.h"
+#include "texture.h"
 #include "wireframetrianglerasterizer.h"
 #include "flattrianglerasterizer.h"
 #include "gouraudtrianglerasterizer.h"
@@ -41,7 +43,7 @@ SoftwareRenderer::~SoftwareRenderer()
         delete m_text;
 }
 
-void SoftwareRenderer::render(const RenderList &rendlist)
+void SoftwareRenderer::renderWorld(const RenderList &rendlist)
 {
     auto &trias = rendlist.triangles();
     TriangleRasterizer *rasterizer = 0;
@@ -80,6 +82,22 @@ void SoftwareRenderer::render(const RenderList &rendlist)
 
         if (rasterizer)
             rasterizer->drawTriangle(t, m_fb);
+    }
+}
+
+void SoftwareRenderer::renderGui(const list<sptr(GuiObject)> &guiObjects)
+{
+    for (auto &obj : guiObjects)
+    {
+        auto texture = obj->getTexture();
+        int xorig = obj->getPosition().x;
+        int yorig = obj->getPosition().y;
+
+        for (int y = 0; y < texture->height(); y++)
+            for (int x = 0; x < texture->width(); x++)
+            {
+                m_fb->wpixel(x + xorig, y + yorig, texture->at(x, y));
+            }
     }
 }
 

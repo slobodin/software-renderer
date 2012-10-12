@@ -17,6 +17,7 @@ DECLARE_EXCEPTION(RendererException)
 
 class Viewport;
 class RenderList;
+class GuiObject;
 
 //! Rendering interface.
 /**
@@ -29,7 +30,8 @@ public:
     AbstractRenderer() { }
     virtual ~AbstractRenderer() { }
 
-    virtual void render(const RenderList &rendlist) = 0;
+    virtual void renderWorld(const RenderList &rendlist) = 0;
+    virtual void renderGui(const list<sptr(GuiObject)> &guiObjects) = 0;
 
     virtual void beginFrame(sptr(Viewport) viewport) = 0;
     virtual void endFrame(sptr(Viewport) viewport) = 0;

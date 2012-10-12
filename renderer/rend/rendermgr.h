@@ -26,6 +26,7 @@ class AmbientLight;
 class DirectionalLight;
 class PointLight;
 class SceneObject;
+class GuiObject;
 
 //! Some debug stats about a frame.
 struct FrameInfo
@@ -46,8 +47,9 @@ class RenderMgr : boost::noncopyable
     sptr(Camera) m_camera;
     sptr(Viewport) m_viewport;
 
-    list<sptr(SceneObject) > m_sceneObjects;
-    list<sptr(Light) > m_lights;
+    list<sptr(SceneObject)> m_sceneObjects;
+    list<sptr(GuiObject)> m_guiObjects;
+    list<sptr(Light)> m_lights;
 
     // helpers
     void makeLight();
@@ -58,8 +60,9 @@ public:
 
     FrameInfo update();
 
-    void addSceneObject(sptr(SceneObject) node);
-    sptr(SceneObject) getSceneObject(const string &name);
+    void                addSceneObject(sptr(SceneObject) node);
+    sptr(SceneObject)   getSceneObject(const string &name);
+    void                addGuiObject(sptr(GuiObject) obj);
 
     sptr(Light) getLight(int id) const;
 

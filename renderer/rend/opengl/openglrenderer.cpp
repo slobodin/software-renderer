@@ -9,6 +9,7 @@
 #include "platform/baseapptk.h"
 #include "viewport.h"
 #include "renderlist.h"
+#include "guiobject.h"
 
 #ifdef __linux__
 #include <tcl/tk.h>
@@ -123,7 +124,11 @@ OpenGLRenderer::~OpenGLRenderer()
 {
 }
 
-void OpenGLRenderer::render(const RenderList &rendlist)
+void OpenGLRenderer::renderWorld(const RenderList &rendlist)
+{
+}
+
+void OpenGLRenderer::renderGui(const list<sptr(GuiObject)> &guiObjects)
 {
 }
 

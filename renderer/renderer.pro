@@ -71,7 +71,8 @@ HEADERS += \
     rend/software/trianglerasterizer.h \
     rend/software/flattrianglerasterizer.h \
     rend/software/gouraudtrianglerasterizer.h \
-    rend/software/texturedtrianglerasterizer.h
+    rend/software/texturedtrianglerasterizer.h \
+    rend/guiobject.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -118,7 +119,8 @@ SOURCES += \
     rend/software/wireframetrianglerasterizer.cpp \
     rend/software/flattrianglerasterizer.cpp \
     rend/software/gouraudtrianglerasterizer.cpp \
-    rend/software/texturedtrianglerasterizer.cpp
+    rend/software/texturedtrianglerasterizer.cpp \
+    rend/guiobject.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

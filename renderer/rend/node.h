@@ -23,7 +23,7 @@ class Node
 {
 protected:
     //! Local to world transformation.
-    /*! Applied every frame calling. */
+    /*! Applied every frame. */
     math::M44 m_worldTransformation;
 
 public:
@@ -62,8 +62,6 @@ inline void Node::setPosition(const math::vec3 &pos)
     m_worldTransformation.x[3][1] = pos.y;
     m_worldTransformation.x[3][2] = pos.z;
 }
-
-// FIXME: matrix multiplication!
 
 inline void Node::setRotation(const math::vec3 &angles)
 {

@@ -35,7 +35,8 @@ public:
     SoftwareRenderer(int width, int height);
     ~SoftwareRenderer();
 
-    virtual void render(const RenderList &rendlist);
+    virtual void renderWorld(const RenderList &rendlist);
+    virtual void renderGui(const list<sptr(GuiObject)> &guiObjects);
 
     virtual void beginFrame(sptr(Viewport) viewport);
     virtual void endFrame(sptr(Viewport) viewport);
