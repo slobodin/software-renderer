@@ -72,7 +72,11 @@ HEADERS += \
     rend/software/flattrianglerasterizer.h \
     rend/software/gouraudtrianglerasterizer.h \
     rend/software/texturedtrianglerasterizer.h \
-    rend/guiobject.h
+    rend/guiobject.h \
+    third-party/include/easybmp/EasyBMP_VariousBMPutilities.h \
+    third-party/include/easybmp/EasyBMP_DataStructures.h \
+    third-party/include/easybmp/EasyBMP_BMP.h \
+    third-party/include/easybmp/EasyBMP.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -120,7 +124,8 @@ SOURCES += \
     rend/software/flattrianglerasterizer.cpp \
     rend/software/gouraudtrianglerasterizer.cpp \
     rend/software/texturedtrianglerasterizer.cpp \
-    rend/guiobject.cpp
+    rend/guiobject.cpp \
+    third-party/include/easybmp/EasyBMP.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \
@@ -134,4 +139,5 @@ win32:INCLUDEPATH += $(TCL_ROOT)/include
 
 OTHER_FILES += \
     third-party/include/cpptk-1.0.2/cpptkoptions.x \
-    third-party/include/cpptk-1.0.2/cpptkconstants.x
+    third-party/include/cpptk-1.0.2/cpptkconstants.x \
+    third-party/include/easybmp/EasyBMP_ChangeLog.txt

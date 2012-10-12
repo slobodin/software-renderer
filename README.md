@@ -35,8 +35,8 @@ Otherwise you'll get nothing.
 Compile
 =======
 This renderer works well on Linux and Windows systems because it uses qmake build system. It has .pro files with qt creator project description.
-Also you need boost (at least 1.51), tk/tcl (ActiveTcl for Windows) and CImg library.
-Another libraries (cpptk and yamlcpp) included in the project.
+Also you need boost (at least 1.51) and tk/tcl (ActiveTcl for Windows).
+Another libraries (cpptk, yamlcpp and easybmp) included in the project.
 On Windows you also should set BOOST_ROOT and TCL_ROOT environment variables (for example, in Qt creator "build environment" tab)
 
 Package structure
