@@ -26,16 +26,6 @@
 namespace rend
 {
 
-static int attrListDbl[] =
-{
-    GLX_RGBA, GLX_DOUBLEBUFFER,
-    GLX_RED_SIZE, 4,
-    GLX_GREEN_SIZE, 4,
-    GLX_BLUE_SIZE, 4,
-    GLX_DEPTH_SIZE, 16,
-    None
-};
-
 OpenGLRenderer::OpenGLRenderer(const shared_ptr<Viewport> viewport)
 {
     Tk::getInterp();
@@ -53,17 +43,6 @@ OpenGLRenderer::OpenGLRenderer(const shared_ptr<Viewport> viewport)
 
 //    XWindowAttributes wndAttrib;
 //    XGetWindowAttributes(display, m_xWindowId, &wndAttrib);
-
-    int a;
-    a = 5;
-
-
-
-
-
-
-
-
 
 
 

@@ -5,7 +5,7 @@ Objects:
 #    position: [0, 0, -250]
 #  - model: sphere01.asc
 #    position: [0, 0, 0]
-  - model: 20kdm3.bsp
+  - model: 20kdm2.bsp
     position: [0, 0, 0]
 #  - model: hammer02.asc
 #    position: [0, 300, 0]
