@@ -26,18 +26,9 @@
 namespace rend
 {
 
-static int attrListDbl[] =
-{
-    GLX_RGBA, GLX_DOUBLEBUFFER,
-    GLX_RED_SIZE, 4,
-    GLX_GREEN_SIZE, 4,
-    GLX_BLUE_SIZE, 4,
-    GLX_DEPTH_SIZE, 16,
-    None
-};
-
 OpenGLRenderer::OpenGLRenderer(const shared_ptr<Viewport> viewport)
 {
+#ifdef __linux__
     auto tkViewport = boost::dynamic_pointer_cast<platform::TkViewport>(viewport);
 
     if (!tkViewport)
@@ -110,6 +101,7 @@ OpenGLRenderer::OpenGLRenderer(const shared_ptr<Viewport> viewport)
 
 
 //    Tk_IdToWindow(Display *display, Window window);
+#endif
 }
 
 void OpenGLRenderer::onreshape(Togl *togl)
@@ -161,7 +153,7 @@ void OpenGLRenderer::endFrame(sptr(Viewport) viewport)
 
 void OpenGLRenderer::resize(int w, int h)
 {
-    glViewport(0, 0, w, h);
+//    glViewport(0, 0, w, h);
 //	glMatrixMode(GL_PROJECTION);
 //	glLoadIdentity();
 //	gluPerspective(camera->GetFovy(), camera->GetAspectRatio(), camera->GetZNear(), camera->GetZFar());

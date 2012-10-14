@@ -45,22 +45,22 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (m_hammer)
     {
         m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
-        m_hammer->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+        m_hammer->getMesh()->setShadingMode(rend::Material::SM_FLAT);
     }
 
     // create terrain
-    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
-    auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
-    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 500, heightMapTexture, texture);
+//    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
+//    auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
+//    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 500, heightMapTexture, texture);
 
-    rendmgr->addSceneObject(terrain);
+//    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
     {
         m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
-        m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+        m_sphere->getMesh()->setShadingMode(rend::Material::SM_FLAT);
     }
 }
 
