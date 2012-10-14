@@ -41,12 +41,12 @@ TkApplication::TkApplication(int argc, const char *argv[])
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
-//    m_hammer = rendmgr->getSceneObject("Hammer");
-//    if (m_hammer)
-//    {
-//        m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
-//        m_hammer->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
-//    }
+    m_hammer = rendmgr->getSceneObject("Hammer");
+    if (m_hammer)
+    {
+        m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
+        m_hammer->getMesh()->setShadingMode(rend::Material::SM_FLAT);
+    }
 
     // create terrain
 //    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
@@ -56,12 +56,12 @@ TkApplication::TkApplication(int argc, const char *argv[])
 //    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
-//    m_sphere = rendmgr->getSceneObject("Sphere");
-//    if (m_sphere)
-//    {
-//        m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
-//        m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
-//    }
+    m_sphere = rendmgr->getSceneObject("Sphere");
+    if (m_sphere)
+    {
+        m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
+        m_sphere->getMesh()->setShadingMode(rend::Material::SM_FLAT);
+    }
 }
 
 TkApplication::~TkApplication()
