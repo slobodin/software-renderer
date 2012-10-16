@@ -28,10 +28,18 @@ int BaseApp::run()
         return -1;
     }
 
+    static long prevTime, currTime;
+
+    timeval tm;
+    gettimeofday(&tm, 0);
+    currTime = tm.tv_sec * 1000 + tm.tv_usec / 1000;
+
     onFrameStart();
 
     m_clientController->update();
-    update(0.0f);       // update user callback
+    update(currTime - prevTime);       // update user callback
+
+    prevTime = currTime;
 
     onFrameEnd();
 

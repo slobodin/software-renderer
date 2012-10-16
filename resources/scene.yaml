@@ -3,16 +3,16 @@ Objects:
 ##    position: [0, 0, 0]
 #  - model: tower1.plg
 #    position: [0, 0, -250]
-  - model: sphere01.asc
-    position: [0, 0, 0]
+#  - model: sphere01.asc
+#    position: [0, 0, 0]
 #  - model: 20kdm2.bsp
 #    position: [0, 0, 0]
   - model: hammer02.asc
     position: [0, 300, 0]
 #  - model: tie04.cob
 #    position: [200, 100, 0]
-#  - model: cube_flat_textured_01.cob
-#    position: [0, 0, 0]
+  - model: cube_flat_textured_01.cob
+    position: [0, 0, 0]
 #  - model: cessna.obj
 #    position: [100, 200, 600]
 #  - model: al.obj
@@ -26,8 +26,8 @@ Lights:
   Directional:
 #    - direction: [1, 1, 0]
 #      intensity: [255, 10, 50]
-    - direction: [1, 1, 0]		# note: id = 1
-      intensity: [255, 80, 80]
+#    - direction: [1, 1, 0]		# note: id = 1
+#      intensity: [255, 80, 80]
 #  Point:
 #    - position: [0, 1500, 0]		# note: id = 2
 #     intensity: [255, 255, 50]

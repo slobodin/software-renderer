@@ -16,6 +16,8 @@ class TkApplication : public platform::BaseAppTk
     sptr(rend::SceneObject) m_hammer;
     sptr(rend::SceneObject) m_sphere;
 
+    sptr(rend::TextObject) m_debugStats1, m_debugStats2, m_debugStats3;
+
 protected:
     void update(float dt);
 

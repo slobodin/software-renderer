@@ -22,12 +22,13 @@ class Texture;
   */
 class GuiObject : public Node
 {
+protected:
     sptr(Texture) m_texture;
 
 public:
     GuiObject(sptr(Texture) texture);
 
-    const sptr(Texture) getTexture() const { return m_texture; }
+    virtual const sptr(Texture) getTexture() const { return m_texture; }
 };
 
 }

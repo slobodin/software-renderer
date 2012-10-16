@@ -47,6 +47,7 @@ public:
     void removeBackfaces(const sptr(Camera) cam);
 
     size_t getSize() const { return m_triangles.size(); }
+    bool empty() const { return m_triangles.empty(); }
 };
 
 }

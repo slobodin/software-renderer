@@ -54,15 +54,14 @@ RenderMgr::~RenderMgr()
 
 }
 
-FrameInfo RenderMgr::update()
+void RenderMgr::update()
 {
     RenderList renderList;
-    FrameInfo frInfo;
 
     if (!m_viewport)
     {
         syslog << "Viewport is not setted" << logdebug;
-        return frInfo;
+        return;
     }
 
     // 1. Clear buffer.
@@ -79,7 +78,13 @@ FrameInfo RenderMgr::update()
             renderList.append(*obj);
     }
 
-    frInfo.trianglesOnFrameStart = renderList.getSize();
+    // collect debug information
+    m_frameInfo.trianglesOnFrameStart = renderList.getSize();
+    if (renderList.empty())
+    {
+        m_frameInfo.trianglesForRaster = 0;
+        return;
+    }
 
     // 3. Cull backfaces.
     renderList.removeBackfaces(m_camera);
@@ -89,27 +94,27 @@ FrameInfo RenderMgr::update()
         light->illuminate(renderList);
 
     // 5. World -> Camera transformation. Also cull triangles with negative Z.
-    // TODO: frustum culling here.
     m_camera->toCamera(renderList);
 
-    // 6. Sort triangles by painter algorithm.
+    // 6. Frustum culling.
+    m_camera->frustumCull(renderList);
+
+    // 7. Sort triangles by painter algorithm.
     renderList.zsort();
 
-    // 7. Camera -> Perspective -> Screen transformation.
+    // 8. Camera -> Perspective -> Screen transformation.
     m_camera->toScreen(renderList, *m_viewport);
 
-    frInfo.trianglesForRaster = renderList.getSize();
+    m_frameInfo.trianglesForRaster = renderList.getSize();
 
-    // 8. Rasterize world triangles.
+    // 9. Rasterize world triangles.
     m_renderer->renderWorld(renderList);
 
-    // 9. Render post effects.
+    // 10. Render post effects.
     m_renderer->renderGui(m_guiObjects);
 
-    // 10. Flush buffer to the screen.
+    // 11. Flush buffer to the screen.
     m_renderer->endFrame(m_viewport);
-
-    return frInfo;
 }
 
 sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)

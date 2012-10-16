@@ -76,7 +76,8 @@ HEADERS += \
     third-party/include/easybmp/EasyBMP_VariousBMPutilities.h \
     third-party/include/easybmp/EasyBMP_DataStructures.h \
     third-party/include/easybmp/EasyBMP_BMP.h \
-    third-party/include/easybmp/EasyBMP.h
+    third-party/include/easybmp/EasyBMP.h \
+    rend/textobject.h
 
 SOURCES += \
     base/resourcemgr.cpp \
@@ -125,7 +126,8 @@ SOURCES += \
     rend/software/gouraudtrianglerasterizer.cpp \
     rend/software/texturedtrianglerasterizer.cpp \
     rend/guiobject.cpp \
-    third-party/include/easybmp/EasyBMP.cpp
+    third-party/include/easybmp/EasyBMP.cpp \
+    rend/textobject.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

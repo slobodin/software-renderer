@@ -7,7 +7,7 @@
 
 #include "tkapplication.h"
 
-void TkApplication::update(float /*dt*/)
+void TkApplication::update(float dt)
 {
     static int yaw, roll;
 
@@ -17,20 +17,27 @@ void TkApplication::update(float /*dt*/)
     if (abs(roll) > 360) roll %= 360;
 
     // hammer
-//    math::vec3 transl;
-//    math::M33 rotM, scaleM;
+    math::vec3 transl;
+    math::M33 rotM, scaleM;
 
-//    if (m_hammer)
-//    {
-//        transl = m_hammer->getPosition();
+    if (m_hammer)
+    {
+        transl = m_hammer->getPosition();
 
-//        m_hammer->resetTransformation();
+        m_hammer->resetTransformation();
 
-//        rotM = math::M33::getRotateYawPitchRollMatrix(yaw, 0, 0);
-//        scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
+        rotM = math::M33::getRotateYawPitchRollMatrix(yaw, 0, 0);
+        scaleM = math::M33::getScaleMatrix(math::vec3(15.0, 15.0, 15.0));
 
-//        m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
-//    }
+        m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
+    }
+
+    auto frameStats = m_clientController->getRendmgr()->getLastFrameStats();
+    m_debugStats1->setText(string("Triangles for rasterization:") + common::toString(frameStats.trianglesForRaster));
+    m_debugStats2->setText(string("Triangles before culling:") + common::toString(frameStats.trianglesOnFrameStart));
+    double fps = dt / 1000;
+    fps = 1.0 / fps;
+    m_debugStats3->setText(string("FPS:") + common::toString((int)fps));
 }
 
 TkApplication::TkApplication(int argc, const char *argv[])
@@ -49,11 +56,11 @@ TkApplication::TkApplication(int argc, const char *argv[])
     }
 
     // create terrain
-//    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
-//    auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
-//    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 500, heightMapTexture, texture);
+    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
+    auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
+    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 600, heightMapTexture, texture);
 
-//    rendmgr->addSceneObject(terrain);
+    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
     m_sphere = rendmgr->getSceneObject("Sphere");
@@ -62,6 +69,22 @@ TkApplication::TkApplication(int argc, const char *argv[])
         m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
         m_sphere->getMesh()->setShadingMode(rend::Material::SM_FLAT);
     }
+
+    auto cube = rendmgr->getSceneObject("Cube");
+    if (cube)
+    {
+        cube->setScale(math::vec3(35.0, 35.0, 35.0));
+    }
+
+    auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
+    m_debugStats1 = make_shared<rend::TextObject>(textureFont, 16, 16);
+    rendmgr->addGuiObject(m_debugStats1);
+    m_debugStats2 = make_shared<rend::TextObject>(textureFont, 16, 16);
+    m_debugStats2->setPosition({0, 16, 0});
+    rendmgr->addGuiObject(m_debugStats2);
+    m_debugStats3 = make_shared<rend::TextObject>(textureFont, 16, 16);
+    m_debugStats3->setPosition({0, 32, 0});
+    rendmgr->addGuiObject(m_debugStats3);
 }
 
 TkApplication::~TkApplication()

@@ -93,9 +93,7 @@ void Controller::update()
     }
 
     // m_inputManager->capture() ???
-    rend::FrameInfo frInfo = m_rendmgr->update();
-
-    // do something with fps and other
+    m_rendmgr->update();
 }
 
 std::pair<int, int> Controller::getViewportSize()

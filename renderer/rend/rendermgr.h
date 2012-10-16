@@ -13,6 +13,13 @@
 #include "color.h"
 #include "vec3.h"
 
+namespace base
+{
+
+struct FrameInfo;
+
+}
+
 namespace rend
 {
 
@@ -28,17 +35,17 @@ class PointLight;
 class SceneObject;
 class GuiObject;
 
+enum RendererMode
+{
+    RM_SOFTWARE,
+    RM_OPENGL
+};
+
 //! Some debug stats about a frame.
 struct FrameInfo
 {
     int trianglesOnFrameStart;      //
     int trianglesForRaster;
-};
-
-enum RendererMode
-{
-    RM_SOFTWARE,
-    RM_OPENGL
 };
 
 class RenderMgr : boost::noncopyable
@@ -51,6 +58,8 @@ class RenderMgr : boost::noncopyable
     list<sptr(GuiObject)> m_guiObjects;
     list<sptr(Light)> m_lights;
 
+    FrameInfo m_frameInfo;
+
     // helpers
     void makeLight();
 
@@ -58,11 +67,13 @@ public:
     RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode);
     ~RenderMgr();
 
-    FrameInfo update();
+    void update();
 
     void                addSceneObject(sptr(SceneObject) node);
     sptr(SceneObject)   getSceneObject(const string &name);
     void                addGuiObject(sptr(GuiObject) obj);
+
+    const FrameInfo    &getLastFrameStats() const { return m_frameInfo; }
 
     sptr(Light) getLight(int id) const;
 

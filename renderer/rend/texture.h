@@ -41,6 +41,10 @@ public:
         return m_pixels[pos];
     }
 
+    // Getting pixels
+    vector<Color3> getLine(int y, int xStart = 0, int xEnd = 0) const;
+    vector<Color3> getBlock(int x, int y, int width, int height) const;
+
     const Color3 *raw() const
     {
         return &m_pixels[0];
@@ -48,6 +52,8 @@ public:
 
     int width() const { return m_width; }
     int height() const { return m_height; }
+
+    sptr(Texture) clone() const;
 };
 
 }
