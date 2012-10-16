@@ -75,6 +75,12 @@ void Mesh::setShadingMode(Material::ShadeMode shMode)
         vb.getMaterial()->shadeMode = shMode;      // ?
 }
 
+void Mesh::setTexture(sptr(Texture) texture)
+{
+    for (auto vb : m_submeshes)
+        vb.getMaterial()->texture = texture;      // ?
+}
+
 void Mesh::setSideType(Material::SideType side)
 {
     for (auto vb : m_submeshes)

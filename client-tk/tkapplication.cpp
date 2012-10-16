@@ -60,7 +60,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
     auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 600, heightMapTexture, texture);
 
-    rendmgr->addSceneObject(terrain);
+//    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
     m_sphere = rendmgr->getSceneObject("Sphere");
@@ -74,6 +74,8 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (cube)
     {
         cube->setScale(math::vec3(35.0, 35.0, 35.0));
+        auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
+        cube->getMesh()->setTexture(texture);
     }
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");

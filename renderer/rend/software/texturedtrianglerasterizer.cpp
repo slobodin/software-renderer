@@ -31,7 +31,10 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
        (v0.p.x > fb->width() && v1.p.x > fb->width() && v2.p.x > fb->width()))
         return;
 
-    Texture *texture = t.getMaterial()->texture.get();
+    if (!t.getMaterial()->texture)
+        return;
+
+    Texture *texture = t.getMaterial()->texture.get();    
     int texWidth = texture->width();
     int texHeight = texture->height();
 
