@@ -17,6 +17,8 @@ class Example1Application : public platform::BaseAppTk
     sptr(rend::SceneObject) m_sphere;
     sptr(rend::SceneObject) m_lightPoint;
 
+    sptr(rend::TextObject) m_fpsLabel;
+
 protected:
     void update(float dt);
 

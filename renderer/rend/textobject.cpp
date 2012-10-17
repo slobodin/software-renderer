@@ -32,6 +32,9 @@ void TextObject::setText(const string &str)
     if (str.empty())
         return;
 
+    if (!m_texture)
+        return;
+
     vector<Color3> resultPixmap;
     // scanlining
     for (int ln = 0; ln < m_symbHeight; ln++)

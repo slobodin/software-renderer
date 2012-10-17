@@ -7,7 +7,7 @@
 
 #include "example2application.h"
 
-void Example2Application::update(float /*dt*/)
+void Example2Application::update(float dt)
 {
     static int yaw, roll;
 
@@ -25,6 +25,13 @@ void Example2Application::update(float /*dt*/)
         transl = transl * rotM;
 
         ptL->setPosition(transl);
+    }
+
+    if (m_fpsLabel)
+    {
+        double fps = dt / 1000;
+        fps = 1.0 / fps;
+        m_fpsLabel->setText(string("FPS:") + common::toString((int)fps));
     }
 }
 
@@ -45,6 +52,13 @@ Example2Application::Example2Application(int argc, const char *argv[])
 
     if (!m_cube)
         std::cerr << "Error: Missing some resources.\n";
+
+    auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
+    if (textureFont)
+    {
+        m_fpsLabel = make_shared<rend::TextObject>(textureFont, 16, 16);
+        rendmgr->addGuiObject(m_fpsLabel);
+    }
 }
 
 void Example2Application::onMouseEvent(const platform::MouseEvent &ev)

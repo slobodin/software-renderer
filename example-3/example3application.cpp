@@ -28,6 +28,13 @@ void Example3Application::update(float dt)
         if (m_sphere)
             m_sphere->setPosition(transl);
     }
+
+    if (m_fpsLabel)
+    {
+        double fps = dt / 1000;
+        fps = 1.0 / fps;
+        m_fpsLabel->setText(string("FPS:") + common::toString((int)fps));
+    }
 }
 
 Example3Application::Example3Application(int argc, const char *argv[])
@@ -40,13 +47,21 @@ Example3Application::Example3Application(int argc, const char *argv[])
 
     // create terrain
     auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
-    auto terrain = boost::make_shared<rend::TerrainSceneObject>(4000, 4000, 700, heightMapTexture);
+    auto terrainTexture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
+    auto terrain = boost::make_shared<rend::TerrainSceneObject>(4000, 4000, 700, heightMapTexture, terrainTexture);
 
     rendmgr->addSceneObject(terrain);
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
         m_sphere->getMesh()->setShadingMode(rend::Material::SM_WIRE);
+
+    auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
+    if (textureFont)
+    {
+        m_fpsLabel = make_shared<rend::TextObject>(textureFont, 16, 16);
+        rendmgr->addGuiObject(m_fpsLabel);
+    }
 }
 
 Example3Application::~Example3Application()

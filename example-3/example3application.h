@@ -15,6 +15,8 @@ class Example3Application : public platform::BaseAppTk
     sptr(rend::Camera) m_playerCamera;
     sptr(rend::SceneObject) m_sphere;
 
+    sptr(rend::TextObject) m_fpsLabel;
+
 protected:
     void update(float dt);
 

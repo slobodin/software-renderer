@@ -202,6 +202,8 @@ sptr(SceneObject) RenderMgr::getSceneObject(const string &name)
 
 void RenderMgr::addGuiObject(sptr(GuiObject) obj)
 {
+    if (!obj)
+        return;
     m_guiObjects.push_back(obj);
 }
 

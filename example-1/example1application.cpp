@@ -7,7 +7,7 @@
 
 #include "example1application.h"
 
-void Example1Application::update(float /*dt*/)
+void Example1Application::update(float dt)
 {
     static int yaw, roll;
 
@@ -56,6 +56,13 @@ void Example1Application::update(float /*dt*/)
         ptL->setPosition(transl);
         m_lightPoint->setPosition(transl);
     }
+
+    if (m_fpsLabel)
+    {
+        double fps = dt / 1000;
+        fps = 1.0 / fps;
+        m_fpsLabel->setText(string("FPS:") + common::toString((int)fps));
+    }
 }
 
 Example1Application::Example1Application(int argc, const char *argv[])
@@ -65,8 +72,6 @@ Example1Application::Example1Application(int argc, const char *argv[])
 
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
-
-
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
@@ -96,6 +101,12 @@ Example1Application::Example1Application(int argc, const char *argv[])
     if (!al || !cube || !m_sphere || !m_hammer)
         std::cerr << "Error: Missing some resources.\n";
 
+    auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
+    if (textureFont)
+    {
+        m_fpsLabel = make_shared<rend::TextObject>(textureFont, 16, 16);
+        rendmgr->addGuiObject(m_fpsLabel);
+    }
 }
 
 void Example1Application::onMouseEvent(const platform::MouseEvent &ev)
