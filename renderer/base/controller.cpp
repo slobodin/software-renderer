@@ -40,19 +40,19 @@ void Controller::resize(int w, int h)
 void Controller::test()
 {
 
-    Display *display = XOpenDisplay(getenv("DISPLAY"));
-    Window m_xWindowId;
+//    Display *display = XOpenDisplay(getenv("DISPLAY"));
+//    Window m_xWindowId;
 
-    string windowId = Tk::winfo(Tk::id, ".c");
-    stringstream ss(windowId);
-    ss >> std::hex >> m_xWindowId;
-//    m_xWindowId = windowId;
+//    string windowId = Tk::winfo(Tk::id, ".c");
+//    stringstream ss(windowId);
+//    ss >> std::hex >> m_xWindowId;
+////    m_xWindowId = windowId;
 
-    XWindowAttributes wndAttrib;
-    XGetWindowAttributes(display, m_xWindowId, &wndAttrib);
+//    XWindowAttributes wndAttrib;
+//    XGetWindowAttributes(display, m_xWindowId, &wndAttrib);
 
-    int a;
-    a = 5;
+//    int a;
+//    a = 5;
 }
 
 Controller::Controller(int argc, const char *argv[])
