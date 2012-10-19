@@ -99,7 +99,7 @@ TEST(Matrix2x2, DefaultConstructor)
 
 TEST(Matrix2x2, ArrayConstructor)
 {
-    const double in[4] = { 5, 7, 4, 3 };
+    const float in[4] = { 5, 7, 4, 3 };
     M22 m(in);
 
     EXPECT_EQ(5, m.x[0]);

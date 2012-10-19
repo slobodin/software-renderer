@@ -18,6 +18,8 @@ class TkApplication : public platform::BaseAppTk
 
     sptr(rend::TextObject) m_debugStats1, m_debugStats2, m_debugStats3;
 
+    void showStats(float dt);
+
 protected:
     void update(float dt);
 

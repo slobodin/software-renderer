@@ -12,6 +12,7 @@
 #include "color.h"
 #include "material.h"
 #include "poly.h"
+#include "string_utils.h"
 
 namespace base
 {
@@ -35,7 +36,28 @@ void DecoderOBJ::appendFace(string &line)
     std::istringstream is(line);
     FaceInfo face;
 
-    copy(std::istream_iterator<int>(is), std::istream_iterator<int>(), std::back_inserter(face.indices));
+    if (line.find("//") != string::npos)
+    {
+        boost::char_separator<char> sep("// ");
+        boost::tokenizer<boost::char_separator<char> > tokens(line, sep);
+        int i = 0;
+
+        for (auto tokIter = tokens.begin(); tokIter != tokens.end(); ++tokIter, ++i)
+        {
+            if (i % 2 == 0)
+                face.indices.push_back(common::fromString<int>(*tokIter));
+            // omit normals for now
+        }
+    }
+    else if (line.find("/") != string::npos)
+    {
+        // Vertex/texture-coordinate format
+        throw std::runtime_error("Unsupported obj file");
+    }
+    else
+    {
+        copy(std::istream_iterator<int>(is), std::istream_iterator<int>(), std::back_inserter(face.indices));
+    }
 
     faces.push_back(face);
 }

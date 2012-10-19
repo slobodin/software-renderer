@@ -41,20 +41,20 @@ class Plane
     //! Plane normal(A, B, C).
     vec3 m_normal;
     //! Distance from origin D.
-    double m_d;
+    float m_d;
 
 public:
     //! Build plane from normal vector and distance.
-    Plane(const vec3 &n, const double d);
+    Plane(const vec3 &n, float d);
     //! Build plane from normal vector and point on plane.
     Plane(const vec3 &n, const vec3 &p);
     //! Build from plane equation.
-    Plane(const double a, const double b, const double c, const double d);
+    Plane(float a, float b, float c, float d);
     //! Build plane with 3 points.
     Plane(const vec3 &p0, const vec3 &p1, const vec3 &p2);
 
     const vec3 &normal() const { return m_normal; }
-    double      distance() const { return m_d; }
+    float       distance() const { return m_d; }
 
     //! Check point position relative to the plane.
     /*!

@@ -39,7 +39,7 @@ public:
     virtual void setRotation(const math::vec3 &angles);
 
     //! Sets rotation in world space by yaw pitch roll angles.
-    virtual void setRotation(double yaw, double pitch, double roll);
+    virtual void setRotation(float yaw, float pitch, float roll);
 
     //! Scales the model.
     virtual void setScale(const math::vec3 &coeff);
@@ -74,7 +74,7 @@ inline void Node::setRotation(const math::vec3 &angles)
     m_worldTransformation = math::M44(rotM, m_worldTransformation.getV());
 }
 
-inline void Node::setRotation(double yaw, double pitch, double roll)
+inline void Node::setRotation(float yaw, float pitch, float roll)
 {
     setRotation(math::vec3(pitch, yaw, roll));
 }

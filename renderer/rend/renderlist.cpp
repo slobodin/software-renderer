@@ -16,24 +16,27 @@
 namespace rend
 {
 
-void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M44 &transform, list<math::Triangle> &output)
+void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M44 &transform)
 {
     math::Triangle triangle;
     // all mesh vertices
-    auto vertices = vertexBuffer.getVertices();
+    const VertexBuffer::VertexArray &vertices = vertexBuffer.getVertices();
     // mesh indices
-    auto indices = vertexBuffer.getIndices();
+    const VertexBuffer::IndexArray &indices = vertexBuffer.getIndices();
 
-    auto uvs = vertexBuffer.getUVs();
-    auto uvind = vertexBuffer.getUVIndices();
+    const vector<math::vec2> &uvs = vertexBuffer.getUVs();
+    const VertexBuffer::IndexArray &uvind = vertexBuffer.getUVIndices();
+
+    size_t verticesSize = vertices.size();
+    size_t indicesSize = indices.size();
 
     switch(vertexBuffer.getType())
     {
     case VertexBuffer::INDEXEDTRIANGLELIST:
 
-        for(size_t ind = 0, t = 0; ind < indices.size(); ind += 3, t++)
+        for(size_t ind = 0, t = 0; ind < indicesSize; ind += 3, t++)
         {
-            if ((ind + 2) >= indices.size())
+            if ((ind + 2) >= indicesSize)
                 break;
 
             // form the triangle
@@ -42,9 +45,7 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.v(2) = vertices[indices[ind + 2]];
 
             // translate and rotate the triangle
-            triangle.v(0).p = triangle.v(0).p * transform;
-            triangle.v(1).p = triangle.v(1).p * transform;
-            triangle.v(2).p = triangle.v(2).p * transform;
+            triangle.applyTransformation(transform);
 
             if (!uvs.empty() && !uvind.empty())
             {
@@ -60,35 +61,31 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.computeNormal();
 
             // save it
-            output.push_back(triangle);
+            m_triangles.push_back(triangle);
         }
         break;
 
     case VertexBuffer::TRIANGLELIST:
 
-        for(size_t v = 0; v < vertices.size(); v += 3)
+        for(size_t v = 0; v < verticesSize; v += 3)
         {
-            if ((v + 2) >= vertices.size())
+            if ((v + 2) >= verticesSize)
                 break;
 
             // form the triangle
-            triangle.v(0) = vertices[v];
-            triangle.v(1) = vertices[v + 1];
-            triangle.v(2) = vertices[v + 2];
+            triangle.setVertices(&vertices[v]);
 
             // translate and rotate the triangle
-            triangle.v(0).p = triangle.v(0).p * transform;
-            triangle.v(1).p = triangle.v(1).p * transform;
-            triangle.v(2).p = triangle.v(2).p * transform;
+            triangle.applyTransformation(transform);                    // bottleneck
 
             // set material
             triangle.setMaterial(vertexBuffer.getMaterial());
 
             // compute normals
-            triangle.computeNormal();
+            triangle.computeNormal();                                   // bottleneck
 
             // save it
-            output.push_back(triangle);
+            m_triangles.push_back(triangle);                            // bottleneck
         }
         break;
 
@@ -97,6 +94,10 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
         syslog << "Can't draw this mesh." << logerr;
         break;
     }
+}
+
+RenderList::~RenderList()
+{
 }
 
 void RenderList::append(const SceneObject &obj)
@@ -129,7 +130,7 @@ void RenderList::append(const SceneObject &obj)
     for (const auto &vb : subMeshes)
     {
         // TODO: where to compute vertex normals? Here?? Maybe when we apply transformation for model only?
-        RenderList::createTriangles(vb, worldTransform, m_triangles);
+        createTriangles(vb, worldTransform);
     }
 }
 
@@ -158,10 +159,12 @@ void RenderList::removeBackfaces(const sptr(Camera) cam)
 
         math::vec3 view = cam->getPosition() - t->v(0).p;
         view.normalize();
-        double dp = t->normal().dotProduct(view);
+        float dp = t->normal().dotProduct(view);
 
         if (dp <= 0)
         {
+            // TODO:
+            // not erase, just flag it as culled
             t = m_triangles.erase(t);
             continue;
         }

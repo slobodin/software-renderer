@@ -137,6 +137,10 @@ void FlatTriangleRasterizer::rasterizeTopOrBottomTriangle(int x1, int y1, int x2
     }
 }
 
+/*
+ * Scanline algorithm
+ */
+
 void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *fb)
 {
     math::vertex p1 = t.v(0);
@@ -172,5 +176,13 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
         drawTopTriangle(x2, y2, newX, y2, x3, y3, color, fb);
     }
 }
+
+/*
+ * Half-space algorithm
+ */
+//void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *fb)
+//{
+
+//}
 
 }

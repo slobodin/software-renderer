@@ -48,6 +48,9 @@
 #include <boost/make_shared.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/tokenizer.hpp>
+#include <boost/pool/pool.hpp>
+#include <boost/pool/pool_alloc.hpp>
 
 // Some useful classes.
 using std::string;

@@ -12,9 +12,9 @@
 namespace math
 {
 
-static const boost::numeric::interval<double> ZERO_ONE_INTERVAL(0.0, 1.0);
+static const boost::numeric::interval<float> ZERO_ONE_INTERVAL(0.0, 1.0);
 
-Plane::Plane(const vec3 &n, const double d)
+Plane::Plane(const vec3 &n, float d)
     : m_normal(n),
       m_d(d)
 {
@@ -28,7 +28,7 @@ Plane::Plane(const vec3 &n, const vec3 &p)
     m_d = -m_normal.x * p.x - m_normal.y * p.y - m_normal.z * p.z;
 }
 
-Plane::Plane(const double a, const double b, const double c, const double d)
+Plane::Plane(float a, float b, float c, float d)
 {
     m_normal.set(a, b, c);
     m_normal.normalize();
@@ -46,7 +46,7 @@ Plane::Plane(const vec3 &p0, const vec3 &p1, const vec3 &p2)
 
 PointPlaneRelation Plane::checkPoint(const vec3 &p) const
 {
-    double dot = m_normal.dotProduct(p) + m_d;    // signed dist to the point
+    float dot = m_normal.dotProduct(p) + m_d;    // signed dist to the point
     if (dot > EPSILON_E3)
         return POINT_IN_FRONT_OF_PLANE;
     if (dot < -EPSILON_E3)
@@ -59,7 +59,7 @@ LinePlaneIntersectionType Plane::checkLine(const vec3 &p0, const vec3 &p1,
                                            vec3 &resultPoint)
 {
     const vec3 linedir = p1 - p0;
-    double dotProd = linedir.dotProduct(m_normal);
+    float dotProd = linedir.dotProduct(m_normal);
 
     if (DCMP(dotProd, 0.0))
     {
@@ -73,10 +73,10 @@ LinePlaneIntersectionType Plane::checkLine(const vec3 &p0, const vec3 &p1,
             return LINE_PLANE_NO_INTERSECT;
     }
 
-    double t = -(m_normal.x * p0.x +
-                 m_normal.y * p0.y +
-                 m_normal.z * p0.z +
-                 m_d) / dotProd;
+    float t = -(m_normal.x * p0.x +
+                m_normal.y * p0.y +
+                m_normal.z * p0.z +
+                m_d) / dotProd;
 
     resultPoint.x = p0.x + linedir.x * t;
     resultPoint.y = p0.y + linedir.y * t;

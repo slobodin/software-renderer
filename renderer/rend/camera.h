@@ -37,21 +37,21 @@ class Camera
     //! Direction vector.
     math::vec3 m_dir;
 
-    double m_yaw, m_pitch, m_roll;
+    float m_yaw, m_pitch, m_roll;
 
     //! Field of view. Default is 90 grad.
-    double m_fov;
+    float m_fov;
 
     //! Near Z-clipping plane position.
-    double m_nearZ;
+    float m_nearZ;
     //! Far Z-clipping plane position.
-    double m_farZ;
+    float m_farZ;
 
     //! Normalized projected plane size.
-    double m_viewPlaneWidth;
-    double m_viewPlaneHeight;
+    float m_viewPlaneWidth;
+    float m_viewPlaneHeight;
     //! Distance from the (0, 0, 0) to the projected plane along Z axis.
-    double m_distance;
+    float m_distance;
 
     math::M44 m_worldToCamera;
     math::M44 m_projection;
@@ -67,9 +67,9 @@ public:
     /*! Initialize camera with position,
       * field of view (default 90 gr.), near and far clipping planes */
     Camera(const math::vec3 position,
-           double fov = 90.0,
-           double nearZ = 5.0,
-           double farZ = 15000.0);
+           float fov = 90.0,
+           float nearZ = 5.0,
+           float farZ = 15000.0);
     ~Camera() { }
 
     void        setPosition(const math::vec3 &pos);
@@ -81,7 +81,7 @@ public:
     math::vec3  getRightVector() const;
     math::vec3  getUpVector() const;
 
-    void setEulerAnglesRotation(double yaw, double pitch, double roll);
+    void setEulerAnglesRotation(float yaw, float pitch, float roll);
 
     void toCamera(RenderList &rendList) const;
     void toScreen(RenderList &rendList, const Viewport &viewport) const;

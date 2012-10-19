@@ -26,18 +26,18 @@ struct vec3;
 struct M44
 {
     //! x[row][col].
-    double x[4][4];
+    float x[4][4];
 
     //! Default ctor.
     /*! Default identity matrix. */
     M44();
     //! Array ctor.
-    M44(const double (&src)[4][4]);
+    M44(const float (&src)[4][4]);
     //! Component ctor.
-    M44(double a00, double a01, double a02, double a03,
-        double a10, double a11, double a12, double a13,
-        double a20, double a21, double a22, double a23,
-        double a30, double a31, double a32, double a33);
+    M44(float a00, float a01, float a02, float a03,
+        float a10, float a11, float a12, float a13,
+        float a20, float a21, float a22, float a23,
+        float a30, float a31, float a32, float a33);
     //! Affine transform ctor.
     M44(const M33 &rotScale, const vec3 &translation);
     //! Set affine transform.
@@ -46,12 +46,12 @@ struct M44
     M44(const M33 &rotScale);
 
     //! Set elements with array.
-    void set(const double (&src)[4][4]);
+    void set(const float (&src)[4][4]);
     //! Set elements.
-    void set(double a00, double a01, double a02, double a03,
-             double a10, double a11, double a12, double a13,
-             double a20, double a21, double a22, double a23,
-             double a30, double a31, double a32, double a33);
+    void set(float a00, float a01, float a02, float a03,
+             float a10, float a11, float a12, float a13,
+             float a20, float a21, float a22, float a23,
+             float a30, float a31, float a32, float a33);
     //! Set affine transform.
     void set(const M33 &rotScale, const vec3 &translation);
     //! Set affine transform.
@@ -71,9 +71,9 @@ struct M44
     //! Matrix multiplication.
     M44 &operator*= (const M44 &a);
     //! Scalar multiplication.
-    M44 &operator*= (double s);
+    M44 &operator*= (float s);
     //! 1/scalar multiplication.
-    M44 &operator/= (double s);
+    M44 &operator/= (float s);
 
     //! Equality check.
     bool operator== (const M44 &a) const;
@@ -82,7 +82,7 @@ struct M44
     M44 &transpose();
 
     //! Returns matrix memory address.
-    double *getPointer() { return reinterpret_cast<double *>(x); }
+    float *getPointer() { return reinterpret_cast<float *>(x); }
 
     //! Addition of two matrices.
     friend M44 operator+ (const M44 &a, const M44 &b);
@@ -91,9 +91,9 @@ struct M44
     //! Multiplication of two matrices.
     friend M44 operator* (const M44 &a, const M44 &b);
     //! Scalar multiplication.
-    friend M44 operator* (const M44 &a, double s);
+    friend M44 operator* (const M44 &a, float s);
     //! Scalar multiplication.
-    friend M44 operator* (double s, const M44 &a);
+    friend M44 operator* (float s, const M44 &a);
 
     //! 3-vector (fake vector with 4th "w" component = 1) and 4x4 matrix multiplication.
     /*!

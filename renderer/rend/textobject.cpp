@@ -18,8 +18,16 @@ TextObject::TextObject(sptr(Texture) texturedFont, int cols, int rows)
       m_rows(rows)
 {
     m_textPic = make_shared<Texture>(vector<Color3>(), 0, 0);
-    m_symbWidth = m_texture->width() / cols;
-    m_symbHeight = m_texture->height() / rows;
+    if (m_texture)
+    {
+        m_symbWidth = m_texture->width() / cols;
+        m_symbHeight = m_texture->height() / rows;
+    }
+    else
+    {
+        m_symbWidth = 0;
+        m_symbHeight = 0;
+    }
 }
 
 const sptr(Texture) TextObject::getTexture() const

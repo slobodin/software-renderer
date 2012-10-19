@@ -11,7 +11,7 @@ DEFINES += USING_PCH
 Debug:DEFINES += DEBUG
 DEFINES += RENDERER_LIBRARY
 
-QMAKE_CXXFLAGS += -std=gnu++0x
+QMAKE_CXXFLAGS += -std=gnu++0x -msse4.1
 
 HEADERS += \
     base/resourcemgr.h \

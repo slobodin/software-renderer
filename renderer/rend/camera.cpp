@@ -17,9 +17,9 @@ namespace rend
 {
 
 Camera::Camera(const math::vec3 position,
-               double fov,
-               double nearZ,
-               double farZ)
+               float fov,
+               float nearZ,
+               float farZ)
     : m_position(position),
       m_right(1.0, 0.0, 0.0),
       m_up(0.0, 1.0, 0.0),
@@ -70,7 +70,7 @@ math::vec3 Camera::getUpVector() const
     return m_up;
 }
 
-void Camera::setEulerAnglesRotation(double yaw, double pitch, double roll)
+void Camera::setEulerAnglesRotation(float yaw, float pitch, float roll)
 {
     m_yaw = yaw;
     m_pitch = pitch;
@@ -101,8 +101,8 @@ void Camera::buildCamMatrix()
 
 void Camera::toCamera(RenderList &rendList) const
 {
-    list<math::Triangle> &trias = rendList.triangles();
-    list<math::Triangle>::iterator t = trias.begin();
+    RenderList::Triangles &trias = rendList.triangles();
+    auto t = trias.begin();
 
     while (t != trias.end())
     {
@@ -127,7 +127,7 @@ void Camera::toCamera(RenderList &rendList) const
 
 void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
 {
-    list<math::Triangle> &trias = rendList.triangles();
+    RenderList::Triangles &trias = rendList.triangles();
 
     for (auto &t : trias)
     {
@@ -143,12 +143,12 @@ void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
 
 void Camera::frustumCull(RenderList &rendList) const
 {
-    list<math::Triangle> &trias = rendList.triangles();
+    RenderList::Triangles &trias = rendList.triangles();
     auto t = trias.begin();
 
-    auto testFn = [](double coord, double plane) -> bool { return coord > plane || coord < -plane; };
+    auto testFn = [](float coord, float plane) -> bool { return coord > plane || coord < -plane; };
 
-    double zfactor = 0.5 * m_viewPlaneWidth / m_distance;
+    float zfactor = 0.5 * m_viewPlaneWidth / m_distance;
     bool cull1_x = false, cull2_x = false, cull3_x = false;
     bool cull1_y = false, cull2_y = false, cull3_y = false;
     while (t != trias.end())
@@ -180,7 +180,7 @@ bool Camera::culled(const SceneObject &obj) const
     if (!obj.bsphere().valid())
         return false;
 
-    double radius = obj.bsphere().radius();
+    float radius = obj.bsphere().radius();
     spherePos = spherePos * m_worldToCamera;
 
     // check Z plane
@@ -206,7 +206,7 @@ bool Camera::culled(const SceneObject &obj) const
 void Camera::toScreen(math::vec3 &v, const Viewport &viewport) const
 {
     // perspective transformation
-    double z = v.z;
+    float z = v.z;
 
     assert(z != 0.0);
 
@@ -214,8 +214,8 @@ void Camera::toScreen(math::vec3 &v, const Viewport &viewport) const
     v.y = m_distance * v.y * viewport.getAspect() / z;
 
     // screen transformation
-    double alpha = 0.5 * viewport.getWidth() - 0.5;
-    double beta = 0.5 * viewport.getHeight() - 0.5;
+    float alpha = 0.5 * viewport.getWidth() - 0.5;
+    float beta = 0.5 * viewport.getHeight() - 0.5;
 
     v.x = alpha + alpha * v.x;
     v.y = beta - beta * v.y;

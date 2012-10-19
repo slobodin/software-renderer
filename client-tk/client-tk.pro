@@ -2,7 +2,7 @@ TEMPLATE = app
 CONFIG += console
 CONFIG -= qt
 
-QMAKE_CXXFLAGS += -std=gnu++0x
+QMAKE_CXXFLAGS += -std=gnu++0x -msse4.1
 
 DEFINES += TK_VERSION
 

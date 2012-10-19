@@ -146,7 +146,7 @@ struct CallbackTraits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
      typedef R result_type;
 };
 
-namespace details
+namespace details_cpptk
 {
 
 // The Command class gathers everything on its road while
@@ -843,7 +843,7 @@ std::ostream & operator<<(std::ostream &os, BasicToken const &token);
 // querying, for example:
 // 1. button(".b") -text("Hello") -foreground("blue");
 // 2. string color(".b" << cget(foreground));
-class Option : public details::BasicToken
+class Option : public details_cpptk::BasicToken
 {
 public:
      explicit Option(char const *name, bool quote = false)
@@ -896,19 +896,19 @@ public:
      ValidateAttr(std::string const &spec) : SubstAttr<T>(spec) {}
 };
 
-} // namespace details
+} // namespace details_cpptk
 
 // basic operations for Tk expressions
 
-details::Expr operator-(details::Expr const &lhs, details::Expr const &rhs);
-details::Expr operator<<(std::string const &w, details::Expr const &rhs);
+details_cpptk::Expr operator-(details_cpptk::Expr const &lhs, details_cpptk::Expr const &rhs);
+details_cpptk::Expr operator<<(std::string const &w, details_cpptk::Expr const &rhs);
 
 // for defining callbacks
 template <class Functor> std::string callback(Functor f)
 {
-     return details::addCallback(
-          boost::shared_ptr<details::CallbackBase>(
-               new details::Callback0<Functor>(f)));
+     return details_cpptk::addCallback(
+          boost::shared_ptr<details_cpptk::CallbackBase>(
+               new details_cpptk::Callback0<Functor>(f)));
 }
 
 // for deleting callbacks
@@ -930,19 +930,19 @@ private:
 // for linking variable
 template <typename T> std::string linkVar(T &t)
 {
-     return details::addLinkVar(t);
+     return details_cpptk::addLinkVar(t);
 }
 
 // for unlinking variable
-template <typename T> void unLinkVar(T &t) { details::deleteLinkVar(t); }
+template <typename T> void unLinkVar(T &t) { details_cpptk::deleteLinkVar(t); }
 
 // RAII handle for linking variables (calls unLinkVar in its destructor)
 template <typename T>
 class LinkHandle
 {
 public:
-     explicit LinkHandle(T &t) :t_(t) { var_ = details::addLinkVar(t); }
-     ~LinkHandle() { details::deleteLinkVar(t_); }
+     explicit LinkHandle(T &t) :t_(t) { var_ = details_cpptk::addLinkVar(t); }
+     ~LinkHandle() { details_cpptk::deleteLinkVar(t_); }
      
      std::string const & get() const { return var_; }
      
@@ -952,7 +952,7 @@ private:
 };
 
 // for brute-force evaluation of simple scripts
-details::Expr eval(std::string const &str);
+details_cpptk::Expr eval(std::string const &str);
 
 // for initializing Tcl environment
 void init(char *argv0);

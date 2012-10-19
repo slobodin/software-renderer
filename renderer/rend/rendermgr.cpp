@@ -152,7 +152,7 @@ sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, ma
 }
 
 sptr(PointLight) RenderMgr::addPointLight(Color3 intensity, math::vec3 position,
-                                          double kc, double kl, double kq)
+                                          float kc, float kl, float kq)
 {
     sptr(Light) newLight;
     try

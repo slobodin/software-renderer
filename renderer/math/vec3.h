@@ -11,6 +11,7 @@
 #include "comm_pch.h"
 
 #include "common_math.h"
+#include <xmmintrin.h>
 
 namespace math
 {
@@ -22,20 +23,25 @@ namespace math
 struct vec3
 {
     //! X Y Z coordinates of this vector
-    double x, y, z;
+    union
+    {
+        struct { float x, y, z, w; };      // w unused
+        __attribute__((aligned(16))) __m128 v;
+    };
 
     //! Default ctor.
     /*! Default zero vector. */
-    vec3(double x = 0.0, double y = 0.0, double z = 0.0) { this->x = x; this->y = y; this->z = z; }
+    vec3(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f)
+        : x(_x), y(_y), z(_z), w(1.0f) { }
 
     //! Addition assignment.
     vec3 &operator+= (const vec3 &other);
     //! Subtraction assignment.
     vec3 &operator-= (const vec3 &other);
     //! Scalar multiplication assignment.
-    vec3 &operator*= (double s);
+    vec3 &operator*= (float s);
     //! 1/scalar multiplication.
-    vec3 &operator/= (double s);
+    vec3 &operator/= (float s);
 
     //! Returns flipped vector.
     vec3 operator-() const;
@@ -45,15 +51,15 @@ struct vec3
     //! Non-equality check.
     bool operator!= (const vec3 &other) const;
 
-    //! Convertion to pointer to double. Returns address of `this'.
-    operator const double* () const;
+    //! Convertion to pointer to float. Returns address of `this'.
+    operator const float* () const;
 
     //! Vector's magnitude.
-    double length() const;
+    float length() const;
     //! Normalizes this vector and returns it.
     vec3 &normalize();
     //! Some type of ctor.
-    void set(double x, double y, double z);
+    void set(float x, float y, float z);
     //! Constructor from another vector.
     void set(const vec3 &other);
     //! Resets vector.
@@ -61,7 +67,7 @@ struct vec3
     //! Check all components for zero equality.
     bool isZero() const;
     //! Scalar product.
-    double dotProduct(const vec3 &other) const;
+    float dotProduct(const vec3 &other) const;
     //! Cross product.
     vec3 crossProduct(const vec3 &other) const;
 
@@ -70,11 +76,11 @@ struct vec3
     //! Subtraction of two vectors.
     friend vec3 operator- (const vec3 &a, const vec3 &b);
     //! Multiplication of vector and scalar.
-    friend vec3 operator* (const vec3 &a, double b);
+    friend vec3 operator* (const vec3 &a, float b);
     //! Multiplication of vector and scalar.
-    friend vec3 operator* (double a, const vec3 &b);
+    friend vec3 operator* (float a, const vec3 &b);
     //! Vector and 1/scalar multiplication.
-    friend vec3 operator/ (const vec3 &a, double b);
+    friend vec3 operator/ (const vec3 &a, float b);
 
     //! Logger helper. Writes `[x = ?, y = ?, z = ?]' in the stream
     friend std::ostream &operator<< (std::ostream &os, const vec3 &v);
@@ -110,7 +116,7 @@ inline vec3 &vec3::operator-= (const vec3 &other)
     return *this;
 }
 
-inline vec3 &vec3::operator*= (double s)
+inline vec3 &vec3::operator*= (float s)
 {
     x *= s;
     y *= s;
@@ -119,9 +125,9 @@ inline vec3 &vec3::operator*= (double s)
     return *this;
 }
 
-inline vec3 &vec3::operator/= (double s)
+inline vec3 &vec3::operator/= (float s)
 {
-    assert(!DCMP(s, 0.0));
+    assert(!DCMP(s, 0.0f));
     x /= s;
     y /= s;
     z /= s;
@@ -156,30 +162,30 @@ inline bool vec3::operator!= (const vec3 &other) const
     return false;
 }
 
-inline vec3::operator const double* () const
+inline vec3::operator const float* () const
 {
     return &x;
 }
 
-inline double vec3::length() const
+inline float vec3::length() const
 {
-    double t = x * x + y * y + z * z;
-    assert(!DCMP(t, 0.0));
+    float t = x * x + y * y + z * z;
+    assert(!DCMP(t, 0.0f));
 
     return sqrt(t);
 }
 
 inline vec3 &vec3::normalize()
 {
-    if ((fabs(x - 0.0) < EPSILON_E6) &&
-        (fabs(y - 0.0) < EPSILON_E6) &&
-        (fabs(z - 0.0) < EPSILON_E6))
+    if ((fabs(x - 0.0f) < EPSILON_E6) &&
+        (fabs(y - 0.0f) < EPSILON_E6) &&
+        (fabs(z - 0.0f) < EPSILON_E6))
         return (*this);
 
     return (*this) /= length();
 }
 
-inline void vec3::set(double x, double y, double z)
+inline void vec3::set(float x, float y, float z)
 {
     this->x = x;
     this->y = y;
@@ -195,17 +201,17 @@ inline void vec3::set(const vec3 &other)
 
 inline void vec3::zero()
 {
-    x = 0.0;
-    y = 0.0;
-    z = 0.0;
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
 }
 
 inline bool vec3::isZero() const
 {
-    return (DCMP(x, 0.0)) && (DCMP(y, 0.0)) && (DCMP(z, 0.0));
+    return (DCMP(x, 0.0f)) && (DCMP(y, 0.0f)) && (DCMP(z, 0.0f));
 }
 
-inline double vec3::dotProduct(const vec3 &other) const
+inline float vec3::dotProduct(const vec3 &other) const
 {
     return (x * other.x + y * other.y + z * other.z);
 }
@@ -227,17 +233,17 @@ inline vec3 operator- (const vec3 &a, const vec3 &b)
     return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
-inline vec3 operator* (const vec3 &a, double b)
+inline vec3 operator* (const vec3 &a, float b)
 {
     return vec3(a.x * b, a.y * b, a.z * b);
 }
 
-inline vec3 operator* (double a, const vec3 &b)
+inline vec3 operator* (float a, const vec3 &b)
 {
     return vec3(b.x * a, b.y * a, b.z * a);
 }
 
-inline vec3 operator/ (const vec3 &a, double b)
+inline vec3 operator/ (const vec3 &a, float b)
 {
     assert(!DCMP(b, 0.0));
     return vec3(a.x / b, a.y / b, a.z / b);
@@ -264,7 +270,7 @@ inline bool comparez(const vec3 &a, const vec3 &b)
     return a.z < b.z;
 }
 
-inline vec3 lerp(const vec3 &a, const vec3 &b, double t)
+inline vec3 lerp(const vec3 &a, const vec3 &b, float t)
 {
     return a + t * (b - a);
 }

@@ -141,7 +141,7 @@ TEST(Matrix3x3, DefaultConstructor)
 
 TEST(Matrix3x3, ArrayConstructor)
 {
-    const double in[3][3] = { { 1, 2, 3 },
+    const float in[3][3] = { { 1, 2, 3 },
                               { 4, 5, 6 },
                               { 7, 8, 9 } };
     M33 m(in);

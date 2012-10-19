@@ -92,7 +92,7 @@ void Triangle::computeNormal()
     m_normal.normalize();
 }
 
-double Triangle::square() const
+float Triangle::square() const
 {
     static vec3 p1, p2;
 
@@ -106,8 +106,8 @@ double Triangle::square() const
 
 bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2)
 {
-    double avgz = 0.33333 * (t1.m_verts[0].p.z + t1.m_verts[1].p.z + t1.m_verts[2].p.z);
-    double avgotherz = 0.33333 * (t2.m_verts[0].p.z + t2.m_verts[1].p.z + t2.m_verts[2].p.z);
+    float avgz = 0.33333 * (t1.m_verts[0].p.z + t1.m_verts[1].p.z + t1.m_verts[2].p.z);
+    float avgotherz = 0.33333 * (t2.m_verts[0].p.z + t2.m_verts[1].p.z + t2.m_verts[2].p.z);
 
     if (avgz < avgotherz)
         return true;
@@ -118,10 +118,10 @@ bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2)
 bool ZCompareMin(const Triangle &t1, const Triangle &t2)
 {
     vector<vec3> points = t1.points();
-    double minz1 = (*std::min_element(points.begin(), points.end(), comparez)).z;
+    float minz1 = (*std::min_element(points.begin(), points.end(), comparez)).z;
 
     points = t2.points();
-    double minz2 = (*std::min_element(points.begin(), points.end(), comparez)).z;
+    float minz2 = (*std::min_element(points.begin(), points.end(), comparez)).z;
 
     if (minz1 < minz2)
         return true;
@@ -132,10 +132,10 @@ bool ZCompareMin(const Triangle &t1, const Triangle &t2)
 bool ZCompareMax(const Triangle &t1, const Triangle &t2)
 {
     vector<vec3> points = t1.points();
-    double minz1 = (*std::max_element(points.begin(), points.end(), comparez)).z;
+    float minz1 = (*std::max_element(points.begin(), points.end(), comparez)).z;
 
     points = t2.points();
-    double minz2 = (*std::max_element(points.begin(), points.end(), comparez)).z;
+    float minz2 = (*std::max_element(points.begin(), points.end(), comparez)).z;
 
     if (minz1 < minz2)
         return true;

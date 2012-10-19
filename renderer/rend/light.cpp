@@ -63,7 +63,7 @@ void Light::illuminate(RenderList &renderlist) const
             t.v(0).color = t.v(1).color = t.v(2).color = material->plainColor;
             break;
         case Material::SM_TEXTURE:
-            // texture - performing standart flat shading. On rasterizing phaze we modulate texture texels with this color
+            // texture - performing standart flat shading. On rasterizing phaze we modulate texture texels with this color.
             t.v(0).color += m_shader(this, material, t.normal(), t.v(0).p);
             t.v(1).color += m_shader(this, material, t.normal(), t.v(0).p);
             t.v(2).color += m_shader(this, material, t.normal(), t.v(0).p);
@@ -95,7 +95,7 @@ Color3 DirectionalLight::shader(const sptr(Material) material, const math::vec3 
     if (normal.isZero())
         return Color3(0, 0, 0);
 
-    double dp = normal.dotProduct(m_dir);
+    float dp = normal.dotProduct(m_dir);
     if (dp > 0)
     {
         shadedColor = m_intensity * material->diffuseColor;
@@ -122,13 +122,13 @@ Color3 PointLight::shader(const sptr(Material) material, const math::vec3 &norma
         return Color3(0, 0, 0);
 
     math::vec3 l = getPosition() - pt;
-    double dist = l.length();
+    float dist = l.length();
 
-    double dp = normal.dotProduct(l);
+    float dp = normal.dotProduct(l);
     if (dp > 0)
     {
-        double atten = m_kc + m_kl * dist + m_kq * dist * dist;
-        double i = dp / (dist * atten);
+        float atten = m_kc + m_kl * dist + m_kq * dist * dist;
+        float i = dp / (dist * atten);
 
         shadedColor = m_intensity * material->diffuseColor;
         shadedColor *= (i / 256.0);
@@ -140,7 +140,7 @@ Color3 PointLight::shader(const sptr(Material) material, const math::vec3 &norma
 }
 
 PointLight::PointLight(const Color3 &intensity, const math::vec3 &pos,
-                       double kc, double kl, double kq)
+                       float kc, float kl, float kq)
     : Light(intensity),
       m_kc(kc),
       m_kl(kl),
@@ -160,7 +160,7 @@ Color3 SpotLight::getMaterialColor(sptr(Material) material) const
 }
 
 SpotLight::SpotLight(const Color3 &intensity, const math::vec3 &pos, const math::vec3 &dir,
-                     double umbra, double penumbra, double falloff)
+                     float umbra, float penumbra, float falloff)
     : Light(intensity),
       m_pos(pos),
       m_dir(dir),

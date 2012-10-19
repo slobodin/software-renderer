@@ -83,7 +83,7 @@ public:
     sptr(AmbientLight)      addAmbientLight(Color3 intensity);
     sptr(DirectionalLight)  addDirectionalLight(Color3 intensity, math::vec3 direction);
     sptr(PointLight)        addPointLight(Color3 intensity, math::vec3 position,
-                                          double kc, double kl, double kq);
+                                          float kc, float kl, float kq);
 
     void resize(int w, int h);
 };

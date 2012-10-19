@@ -7,30 +7,32 @@ Objects:
 #    position: [0, 0, 0]
 #  - model: 20kdm2.bsp
 #    position: [0, 0, 0]
-  - model: hammer02.asc
-    position: [0, 300, 0]
+#  - model: hammer02.asc
+#    position: [0, 300, 0]
 #  - model: tie04.cob
 #    position: [200, 100, 0]
-  - model: cube_flat_textured_01.cob
-    position: [0, 0, 0]
+#  - model: cube_flat_textured_01.cob
+#    position: [0, 0, 0]
 #  - model: cessna.obj
 #    position: [100, 200, 600]
 #  - model: al.obj
 #    position: [0, 0, -200]
 #  - model: water_gouraud_01.cob
 #    position: [-200, 300, 0]
+  - model: statue2.obj
+    position: [0, 100, -200]
 
 Lights:
   Ambient:				# note: id = 0
     - intensity: [150, 150, 150]
   Directional:
-#    - direction: [1, 1, 0]
-#      intensity: [255, 10, 50]
+    - direction: [1, 1, 0]
+      intensity: [255, 10, 50]
 #    - direction: [1, 1, 0]		# note: id = 1
 #      intensity: [255, 80, 80]
-#  Point:
-#    - position: [0, 1500, 0]		# note: id = 2
-#     intensity: [255, 255, 50]
-#      kc: 0
-#      kl: 0.001
-#      kq: 0
+  Point:
+    - position: [0, 0, 500]		# note: id = 2
+      intensity: [255, 255, 50]
+      kc: 0
+      kl: 0.001
+      kq: 0

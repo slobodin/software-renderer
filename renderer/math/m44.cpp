@@ -19,15 +19,15 @@ M44::M44()
     reset();
 }
 
-M44::M44(const double (&src)[4][4])
+M44::M44(const float (&src)[4][4])
 {
     set(src);
 }
 
-M44::M44(double a00, double a01, double a02, double a03,
-         double a10, double a11, double a12, double a13,
-         double a20, double a21, double a22, double a23,
-         double a30, double a31, double a32, double a33)
+M44::M44(float a00, float a01, float a02, float a03,
+         float a10, float a11, float a12, float a13,
+         float a20, float a21, float a22, float a23,
+         float a30, float a31, float a32, float a33)
 {
     set(a00, a01, a02, a03,
         a10, a11, a12, a13,
@@ -50,15 +50,15 @@ M44::M44(const M33 &rotScale)
     set(rotScale);
 }
 
-void M44::set(const double (&src)[4][4])
+void M44::set(const float (&src)[4][4])
 {
-    memcpy(x, src, 4 * 4 * sizeof(double));
+    memcpy(x, src, 4 * 4 * sizeof(float));
 }
 
-void M44::set(double a00, double a01, double a02, double a03,
-              double a10, double a11, double a12, double a13,
-              double a20, double a21, double a22, double a23,
-              double a30, double a31, double a32, double a33)
+void M44::set(float a00, float a01, float a02, float a03,
+              float a10, float a11, float a12, float a13,
+              float a20, float a21, float a22, float a23,
+              float a30, float a31, float a32, float a33)
 {
     x[0][0] = a00;
     x[0][1] = a01;
@@ -152,7 +152,7 @@ void M44::set(const M33 &rotScale)
 
 void M44::reset()
 {
-    memset(&x[0], 0, sizeof(double) * 4 * 4);
+    memset(&x[0], 0, sizeof(float) * 4 * 4);
     x[0][0] = x[1][1] = x[2][2] = x[3][3] = 1.0;
 }
 
@@ -193,21 +193,21 @@ M44 &M44::operator*= (const M44 &a)
     return *this = res;
 }
 
-M44 &M44::operator*= (double s)
+M44 &M44::operator*= (float s)
 {
-    BOOST_FOREACH (double (&row)[4], x)
-        BOOST_FOREACH (double &el, row)
+    BOOST_FOREACH (float (&row)[4], x)
+        BOOST_FOREACH (float &el, row)
             el *= s;
 
     return *this;
 }
 
-M44 &M44::operator/= (double s)
+M44 &M44::operator/= (float s)
 {
     assert(!DCMP(s, 0.0));
 
-    BOOST_FOREACH (double (&row)[4], x)
-        BOOST_FOREACH (double &el, row)
+    BOOST_FOREACH (float (&row)[4], x)
+        BOOST_FOREACH (float &el, row)
             el /= s;
 
     return *this;
@@ -274,14 +274,14 @@ M44 operator* (const M44 &a, const M44 &b)
     return res;
 }
 
-M44 operator* (const M44 &a, double s)
+M44 operator* (const M44 &a, float s)
 {
     M44 res = a;
 
     return res *= s;
 }
 
-M44 operator* (double s, const M44 &a)
+M44 operator* (float s, const M44 &a)
 {
     M44 res = a;
 
@@ -290,14 +290,14 @@ M44 operator* (double s, const M44 &a)
 
 vec3 operator* (const vec3 &v, const M44 &a)
 {
-    double res[4];  // result 4-vector
+    float res[4];  // result 4-vector
 
     res[0] = v.x * a.x[0][0] + v.y * a.x[1][0] + v.z * a.x[2][0] + /*1.0 * */a.x[3][0];
     res[1] = v.x * a.x[0][1] + v.y * a.x[1][1] + v.z * a.x[2][1] + /*1.0 * */a.x[3][1];
     res[2] = v.x * a.x[0][2] + v.y * a.x[1][2] + v.z * a.x[2][2] + /*1.0 * */a.x[3][2];
     res[3] = v.x * a.x[0][3] + v.y * a.x[1][3] + v.z * a.x[2][3] + /*1.0 * */a.x[3][3];
 
-    if (fabs(res[3] - 1.0) < std::numeric_limits<double>::epsilon())   // equals to 1.0
+    if (fabs(res[3] - 1.0) < 0.00000001/*std::numeric_limits<float>::epsilon()*/)   // equals to 1.0
     {
         return vec3(res[0], res[1], res[2]);
     }

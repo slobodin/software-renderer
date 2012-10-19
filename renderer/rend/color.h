@@ -205,7 +205,7 @@ public:
     }
 
     //! Color scalar modulation.
-    Color3 &operator*= (double s);
+    Color3 &operator*= (float s);
     //! Color modulation.
     Color3 &operator*= (const Color3 &other);
     //! Color addition.
@@ -213,7 +213,7 @@ public:
     //! Color modulation.
     friend Color3 operator* (const Color3 &a, const Color3 &b);
 
-    static Color3 lerp(const Color3 &a, const Color3 &b, double t);
+    static Color3 lerp(const Color3 &a, const Color3 &b, float t);
 
     //! Resets color to zero (black).
     void reset() { m_r = m_g = m_b = 0; }
@@ -226,23 +226,23 @@ inline Color3 operator* (const Color3 &a, const Color3 &b)
     return Color3(a.m_r * b.m_r, a.m_g * b.m_g, a.m_b * b.m_b);
 }
 
-inline Color3 Color3::lerp(const Color3 &a, const Color3 &b, double t)
+inline Color3 Color3::lerp(const Color3 &a, const Color3 &b, float t)
 {
-    double red = (double)a[RED] + t * ((double)b[RED] - (double)a[RED]);
-    double green = (double)a[GREEN] + t * ((double)b[GREEN] - (double)a[GREEN]);
-    double blue = (double)a[BLUE] + t * ((double)b[BLUE] - (double)a[BLUE]);
+    float red = (float)a[RED] + t * ((float)b[RED] - (float)a[RED]);
+    float green = (float)a[GREEN] + t * ((float)b[GREEN] - (float)a[GREEN]);
+    float blue = (float)a[BLUE] + t * ((float)b[BLUE] - (float)a[BLUE]);
 
     return Color3(red, green, blue);
 }
 
-inline Color3 &Color3::operator*= (double s)
+inline Color3 &Color3::operator*= (float s)
 {
     if (s < 0)
         return *this;
 
-    m_r = std::min(m_r * s, 255.0);
-    m_g = std::min(m_g * s, 255.0);
-    m_b = std::min(m_b * s, 255.0);
+    m_r = std::min(m_r * s, 255.0f);
+    m_g = std::min(m_g * s, 255.0f);
+    m_b = std::min(m_b * s, 255.0f);
 
     return *this;
 }

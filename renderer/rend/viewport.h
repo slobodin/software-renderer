@@ -31,7 +31,7 @@ protected:
     //! Screen Y center point.
     int m_centerY;
     //! Aspect ratio. Width / height.
-    double m_aspect;
+    float m_aspect;
 
     boost::shared_ptr<Camera> m_camera;
 

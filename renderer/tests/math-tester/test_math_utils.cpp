@@ -14,7 +14,7 @@ TEST(AngleBetween, TwoDim)
 {
     vec2 a(1, 5), b(1, 5);
 
-    double angle = AngleBetween(a, b);
+    float angle = AngleBetween(a, b);
     EXPECT_NEAR(0, angle, 0.0001);
 
     a.set(5, 1);
@@ -27,7 +27,7 @@ TEST(AngleBetween, ThreeDim)
     vec3 a, b(5, 8, 7);
     a = b;
 
-    double angle = AngleBetween(a, b);
+    float angle = AngleBetween(a, b);
     EXPECT_NEAR(0, angle, 0.0001);
 
     a.set(5, 6, 7);

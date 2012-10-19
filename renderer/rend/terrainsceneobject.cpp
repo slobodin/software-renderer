@@ -17,11 +17,11 @@ TerrainSceneObject::TerrainSceneObject(double width, double height, double vertS
                                        const shared_ptr<Texture> heightMap,
                                        const shared_ptr<Texture> texture)
 {
-    // set name
-    setName(string("terrain_") + heightMap->getName());
-
     if (!heightMap)
         return;
+
+    // set name
+    setName(string("terrain_") + heightMap->getName());
 
     int columns = heightMap->width();
     int rows = heightMap->height();

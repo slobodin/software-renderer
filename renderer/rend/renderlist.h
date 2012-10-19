@@ -26,22 +26,25 @@ class Camera;
 
 class RenderList : boost::noncopyable
 {
-    list<math::Triangle> m_triangles;
+public:
+    typedef list<math::Triangle> Triangles;
 
-    static void createTriangles(const VertexBuffer &vertexBuffer,
-                                const math::M44 &transform,
-                                list<math::Triangle> &output);
+private:
+    Triangles m_triangles;
+
+    void createTriangles(const VertexBuffer &vertexBuffer,
+                         const math::M44 &transform);
 
 public:
     //! Default ctor.
     RenderList() { }
     //! Dtor.
-    ~RenderList() { }
+    ~RenderList();
 
     void append(const SceneObject &mesh);
 
-    const list<math::Triangle> &triangles() const { return m_triangles; }
-    list<math::Triangle>       &triangles() { return m_triangles; }
+    const Triangles &triangles() const { return m_triangles; }
+    Triangles       &triangles() { return m_triangles; }
 
     void zsort();
     void removeBackfaces(const sptr(Camera) cam);

@@ -24,24 +24,24 @@ namespace math
 struct M33
 {
     //! x[row][col].
-    double x[3][3];
+    float x[3][3];
 
     //! Default ctor.
     /*! Default identity matrix. */
     M33();
     //! Array ctor.
-    M33(const double (&src)[3][3]);
+    M33(const float (&src)[3][3]);
     //! Component ctor.
-    M33(double a00, double a01, double a02,
-        double a10, double a11, double a12,
-        double a20, double a21, double a22);
+    M33(float a00, float a01, float a02,
+        float a10, float a11, float a12,
+        float a20, float a21, float a22);
 
     //! Set elements with array.
-    void set(const double (&src)[3][3]);
+    void set(const float (&src)[3][3]);
     //! Set elements.
-    void set(double a00, double a01, double a02,
-             double a10, double a11, double a12,
-             double a20, double a21, double a22);
+    void set(float a00, float a01, float a02,
+             float a10, float a11, float a12,
+             float a20, float a21, float a22);
     //! Reset to identity matrix.
     void reset();
 
@@ -52,9 +52,9 @@ struct M33
     //! Matrix multiplication.
     M33 &operator*= (const M33 &a);
     //! Scalar multiplication.
-    M33 &operator*= (double s);
+    M33 &operator*= (float s);
     //! 1/scalar multiplication.
-    M33 &operator/= (double s);
+    M33 &operator/= (float s);
 
     //! Equality check.
     bool operator== (const M33 &a) const;
@@ -64,10 +64,10 @@ struct M33
     //! Matrix transposition.
     M33 &transpose();
     //! Determinant computing.
-    double determinant() const;
+    float determinant() const;
 
     //! Returns matrix memory address.
-    double *getPointer() { return reinterpret_cast<double *>(x); }
+    float *getPointer() { return reinterpret_cast<float *>(x); }
 
     //! Makes scale matrix from given 3d vector.
     /*!
@@ -83,7 +83,7 @@ struct M33
       * \param rads If true - angle in radians.
       * \returns X-rotation matrix.
       */
-    static M33 getRotateXMatrix(double angle, bool rads = false);
+    static M33 getRotateXMatrix(float angle, bool rads = false);
 
     //! Makes matrix represents rotation about the Y-axis by an given angle.
     /*!
@@ -91,7 +91,7 @@ struct M33
       * \param rads If true - angle in radians.
       * \returns Y-rotation matrix.
       */
-    static M33 getRotateYMatrix(double angle, bool rads = false);
+    static M33 getRotateYMatrix(float angle, bool rads = false);
 
     //! Makes matrix represents rotation about the Z-axis by given angle.
     /*!
@@ -99,7 +99,7 @@ struct M33
       * \param rads If true - angle in radians.
       * \returns Z-rotation matrix.
       */
-    static M33 getRotateZMatrix(double angle, bool rads = false);
+    static M33 getRotateZMatrix(float angle, bool rads = false);
 
     //! Makes matrix represents three sequential rotations about Y -> Z -> X axis
     /*!
@@ -109,9 +109,9 @@ struct M33
       \param rads radians or degrees.
       \returns Result rotation matrix.
       */
-    static M33 getRotateYawPitchRollMatrix(double yaw,
-                                           double pitch,
-                                           double roll,
+    static M33 getRotateYawPitchRollMatrix(float yaw,
+                                           float pitch,
+                                           float roll,
                                            bool rads = false);
 
     //! Addition of two matrices.
@@ -121,9 +121,9 @@ struct M33
     //! Multiplication of two matrices.
     friend M33 operator* (const M33 &a, const M33 &b);
     //! Scalar multiplication.
-    friend M33 operator* (const M33 &a, double s);
+    friend M33 operator* (const M33 &a, float s);
     //! Scalar multiplication.
-    friend M33 operator* (double s, const M33 &a);
+    friend M33 operator* (float s, const M33 &a);
 
     //! 3-vector and 3x3 matrix multiplication.
     /*!

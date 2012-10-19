@@ -12,7 +12,7 @@
 
 
 using namespace Tk;
-using namespace Tk::details;
+using namespace Tk::details_cpptk;
 using namespace boost;
 using namespace std;
 
@@ -858,8 +858,8 @@ Expr Tk::cliptype(string const &type)
 Expr Tk::count(int &i)
 {
      std::string str(" -count ");
-     str += details::addLinkVar(i);
-     return details::Expr(str, false);
+     str += details_cpptk::addLinkVar(i);
+     return details_cpptk::Expr(str, false);
 }
 
 Expr Tk::count(string const &name)
@@ -1106,9 +1106,9 @@ Expr Tk::update(string const &option)
 
 // multipurpose tokens
 
-Tk::details::BindToken::BindToken() : BasicToken("bind") {}
+Tk::details_cpptk::BindToken::BindToken() : BasicToken("bind") {}
 
-Expr Tk::details::BindToken::operator()(string const &name,
+Expr Tk::details_cpptk::BindToken::operator()(string const &name,
      string const &seq) const
 {
      string str("bind ");
@@ -1119,10 +1119,10 @@ Expr Tk::details::BindToken::operator()(string const &name,
 
 BindToken Tk::bind;
 
-Tk::details::CheckButtonToken::CheckButtonToken()
+Tk::details_cpptk::CheckButtonToken::CheckButtonToken()
      : BasicToken("checkbutton") {}
 
-Expr Tk::details::CheckButtonToken::operator()(string const &name) const
+Expr Tk::details_cpptk::CheckButtonToken::operator()(string const &name) const
 {
      string str("checkbutton ");
      str += name;
@@ -1131,9 +1131,9 @@ Expr Tk::details::CheckButtonToken::operator()(string const &name) const
 
 CheckButtonToken Tk::checkbutton;
 
-Tk::details::FrameToken::FrameToken() : BasicToken("frame") {}
+Tk::details_cpptk::FrameToken::FrameToken() : BasicToken("frame") {}
 
-Expr Tk::details::FrameToken::operator()(string const &name) const
+Expr Tk::details_cpptk::FrameToken::operator()(string const &name) const
 {
      string str("frame ");
      str += name;
@@ -1142,9 +1142,9 @@ Expr Tk::details::FrameToken::operator()(string const &name) const
 
 FrameToken Tk::frame;
 
-Tk::details::GridToken::GridToken() : BasicToken("grid") {}
+Tk::details_cpptk::GridToken::GridToken() : BasicToken("grid") {}
 
-Expr Tk::details::GridToken::operator()(string const &option,
+Expr Tk::details_cpptk::GridToken::operator()(string const &option,
      string const &name) const
 {
      string str("grid ");
@@ -1153,7 +1153,7 @@ Expr Tk::details::GridToken::operator()(string const &option,
      return Expr(str);
 }
 
-Expr Tk::details::GridToken::operator()(string const &option,
+Expr Tk::details_cpptk::GridToken::operator()(string const &option,
      string const &name, int x, int y) const
 {
      string str("grid ");
@@ -1164,7 +1164,7 @@ Expr Tk::details::GridToken::operator()(string const &option,
      return Expr(str);
 }
 
-Expr Tk::details::GridToken::operator()(string const &option,
+Expr Tk::details_cpptk::GridToken::operator()(string const &option,
      string const &name, int col1, int row1, int col2, int row2) const
 {
      string str("grid ");
@@ -1179,9 +1179,9 @@ Expr Tk::details::GridToken::operator()(string const &option,
 
 GridToken Tk::grid;
 
-Tk::details::LowerToken::LowerToken() : BasicToken("lower") {}
+Tk::details_cpptk::LowerToken::LowerToken() : BasicToken("lower") {}
 
-Expr Tk::details::LowerToken::operator()(string const &name,
+Expr Tk::details_cpptk::LowerToken::operator()(string const &name,
      string const &belowthis) const
 {
      string str("lower ");
@@ -1196,16 +1196,16 @@ Expr Tk::details::LowerToken::operator()(string const &name,
 
 LowerToken Tk::lower;
 
-Tk::details::PlaceToken::PlaceToken() : BasicToken("place") {}
+Tk::details_cpptk::PlaceToken::PlaceToken() : BasicToken("place") {}
 
-Expr Tk::details::PlaceToken::operator()(string const &w) const
+Expr Tk::details_cpptk::PlaceToken::operator()(string const &w) const
 {
      string str("place ");
      str += w;
      return Expr(str);
 }
 
-Expr Tk::details::PlaceToken::operator()(string const &option,
+Expr Tk::details_cpptk::PlaceToken::operator()(string const &option,
      string const &w) const
 {
      string str("place ");
@@ -1216,10 +1216,10 @@ Expr Tk::details::PlaceToken::operator()(string const &option,
 
 PlaceToken Tk::place;
 
-Tk::details::RadioButtonToken::RadioButtonToken()
+Tk::details_cpptk::RadioButtonToken::RadioButtonToken()
      : BasicToken("radiobutton") {}
 
-Expr Tk::details::RadioButtonToken::operator()(string const &name) const
+Expr Tk::details_cpptk::RadioButtonToken::operator()(string const &name) const
 {
      string str("radiobutton ");
      str += name;
@@ -1228,9 +1228,9 @@ Expr Tk::details::RadioButtonToken::operator()(string const &name) const
 
 RadioButtonToken Tk::radiobutton;
 
-Tk::details::RaiseToken::RaiseToken() : BasicToken("raise") {}
+Tk::details_cpptk::RaiseToken::RaiseToken() : BasicToken("raise") {}
 
-Expr Tk::details::RaiseToken::operator()(string const &name,
+Expr Tk::details_cpptk::RaiseToken::operator()(string const &name,
      string const &abovethis) const
 {
      string str("raise ");
@@ -1245,9 +1245,9 @@ Expr Tk::details::RaiseToken::operator()(string const &name,
 
 RaiseToken Tk::raise;
 
-Tk::details::ToplevelToken::ToplevelToken() : BasicToken("toplevel") {}
+Tk::details_cpptk::ToplevelToken::ToplevelToken() : BasicToken("toplevel") {}
 
-Expr Tk::details::ToplevelToken::operator()(string const &w) const
+Expr Tk::details_cpptk::ToplevelToken::operator()(string const &w) const
 {
      string str("toplevel ");
      str += w;
@@ -1256,9 +1256,9 @@ Expr Tk::details::ToplevelToken::operator()(string const &w) const
 
 ToplevelToken Tk::toplevel;
 
-Tk::details::AddToken::AddToken() : BasicToken("add") {}
+Tk::details_cpptk::AddToken::AddToken() : BasicToken("add") {}
 
-Expr Tk::details::AddToken::operator()(string const &tn) const
+Expr Tk::details_cpptk::AddToken::operator()(string const &tn) const
 {
      string str("add ");
      str += tn;
@@ -1267,13 +1267,13 @@ Expr Tk::details::AddToken::operator()(string const &tn) const
 
 AddToken Tk::add;
 
-Tk::details::BboxToken::BboxToken() : BasicToken("bbox") {}
+Tk::details_cpptk::BboxToken::BboxToken() : BasicToken("bbox") {}
 
 BboxToken Tk::bbox;
 
-Tk::details::CgetToken::CgetToken() : BasicToken("cget") {}
+Tk::details_cpptk::CgetToken::CgetToken() : BasicToken("cget") {}
 
-Expr Tk::details::CgetToken::operator()(string const &name) const
+Expr Tk::details_cpptk::CgetToken::operator()(string const &name) const
 {
      string str("cget -");
      str += name;
@@ -1282,18 +1282,18 @@ Expr Tk::details::CgetToken::operator()(string const &name) const
 
 CgetToken Tk::cget;
 
-Tk::details::ConfigureToken::ConfigureToken() : BasicToken("configure") {}
+Tk::details_cpptk::ConfigureToken::ConfigureToken() : BasicToken("configure") {}
 
-Expr Tk::details::ConfigureToken::operator()() const
+Expr Tk::details_cpptk::ConfigureToken::operator()() const
 {
      return Expr("configure");
 }
 
 ConfigureToken Tk::configure;
 
-Tk::details::CreateToken::CreateToken() : BasicToken("create") {}
+Tk::details_cpptk::CreateToken::CreateToken() : BasicToken("create") {}
 
-Expr Tk::details::CreateToken::operator()(string const &type,
+Expr Tk::details_cpptk::CreateToken::operator()(string const &type,
      int x, int y) const
 {
      string str("create ");
@@ -1303,13 +1303,13 @@ Expr Tk::details::CreateToken::operator()(string const &type,
      return Expr(str);
 }
 
-Expr Tk::details::CreateToken::operator()(string const &type,
+Expr Tk::details_cpptk::CreateToken::operator()(string const &type,
      Point const &p) const
 {
      return create(type, p.x, p.y);
 }
 
-Expr Tk::details::CreateToken::operator()(string const &type,
+Expr Tk::details_cpptk::CreateToken::operator()(string const &type,
      int x1, int y1, int x2, int y2) const
 {
      string str("create ");
@@ -1321,13 +1321,13 @@ Expr Tk::details::CreateToken::operator()(string const &type,
      return Expr(str);
 }
 
-Expr Tk::details::CreateToken::operator()(string const &type,
+Expr Tk::details_cpptk::CreateToken::operator()(string const &type,
      Point const &p1, Point const &p2) const
 {
      return create(type, p1.x, p1.y, p2.x, p2.y);
 }
 
-Expr Tk::details::CreateToken::operator()(string const &type,
+Expr Tk::details_cpptk::CreateToken::operator()(string const &type,
      Box const &b) const
 {
      return create(type, b.x1, b.y1, b.x2, b.y2);
@@ -1335,9 +1335,9 @@ Expr Tk::details::CreateToken::operator()(string const &type,
 
 CreateToken Tk::create;
 
-Tk::details::FocusToken::FocusToken() : BasicToken("focus") {}
+Tk::details_cpptk::FocusToken::FocusToken() : BasicToken("focus") {}
 
-Expr Tk::details::FocusToken::operator()(string const &name) const
+Expr Tk::details_cpptk::FocusToken::operator()(string const &name) const
 {
      string str("focus");
      if (name.empty())
@@ -1353,9 +1353,9 @@ Expr Tk::details::FocusToken::operator()(string const &name) const
 
 FocusToken Tk::focus;
 
-Tk::details::ForgetToken::ForgetToken() : BasicToken("forget") {}
+Tk::details_cpptk::ForgetToken::ForgetToken() : BasicToken("forget") {}
 
-Expr Tk::details::ForgetToken::operator()(string const &name) const
+Expr Tk::details_cpptk::ForgetToken::operator()(string const &name) const
 {
      string str("forget ");
      str += name;
@@ -1364,18 +1364,18 @@ Expr Tk::details::ForgetToken::operator()(string const &name) const
 
 ForgetToken Tk::forget;
 
-Tk::details::GetToken::GetToken() : BasicToken("get") {}
+Tk::details_cpptk::GetToken::GetToken() : BasicToken("get") {}
 
-Expr Tk::details::GetToken::operator()() const
+Expr Tk::details_cpptk::GetToken::operator()() const
 {
      return Expr("get");
 }
 
 GetToken Tk::get;
 
-Tk::details::MoveToToken::MoveToToken() : BasicToken("moveto") {}
+Tk::details_cpptk::MoveToToken::MoveToToken() : BasicToken("moveto") {}
 
-Expr Tk::details::MoveToToken::operator()(double fraction) const
+Expr Tk::details_cpptk::MoveToToken::operator()(double fraction) const
 {
      string str("moveto ");
      str += toString(fraction);
@@ -1384,9 +1384,9 @@ Expr Tk::details::MoveToToken::operator()(double fraction) const
 
 MoveToToken Tk::moveto;
 
-Tk::details::ScrollToken::ScrollToken() : BasicToken("scroll") {}
+Tk::details_cpptk::ScrollToken::ScrollToken() : BasicToken("scroll") {}
 
-Expr Tk::details::ScrollToken::operator()(int n, string const &what) const
+Expr Tk::details_cpptk::ScrollToken::operator()(int n, string const &what) const
 {
      string str("scroll ");
      str += toString(n); str += " ";
@@ -1396,14 +1396,14 @@ Expr Tk::details::ScrollToken::operator()(int n, string const &what) const
 
 ScrollToken Tk::scroll;
 
-Tk::details::SetToken::SetToken() : BasicToken("set") {}
+Tk::details_cpptk::SetToken::SetToken() : BasicToken("set") {}
 
-Expr Tk::details::SetToken::operator()() const
+Expr Tk::details_cpptk::SetToken::operator()() const
 {
      return Expr("set");
 }
 
-Expr Tk::details::SetToken::operator()(double first, double last) const
+Expr Tk::details_cpptk::SetToken::operator()(double first, double last) const
 {
      string str("set ");
      str += toString(first); str += " ";
@@ -1413,18 +1413,18 @@ Expr Tk::details::SetToken::operator()(double first, double last) const
 
 SetToken Tk::set;
 
-Tk::details::TypeToken::TypeToken() : BasicToken("type") {}
+Tk::details_cpptk::TypeToken::TypeToken() : BasicToken("type") {}
 
 TypeToken Tk::type;
 
-Tk::details::ValidateToken::ValidateToken() : BasicToken("validate") {}
+Tk::details_cpptk::ValidateToken::ValidateToken() : BasicToken("validate") {}
 
-Expr Tk::details::ValidateToken::operator()() const
+Expr Tk::details_cpptk::ValidateToken::operator()() const
 {
      return Expr("validate");
 }
 
-Expr Tk::details::ValidateToken::operator()(string const &when) const
+Expr Tk::details_cpptk::ValidateToken::operator()(string const &when) const
 {
      string str(" -validate ");
      str += when;
@@ -1433,25 +1433,25 @@ Expr Tk::details::ValidateToken::operator()(string const &when) const
 
 ValidateToken Tk::validate;
 
-Tk::details::AllToken::AllToken() : BasicToken("all") {}
+Tk::details_cpptk::AllToken::AllToken() : BasicToken("all") {}
 
-Expr Tk::details::AllToken::operator()() const
+Expr Tk::details_cpptk::AllToken::operator()() const
 {
      return Expr(" -all", false);
 }
 
 AllToken Tk::all;
 
-Tk::details::CommandToken::CommandToken() : BasicToken("command") {}
+Tk::details_cpptk::CommandToken::CommandToken() : BasicToken("command") {}
 
-Expr Tk::details::CommandToken::operator()(string const &name) const
+Expr Tk::details_cpptk::CommandToken::operator()(string const &name) const
 {
      string str(" -command { ");
      str += name; str += " }";
      return Expr(str, false);
 }
 
-Expr Tk::details::CommandToken::operator()(CallbackHandle const &handle) const
+Expr Tk::details_cpptk::CommandToken::operator()(CallbackHandle const &handle) const
 {
      string str(" -command { ");
      str += handle.get(); str += " }";
@@ -1460,14 +1460,14 @@ Expr Tk::details::CommandToken::operator()(CallbackHandle const &handle) const
 
 CommandToken Tk::command;
 
-Tk::details::ElideToken::ElideToken() : BasicToken("elide") {}
+Tk::details_cpptk::ElideToken::ElideToken() : BasicToken("elide") {}
 
-Expr Tk::details::ElideToken::operator()() const
+Expr Tk::details_cpptk::ElideToken::operator()() const
 {
      return Expr(" -elide", false);
 }
 
-Expr Tk::details::ElideToken::operator()(bool b) const
+Expr Tk::details_cpptk::ElideToken::operator()(bool b) const
 {
      string str(" -elide ");
      str += toString(b);
@@ -1476,16 +1476,16 @@ Expr Tk::details::ElideToken::operator()(bool b) const
 
 ElideToken Tk::elide;
 
-Tk::details::FromToken::FromToken() : BasicToken("from") {}
+Tk::details_cpptk::FromToken::FromToken() : BasicToken("from") {}
 
-Expr Tk::details::FromToken::operator()(int val) const
+Expr Tk::details_cpptk::FromToken::operator()(int val) const
 {
      string str(" -from ");
      str += toString(val);
      return Expr(str, false);
 }
 
-Expr Tk::details::FromToken::operator()(int x1, int y1, int x2, int y2) const
+Expr Tk::details_cpptk::FromToken::operator()(int x1, int y1, int x2, int y2) const
 {
      string str(" -from ");
      str += toString(x1); str += " ";
@@ -1497,14 +1497,14 @@ Expr Tk::details::FromToken::operator()(int x1, int y1, int x2, int y2) const
 
 FromToken Tk::from;
 
-Tk::details::ImageToken::ImageToken() : BasicToken("image") {}
+Tk::details_cpptk::ImageToken::ImageToken() : BasicToken("image") {}
 
-Expr Tk::details::ImageToken::operator()() const
+Expr Tk::details_cpptk::ImageToken::operator()() const
 {
      return Expr(" -image", false);
 }
 
-Expr Tk::details::ImageToken::operator()(string const &name) const
+Expr Tk::details_cpptk::ImageToken::operator()(string const &name) const
 {
      string str(" -image ");
      str += name;
@@ -1513,14 +1513,14 @@ Expr Tk::details::ImageToken::operator()(string const &name) const
 
 ImageToken Tk::image;
 
-Tk::details::MarkToken::MarkToken() : BasicToken("mark") {}
+Tk::details_cpptk::MarkToken::MarkToken() : BasicToken("mark") {}
 
-Expr Tk::details::MarkToken::operator()() const
+Expr Tk::details_cpptk::MarkToken::operator()() const
 {
      return Expr(" -mark", false);
 }
 
-Expr Tk::details::MarkToken::operator()(string const &option,
+Expr Tk::details_cpptk::MarkToken::operator()(string const &option,
      string const &markname, string const &dir) const
 {
      string str("mark ");
@@ -1542,9 +1542,9 @@ Expr Tk::details::MarkToken::operator()(string const &option,
 
 MarkToken Tk::mark;
 
-Tk::details::MenuLabelToken::MenuLabelToken() : BasicToken("label") {}
+Tk::details_cpptk::MenuLabelToken::MenuLabelToken() : BasicToken("label") {}
 
-Expr Tk::details::MenuLabelToken::operator()(string const &label) const
+Expr Tk::details_cpptk::MenuLabelToken::operator()(string const &label) const
 {
      string str(" -label \"");
      str += label; str += '\"';
@@ -1553,14 +1553,14 @@ Expr Tk::details::MenuLabelToken::operator()(string const &label) const
 
 MenuLabelToken Tk::menulabel;
 
-Tk::details::TextToken::TextToken() : BasicToken("text") {}
+Tk::details_cpptk::TextToken::TextToken() : BasicToken("text") {}
 
-Expr Tk::details::TextToken::operator()() const
+Expr Tk::details_cpptk::TextToken::operator()() const
 {
      return Expr(" -text", false);
 }
 
-Expr Tk::details::TextToken::operator()(string const &t) const
+Expr Tk::details_cpptk::TextToken::operator()(string const &t) const
 {
      string str(" -text \"");
      str += quote(t); str += '\"';
@@ -1569,16 +1569,16 @@ Expr Tk::details::TextToken::operator()(string const &t) const
 
 TextToken Tk::text;
 
-Tk::details::ToToken::ToToken() : BasicToken("to") {}
+Tk::details_cpptk::ToToken::ToToken() : BasicToken("to") {}
 
-Expr Tk::details::ToToken::operator()(int val) const
+Expr Tk::details_cpptk::ToToken::operator()(int val) const
 {
      string str(" -to ");
      str += toString(val);
      return Expr(str, false);
 }
 
-Expr Tk::details::ToToken::operator()(int x, int y) const
+Expr Tk::details_cpptk::ToToken::operator()(int x, int y) const
 {
      string str(" -to ");
      str += toString(x); str += " ";
@@ -1586,7 +1586,7 @@ Expr Tk::details::ToToken::operator()(int x, int y) const
      return Expr(str, false);
 }
 
-Expr Tk::details::ToToken::operator()(int x1, int y1, int x2, int y2) const
+Expr Tk::details_cpptk::ToToken::operator()(int x1, int y1, int x2, int y2) const
 {
      string str(" -to ");
      str += toString(x1); str += " ";
@@ -1598,9 +1598,9 @@ Expr Tk::details::ToToken::operator()(int x1, int y1, int x2, int y2) const
 
 ToToken Tk::to;
 
-Tk::details::WindowToken::WindowToken() : BasicToken("window") {}
+Tk::details_cpptk::WindowToken::WindowToken() : BasicToken("window") {}
 
-Expr Tk::details::WindowToken::operator()(string const &name) const
+Expr Tk::details_cpptk::WindowToken::operator()(string const &name) const
 {
      string str(" -window");
      if (name.empty())
@@ -1613,9 +1613,9 @@ Expr Tk::details::WindowToken::operator()(string const &name) const
 
 WindowToken Tk::window;
 
-Tk::details::WndClassToken::WndClassToken() : BasicToken("class") {}
+Tk::details_cpptk::WndClassToken::WndClassToken() : BasicToken("class") {}
 
-Expr Tk::details::WndClassToken::operator()(string const &name) const
+Expr Tk::details_cpptk::WndClassToken::operator()(string const &name) const
 {
      string str(" -class ");
      str += name;
@@ -1624,23 +1624,23 @@ Expr Tk::details::WndClassToken::operator()(string const &name) const
 
 WndClassToken Tk::wndclass;
 
-Tk::details::AfterToken::AfterToken() : BasicToken("after") {}
+Tk::details_cpptk::AfterToken::AfterToken() : BasicToken("after") {}
 
-Expr Tk::details::AfterToken::operator()(int time) const
+Expr Tk::details_cpptk::AfterToken::operator()(int time) const
 {
      string str("after ");
      str += toString(time);
      return Expr(str);
 }
 
-Expr Tk::details::AfterToken::operator()(string const &name) const
+Expr Tk::details_cpptk::AfterToken::operator()(string const &name) const
 {
      string str(" -after ");
      str += name;
      return Expr(str, false);
 }
 
-Expr Tk::details::AfterToken::operator()(int time, string const &name) const
+Expr Tk::details_cpptk::AfterToken::operator()(int time, string const &name) const
 {
      string str("after ");
      str += toString(time); str += " ";
@@ -1648,7 +1648,7 @@ Expr Tk::details::AfterToken::operator()(int time, string const &name) const
      return Expr(str);
 }
 
-Expr Tk::details::AfterToken::operator()(string const &option,
+Expr Tk::details_cpptk::AfterToken::operator()(string const &option,
      string const &id) const
 {
      string str("after ");
@@ -1659,9 +1659,9 @@ Expr Tk::details::AfterToken::operator()(string const &option,
 
 AfterToken Tk::after;
 
-Tk::details::RGBToken::RGBToken() : BasicToken("rgb") {}
+Tk::details_cpptk::RGBToken::RGBToken() : BasicToken("rgb") {}
 
-string Tk::details::RGBToken::operator()(int r, int g, int b) const
+string Tk::details_cpptk::RGBToken::operator()(int r, int g, int b) const
 {
      if (r < 0)   r = 0;
      if (r > 255) r = 255;

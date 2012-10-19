@@ -63,7 +63,7 @@ void SceneObject::setRotation(const math::vec3 &angles)
     Node::setRotation(angles);
 }
 
-void SceneObject::setRotation(double yaw, double pitch, double roll)
+void SceneObject::setRotation(float yaw, float pitch, float roll)
 {
     Node::setRotation(yaw, pitch, roll);
 }

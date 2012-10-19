@@ -7,6 +7,16 @@
 
 #include "tkapplication.h"
 
+void TkApplication::showStats(float dt)
+{
+    auto frameStats = m_clientController->getRendmgr()->getLastFrameStats();
+    m_debugStats1->setText(string("Triangles for rasterization:") + common::toString(frameStats.trianglesForRaster));
+    m_debugStats2->setText(string("Triangles before culling:") + common::toString(frameStats.trianglesOnFrameStart));
+    double fps = dt / 1000;
+    fps = 1.0 / fps;
+    m_debugStats3->setText(string("FPS:") + common::toString((int)fps));
+}
+
 void TkApplication::update(float dt)
 {
     static int yaw, roll;
@@ -32,12 +42,19 @@ void TkApplication::update(float dt)
         m_hammer->setTransformation(math::M44(rotM * scaleM, transl));
     }
 
-    auto frameStats = m_clientController->getRendmgr()->getLastFrameStats();
-    m_debugStats1->setText(string("Triangles for rasterization:") + common::toString(frameStats.trianglesForRaster));
-    m_debugStats2->setText(string("Triangles before culling:") + common::toString(frameStats.trianglesOnFrameStart));
-    double fps = dt / 1000;
-    fps = 1.0 / fps;
-    m_debugStats3->setText(string("FPS:") + common::toString((int)fps));
+    sptr(rend::Light) ptL = m_clientController->getRendmgr()->getFirstPointLight();
+    if (ptL)
+    {
+        transl = ptL->getPosition();
+        rotM = math::M33::getRotateYawPitchRollMatrix(3, 0, 0);
+
+        transl = transl * rotM;
+
+        ptL->setPosition(transl);
+//        m_lightPoint->setPosition(transl);
+    }
+
+    showStats(dt);
 }
 
 TkApplication::TkApplication(int argc, const char *argv[])
@@ -77,6 +94,9 @@ TkApplication::TkApplication(int argc, const char *argv[])
         auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
         cube->getMesh()->setTexture(texture);
     }
+
+    auto statue = rendmgr->getSceneObject("statue2.obj");
+    statue->setScale({5, 5, 5});
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
     m_debugStats1 = make_shared<rend::TextObject>(textureFont, 16, 16);

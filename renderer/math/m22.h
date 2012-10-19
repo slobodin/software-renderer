@@ -22,20 +22,20 @@ namespace math
   */
 struct M22
 {
-    double x[4];
+    float x[4];
 
     //! Default ctor.
     /*! Default identity matrix. */
     M22();
     //! Array ctor.
-    M22(const double (&src)[4]);
+    M22(const float (&src)[4]);
     //! Component ctor.
-    M22(double a00, double a01, double a10, double a11);
+    M22(float a00, float a01, float a10, float a11);
 
     //! Set elements with array.
-    void set(const double (&src)[4]);
+    void set(const float (&src)[4]);
     //! Set elements.
-    void set(double a00, double a01, double a10, double a11);
+    void set(float a00, float a01, float a10, float a11);
     //! Reset to identity matrix.
     void reset();
 
@@ -46,9 +46,9 @@ struct M22
     //! Matrix multiplication.
     M22 &operator*= (const M22 &a);
     //! Scalar multiplication.
-    M22 &operator*= (double s);
+    M22 &operator*= (float s);
     //! Scalar multiplication.
-    M22 &operator/= (double s);
+    M22 &operator/= (float s);
 
     //! Equality check.
     bool operator== (const M22 &a) const;
@@ -58,9 +58,9 @@ struct M22
     //! Matrix transposition.
     M22 &transpose();
     //! Determinant computing.
-    double determinant() const;
+    float determinant() const;
     //! Returns matrix memory address.
-    double *getPointer() { return x; }
+    float *getPointer() { return x; }
 
     //! Addition of two matrices.
     friend M22 operator+ (const M22 &a, const M22 &b);
@@ -69,9 +69,9 @@ struct M22
     //! Multiplication of two matrices.
     friend M22 operator* (const M22 &a, const M22 &b);
     //! Scalar multiplication.
-    friend M22 operator* (const M22 &a, const double s);
+    friend M22 operator* (const M22 &a, const float s);
     //! Scalar multiplication.
-    friend M22 operator* (double s, const M22 &b);
+    friend M22 operator* (float s, const M22 &b);
 
     //! 2-vector and 2x2 matrix multiplication.
     /*!
@@ -86,22 +86,22 @@ inline M22::M22()
     reset();
 }
 
-inline M22::M22(double a00, double a01, double a10, double a11)
+inline M22::M22(float a00, float a01, float a10, float a11)
 {
     set(a00, a01, a10, a11);
 }
 
-inline M22::M22(const double (&src)[4])
+inline M22::M22(const float (&src)[4])
 {
     set(src);
 }
 
-inline void M22::set(const double (&src)[4])
+inline void M22::set(const float (&src)[4])
 {
-    memcpy(x, src, 4 * sizeof(double));
+    memcpy(x, src, 4 * sizeof(float));
 }
 
-inline void M22::set(double a00, double a01, double a10, double a11)
+inline void M22::set(float a00, float a01, float a10, float a11)
 {
     x[0] = a00;
     x[1] = a01;
@@ -144,18 +144,18 @@ inline M22 &M22::operator*= (const M22 &a)
     return *this;
 }
 
-inline M22 &M22::operator*= (double s)
+inline M22 &M22::operator*= (float s)
 {
-    std::for_each(x, x + 4, [s](double &el) { el *= s; });
+    std::for_each(x, x + 4, [s](float &el) { el *= s; });
 
     return *this;
 }
 
-inline M22 &M22::operator/= (double s)
+inline M22 &M22::operator/= (float s)
 {
     assert(!DCMP(s, 0.0));
 
-    std::for_each(x, x + 4, [s](double &el) { el /= s; });
+    std::for_each(x, x + 4, [s](float &el) { el /= s; });
 
 return *this;
 }
@@ -168,7 +168,7 @@ inline bool M22::operator== (const M22 &a) const
 
 inline M22 &M22::invert()
 {
-    double d = determinant();
+    float d = determinant();
     assert(!DCMP(d, 0.0));
     M22 temp;
 
@@ -189,7 +189,7 @@ inline M22 &M22::transpose()
     return *this = temp;
 }
 
-inline double M22::determinant() const
+inline float M22::determinant() const
 {
     return (x[0] * x[3] - x[1] * x[2]);
 }
@@ -224,13 +224,13 @@ inline M22 operator* (const M22 &a, const M22 &b)
     return res;
 }
 
-inline M22 operator* (const M22 &a, double s)
+inline M22 operator* (const M22 &a, float s)
 {
     M22 res(a);
     return res *= s;
 }
 
-inline M22 operator* (double s, const M22 &b)
+inline M22 operator* (float s, const M22 &b)
 {
     M22 res(b);
     return res *= s;

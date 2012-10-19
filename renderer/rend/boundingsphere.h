@@ -18,7 +18,7 @@ namespace rend
 class BoundingSphere
 {
     math::vec3 m_centerPoint;
-    double m_radius;
+    float m_radius;
 
 public:
     BoundingSphere();
@@ -26,7 +26,7 @@ public:
     ~BoundingSphere();
 
     math::vec3  center() const { return m_centerPoint; }
-    double      radius() const { return m_radius; }
+    float       radius() const { return m_radius; }
 
     void        calculate(const vector<math::vec3> &vertices);
 

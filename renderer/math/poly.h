@@ -12,6 +12,7 @@
 
 #include "vertex.h"
 #include "material.h"
+#include "m44.h"
 
 namespace math
 {
@@ -31,8 +32,26 @@ public:
     const vertex &v(size_t ind) const { return m_verts[ind]; }
     vertex &v(size_t ind) { return m_verts[ind]; }
 
+    //! Sets 3 vertices from an array.
+    void setVertices(const vertex *arr)
+    {
+        m_verts[0] = arr[0];
+        m_verts[1] = arr[1];
+        m_verts[2] = arr[2];
+    }
+
+    void applyTransformation(const math::M44 &transform)
+    {
+        m_verts[0].p = m_verts[0].p * transform;
+        m_verts[1].p = m_verts[1].p * transform;
+        m_verts[2].p = m_verts[2].p * transform;
+    }
+
+    //! Returns copy of the triangle points.
     vector<vec3> points() const;
+    //! Returns copy of the triangle normals.
     vector<vec3> normals() const;
+    //! Returns copy of the triangle texture coordinates.
     vector<vec2> uvs() const;
 
     sptr(rend::Material) getMaterial() const { return m_material; }
@@ -44,7 +63,7 @@ public:
     void computeNormal();
     vec3 normal() const { return m_normal; }
 
-    double square() const;
+    float square() const;
 
     friend bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2);
     friend bool ZCompareMin(const math::Triangle &t1, const math::Triangle &t2);
@@ -54,9 +73,6 @@ public:
 bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2);
 bool ZCompareMin(const math::Triangle &t1, const math::Triangle &t2);
 bool ZCompareMax(const math::Triangle &t1, const math::Triangle &t2);
-
-// TODO: class Poly, for arbitrary polys support
-// They will be triangulated
 
 //! Arbitrary poly.
 /*!

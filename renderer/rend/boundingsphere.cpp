@@ -38,7 +38,7 @@ void BoundingSphere::calculate(const vector<math::vec3> &vertices)
     m_radius = (m_centerPoint - vertices[0]).length();
     for (unsigned i = 1; i < vertices.size(); i++)
     {
-        double currR = (m_centerPoint - vertices[1]).length();
+        float currR = (m_centerPoint - vertices[1]).length();
 
         if (currR > m_radius)
             m_radius = currR;

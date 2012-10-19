@@ -17,26 +17,26 @@ namespace math
 {
 
 //! Some kind of machine epsilons.
-const double EPSILON_E1 = 1E-1;
-const double EPSILON_E3 = 1E-3;
-const double EPSILON_E4 = 1E-4;
-const double EPSILON_E5 = 1E-5;
-const double EPSILON_E6 = 1E-6;
-const double EPSILON_E12 = 1E-12;
+const float EPSILON_E1 = 1E-1;
+const float EPSILON_E3 = 1E-3;
+const float EPSILON_E4 = 1E-4;
+const float EPSILON_E5 = 1E-5;
+const float EPSILON_E6 = 1E-6;
+const float EPSILON_E12 = 1E-12;
 
 //! Float point comparsion of two values.
 /*!
   * \returns true if x == y with some imprecision.
   */
-inline bool DCMP(double x, double y, double pres = EPSILON_E12)
+inline bool DCMP(float x, float y, float pres = EPSILON_E12)
 {
     return (fabs(x - y) < pres);
 }
 
 //! Degrees to radians conversion function.
-inline double DegToRad(const double ang) { return ang * (M_PI / 180.0); }
+inline float DegToRad(float ang) { return ang * (M_PI / 180.0); }
 //! Radians to degrees conversion function.
-inline double RadToDeg(const double rad) { return rad * (180.0 / M_PI); }
+inline float RadToDeg(float rad) { return rad * (180.0 / M_PI); }
 
 }
 

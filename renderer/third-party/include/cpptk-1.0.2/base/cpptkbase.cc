@@ -22,7 +22,7 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace Tk;
-using namespace Tk::details;
+using namespace Tk::details_cpptk;
 using namespace boost;
 using namespace std;
 
@@ -237,7 +237,7 @@ void callbackDeleter(ClientData cd)
      callbacks.erase(slot);
 }
 
-string Tk::details::addCallback(boost::shared_ptr<CallbackBase> cb)
+string Tk::details_cpptk::addCallback(boost::shared_ptr<CallbackBase> cb)
 {
      int newSlot = callbackId++;
      callbacks[newSlot] = cb;
@@ -253,7 +253,7 @@ string Tk::details::addCallback(boost::shared_ptr<CallbackBase> cb)
      return newCmd;
 }
 
-string Tk::details::addLinkVar(int &i)
+string Tk::details_cpptk::addLinkVar(int &i)
 {
      int newLink = linkId++;
      string newLinkVar(linkVarPrefix);
@@ -270,7 +270,7 @@ string Tk::details::addLinkVar(int &i)
      return newLinkVar;
 }
 
-string Tk::details::addLinkVar(double &d)
+string Tk::details_cpptk::addLinkVar(double &d)
 {
      int newLink = linkId++;
      string newLinkVar(linkVarPrefix);
@@ -287,7 +287,7 @@ string Tk::details::addLinkVar(double &d)
      return newLinkVar;
 }
 
-string Tk::details::addLinkVar(string &s)
+string Tk::details_cpptk::addLinkVar(string &s)
 {
      int newLink = linkId++;
      string newLinkVar(linkVarPrefix);
@@ -312,7 +312,7 @@ string Tk::details::addLinkVar(string &s)
      return newLinkVar;
 }
 
-void Tk::details::deleteLinkVar(int &i)
+void Tk::details_cpptk::deleteLinkVar(int &i)
 {
      IntLinks::iterator it = intLinks.find(&i);
      if (it == intLinks.end())
@@ -324,7 +324,7 @@ void Tk::details::deleteLinkVar(int &i)
      intLinks.erase(it);
 }
 
-void Tk::details::deleteLinkVar(double &d)
+void Tk::details_cpptk::deleteLinkVar(double &d)
 {
      DoubleLinks::iterator it = doubleLinks.find(&d);
      if (it == doubleLinks.end())
@@ -336,7 +336,7 @@ void Tk::details::deleteLinkVar(double &d)
      doubleLinks.erase(it);
 }
 
-void Tk::details::deleteLinkVar(string &s)
+void Tk::details_cpptk::deleteLinkVar(string &s)
 {
      StringLinks::iterator it = stringLinks.find(&s);
      if (it == stringLinks.end())
@@ -357,28 +357,28 @@ void Tk::details::deleteLinkVar(string &s)
      stringLinkBuffers.erase(itb);
 }
 
-void details::setResult(bool b)
+void details_cpptk::setResult(bool b)
 {
      Tcl_SetObjResult(getInterp(), Tcl_NewBooleanObj(b));
 }
 
-void details::setResult(long i)
+void details_cpptk::setResult(long i)
 {
      Tcl_SetObjResult(getInterp(), Tcl_NewLongObj(i));
 }
 
-void details::setResult(double d)
+void details_cpptk::setResult(double d)
 {
      Tcl_SetObjResult(getInterp(), Tcl_NewDoubleObj(d));
 }
 
-void details::setResult(string const &s)
+void details_cpptk::setResult(string const &s)
 {
      Tcl_SetObjResult(getInterp(),
           Tcl_NewStringObj(s.data(), static_cast<int>(s.size())));
 }
 
-int details::getResultLen()
+int details_cpptk::getResultLen()
 {
      Tcl_Interp *interp = getInterp();
      
@@ -395,7 +395,7 @@ int details::getResultLen()
 }
 
 template <>
-int details::getResultElem<int>(int indx)
+int details_cpptk::getResultElem<int>(int indx)
 {
      Tcl_Interp *interp = getInterp();
 
@@ -419,7 +419,7 @@ int details::getResultElem<int>(int indx)
 }
 
 template <>
-double details::getResultElem<double>(int indx)
+double details_cpptk::getResultElem<double>(int indx)
 {
      Tcl_Interp *interp = getInterp();
 
@@ -443,7 +443,7 @@ double details::getResultElem<double>(int indx)
 }
 
 template <>
-string details::getResultElem<string>(int indx)
+string details_cpptk::getResultElem<string>(int indx)
 {
      Tcl_Interp *interp = getInterp();
 
@@ -459,12 +459,12 @@ string details::getResultElem<string>(int indx)
      return Tcl_GetString(obj);
 }
 
-details::Command::Command(std::string const &str, std::string const &postfix)
+details_cpptk::Command::Command(std::string const &str, std::string const &postfix)
      : invoked_(false), str_(str), postfix_(postfix)
 {
 }
 
-details::Command::~Command()
+details_cpptk::Command::~Command()
 {
      if (!TkError::inTkError)
      {
@@ -472,13 +472,13 @@ details::Command::~Command()
      }
 }
 
-string details::Command::invoke() const
+string details_cpptk::Command::invoke() const
 {
      invokeOnce();
      return getInterp()->result;
 }
 
-void details::Command::invokeOnce() const
+void details_cpptk::Command::invokeOnce() const
 {
      if (invoked_ == false)
      {
@@ -491,7 +491,7 @@ void details::Command::invokeOnce() const
      }
 }
 
-details::Expr::Expr(string const &str, bool starter)
+details_cpptk::Expr::Expr(string const &str, bool starter)
 {
      if (starter)
      {
@@ -503,12 +503,12 @@ details::Expr::Expr(string const &str, bool starter)
      }
 }
 
-details::Expr::Expr(string const &str, string const &postfix)
+details_cpptk::Expr::Expr(string const &str, string const &postfix)
 {
      cmd_.reset(new Command(str, postfix));
 }
 
-string details::Expr::getValue() const
+string details_cpptk::Expr::getValue() const
 {
      if (!str_.empty())
      {
@@ -520,12 +520,12 @@ string details::Expr::getValue() const
      }
 }
 
-details::Expr::operator string() const
+details_cpptk::Expr::operator string() const
 {
      return cmd_->invoke();
 }
 
-details::Expr::operator int() const
+details_cpptk::Expr::operator int() const
 {
      cmd_->invokeOnce();
      
@@ -542,7 +542,7 @@ details::Expr::operator int() const
      return val;
 }
 
-details::Expr::operator double() const
+details_cpptk::Expr::operator double() const
 {
      cmd_->invokeOnce();
      
@@ -559,7 +559,7 @@ details::Expr::operator double() const
      return val;
 }
 
-details::Expr::operator Tk::Point() const
+details_cpptk::Expr::operator Tk::Point() const
 {
      string ret(cmd_->invoke());
      if (ret.empty())
@@ -579,7 +579,7 @@ details::Expr::operator Tk::Point() const
      return Point(x, y);
 }
 
-details::Expr::operator Tk::Box() const
+details_cpptk::Expr::operator Tk::Box() const
 {
      string ret(cmd_->invoke());
      if (ret.empty())
@@ -605,7 +605,7 @@ details::Expr::operator Tk::Box() const
 // with the requested type
 
 template <>
-int details::Params::get<int>(int argno) const
+int details_cpptk::Params::get<int>(int argno) const
 {
      if (argno < 1 || argno >= argc_)
      {
@@ -625,7 +625,7 @@ int details::Params::get<int>(int argno) const
 }
 
 template <>
-string details::Params::get<string>(int argno) const
+string details_cpptk::Params::get<string>(int argno) const
 {
      if (argno < 1 || argno >= argc_)
      {
@@ -638,7 +638,7 @@ string details::Params::get<string>(int argno) const
      return res;
 }
 
-ostream & details::operator<<(ostream &os, BasicToken const &token)
+ostream & details_cpptk::operator<<(ostream &os, BasicToken const &token)
 {
      return os << static_cast<string>(token);
 }
@@ -659,7 +659,7 @@ void doSingleQuote(string &s, char c)
 
 // this function is used to quote quotation marks in string values'
 // in later version, it will not be needed
-string details::quote(string const &s)
+string details_cpptk::quote(string const &s)
 {
      string ret(s);
      doSingleQuote(ret, '\\');
