@@ -1,7 +1,7 @@
 TEMPLATE = app
 CONFIG += console
 CONFIG -= qt
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x -msse4.1
 
 SOURCES += main.cpp \
     test_vec_matr_2x2.cpp \
@@ -19,6 +19,7 @@ INCLUDEPATH += ../../math/ \
 SOURCES += ../../math/m33.cpp
 
 LIBS += -lgtest -lgtest_main -lpthread
+unix:LIBS += -lboost_system -lboost_filesystem
 
 HEADERS += \
     ../../math/m44.h \

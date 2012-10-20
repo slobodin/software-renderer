@@ -11,7 +11,8 @@
 #include "comm_pch.h"
 
 #include "common_math.h"
-#include <xmmintrin.h>
+//#include <xmmintrin.h>
+#include <smmintrin.h>
 
 namespace math
 {
@@ -25,14 +26,20 @@ struct vec3
     //! X Y Z coordinates of this vector
     union
     {
-        struct { float x, y, z, w; };      // w unused
+        struct { float x, y, z, w; } __attribute__((aligned(16)));      // w unused
         __attribute__((aligned(16))) __m128 v;
     };
 
     //! Default ctor.
     /*! Default zero vector. */
     vec3(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f)
-        : x(_x), y(_y), z(_z), w(1.0f) { }
+        : x(_x), y(_y), z(_z), w(0.0f) { }
+
+//private:
+//    vec3(__m128 _v)
+//        : v(_v) { w = 1.0f; }
+
+public:
 
     //! Addition assignment.
     vec3 &operator+= (const vec3 &other);
@@ -100,27 +107,24 @@ struct vec3
 
 inline vec3 &vec3::operator+= (const vec3 &other)
 {
-    x += other.x;
-    y += other.y;
-    z += other.z;
+    v = _mm_add_ps(v, other.v);
+    w = 0.0f;
 
     return *this;
 }
 
 inline vec3 &vec3::operator-= (const vec3 &other)
 {
-    x -= other.x;
-    y -= other.y;
-    z -= other.z;
+    v = _mm_sub_ps(v, other.v);
+    w = 0.0f;
 
     return *this;
 }
 
 inline vec3 &vec3::operator*= (float s)
 {
-    x *= s;
-    y *= s;
-    z *= s;
+    v = _mm_mul_ps(v, _mm_set1_ps(s));
+    w = 0.0f;
 
     return *this;
 }
@@ -128,9 +132,9 @@ inline vec3 &vec3::operator*= (float s)
 inline vec3 &vec3::operator/= (float s)
 {
     assert(!DCMP(s, 0.0f));
-    x /= s;
-    y /= s;
-    z /= s;
+
+    v = _mm_div_ps(v, _mm_set1_ps(s));
+    w = 0.0f;
 
     return *this;
 }
@@ -177,12 +181,15 @@ inline float vec3::length() const
 
 inline vec3 &vec3::normalize()
 {
-    if ((fabs(x - 0.0f) < EPSILON_E6) &&
-        (fabs(y - 0.0f) < EPSILON_E6) &&
-        (fabs(z - 0.0f) < EPSILON_E6))
-        return (*this);
+    __m128 inverse_norm = _mm_rsqrt_ps(_mm_dp_ps(v, v, 0x77));
+    v = _mm_mul_ps(v, inverse_norm);
+    return *this;
+//    if ((fabs(x - 0.0f) < EPSILON_E6) &&
+//        (fabs(y - 0.0f) < EPSILON_E6) &&
+//        (fabs(z - 0.0f) < EPSILON_E6))
+//        return (*this);
 
-    return (*this) /= length();
+//    return (*this) /= length();
 }
 
 inline void vec3::set(float x, float y, float z)
@@ -190,6 +197,7 @@ inline void vec3::set(float x, float y, float z)
     this->x = x;
     this->y = y;
     this->z = z;
+    w = 0.0f;
 }
 
 inline void vec3::set(const vec3 &other)
@@ -197,6 +205,7 @@ inline void vec3::set(const vec3 &other)
     x = other.x;
     y = other.y;
     z = other.z;
+    w = 0.0f;
 }
 
 inline void vec3::zero()
@@ -204,11 +213,12 @@ inline void vec3::zero()
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
+    w = 0.0f;
 }
 
 inline bool vec3::isZero() const
 {
-    return (DCMP(x, 0.0f)) && (DCMP(y, 0.0f)) && (DCMP(z, 0.0f));
+    return (DCMP(x, 0.0f, EPSILON_E6)) && (DCMP(y, 0.0f, EPSILON_E6)) && (DCMP(z, 0.0f, EPSILON_E6));
 }
 
 inline float vec3::dotProduct(const vec3 &other) const
@@ -225,28 +235,33 @@ inline vec3 vec3::crossProduct(const vec3 &other) const
 
 inline vec3 operator+ (const vec3 &a, const vec3 &b)
 {
-    return vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+    auto ret = _mm_add_ps(a.v, b.v);
+    return *(vec3*)&ret;
 }
 
 inline vec3 operator- (const vec3 &a, const vec3 &b)
 {
-    return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
+    __m128 ret = _mm_sub_ps(a.v, b.v);
+    return *(vec3*)&ret;
 }
 
 inline vec3 operator* (const vec3 &a, float b)
 {
-    return vec3(a.x * b, a.y * b, a.z * b);
+    auto ret = _mm_mul_ps(a.v, _mm_set1_ps(b));
+    return *(vec3*)&ret;
 }
 
 inline vec3 operator* (float a, const vec3 &b)
 {
-    return vec3(b.x * a, b.y * a, b.z * a);
+    auto ret = _mm_mul_ps(b.v, _mm_set1_ps(a));
+    return *(vec3*)&ret;
 }
 
 inline vec3 operator/ (const vec3 &a, float b)
 {
     assert(!DCMP(b, 0.0));
-    return vec3(a.x / b, a.y / b, a.z / b);
+    auto ret = _mm_div_ps(a.v, _mm_set1_ps(b));
+    return *(vec3*)&ret;
 }
 
 inline std::ostream &operator<< (std::ostream &os, const vec3 &v)

@@ -1,4 +1,5 @@
 resources/*.bsp
+resources/statue2.obj
 resources/*.*~
 *.*~
 *.pro.user
