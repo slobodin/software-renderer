@@ -25,8 +25,8 @@ struct vec3
     //! X Y Z coordinates of this vector
     union
     {
-        struct { float x, y, z, w; };      // w unused
-        __attribute__((aligned(16))) __m128 v;
+        struct { float x, y, z, w; } __attribute__((aligned(16))) ;      // w unused
+        __m128 v __attribute__((aligned(16))) ;
     };
 
     //! Default ctor.
