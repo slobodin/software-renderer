@@ -50,7 +50,7 @@ void TkApplication::update(float dt)
 
         transl = transl * rotM;
 
-        ptL->setPosition(transl);
+//        ptL->setPosition(transl);
 //        m_lightPoint->setPosition(transl);
     }
 
@@ -65,13 +65,6 @@ TkApplication::TkApplication(int argc, const char *argv[])
     sptr(base::ResourceMgr) rmgr = m_clientController->getResmgr();
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
-    m_hammer = rendmgr->getSceneObject("Hammer");
-    if (m_hammer)
-    {
-        m_hammer->setScale(math::vec3(15.0, 15.0, 15.0));
-        m_hammer->getMesh()->setShadingMode(rend::Material::SM_FLAT);
-    }
-
     // create terrain
     auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
     auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
@@ -80,23 +73,12 @@ TkApplication::TkApplication(int argc, const char *argv[])
 //    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
-    m_sphere = rendmgr->getSceneObject("Sphere");
-    if (m_sphere)
-    {
-        m_sphere->setScale(math::vec3(15.0, 15.0, 15.0));
-        m_sphere->getMesh()->setShadingMode(rend::Material::SM_FLAT);
-    }
-
     auto cube = rendmgr->getSceneObject("Cube");
     if (cube)
     {
-        cube->setScale(math::vec3(35.0, 35.0, 35.0));
         auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
         cube->getMesh()->setTexture(texture);
     }
-
-    auto statue = rendmgr->getSceneObject("statue2.obj");
-    statue->setScale({5, 5, 5});
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
     m_debugStats1 = make_shared<rend::TextObject>(textureFont, 16, 16);

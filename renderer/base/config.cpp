@@ -45,7 +45,10 @@ static void operator>> (const YAML::Node &node, SceneConfig::ObjInfo &objInfo)
 {
     node["model"] >> objInfo.pathToTheModel;
     node["position"] >> objInfo.position;
+
+    try { node["scale"] >> objInfo.scale; } catch (YAML::Exception &e) { }
 }
+
 
 static void operator>> (const YAML::Node &node, SceneConfig::DirLightInfo &dirLightInfo)
 {

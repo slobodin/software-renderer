@@ -63,6 +63,8 @@ inline void Node::setPosition(const math::vec3 &pos)
     m_worldTransformation.x[3][2] = pos.z;
 }
 
+// TODO:
+// set transformation with parameter (replace, multiply existing matrix etc)
 inline void Node::setRotation(const math::vec3 &angles)
 {
     math::M33 rotM = math::M33::getRotateYawPitchRollMatrix(angles.y,

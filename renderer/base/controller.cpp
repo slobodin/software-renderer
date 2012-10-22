@@ -122,6 +122,7 @@ void Controller::createRenderManager()
         if (obj)
         {
             obj->setPosition(objInfo.position);
+            obj->setScale(objInfo.scale);
 
             m_rendmgr->addSceneObject(obj);
         }

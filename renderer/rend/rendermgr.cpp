@@ -83,7 +83,7 @@ void RenderMgr::update()
     if (renderList.empty())
     {
         m_frameInfo.trianglesForRaster = 0;
-        return;
+//        return;
     }
 
     // 3. Cull backfaces.

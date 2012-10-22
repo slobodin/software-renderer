@@ -39,6 +39,8 @@ struct SceneConfig
     {
         math::vec3 position;
         string pathToTheModel;
+        math::vec3 scale;
+        ObjInfo() : scale(1.0, 1.0, 1.0) { }
     };
 
     // scene objects
