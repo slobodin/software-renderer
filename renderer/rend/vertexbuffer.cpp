@@ -31,27 +31,32 @@ void VertexBuffer::setMaterial(boost::shared_ptr<Material> material)
 }
 
 void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices,
-                                  const vector<math::vec2> &uvs, const vector<int> &uvinds)
+                                  const vector<math::vec2> &uvs, const vector<int> &uvinds,
+                                  bool isNormalsComputed)
 {
     std::copy(uvs.begin(), uvs.end(), std::back_inserter(m_uvs));
     std::copy(uvinds.begin(), uvinds.end(), std::back_inserter(m_uvsIndices));
 
-    appendVertices(vertices, indices);
+    appendVertices(vertices, indices, isNormalsComputed);
 }
 
-void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices)
+void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices,
+                                  bool isNormalsComputed)
 {
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
     std::copy(indices.begin(), indices.end(), std::back_inserter(m_indices));
 
-    computeVertexNormals();
+    if (!isNormalsComputed)
+        computeVertexNormals();
 }
 
-void VertexBuffer::appendVertices(const vector<math::vertex> &vertices)
+void VertexBuffer::appendVertices(const vector<math::vertex> &vertices,
+                                  bool isNormalsComputed)
 {
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
 
-    computeVertexNormals();
+    if (!isNormalsComputed)
+        computeVertexNormals();
 }
 
 void VertexBuffer::computeVertexNormals()
@@ -96,33 +101,33 @@ void VertexBuffer::computeVertexNormals()
         break;
 
     case TRIANGLELIST:
+        syslog << "Can't compute normals for triangle list vertex buffer" << logwarn;
+        break;
 
-        for(size_t vind = 0; vind < m_vertices.size(); vind += 3)
-        {
-            if ((vind + 2) >= m_vertices.size())
-                break;
-
-            polysTouchVertex[vind]++;
-            polysTouchVertex[vind + 1]++;
-            polysTouchVertex[vind + 2]++;
-
-            math::vec3 u = m_vertices[vind + 1].p - m_vertices[vind].p;
-            math::vec3 v = m_vertices[vind + 2].p - m_vertices[vind].p;
-
-            math::vec3 normal = u.crossProduct(v);
-
-            m_vertices[vind].n += normal;
-            m_vertices[vind + 1].n += normal;
-            m_vertices[vind + 2].n += normal;
-        }
-
+        // O(n^2) !!!!!!
         for (size_t vertex = 0; vertex < m_vertices.size(); vertex++)
         {
-            if (polysTouchVertex[vertex] >= 1)
+            auto &currVertex = m_vertices[vertex];
+            math::vec3 resNormal;
+
+            // for each triangle
+            for(size_t vind = 0; vind < m_vertices.size(); vind += 3)
             {
-                m_vertices[vertex].n /= polysTouchVertex[vertex];
-                m_vertices[vertex].n.normalize();
+                if ((vind + 2) >= m_vertices.size())
+                    break;
+
+                if (currVertex.p == m_vertices[vind].p ||
+                        currVertex.p == m_vertices[vind + 1].p ||
+                        currVertex.p == m_vertices[vind + 2].p)
+                {
+                    math::vec3 u = m_vertices[vind + 1].p - m_vertices[vind].p;
+                    math::vec3 v = m_vertices[vind + 2].p - m_vertices[vind].p;
+                    math::vec3 normal = u.crossProduct(v);
+                    normal.normalize();
+                }
             }
+
+            currVertex.n = resNormal.normalize();
         }
         break;
 

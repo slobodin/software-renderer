@@ -20,17 +20,20 @@ class DecoderOBJ : public ResourceDecoder
 {
     void appendVertex(string &line);
     void appendFace(string &line);
+    void appendNormal(string &line);
     void triangulateModel();
 
     vector<math::vertex> vertexList;
+    vector<math::vec3> normalsList;
 
     struct FaceInfo
     {
         vector<int> indices;
+        vector<int> normalIndices;
     };
 
     vector<FaceInfo> faces;
-    vector<math::vertex> resultTriangles;
+    vector<int> resultTrianglesIndices;
 
     void clear();
 

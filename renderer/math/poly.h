@@ -47,15 +47,16 @@ public:
         m_verts[1].p = m_verts[1].p * transform;
         m_verts[2].p = m_verts[2].p * transform;
 
+        // FIXME: !!
         // translate normal
-        m_verts[0].n = m_verts[0].n * transform;
+        /*m_verts[0].n = m_verts[0].n * transform;
         m_verts[1].n = m_verts[1].n * transform;
         m_verts[2].n = m_verts[2].n * transform;
 
         // noo??
         m_verts[0].n.normalize();
         m_verts[1].n.normalize();
-        m_verts[2].n.normalize();
+        m_verts[2].n.normalize();*/
     }
 
     //! Returns copy of the triangle points.
@@ -109,7 +110,10 @@ public:
     friend void Triangulate(const Polygon &poly, vector<Triangle> &resultList);
 };
 
+//! Performs triangulation of poly into resultList.
 void Triangulate(const Polygon &poly, vector<Triangle> &resultList);
+//! Performs triangulation of poly defined by index and vertex list.
+void Triangulate(const vector<math::vertex> &vertices, const vector<int> &indices, vector<int> &resultIndexList);
 
 }
 

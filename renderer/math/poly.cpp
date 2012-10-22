@@ -185,4 +185,28 @@ void Triangulate(const Polygon &poly, vector<Triangle> &resultList)
     }
 }
 
+void Triangulate(const vector<math::vertex> &vertices, const vector<int> &indices, vector<int> &resultIndexList)
+{
+    if (vertices.size() == 3)
+    {
+        assert(indices.size() == 3);
+        resultIndexList.insert(resultIndexList.end(), indices.begin(), indices.end());
+    }
+    else
+    {
+        // split
+        vector<vertex> newverts1(vertices.begin(), vertices.begin() + 3);
+        vector<vertex> newverts2(vertices.begin() + 2, vertices.end());
+        newverts2.push_back(vertices[0]);
+
+        vector<int> newinds1(indices.begin(), indices.begin() + 3);
+        vector<int> newinds2(indices.begin() + 2, indices.end());
+        newinds2.push_back(indices[0]);
+
+        // triangulate
+        Triangulate(newverts1, newinds1, resultIndexList);
+        Triangulate(newverts2, newinds2, resultIndexList);
+    }
+}
+
 }

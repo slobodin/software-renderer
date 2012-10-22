@@ -74,9 +74,9 @@ public:
 
     //! Appends vertices to this submesh. Also computes vertex normals and bounding sphere.
     void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices,
-                        const vector<math::vec2> &uvs, const vector<int> &uvinds);
-    void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices);
-    void appendVertices(const vector<math::vertex> &vertices);
+                        const vector<math::vec2> &uvs, const vector<int> &uvinds, bool isNormalsComputed = false);
+    void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices, bool isNormalsComputed = false);
+    void appendVertices(const vector<math::vertex> &vertices, bool isNormalsComputed = false);
 
     //! Helper to compute vertex normals.
     void computeVertexNormals();

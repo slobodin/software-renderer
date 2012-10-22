@@ -46,7 +46,8 @@ void DecoderOBJ::appendFace(string &line)
         {
             if (i % 2 == 0)
                 face.indices.push_back(common::fromString<int>(*tokIter));
-            // omit normals for now
+            else
+                face.normalIndices.push_back(common::fromString<int>(*tokIter));
         }
     }
     else if (line.find("/") != string::npos)
@@ -62,29 +63,48 @@ void DecoderOBJ::appendFace(string &line)
     faces.push_back(face);
 }
 
+void DecoderOBJ::appendNormal(string &line)
+{
+    line = line.substr(line.find(' ') + 1);
+
+    std::istringstream is(line);
+    math::vec3 n;
+
+    is >> n.x >> n.y >> n.z;
+
+    normalsList.push_back(n);
+}
+
 void DecoderOBJ::triangulateModel()
 {
     for (auto f : faces)
     {
         vector<math::vertex> polyVerts;
+        vector<int> polyInds;
 
         // create polygon
-        std::for_each(f.indices.begin(), f.indices.end(), [&polyVerts, this](int ind)
-                      { polyVerts.push_back(vertexList.at(ind - 1)); });        // indices starting from 1 to N [1, N]
+        std::for_each(f.indices.begin(), f.indices.end(), [&polyVerts, &polyInds, this](int ind)
+                      { polyVerts.push_back(vertexList.at(ind - 1)); polyInds.push_back(ind - 1); });        // indices starting from 1 to N [1, N]
 
-        vector<math::Triangle> trias;
-        math::Polygon poly(polyVerts);
-
-        // triangulate polygon
-        math::Triangulate(poly, trias);
-
-        // save result verts
-        for (auto t : trias)
+        // store normals (if they are present)
+        if (!f.normalIndices.empty())
         {
-            resultTriangles.push_back(t.v(0));
-            resultTriangles.push_back(t.v(1));
-            resultTriangles.push_back(t.v(2));
+            assert(f.normalIndices.size() == f.indices.size());
+            for (size_t i = 0; i < f.indices.size(); i++)
+            {
+                auto &n = normalsList.at(f.normalIndices[i] - 1);
+
+                // normals might not be unit in .obj file.
+//                n.normalize();
+                vertexList.at(f.indices[i] - 1).n = n;
+            }
         }
+
+        // triangulate a polygon
+        vector<int> polyIndsTriangulated;
+        math::Triangulate(polyVerts, polyInds, polyIndsTriangulated);
+
+        resultTrianglesIndices.insert(resultTrianglesIndices.end(), polyIndsTriangulated.begin(), polyIndsTriangulated.end());
     }
 }
 
@@ -92,7 +112,8 @@ void DecoderOBJ::clear()
 {
     vertexList.clear();
     faces.clear();
-    resultTriangles.clear();
+    resultTrianglesIndices.clear();
+    normalsList.clear();
 }
 
 sptr(Resource) DecoderOBJ::decode(const string &path)
@@ -113,7 +134,7 @@ sptr(Resource) DecoderOBJ::decode(const string &path)
         { }
 
         if (line.find("vn") != string::npos)
-        { }
+            appendNormal(line);
 
         if (line.find("vp") != string::npos)
         { }
@@ -139,8 +160,8 @@ sptr(Resource) DecoderOBJ::decode(const string &path)
     triangulateModel();
 
     rend::VertexBuffer vb;
-    vb.setType(rend::VertexBuffer::TRIANGLELIST);
-    vb.appendVertices(resultTriangles);
+    vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
+    vb.appendVertices(vertexList, resultTrianglesIndices, !normalsList.empty());
 
     auto material = make_shared<rend::Material>();
 
