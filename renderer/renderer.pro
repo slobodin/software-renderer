@@ -127,7 +127,8 @@ SOURCES += \
     rend/software/texturedtrianglerasterizer.cpp \
     rend/guiobject.cpp \
     third-party/include/easybmp/EasyBMP.cpp \
-    rend/textobject.cpp
+    rend/textobject.cpp \
+    rend/software/trianglerasterizer.cpp
 
 INCLUDEPATH += ./base \
                 ./comm \

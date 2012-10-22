@@ -1,6 +1,6 @@
 Objects:
 #  - model: tank1.plg
-##    position: [0, 0, 0]
+#    position: [0, 0, 0]
 #  - model: tower1.plg
 #    position: [0, 0, -250]
   - model: sphere01.asc
@@ -8,24 +8,24 @@ Objects:
     scale: [20, 20, 20]
 #  - model: 20kdm2.bsp
 #    position: [0, 0, 0]
-  - model: hammer02.asc
-    position: [0, 300, 0]
-    scale: [20, 20, 20]
+#  - model: hammer02.asc
+#    position: [0, 300, 0]
+#    scale: [20, 20, 20]
 #  - model: tie04.cob
 #    position: [200, 100, 0]
   - model: cube_flat_textured_01.cob
-    position: [0, 0, 0]
+    position: [0, 200, -200]
     scale: [40, 40, 40]
-  - model: cessna.obj
-    position: [100, 200, 600]
-    scale: [20, 20, 20]
+#  - model: cessna.obj
+#    position: [100, 200, 600]
+#    scale: [20, 20, 20]
 #  - model: al.obj
 #    position: [0, 0, -200]
 #  - model: water_gouraud_01.cob
 #    position: [-200, 300, 0]
 #  - model: statue2.obj
-#   position: [0, 100, -200]
-#   scale: [5, 5, 5]
+#    position: [0, 100, -200]
+#    scale: [5, 5, 5]
 
 Lights:
   Ambient:				# note: id = 0

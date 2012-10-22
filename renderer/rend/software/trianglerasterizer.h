@@ -29,6 +29,9 @@ class FrameBuffer;
   */
 class TriangleRasterizer
 {
+protected:
+    void makeCCWTriangle(math::vertex &p1, math::vertex &p2, math::vertex &p3);
+
 public:
     TriangleRasterizer() { }
     virtual ~TriangleRasterizer() { }

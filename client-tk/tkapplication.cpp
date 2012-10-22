@@ -17,6 +17,41 @@ void TkApplication::showStats(float dt)
     m_debugStats3->setText(string("FPS:") + common::toString((int)fps));
 }
 
+void TkApplication::createTestTriangle()
+{
+    auto newMesh = make_shared<rend::Mesh>();
+    rend::VertexBuffer vb;
+
+    vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
+
+    math::vertex v1; v1.p = { -100, 600, -100 };
+    math::vertex v2; v2.p = { -100, 0, -100 };
+    math::vertex v3; v3.p = { 100, 0, -100 };
+
+    vector<math::vertex> vertexList = { v1, v2, v3 };
+    vector<int> indices = { 0, 1, 2 };
+
+    vb.appendVertices(vertexList, indices);
+
+    auto material = make_shared<rend::Material>();
+    material->plainColor = rend::Color3(255, 255, 255);
+    material->ambientColor = rend::Color3(255, 255, 255);
+    material->diffuseColor = rend::Color3(255, 255, 255);
+    material->shadeMode = rend::Material::SM_GOURAUD;
+    material->sideType = rend::Material::TWO_SIDE;
+
+    vb.setMaterial(material);
+    newMesh->appendSubmesh(vb);
+
+    auto newObject = make_shared<rend::SceneObject>(newMesh);
+    m_clientController->getRendmgr()->addSceneObject(newObject);
+
+    auto mesh2 = newMesh->clone();
+    mesh2->setShadingMode(rend::Material::SM_WIRE);
+    auto newObject2 = make_shared<rend::SceneObject>(mesh2);
+    m_clientController->getRendmgr()->addSceneObject(newObject2);
+}
+
 void TkApplication::update(float dt)
 {
     static int yaw, roll;
@@ -68,7 +103,11 @@ TkApplication::TkApplication(int argc, const char *argv[])
     // create terrain
     auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
     auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
-    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 600, heightMapTexture, texture);
+    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 600, heightMapTexture/*, texture*/);
+
+    m_sphere = rendmgr->getSceneObject("Sphere");
+    if (m_sphere)
+        m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
 //    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
@@ -76,8 +115,9 @@ TkApplication::TkApplication(int argc, const char *argv[])
     auto cube = rendmgr->getSceneObject("Cube");
     if (cube)
     {
-        auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
-        cube->getMesh()->setTexture(texture);
+//        auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
+//        cube->getMesh()->setTexture(texture);
+        cube->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
     }
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");

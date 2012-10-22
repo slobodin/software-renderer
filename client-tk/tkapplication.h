@@ -20,6 +20,8 @@ class TkApplication : public platform::BaseAppTk
 
     void showStats(float dt);
 
+    void createTestTriangle();
+
 protected:
     void update(float dt);
 
