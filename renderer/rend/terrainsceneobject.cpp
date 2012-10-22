@@ -114,7 +114,7 @@ TerrainSceneObject::TerrainSceneObject(double width, double height, double vertS
         material->shadeMode = rend::Material::SM_TEXTURE;
     }
     else
-        material->shadeMode = rend::Material::SM_FLAT;
+        material->shadeMode = rend::Material::SM_GOURAUD;
 
     material->sideType = rend::Material::ONE_SIDE;
 
