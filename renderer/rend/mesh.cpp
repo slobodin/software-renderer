@@ -69,6 +69,30 @@ int Mesh::numSubMeshes() const
     return m_submeshes.size();
 }
 
+int Mesh::numTriangles() const
+{
+    int trianglesCount = 0;
+
+    for (auto &vb : m_submeshes)
+    {
+        switch (vb.getType())
+        {
+        case VertexBuffer::INDEXEDTRIANGLELIST:
+            trianglesCount += vb.numIndices() / 3;
+            break;
+
+        case VertexBuffer::TRIANGLELIST:
+            trianglesCount += vb.numVertices() / 3;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return trianglesCount;
+}
+
 void Mesh::setShadingMode(Material::ShadeMode shMode)
 {
     for (auto vb : m_submeshes)

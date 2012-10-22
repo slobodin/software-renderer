@@ -44,6 +44,7 @@ public:
     //! Returns vertex count of all submeshes.
     int numVertices() const;
     int numSubMeshes() const;
+    int numTriangles() const;
 
     void setShadingMode(Material::ShadeMode shMode);
     void setTexture(sptr(Texture) texture);

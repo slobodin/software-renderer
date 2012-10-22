@@ -22,7 +22,8 @@ namespace rend
 
 RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode)
     : m_camera(cam),
-      m_viewport(viewport)
+      m_viewport(viewport),
+      m_renderList(0)
 {
     m_camera->setEulerAnglesRotation(0, 0, 0);
 
@@ -40,24 +41,20 @@ RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> vi
         throw RenderMgrException("Unknown renderer");
     }
 
+    m_renderList = new RenderList();
+
     // add standart white ambient light
 //    addAmbientLight(Color3(255 * 0.3, 255 * 0.3, 255 * 0.3));
 }
 
-void rend::RenderMgr::makeLight()
-{
-
-}
-
 RenderMgr::~RenderMgr()
 {
-
+    if (m_renderList)
+        delete m_renderList;
 }
 
 void RenderMgr::update()
 {
-    RenderList renderList;
-
     if (!m_viewport)
     {
         syslog << "Viewport is not setted" << logdebug;
@@ -67,6 +64,18 @@ void RenderMgr::update()
     // 1. Clear buffer.
     m_renderer->beginFrame(m_viewport);
 
+    // allocate mem for the render list
+    int triangles = 0;
+    for (auto obj : m_sceneObjects)
+    {
+        if (!obj)
+            continue;
+
+        triangles += obj->getMesh()->numTriangles();
+    }
+
+    m_renderList->prepare(triangles);
+
     // 2. Cull full meshes and form triangles render list.
     // Also applies world transformation.
     for (auto obj : m_sceneObjects)
@@ -75,40 +84,40 @@ void RenderMgr::update()
             continue;
 
         if (!m_camera->culled(*obj))
-            renderList.append(*obj);
+            m_renderList->append(*obj);
     }
 
     // collect debug information
-    m_frameInfo.trianglesOnFrameStart = renderList.getSize();
-    if (renderList.empty())
+    m_frameInfo.trianglesOnFrameStart = m_renderList->getSize();
+    if (m_renderList->empty())
     {
         m_frameInfo.trianglesForRaster = 0;
 //        return;
     }
 
     // 3. Cull backfaces.
-    renderList.removeBackfaces(m_camera);
+    m_renderList->removeBackfaces(m_camera);
 
     // 4. Lighting.
     for (auto light : m_lights)
-        light->illuminate(renderList);
+        light->illuminate(*m_renderList);
 
     // 5. World -> Camera transformation. Also cull triangles with negative Z.
-    m_camera->toCamera(renderList);
+    m_camera->toCamera(*m_renderList);
 
     // 6. Frustum culling.
-    m_camera->frustumCull(renderList);
+    m_camera->frustumCull(*m_renderList);
 
     // 7. Sort triangles by painter algorithm.
-    renderList.zsort();
+    m_renderList->zsort();
 
     // 8. Camera -> Perspective -> Screen transformation.
-    m_camera->toScreen(renderList, *m_viewport);
+    m_camera->toScreen(*m_renderList, *m_viewport);
 
-    m_frameInfo.trianglesForRaster = renderList.getSize();
+    m_frameInfo.trianglesForRaster = m_renderList->getSize();
 
     // 9. Rasterize world triangles.
-    m_renderer->renderWorld(renderList);
+    m_renderer->renderWorld(*m_renderList);
 
     // 10. Render post effects.
     m_renderer->renderGui(m_guiObjects);

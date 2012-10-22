@@ -23,11 +23,13 @@ class Triangle
     vec3 m_normal;
 
     sptr(rend::Material) m_material;
-    rend::Material::SideType m_sideType;
 
 public:
-    Triangle(rend::Material::SideType st = rend::Material::ONE_SIDE);
-    Triangle(const vertex *arr, rend::Material::SideType st = rend::Material::ONE_SIDE);
+    bool clipped;
+
+public:
+    Triangle();
+    Triangle(const vertex *arr);
 
     const vertex &v(size_t ind) const { return m_verts[ind]; }
     vertex &v(size_t ind) { return m_verts[ind]; }
@@ -67,10 +69,7 @@ public:
     vector<vec2> uvs() const;
 
     sptr(rend::Material) getMaterial() const { return m_material; }
-    void setMaterial(sptr(rend::Material) material) { m_material = material; m_sideType = material->sideType; }
-
-    void setSideType(rend::Material::SideType st) { m_sideType = st; }
-    rend::Material::SideType getSideType() const { return m_sideType; }
+    void setMaterial(sptr(rend::Material) material) { m_material = material; }
 
     void computeNormal();
     vec3 normal() const { return m_normal; }

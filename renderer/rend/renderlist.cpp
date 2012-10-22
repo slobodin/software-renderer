@@ -29,12 +29,13 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
 
     size_t verticesSize = vertices.size();
     size_t indicesSize = indices.size();
+    size_t t = m_lastTriangleIndex;
 
     switch(vertexBuffer.getType())
     {
     case VertexBuffer::INDEXEDTRIANGLELIST:
 
-        for(size_t ind = 0, t = 0; ind < indicesSize; ind += 3, t++)
+        for(size_t ind = 0; ind < indicesSize; ind += 3, t++)
         {
             if ((ind + 2) >= indicesSize)
                 break;
@@ -62,13 +63,17 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.computeNormal();
 
             // save it
-            m_triangles.push_back(triangle);
+            m_triangles[t] = triangle;
+//            m_triangles.push_back(triangle);
         }
+
+        m_lastTriangleIndex += t;
+
         break;
 
     case VertexBuffer::TRIANGLELIST:
 
-        for(size_t v = 0; v < verticesSize; v += 3)
+        for(size_t v = 0; v < verticesSize; v += 3, t++)
         {
             if ((v + 2) >= verticesSize)
                 break;
@@ -86,8 +91,12 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.computeNormal();                                   // bottleneck
 
             // save it
-            m_triangles.push_back(triangle);                            // bottleneck
+//            m_triangles.push_back(triangle);                            // bottleneck
+            m_triangles[t] = triangle;
         }
+
+        m_lastTriangleIndex += t;
+
         break;
 
     case VertexBuffer::UNDEFINED:
@@ -97,8 +106,14 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
     }
 }
 
-RenderList::~RenderList()
+void RenderList::prepare(int trianglesCount)
 {
+//    m_triangles.clear();
+    m_lastTriangleIndex = 0;
+    if (m_triangles.size() < trianglesCount)
+    {
+        m_triangles.resize(trianglesCount);
+    }
 }
 
 void RenderList::append(const SceneObject &obj)
@@ -109,25 +124,6 @@ void RenderList::append(const SceneObject &obj)
     const list<VertexBuffer> &subMeshes = obj.getMesh()->getSubmeshes();
     math::M44 worldTransform = obj.getTransformation();
 
-    /*size_t trianglesCount = 0;
-
-    for (auto &vb : subMeshes)
-    {
-        switch (vb->getType())
-        {
-        case VertexBuffer::INDEXEDTRIANGLELIST:
-            trianglesCount += vertexBuffer.getIndices() / 3;
-            break;
-
-        case VertexBuffer::TRIANGLELIST:
-            trianglesCount += vertexBuffer.getVertices() / 3;
-            break;
-
-        default:
-            break;
-        }
-    }*/
-
     for (const auto &vb : subMeshes)
     {
         // TODO: where to compute vertex normals? Here?? Maybe when we apply transformation for model only?
@@ -137,7 +133,7 @@ void RenderList::append(const SceneObject &obj)
 
 void RenderList::zsort()
 {
-    m_triangles.sort(math::ZCompareAvg);
+//    m_triangles.sort(math::ZCompareAvg);
 }
 
 void RenderList::removeBackfaces(const sptr(Camera) cam)
@@ -152,7 +148,7 @@ void RenderList::removeBackfaces(const sptr(Camera) cam)
             continue;
         }
 
-        if (t->getSideType() == rend::Material::TWO_SIDE)
+        if (t->getMaterial()->sideType == rend::Material::TWO_SIDE)
         {
             t++;
             continue;
@@ -166,8 +162,9 @@ void RenderList::removeBackfaces(const sptr(Camera) cam)
         {
             // TODO:
             // not erase, just flag it as culled
-            t = m_triangles.erase(t);
-            continue;
+            t->clipped = true;
+//            t = m_triangles.erase(t);
+//            continue;
         }
 
         t++;

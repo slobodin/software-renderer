@@ -27,20 +27,22 @@ class Camera;
 class RenderList : boost::noncopyable
 {
 public:
-    typedef list<math::Triangle> Triangles;
+    typedef vector<math::Triangle> Triangles;
 
 private:
     Triangles m_triangles;
+    int m_lastTriangleIndex;
 
     void createTriangles(const VertexBuffer &vertexBuffer,
                          const math::M44 &transform);
 
 public:
     //! Default ctor.
-    RenderList() { }
+    RenderList() { m_lastTriangleIndex = 0; }
     //! Dtor.
-    ~RenderList();
+    ~RenderList() { }
 
+    void prepare(int trianglesCount);
     void append(const SceneObject &mesh);
 
     const Triangles &triangles() const { return m_triangles; }

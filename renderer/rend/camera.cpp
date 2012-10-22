@@ -102,13 +102,15 @@ void Camera::buildCamMatrix()
 void Camera::toCamera(RenderList &rendList) const
 {
     RenderList::Triangles &trias = rendList.triangles();
-    auto t = trias.begin();
 
-    while (t != trias.end())
+    for (auto &t : trias)
     {
-        math::vec3 &p1 = t->v(0).p;
-        math::vec3 &p2 = t->v(1).p;
-        math::vec3 &p3 = t->v(2).p;
+        if (t.clipped)
+            continue;
+
+        math::vec3 &p1 = t.v(0).p;
+        math::vec3 &p2 = t.v(1).p;
+        math::vec3 &p3 = t.v(2).p;
 
         p1 = p1 * m_worldToCamera;
         p2 = p2 * m_worldToCamera;
@@ -117,11 +119,10 @@ void Camera::toCamera(RenderList &rendList) const
         // delete all triangles, that lies behind z plane
         if (p1.z < m_distance || p2.z < m_distance || p3.z < m_distance)
         {
-            t = trias.erase(t);
-            continue;
+//            t = trias.erase(t);
+//            continue;
+            t.clipped = true;
         }
-
-        t++;
     }
 }
 
@@ -131,6 +132,9 @@ void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
 
     for (auto &t : trias)
     {
+        if (t.clipped)
+            continue;
+
         math::vec3 &p1 = t.v(0).p;
         math::vec3 &p2 = t.v(1).p;
         math::vec3 &p3 = t.v(2).p;
@@ -144,33 +148,34 @@ void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
 void Camera::frustumCull(RenderList &rendList) const
 {
     RenderList::Triangles &trias = rendList.triangles();
-    auto t = trias.begin();
 
     auto testFn = [](float coord, float plane) -> bool { return coord > plane || coord < -plane; };
 
     float zfactor = 0.5 * m_viewPlaneWidth / m_distance;
     bool cull1_x = false, cull2_x = false, cull3_x = false;
     bool cull1_y = false, cull2_y = false, cull3_y = false;
-    while (t != trias.end())
+    for (auto &t : trias)
     {
+        if (t.clipped)
+            continue;
+
         // xz plane
-        cull1_x = testFn(t->v(0).p.x, zfactor * t->v(0).p.z);
-        cull2_x = testFn(t->v(1).p.x, zfactor * t->v(1).p.z);
-        cull3_x = testFn(t->v(2).p.x, zfactor * t->v(2).p.z);
+        cull1_x = testFn(t.v(0).p.x, zfactor * t.v(0).p.z);
+        cull2_x = testFn(t.v(1).p.x, zfactor * t.v(1).p.z);
+        cull3_x = testFn(t.v(2).p.x, zfactor * t.v(2).p.z);
 
         // yz plane
-        cull1_y = testFn(t->v(0).p.y, zfactor * t->v(0).p.z);
-        cull2_y = testFn(t->v(1).p.y, zfactor * t->v(1).p.z);
-        cull3_y = testFn(t->v(2).p.y, zfactor * t->v(2).p.z);
+        cull1_y = testFn(t.v(0).p.y, zfactor * t.v(0).p.z);
+        cull2_y = testFn(t.v(1).p.y, zfactor * t.v(1).p.z);
+        cull3_y = testFn(t.v(2).p.y, zfactor * t.v(2).p.z);
 
         // triangle out of fov
         if ((cull1_x && cull2_x && cull3_x) || (cull1_y && cull2_y && cull3_y))
         {
-            t = trias.erase(t);
-            continue;
+//            t = trias.erase(t);
+//            continue;
+            t.clipped = true;
         }
-
-        t++;
     }
 }
 

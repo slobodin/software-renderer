@@ -51,6 +51,9 @@ void SoftwareRenderer::renderWorld(const RenderList &rendlist)
     // painter's algorithm
     BOOST_REVERSE_FOREACH(const math::Triangle &t, trias)
     {
+        if (t.clipped)
+            continue;
+
         if (!t.getMaterial())
         {
             syslog << "Material has not been setted for this triangle" << logdebug;

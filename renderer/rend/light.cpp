@@ -40,6 +40,9 @@ void Light::illuminate(RenderList &renderlist) const
 
     for (auto &t : trias)
     {
+        if (t.clipped)
+            continue;
+
         auto material = t.getMaterial();
 
         switch (material->shadeMode)

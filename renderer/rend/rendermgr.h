@@ -34,6 +34,7 @@ class DirectionalLight;
 class PointLight;
 class SceneObject;
 class GuiObject;
+class RenderList;
 
 enum RendererMode
 {
@@ -59,9 +60,7 @@ class RenderMgr : boost::noncopyable
     list<sptr(Light)> m_lights;
 
     FrameInfo m_frameInfo;
-
-    // helpers
-    void makeLight();
+    RenderList *m_renderList;
 
 public:
     RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode);

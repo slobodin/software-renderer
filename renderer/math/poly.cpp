@@ -10,13 +10,13 @@
 namespace math
 {
 
-Triangle::Triangle(rend::Material::SideType st)
-    : m_sideType(st)
+Triangle::Triangle()
+    : clipped(false)
 {
 }
 
-Triangle::Triangle(const vertex *arr, rend::Material::SideType st)
-    : m_sideType(st)
+Triangle::Triangle(const vertex *arr)
+    : clipped(false)
 {
     if (!arr)
     {
