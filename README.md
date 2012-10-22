@@ -1,4 +1,4 @@
-Here is simple software renderer. It means, that it doesn't use OpenGL or DirectX to perform rendering. 
+Here is simple software renderer. It means, that it doesn't use OpenGL or DirectX to perform rendering (although, it's not a big problem to change software renderer with opengl). 
 All that it use is tk gui library functions to put image block on a screen (window).
 
 Why software rendering?
@@ -10,7 +10,7 @@ Features
 Now it supports:
 * Loading some graphics files with mesh data(.obj, .cob, .asc). Also it can load bmp files.
 * Lighting (ambient, directional and point).
-* Constant, wireframe and flat shading.
+* Constant, wireframe, flat and gouraud shading.
 * Simple material support.
 * Mathematical operations with scene nodes like scaling, translating and rotation.
 * Affine texture mapping.
@@ -18,7 +18,7 @@ Now it supports:
 * Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
    Also you can setup position of objects through the scene config file.
 
-**TODO**: gouraud shading, perspective texture mapping, z buffer and animation. Also, renderer needs some optimizations.
+**TODO**: perspective texture mapping, z buffer and animation. Also, renderer needs a lot of optimizations.
 
 Usage
 =====
