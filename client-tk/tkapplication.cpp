@@ -109,7 +109,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (m_sphere)
         m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
-    rendmgr->addSceneObject(terrain);
+//    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
     auto cube = rendmgr->getSceneObject("Cube");

@@ -54,142 +54,108 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
     if (v1.p.y < v2.p.y)
         std::swap(v1, v2);
 
-    float dxdy1 = v2.p.x - v0.p.x;
-    float dxdr1 = (float)v2.color[RED] - (float)v0.color[RED];
-    float dxdg1 = (float)v2.color[GREEN] - (float)v0.color[GREEN];
-    float dxdb1 = (float)v2.color[BLUE] - (float)v0.color[BLUE];
+    Interpolant leftInt;
+    Interpolant rightInt;
 
-    float dxdy2 = v1.p.x - v0.p.x;
-    float dxdr2 = (float)v1.color[RED] - (float)v0.color[RED];
-    float dxdg2 = (float)v1.color[GREEN] - (float)v0.color[GREEN];
-    float dxdb2 = (float)v1.color[BLUE] - (float)v0.color[BLUE];
+    leftInt.dx = v2.p.x - v0.p.x;
+    leftInt.dr = (float)v2.color[RED] - (float)v0.color[RED];
+    leftInt.dg = (float)v2.color[GREEN] - (float)v0.color[GREEN];
+    leftInt.db = (float)v2.color[BLUE] - (float)v0.color[BLUE];
 
-    float sdx, sdu, sdv, sdw;
-    float edx, edu, edv, edw;
-    float pu, pv, pw;
-    int x, y;
+    rightInt.dx = v1.p.x - v0.p.x;
+    rightInt.dr = (float)v1.color[RED] - (float)v0.color[RED];
+    rightInt.dg = (float)v1.color[GREEN] - (float)v0.color[GREEN];
+    rightInt.db = (float)v1.color[BLUE] - (float)v0.color[BLUE];
 
     float dy1 = v2.p.y - v0.p.y;
     float dy2 = v1.p.y - v0.p.y;
 
-    dxdy1 /= dy1;
-    dxdr1 /= dy1;
-    dxdg1 /= dy1;
-    dxdb1 /= dy1;
+    leftInt.v = _mm_div_ps(leftInt.v, _mm_set_ps1(dy1));
+    rightInt.v = _mm_div_ps(rightInt.v, _mm_set_ps1(dy2));
 
-    dxdy2 /= dy2;
-    dxdr2 /= dy2;
-    dxdg2 /= dy2;
-    dxdb2 /= dy2;
+    Interpolant leftIntC;
+    Interpolant rightIntC;
 
-    float dxldy, dxrdy;
-    float dxldu, dxrdu;
-    float dxldv, dxrdv;
-    float dxldw, dxrdw;
-
-    if (dxdy1 < dxdy2)
+    if (leftInt.dx < rightInt.dx)
     {
-        dxldy = dxdy1; dxrdy = dxdy2;
-        dxldu = dxdr1; dxrdu = dxdr2;
-        dxldv = dxdg1; dxrdv = dxdg2;
-        dxldw = dxdb1; dxrdw = dxdb2;
+        leftIntC = leftInt;
+        rightIntC = rightInt;
     }
     else
     {
-        dxldy = dxdy2; dxrdy = dxdy1;
-        dxldu = dxdr2; dxrdu = dxdr1;
-        dxldv = dxdg2; dxrdv = dxdg1;
-        dxldw = dxdb2; dxrdw = dxdb1;
+        leftIntC = rightInt;
+        rightIntC = leftInt;
     }
 
-    sdx = v0.p.x; sdu = v0.color[RED]; sdv = v0.color[GREEN]; sdw = v0.color[BLUE];
-    edx = v0.p.x; edu = v0.color[RED]; edv = v0.color[GREEN]; edw = v0.color[BLUE];
-    pu = v0.color[RED]; pv = v0.color[GREEN]; pw = v0.color[BLUE];
+    Interpolant start, end;
+    start.dx = v0.p.x; start.dr = v0.color[RED]; start.dg = v0.color[GREEN]; start.db = v0.color[BLUE];
+    end = start;
 
-    float p_delta_u;
-    float p_delta_v;
-    float p_delta_w;
+    Interpolant p, pdelta;
 
+    int x, y;
     for (y = (int)v0.p.y; y < (int)v2.p.y; y++)
     {
-        p_delta_u = edu - sdu;
-        p_delta_v = edv - sdv;
-        p_delta_w = edw - sdw;
+        pdelta.v = _mm_sub_ps(end.v, start.v);
+        pdelta.dx = 0;
 
-        p_delta_u /= edx - sdx;
-        p_delta_v /= edx - sdx;
-        p_delta_w /= edx - sdx;
+        pdelta.v = _mm_div_ps(pdelta.v, _mm_set_ps1(end.dx - start.dx));
 
-        pu = sdu; pv = sdv; pw = sdw;
-
-        for (x = (int)sdx; x < (int)edx; x++)
+        p = start;
+        for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            fb->wpixel(x, y, Color3(pu, pv, pw));
+            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db));
 
-            pu += p_delta_u;
-            pv += p_delta_v;
-            pw += p_delta_w;
+            p.v = _mm_add_ps(p.v, pdelta.v);
+            p.dx = 0;
         }
 
-        sdx += dxldy; sdu += dxldu; sdv += dxldv; sdw += dxldw;
-        edx += dxrdy; edu += dxrdu; edv += dxrdv; edw += dxrdw;
+        start.v = _mm_add_ps(start.v, leftIntC.v);
+        end.v = _mm_add_ps(end.v, rightIntC.v);
     }
 
     // Now for the bottom of the triangle
-    if (dxdy1 < dxdy2)
+    if (leftInt.dx < rightInt.dx)
     {
-        dxldy = v1.p.x - v2.p.x;
-        dxldu = (float)v1.color[RED] - (float)v2.color[RED];
-        dxldv = (float)v1.color[GREEN] - (float)v2.color[GREEN];
-        dxldw = (float)v1.color[BLUE] - (float)v2.color[BLUE];
+        leftIntC.dx = v1.p.x - v2.p.x;
+        leftIntC.dr = (float)v1.color[RED] - (float)v2.color[RED];
+        leftIntC.dg = (float)v1.color[GREEN] - (float)v2.color[GREEN];
+        leftIntC.db = (float)v1.color[BLUE] - (float)v2.color[BLUE];
 
-        float h = v1.p.y - v2.p.y;
-        dxldy /= h;
-        dxldu /= h;
-        dxldv /= h;
-        dxldw /= h;
+        leftIntC.v = _mm_div_ps(leftIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
 
-        sdx = v2.p.x; sdu = v2.color[RED]; sdv = v2.color[GREEN]; sdw = v2.color[BLUE];
+        start.dx = v2.p.x; start.dr = v2.color[RED]; start.dg = v2.color[GREEN]; start.db = v2.color[BLUE];
     }
     else
     {
-        dxrdy = v1.p.x - v2.p.x;
-        dxrdu = (float)v1.color[RED] - (float)v2.color[RED];
-        dxrdv = (float)v1.color[GREEN] - (float)v2.color[GREEN];
-        dxrdw = (float)v1.color[BLUE] - (float)v2.color[BLUE];
+        rightIntC.dx = v1.p.x - v2.p.x;
+        rightIntC.dr = (float)v1.color[RED] - (float)v2.color[RED];
+        rightIntC.dg = (float)v1.color[GREEN] - (float)v2.color[GREEN];
+        rightIntC.db = (float)v1.color[BLUE] - (float)v2.color[BLUE];
 
-        float h = v1.p.y - v2.p.y;
-        dxrdy /= h;
-        dxrdu /= h;
-        dxrdv /= h;
-        dxrdw /= h;
+        rightIntC.v = _mm_div_ps(rightIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
 
-        edx = v2.p.x; edu = v2.color[RED]; edv = v2.color[GREEN]; edw = v2.color[BLUE];
+        end.dx = v2.p.x; end.dr = v2.color[RED]; end.dg = v2.color[GREEN]; end.db = v2.color[BLUE];
     }
 
-    pu = v2.color[RED]; pv = v2.color[GREEN]; pw = v2.color[BLUE];
     for (y = (int)v2.p.y; y< (int)v1.p.y; y++)
     {
-        p_delta_u = edu - sdu;
-        p_delta_v = edv - sdv;
-        p_delta_w = edw - sdw;
+        pdelta.v = _mm_sub_ps(end.v, start.v);
+        pdelta.dx = 0;
 
-        p_delta_u /= edx - sdx;
-        p_delta_v /= edx - sdx;
-        p_delta_w /= edx - sdx;
+        pdelta.v = _mm_div_ps(pdelta.v, _mm_set_ps1(end.dx - start.dx));
 
-        pu = sdu; pv = sdv; pw = sdw;
-        for (x = (int)sdx; x < (int)edx; x++)
+        p = start;
+        for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            fb->wpixel(x, y, Color3(pu, pv, pw));
+            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db));
 
-            pu += p_delta_u;
-            pv += p_delta_v;
-            pw += p_delta_w;
+            p.v = _mm_add_ps(p.v, pdelta.v);
+            p.dx = 0;
         }
 
-        sdx += dxldy; sdu += dxldu; sdv += dxldv; sdw += dxldw;
-        edx += dxrdy; edu += dxrdu; edv += dxrdv; edw += dxrdw;
+        start.v = _mm_add_ps(start.v, leftIntC.v);
+        end.v = _mm_add_ps(end.v, rightIntC.v);
     }
 }
 
