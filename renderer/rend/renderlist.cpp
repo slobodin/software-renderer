@@ -45,6 +45,7 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.v(2) = vertices[indices[ind + 2]];
 
             // translate and rotate the triangle
+            // TODO: applying transformation for normals only where changing matrix (do not need store original normals)
             triangle.applyTransformation(transform);
 
             if (!uvs.empty() && !uvind.empty())

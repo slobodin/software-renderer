@@ -81,11 +81,11 @@ void TkApplication::update(float dt)
     if (ptL)
     {
         transl = ptL->getPosition();
-        rotM = math::M33::getRotateYawPitchRollMatrix(3, 0, 0);
+        rotM = math::M33::getRotateYawPitchRollMatrix(0, 0, 3);
 
         transl = transl * rotM;
 
-//        ptL->setPosition(transl);
+        ptL->setPosition(transl);
 //        m_lightPoint->setPosition(transl);
     }
 
@@ -119,6 +119,9 @@ TkApplication::TkApplication(int argc, const char *argv[])
 //        cube->getMesh()->setTexture(texture);
         cube->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
     }
+
+    auto cessna = rendmgr->getSceneObject("cessna.obj");
+    cessna->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
     m_debugStats1 = make_shared<rend::TextObject>(textureFont, 16, 16);

@@ -58,11 +58,14 @@ void VertexBuffer::computeVertexNormals()
 {
     vector<int> polysTouchVertex(m_vertices.size());
 
+    // clear normals for all vertices
+    std::for_each(m_vertices.begin(), m_vertices.end(), [](math::vertex &v) { v.n.zero(); } );
+
     switch(m_type)
     {
     case INDEXEDTRIANGLELIST:
 
-        for(size_t ind = 0, t = 0; ind < m_indices.size(); ind += 3, t++)
+        for(size_t ind = 0; ind < m_indices.size(); ind += 3)
         {
             size_t vindex0 = m_indices[ind];
             size_t vindex1 = m_indices[ind + 1];
@@ -94,14 +97,32 @@ void VertexBuffer::computeVertexNormals()
 
     case TRIANGLELIST:
 
-        syslog << "Unsupported triangle list for computing normals" << logerr;
-        break;
-
-        for(size_t v = 0; v < m_vertices.size(); v += 3)
+        for(size_t vind = 0; vind < m_vertices.size(); vind += 3)
         {
-            if ((v + 2) >= m_vertices.size())
+            if ((vind + 2) >= m_vertices.size())
                 break;
 
+            polysTouchVertex[vind]++;
+            polysTouchVertex[vind + 1]++;
+            polysTouchVertex[vind + 2]++;
+
+            math::vec3 u = m_vertices[vind + 1].p - m_vertices[vind].p;
+            math::vec3 v = m_vertices[vind + 2].p - m_vertices[vind].p;
+
+            math::vec3 normal = u.crossProduct(v);
+
+            m_vertices[vind].n += normal;
+            m_vertices[vind + 1].n += normal;
+            m_vertices[vind + 2].n += normal;
+        }
+
+        for (size_t vertex = 0; vertex < m_vertices.size(); vertex++)
+        {
+            if (polysTouchVertex[vertex] >= 1)
+            {
+                m_vertices[vertex].n /= polysTouchVertex[vertex];
+                m_vertices[vertex].n.normalize();
+            }
         }
         break;
 

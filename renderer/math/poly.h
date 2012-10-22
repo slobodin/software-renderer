@@ -42,9 +42,20 @@ public:
 
     void applyTransformation(const math::M44 &transform)
     {
+        // translate point
         m_verts[0].p = m_verts[0].p * transform;
         m_verts[1].p = m_verts[1].p * transform;
         m_verts[2].p = m_verts[2].p * transform;
+
+        // translate normal
+        m_verts[0].n = m_verts[0].n * transform;
+        m_verts[1].n = m_verts[1].n * transform;
+        m_verts[2].n = m_verts[2].n * transform;
+
+        // noo??
+        m_verts[0].n.normalize();
+        m_verts[1].n.normalize();
+        m_verts[2].n.normalize();
     }
 
     //! Returns copy of the triangle points.
