@@ -12,13 +12,14 @@ Now it supports:
 * Lighting (ambient, directional and point).
 * Constant, wireframe, flat and gouraud shading.
 * Simple material support.
+* Z buffer.
 * Mathematical operations with scene nodes like scaling, translating and rotation.
 * Affine texture mapping.
 * Customizable camera.
 * Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
    Also you can setup position of objects through the scene config file.
 
-**TODO**: perspective texture mapping, z buffer and animation. Also, renderer needs a lot of optimizations.
+**TODO**: perspective texture mapping, animation. Also, renderer needs a lot of optimizations.
 
 Usage
 =====
