@@ -109,7 +109,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     if (m_sphere)
         m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
-//    rendmgr->addSceneObject(terrain);
+    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
     auto cube = rendmgr->getSceneObject("Cube");
@@ -121,7 +121,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     }
 
     auto cessna = rendmgr->getSceneObject("statue2.obj");
-    cessna->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+//    cessna->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
     m_debugStats1 = make_shared<rend::TextObject>(textureFont, 16, 16);

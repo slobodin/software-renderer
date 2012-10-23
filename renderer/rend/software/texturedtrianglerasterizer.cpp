@@ -19,7 +19,7 @@ namespace rend
 
 union Interpolant
 {
-    struct { float du, dv, dx, stub; } __attribute__((aligned(16)));
+    struct { float du, dv, dx, dz; } __attribute__((aligned(16)));
     __m128 v __attribute__((aligned(16)));
 
     Interpolant() : v() { _mm_set_ps1(0.f); }
@@ -59,10 +59,12 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     leftInt.dx = v2.p.x - v0.p.x;
     leftInt.du = v2.t.x - v0.t.x;
     leftInt.dv = v2.t.y - v0.t.y;
+    leftInt.dz = v2.p.z - v0.p.z;
 
     rightInt.dx = v1.p.x - v0.p.x;
     rightInt.du = v1.t.x - v0.t.x;
     rightInt.dv = v1.t.y - v0.t.y;
+    rightInt.dz = v1.p.z - v0.p.z;
 
     float dy1 = v2.p.y - v0.p.y;
     float dy2 = v1.p.y - v0.p.y;
@@ -85,7 +87,7 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     }
 
     Interpolant start, end;
-    start.dx = v0.p.x; start.du = v0.t.x; start.dv = v0.t.y;
+    start.dx = v0.p.x; start.du = v0.t.x; start.dv = v0.t.y; start.dz = v0.p.z;
     end = start;
 
     Interpolant p, pdelta;
@@ -94,7 +96,7 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     for (y = (int)v0.p.y; y < (int)v2.p.y; y++)
     {
         pdelta.v = _mm_sub_ps(end.v, start.v);
-        pdelta.dx = pdelta.stub = 0;
+        pdelta.dx = 0;
 
         pdelta.v = _mm_div_ps(pdelta.v, _mm_set_ps1(end.dx - start.dx));
 
@@ -111,10 +113,10 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3
 
-            fb->wpixel(x, y, textel);
+            fb->wpixel(x, y, textel, p.dz);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
-            p.dx = pdelta.stub = 0;
+            p.dx = 0;
         }
 
         start.v = _mm_add_ps(start.v, leftIntC.v);
@@ -127,28 +129,28 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
         leftIntC.dx = v1.p.x - v2.p.x;
         leftIntC.du = v1.t.x - v2.t.x;
         leftIntC.dv = v1.t.y - v2.t.y;
-        leftIntC.stub = 0;
+        leftIntC.dz = v1.p.z - v2.p.z;
 
         leftIntC.v = _mm_div_ps(leftIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
 
-        start.dx = v2.p.x; start.du = v2.t.x; start.dv = v2.t.y; start.stub = 0;
+        start.dx = v2.p.x; start.du = v2.t.x; start.dv = v2.t.y; start.dz = v2.p.z;
     }
     else
     {
         rightIntC.dx = v1.p.x - v2.p.x;
         rightIntC.du = v1.t.x - v2.t.x;
         rightIntC.dv = v1.t.y - v2.t.y;
-        rightIntC.stub = 0;
+        rightIntC.dz = v1.p.z - v2.p.z;
 
         rightIntC.v = _mm_div_ps(rightIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
 
-        end.dx = v2.p.x; end.du = v2.t.x; end.dv = v2.t.y; end.stub = 0;
+        end.dx = v2.p.x; end.du = v2.t.x; end.dv = v2.t.y; end.dz = v2.p.z;
     }
 
     for (y = (int)v2.p.y; y< (int)v1.p.y; y++)
     {
         pdelta.v = _mm_sub_ps(end.v, start.v);
-        pdelta.dx = pdelta.stub = 0;
+        pdelta.dx = 0;
 
         pdelta.v = _mm_div_ps(pdelta.v, _mm_set_ps1(end.dx - start.dx));
 
@@ -164,10 +166,10 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3
 
-            fb->wpixel(x, y, textel);
+            fb->wpixel(x, y, textel, p.dz);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
-            p.dx = pdelta.stub = 0;
+            p.dx = 0;
         }
 
         start.v = _mm_add_ps(start.v, leftIntC.v);
