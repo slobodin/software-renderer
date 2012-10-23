@@ -17,6 +17,14 @@
 namespace rend
 {
 
+union Interpolant
+{
+    struct { float du, dv, dx, stub; } __attribute__((aligned(16)));
+    __m128 v __attribute__((aligned(16)));
+
+    Interpolant() : v() { _mm_set_ps1(0.f); }
+};
+
 void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *fb)
 {
     math::vertex v0 = t.v(0);
@@ -26,10 +34,10 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     static Color3 textel;
 
     // if triangle isn't on a screen
-    if (v2.p.y < fb->yorig() || v0.p.y > fb->height() ||
+    /*if (v2.p.y < fb->yorig() || v0.p.y > fb->height() ||
        (v0.p.x < fb->xorig() && v1.p.x < fb->xorig() && v2.p.x < fb->xorig()) ||
        (v0.p.x > fb->width() && v1.p.x > fb->width() && v2.p.x > fb->width()))
-        return;
+        return;*/
 
     if (!t.getMaterial()->texture)
         return;
@@ -45,77 +53,57 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     if (v1.p.y < v2.p.y)
         std::swap(v1, v2);
 
-    double dxdy1 = v2.p.x - v0.p.x;
-    double dxdu1 = v2.t.x - v0.t.x;
-    double dxdv1 = v2.t.y - v0.t.y;
+    Interpolant leftInt;
+    Interpolant rightInt;
 
-    double dxdy2 = v1.p.x - v0.p.x;
-    double dxdu2 = v1.t.x - v0.t.x;
-    double dxdv2 = v1.t.y - v0.t.y;
+    leftInt.dx = v2.p.x - v0.p.x;
+    leftInt.du = v2.t.x - v0.t.x;
+    leftInt.dv = v2.t.y - v0.t.y;
 
-    double sdx,sdu,sdv;
-    double edx,edu,edv;
-    double pu, pv;
-    int x, y;
+    rightInt.dx = v1.p.x - v0.p.x;
+    rightInt.du = v1.t.x - v0.t.x;
+    rightInt.dv = v1.t.y - v0.t.y;
 
-    double dy1 = v2.p.y - v0.p.y;
-    double dy2 = v1.p.y - v0.p.y;
+    float dy1 = v2.p.y - v0.p.y;
+    float dy2 = v1.p.y - v0.p.y;
 
-    if (!math::DCMP(v2.p.y, v0.p.y))
+    leftInt.v = _mm_div_ps(leftInt.v, _mm_set_ps1(dy1));
+    rightInt.v = _mm_div_ps(rightInt.v, _mm_set_ps1(dy2));
+
+    Interpolant leftIntC;
+    Interpolant rightIntC;
+
+    if (leftInt.dx < rightInt.dx)
     {
-        dxdy1 /= dy1;
-        dxdu1 /= dy1;
-        dxdv1 /= dy1;
-    }
-
-    if (!math::DCMP(v1.p.y, v0.p.y))
-    {
-        dxdy2 /= dy2;
-        dxdu2 /= dy2;
-        dxdv2 /= dy2;
-    }
-
-    double dxldy, dxrdy;
-    double dxldu, dxrdu;
-    double dxldv, dxrdv;
-
-    if (dxdy1 < dxdy2)
-    {
-        dxldy = dxdy1; dxrdy = dxdy2;
-        dxldu = dxdu1; dxrdu = dxdu2;
-        dxldv = dxdv1; dxrdv = dxdv2;
+        leftIntC = leftInt;
+        rightIntC = rightInt;
     }
     else
     {
-        dxldy = dxdy2; dxrdy = dxdy1;
-        dxldu = dxdu2; dxrdu = dxdu1;
-        dxldv = dxdv2; dxrdv = dxdv1;
+        leftIntC = rightInt;
+        rightIntC = leftInt;
     }
 
-    sdx = v0.p.x; sdu = v0.t.x; sdv = v0.t.y;
-    edx = v0.p.x; edu = v0.t.x; edv = v0.t.y;
-//    pu = v0.t.x; pv = v0.t.y;
+    Interpolant start, end;
+    start.dx = v0.p.x; start.du = v0.t.x; start.dv = v0.t.y;
+    end = start;
 
-    double p_delta_u;
-    double p_delta_v;
+    Interpolant p, pdelta;
 
+    int x, y;
     for (y = (int)v0.p.y; y < (int)v2.p.y; y++)
     {
-        p_delta_u = edu - sdu;
-        p_delta_v = edv - sdv;
+        pdelta.v = _mm_sub_ps(end.v, start.v);
+        pdelta.dx = pdelta.stub = 0;
 
-        if (!math::DCMP(edx - sdx, 0.))
+        pdelta.v = _mm_div_ps(pdelta.v, _mm_set_ps1(end.dx - start.dx));
+
+        p = start;
+
+        for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            p_delta_u /= edx - sdx;
-            p_delta_v /= edx - sdx;
-        }
-
-        pu = sdu; pv = sdv;
-
-        for (x = (int)sdx; x < (int)edx; x++)
-        {
-            int ww = pu * (texWidth - 1);
-            int hh = pv * (texHeight - 1);
+            int ww = p.du * (texWidth - 1);
+            int hh = p.dv * (texHeight - 1);
 
             textel = texture->at(ww, hh);
 
@@ -125,76 +113,65 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
 
             fb->wpixel(x, y, textel);
 
-            pu += p_delta_u;
-            pv += p_delta_v;
+            p.v = _mm_add_ps(p.v, pdelta.v);
+            p.dx = pdelta.stub = 0;
         }
 
-        sdx += dxldy; sdu += dxldu; sdv += dxldv;
-        edx += dxrdy; edu += dxrdu; edv += dxrdv;
+        start.v = _mm_add_ps(start.v, leftIntC.v);
+        end.v = _mm_add_ps(end.v, rightIntC.v);
     }
 
     // Now for the bottom of the triangle
-    if (dxdy1 < dxdy2)
+    if (leftInt.dx < rightInt.dx)
     {
-        dxldy = v1.p.x - v2.p.x;
-        dxldu = v1.t.x - v2.t.x;
-        dxldv = v1.t.y - v2.t.y;
+        leftIntC.dx = v1.p.x - v2.p.x;
+        leftIntC.du = v1.t.x - v2.t.x;
+        leftIntC.dv = v1.t.y - v2.t.y;
+        leftIntC.stub = 0;
 
-        if (!math::DCMP(v1.p.y, v2.p.y))
-        {
-            dxldy /= v1.p.y - v2.p.y;
-            dxldu /= v1.p.y - v2.p.y;
-            dxldv /= v1.p.y - v2.p.y;
-        }
+        leftIntC.v = _mm_div_ps(leftIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
 
-        sdx = v2.p.x; sdu = v2.t.x; sdv = v2.t.y;
+        start.dx = v2.p.x; start.du = v2.t.x; start.dv = v2.t.y; start.stub = 0;
     }
     else
     {
-        dxrdy = v1.p.x - v2.p.x;
-        dxrdu = v1.t.x - v2.t.x;
-        dxrdv = v1.t.y - v2.t.y;
+        rightIntC.dx = v1.p.x - v2.p.x;
+        rightIntC.du = v1.t.x - v2.t.x;
+        rightIntC.dv = v1.t.y - v2.t.y;
+        rightIntC.stub = 0;
 
-        if (!math::DCMP(v1.p.y, v2.p.y))
-        {
-            dxrdy /= v1.p.y - v2.p.y;
-            dxrdu /= v1.p.y - v2.p.y;
-            dxrdv /= v1.p.y - v2.p.y;
-        }
+        rightIntC.v = _mm_div_ps(rightIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
 
-        edx = v2.p.x; edu = v2.t.x; edv = v2.t.y;
+        end.dx = v2.p.x; end.du = v2.t.x; end.dv = v2.t.y; end.stub = 0;
     }
 
-//    pu = v2.t.x; pv = v2.t.y;
     for (y = (int)v2.p.y; y< (int)v1.p.y; y++)
     {
-        p_delta_u = edu - sdu;
-        p_delta_v = edv - sdv;
+        pdelta.v = _mm_sub_ps(end.v, start.v);
+        pdelta.dx = pdelta.stub = 0;
 
-        if (!math::DCMP(edx, sdx))
-        {
-            p_delta_u /= edx - sdx;
-            p_delta_v /= edx - sdx;
-        }
+        pdelta.v = _mm_div_ps(pdelta.v, _mm_set_ps1(end.dx - start.dx));
 
-        pu = sdu; pv = sdv;
-        for (x = (int)sdx; x < (int)edx; x++)
+        p = start;
+        for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            int ww = pu * (texWidth - 1);
-            int hh = pv * (texHeight - 1);
+            int ww = p.du * (texWidth - 1);
+            int hh = p.dv * (texHeight - 1);
 
             textel = texture->at(ww, hh);
 
+            // modulate by rgb of first vertex (flat shading)
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3
 
             fb->wpixel(x, y, textel);
 
-            pu += p_delta_u;
-            pv += p_delta_v;
+            p.v = _mm_add_ps(p.v, pdelta.v);
+            p.dx = pdelta.stub = 0;
         }
-        sdx += dxldy; sdu+=dxldu; sdv+=dxldv;
-        edx += dxrdy; edu+=dxrdu; edv+=dxrdv;
+
+        start.v = _mm_add_ps(start.v, leftIntC.v);
+        end.v = _mm_add_ps(end.v, rightIntC.v);
     }
 }
 

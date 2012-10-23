@@ -101,9 +101,9 @@ TkApplication::TkApplication(int argc, const char *argv[])
     sptr(rend::RenderMgr) rendmgr = m_clientController->getRendmgr();
 
     // create terrain
-    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain2");
-    auto texture = rmgr->getObject<rend::Texture>("texture_texture-terrain");
-    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 600, heightMapTexture/*, texture*/);
+    auto heightMapTexture = rmgr->getObject<rend::Texture>("texture_terrain");
+    auto texture = rmgr->getObject<rend::Texture>("texture_earthcolormap01");
+    auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 600, heightMapTexture, texture);
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)

@@ -139,12 +139,19 @@ public:
   */
 class Color3
 {
-    //! Red color.
-    uint32_t m_r;
-    //! Green color.
-    uint32_t m_g;
-    //! Blue color.
-    uint32_t m_b;
+    union
+    {
+        struct
+        {
+            //! Red color.
+            uint32_t m_r;
+            //! Green color.
+            uint32_t m_g;
+            //! Blue color.
+            uint32_t m_b;
+        };
+        uint32_t v[3];
+    };
 
 public:
     //! Default ctor.
@@ -176,32 +183,12 @@ public:
     /*! Usage: mycolor[RED] = 128. */
     uint32_t &operator[] (ColorComp ind)
     {
-        switch (ind)
-        {
-        case RED:
-            return m_r;
-        case GREEN:
-            return m_g;
-        case BLUE:
-            return m_b;
-        default:
-            throw std::out_of_range("Invalid color component");
-        }
+        return v[ind - 1];
     }
     //! Component by-value-getter.
     uint32_t operator[] (ColorComp ind) const
     {
-        switch (ind)
-        {
-        case RED:
-            return m_r;
-        case GREEN:
-            return m_g;
-        case BLUE:
-            return m_b;
-        default:
-            throw std::out_of_range("Invalid color component");
-        }
+        return v[ind - 1];
     }
 
     //! Color scalar modulation.

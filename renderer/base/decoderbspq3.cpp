@@ -125,7 +125,8 @@ sptr(Resource) DecoderBSPQ3::decode(const string &path)
     newMesh->appendSubmesh(vb);
 
     auto newObject = make_shared<rend::SceneObject>(newMesh);
-    newObject->setName(path + "q3");  // FIXME:! not path!
+    boost::filesystem::path p(path);
+    newObject->setName(p.filename().string());
 
     delete [] vertices;
     delete [] faces;
