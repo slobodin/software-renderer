@@ -10,6 +10,8 @@
 namespace rend
 {
 
+const Color3 Texture::BLACK;
+
 Texture::Texture(const vector<Color3> &pixels, int width, int height)
     : m_pixels(pixels),
       m_width(width),

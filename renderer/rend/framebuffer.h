@@ -37,9 +37,10 @@ private:
     int m_height;
     int m_xOrigin;
     int m_yOrigin;
+    int m_size;
 
 public:
-    FrameBuffer(int witdh, int height);
+    FrameBuffer(int w, int h);
     ~FrameBuffer();
 
     void clear();
@@ -82,6 +83,8 @@ inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)
         return;         // do not need this condition
 
     int pos = m_width * y + x;
+//    if (pos < 0 || pos >= m_size)
+//        return;
 
     m_pixels[pos].r = color[RED];
     m_pixels[pos].g = color[GREEN];
@@ -94,6 +97,8 @@ inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, f
         return;         // do not need this condition
 
     int pos = m_width * y + x;
+//    if (pos < 0 || pos >= m_size)
+//        return;
 
     if (z < m_zbuffer[pos])
     {
@@ -106,7 +111,7 @@ inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, f
 
 inline void FrameBuffer::wpixel(const int pos, const Color3 &color)
 {
-    if (!(pos >= 0 && pos < (m_width * m_height)))
+    if (pos < 0 || pos >= m_size)
         return;
 
     m_pixels[pos].r = color[RED];

@@ -109,7 +109,7 @@ void RenderMgr::update()
     m_camera->frustumCull(*m_renderList);
 
     // 7. Sort triangles by painter algorithm.
-    m_renderList->zsort();
+    /* m_renderList->zsort(); do not need this (using z buffer) */
 
     // 8. Camera -> Perspective -> Screen transformation.
     m_camera->toScreen(*m_renderList, *m_viewport);

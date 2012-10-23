@@ -20,16 +20,18 @@ void memset32(void *dest, uint32_t data, int count)
          );
 }
 
-FrameBuffer::FrameBuffer(int witdh, int height)
+FrameBuffer::FrameBuffer(int w, int h)
     : m_pixels(0),
       m_zbuffer(0),
-      m_width(witdh),
-      m_height(height),
+      m_width(w),
+      m_height(h),
       m_xOrigin(0),
-      m_yOrigin(0)
+      m_yOrigin(0),
+      m_size(0)
 {
-    m_pixels = new rgb[m_width * m_height];
-    m_zbuffer = new int[m_width * m_height];
+    m_size = m_width * m_height;
+    m_pixels = new rgb[m_size];
+    m_zbuffer = new int[m_size];
 }
 
 FrameBuffer::~FrameBuffer()
@@ -50,14 +52,15 @@ void FrameBuffer::resize(int w, int h)
 {
     m_width = w;
     m_height = h;
+    m_size = w * h;
 
     if (m_pixels)
         delete [] m_pixels;
     if (m_zbuffer)
         delete [] m_zbuffer;
 
-    m_pixels = new rgb[m_width * m_height];
-    m_zbuffer = new int[m_width * m_height];
+    m_pixels = new rgb[m_size];
+    m_zbuffer = new int[m_size];
 
     clear();
 }
