@@ -19,7 +19,7 @@ namespace rend
 void FlatTriangleRasterizer::drawBottomTriangle(int x1, int y1,
                                                 int x2, int /*y2*/,
                                                 int x3, int y3,
-                                                const Color3 &color,
+                                                const Color4 &color,
                                                 FrameBuffer *fb)
 {
     // make ccw order
@@ -38,7 +38,7 @@ void FlatTriangleRasterizer::drawBottomTriangle(int x1, int y1,
 void FlatTriangleRasterizer::drawTopTriangle(int x1, int y1,
                                              int x2, int /*y2*/,
                                              int x3, int y3,
-                                             const Color3 &color,
+                                             const Color4 &color,
                                              FrameBuffer *fb)
 {
     // here is cw order
@@ -56,7 +56,7 @@ void FlatTriangleRasterizer::drawTopTriangle(int x1, int y1,
 
 void FlatTriangleRasterizer::rasterizeTopOrBottomTriangle(int x1, int y1, int x2, int x3, int y3,
                                                           double dxLeft, double dxRight, double xs, double xe,
-                                                          const Color3 &color, FrameBuffer *fb)
+                                                          const Color4 &color, FrameBuffer *fb)
 {
     int yorig = fb->yorig();
     int xorig = fb->xorig();
@@ -143,7 +143,7 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
 
     int x1 = p1.p.x, x2 = p2.p.x, x3 = p3.p.x;
     int y1 = p1.p.y, y2 = p2.p.y, y3 = p3.p.y;
-    const Color3 &color = p1.color;
+    const Color4 &color = p1.color;
 
     // if triangle isn't on a screen
     if (y3 < fb->yorig() || y1 > fb->height() ||

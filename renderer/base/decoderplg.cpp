@@ -27,7 +27,7 @@ static const uint32_t PLX_SHADE_MODE_WIRE       = 0x08000000;   // this poly is 
 struct PlgPolyData
 {
     uint32_t descriptor;    // poly descriptor (holds info about color and other properties)
-    rend::Color3 color;
+    rend::Color4 color;
     int numVertices;        // always three
     int indices[3];
 
@@ -150,9 +150,9 @@ sptr(Resource) DecoderPLG::decode(const string &path)
         vb.appendVertices(vertexList, indices);
 
         auto material = make_shared<rend::Material>();
-        material->plainColor = rend::Color3(bounds.first->descriptor & 0x00FFFFFF);
-        material->ambientColor = rend::Color3(bounds.first->descriptor & 0x00FFFFFF);
-        material->diffuseColor = rend::Color3(bounds.first->descriptor & 0x00FFFFFF);
+        material->plainColor = rend::Color4(bounds.first->descriptor & 0x00FFFFFF);
+        material->ambientColor = rend::Color4(bounds.first->descriptor & 0x00FFFFFF);
+        material->diffuseColor = rend::Color4(bounds.first->descriptor & 0x00FFFFFF);
 
         // setting shade mode
         rend::Material::ShadeMode shadeMode;

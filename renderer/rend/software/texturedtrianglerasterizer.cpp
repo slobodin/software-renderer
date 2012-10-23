@@ -31,7 +31,7 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     math::vertex v1 = t.v(1);
     math::vertex v2 = t.v(2);
 
-    static Color3 textel;
+    static Color4 textel;
 
     // if triangle isn't on a screen
     /*if (v2.p.y < fb->yorig() || v0.p.y > fb->height() ||

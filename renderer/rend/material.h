@@ -47,11 +47,11 @@ struct Material : public base::Resource
     ShadeMode shadeMode;
     SideType sideType;
 
-    Color3 plainColor;
-    Color3 ambientColor;
-    Color3 diffuseColor;
-    Color3 specularColor;
-    Color3 emissiveColor;
+    Color4 plainColor;
+    Color4 ambientColor;
+    Color4 diffuseColor;
+    Color4 specularColor;
+    Color4 emissiveColor;
 
     string textureName;
     sptr(Texture) texture;

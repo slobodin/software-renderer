@@ -79,9 +79,9 @@ public:
     // test function
     sptr(Light) getFirstPointLight() const;
 
-    sptr(AmbientLight)      addAmbientLight(Color3 intensity);
-    sptr(DirectionalLight)  addDirectionalLight(Color3 intensity, math::vec3 direction);
-    sptr(PointLight)        addPointLight(Color3 intensity, math::vec3 position,
+    sptr(AmbientLight)      addAmbientLight(Color4 intensity);
+    sptr(DirectionalLight)  addDirectionalLight(Color4 intensity, math::vec3 direction);
+    sptr(PointLight)        addPointLight(Color4 intensity, math::vec3 position,
                                           float kc, float kl, float kq);
 
     void resize(int w, int h);

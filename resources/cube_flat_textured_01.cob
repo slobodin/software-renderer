@@ -99,7 +99,7 @@ Mat1 V0.06 Id 18850516 Parent 18629604 Size 00000179
 mat# 0
 shader: phong  facet: auto32
 rgb 1,1,1
-alpha 1  ka 0.1  ks 0.1  exp 0  ior 1
+alpha 0.5  ka 0.1  ks 0.1  exp 0  ior 1
 texture: 48D:\WINXPP Program Files\ts5\Textures\metal04.bmp 
 offset 0,0  repeats 1,1  flags 2
 ShBx V0.03 Id 18850517 Parent 18850516 Size 00000584

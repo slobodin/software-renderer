@@ -141,12 +141,25 @@ void DecoderCOB::parseMaterials(string &line)
         is >> g; is.ignore(1, ',');
         is >> b; is.ignore(1, ',');
 
-        rend::Color3 matColor;
+        rend::Color4 matColor;
         matColor[rend::RED] = r * 255.0;
-        matColor[rend::GREEN] = g * 255.0;;
-        matColor[rend::BLUE] = b * 255.0;;
+        matColor[rend::GREEN] = g * 255.0;
+        matColor[rend::BLUE] = b * 255.0;
 
         materials.at(currMaterial).color = matColor;
+
+        return;
+    }
+
+    if (line.find("alpha") != string::npos)
+    {
+        string col = string(line.begin() + line.find(' ') + 1, line.end());
+        std::istringstream is(col);
+
+        double alpha;
+        is >> alpha;
+
+        materials.at(currMaterial).color[rend::ALPHA] = alpha * 255.0;
 
         return;
     }

@@ -48,6 +48,12 @@ inline uint32_t RgbaToInt(uint32_t red, uint32_t green, uint32_t blue, uint32_t 
     return blue | (green << 8) | (red << 16) | (alpha << 24);
 }
 
+//! Converts red, green, blue and alpha components to 32bit integer in R8G8B8A8 format.
+inline uint32_t RgbaToInt1(uint32_t red, uint32_t green, uint32_t blue, uint32_t alpha)
+{
+    return alpha | (blue << 8) | (green << 16) | (red << 24);
+}
+
 //! Converts red, green, blue components to 32bit integer in R8G8B8 format.
 inline uint32_t RgbToInt(uint32_t red, uint32_t green, uint32_t blue)
 {
@@ -101,48 +107,12 @@ inline void IntToRgba(uint32_t rgb, uint8_t &red, uint8_t &green, uint8_t &blue,
   */
 class Color4
 {
-    //! Color array itself.
-    uint8_t m_color[4];
-
-public:
-    //! Default ctor.
-    Color4(int red = 0, int green = 0,
-           int blue = 0, int alpha = 255)
-    {
-        m_color[1] = red;
-        m_color[2] = green;
-        m_color[3] = blue;
-        m_color[0] = alpha;
-    }
-
-    //! Dtor.
-    ~Color4() { }
-
-    //! Returns raw color in 32bit integer value.
-    uint32_t color() const { return *((uint32_t *)this); }
-    //! Casts this object to 32bit integer color.
-    operator uint32_t() const { return color(); }
-
-    //! Component getter.
-    /*! Usage: mycolor[RED] = 128. */
-    uint8_t &operator[] (ColorComp ind) { return m_color[ind]; }
-    //! Component by-value-getter.
-    uint8_t operator[] (ColorComp ind) const { return m_color[ind]; }
-
-    //! Resets to zero.
-    void reset() { memset(m_color, 0, sizeof(m_color)); }
-};
-
-//! R8-G8-B8 color.
-/*!
-  *
-  */
-class Color3
-{
     union
     {
         struct
         {
+            //! Alpha.
+            uint32_t m_a;
             //! Red color.
             uint32_t m_r;
             //! Green color.
@@ -150,32 +120,33 @@ class Color3
             //! Blue color.
             uint32_t m_b;
         };
-        uint32_t v[3];
+        uint32_t v[4];
     };
 
 public:
     //! Default ctor.
-    Color3()
-        : m_r(0), m_g(0), m_b(0)
+    Color4()
+        : m_a(255), m_r(0), m_g(0), m_b(0)
     { }
     //! Component ctor.
-    Color3(uint32_t red, uint32_t green, uint32_t blue)
-        : m_r(red), m_g(green), m_b(blue)
+    Color4(uint32_t red, uint32_t green, uint32_t blue, uint32_t alpha = 255)
+        : m_a(alpha), m_r(red), m_g(green), m_b(blue)
     { }
 
     //! Constructs color from the 32bit integer (R8G8B8).
-    Color3(uint32_t color)
+    Color4(uint32_t color)
     {
+        m_a = AlphaFromInt(color);
         m_r = RedFromInt(color);
         m_g = GreenFromInt(color);
         m_b = BlueFromInt(color);
     }
 
     //! Dtor.
-    ~Color3() { }
+    ~Color4() { }
 
     //! Returns raw color in 32bit integer value.
-    uint32_t color() const { return RgbToInt(m_r, m_g, m_b); }
+    uint32_t color() const { return RgbaToInt(m_r, m_g, m_b, m_a); }
     //! Casts this object to 32bit integer color.
     operator uint32_t() const { return color(); }
 
@@ -183,46 +154,46 @@ public:
     /*! Usage: mycolor[RED] = 128. */
     uint32_t &operator[] (ColorComp ind)
     {
-        return v[ind - 1];
+        return v[ind];
     }
     //! Component by-value-getter.
     uint32_t operator[] (ColorComp ind) const
     {
-        return v[ind - 1];
+        return v[ind];
     }
 
     //! Color scalar modulation.
-    Color3 &operator*= (float s);
+    Color4 &operator*= (float s);
     //! Color modulation.
-    Color3 &operator*= (const Color3 &other);
+    Color4 &operator*= (const Color4 &other);
     //! Color addition.
-    Color3 &operator+= (const Color3 &other);
+    Color4 &operator+= (const Color4 &other);
     //! Color modulation.
-    friend Color3 operator* (const Color3 &a, const Color3 &b);
+    friend Color4 operator* (const Color4 &a, const Color4 &b);
 
-    static Color3 lerp(const Color3 &a, const Color3 &b, float t);
+    static Color4 lerp(const Color4 &a, const Color4 &b, float t);
 
     //! Resets color to zero (black).
-    void reset() { m_r = m_g = m_b = 0; }
+    void reset() { m_r = m_g = m_b = 0; m_a = 255; }
     //! Checks for zero color.
     bool isBlack() const { return m_r == 0 && m_g == 0 && m_b == 0; }
 };
 
-inline Color3 operator* (const Color3 &a, const Color3 &b)
+inline Color4 operator* (const Color4 &a, const Color4 &b)
 {
-    return Color3(a.m_r * b.m_r, a.m_g * b.m_g, a.m_b * b.m_b);
+    return Color4(a.m_r * b.m_r, a.m_g * b.m_g, a.m_b * b.m_b, b.m_a);      // !!!!!!!!!!!!! FIXME
 }
 
-inline Color3 Color3::lerp(const Color3 &a, const Color3 &b, float t)
+inline Color4 Color4::lerp(const Color4 &a, const Color4 &b, float t)
 {
     float red = (float)a[RED] + t * ((float)b[RED] - (float)a[RED]);
     float green = (float)a[GREEN] + t * ((float)b[GREEN] - (float)a[GREEN]);
     float blue = (float)a[BLUE] + t * ((float)b[BLUE] - (float)a[BLUE]);
 
-    return Color3(red, green, blue);
+    return Color4(red, green, blue);
 }
 
-inline Color3 &Color3::operator*= (float s)
+inline Color4 &Color4::operator*= (float s)
 {
     if (s < 0)
         return *this;
@@ -234,22 +205,24 @@ inline Color3 &Color3::operator*= (float s)
     return *this;
 }
 
-inline Color3 &Color3::operator*= (const Color3 &other)
+inline Color4 &Color4::operator*= (const Color4 &other)
 {
     static const uint32_t max = 255;
     m_r = std::min(m_r * other.m_r, max);
     m_g = std::min(m_g * other.m_g, max);
     m_b = std::min(m_b * other.m_b, max);
+    m_a = other.m_a;
 
     return *this;
 }
 
-inline Color3 &Color3::operator+= (const Color3 &other)
+inline Color4 &Color4::operator+= (const Color4 &other)
 {
     static const uint32_t max = 255;
     m_r = std::min(m_r + other.m_r, max);
     m_g = std::min(m_g + other.m_g, max);
     m_b = std::min(m_b + other.m_b, max);
+    m_a = other.m_a;
 
     return *this;
 }

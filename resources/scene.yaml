@@ -13,9 +13,9 @@ Objects:
 #    scale: [20, 20, 20]
 #  - model: tie04.cob
 #    position: [200, 100, 0]
-#  - model: cube_flat_textured_01.cob
-#    position: [0, 200, -200]
-#    scale: [40, 40, 40]
+  - model: cube_flat_textured_01.cob
+    position: [0, 200, -200]
+    scale: [40, 40, 40]
 #  - model: cessna.obj
 #    position: [100, 200, 600]
 #    scale: [20, 20, 20]

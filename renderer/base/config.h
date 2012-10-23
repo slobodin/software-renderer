@@ -47,18 +47,18 @@ struct SceneConfig
     vector<ObjInfo> objects;
 
     // ambient light intensity
-    rend::Color3 ambIntensity;
+    rend::Color4 ambIntensity;
 
     struct DirLightInfo
     {
         math::vec3 direction;
-        rend::Color3 intensity;
+        rend::Color4 intensity;
     };
 
     struct PointLightInfo
     {
         math::vec3 position;
-        rend::Color3 intensity;
+        rend::Color4 intensity;
         double kc, kl, kq;
     };
 

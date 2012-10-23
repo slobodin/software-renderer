@@ -104,9 +104,9 @@ TerrainSceneObject::TerrainSceneObject(double width, double height, double vertS
         vb.appendVertices(vertices, indices);
 
     auto material = make_shared<rend::Material>();
-    material->plainColor = rend::Color3(255, 255, 255);
-    material->ambientColor = rend::Color3(255, 255, 255);
-    material->diffuseColor = rend::Color3(255, 255, 255);
+    material->plainColor = rend::Color4(255, 255, 255);
+    material->ambientColor = rend::Color4(255, 255, 255);
+    material->diffuseColor = rend::Color4(255, 255, 255);
 
     if (texture)
     {

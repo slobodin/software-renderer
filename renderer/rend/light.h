@@ -39,14 +39,14 @@ private:
 
 protected:
     bool m_isEnabled;   // on\off
-    Color3 m_intensity;
+    Color4 m_intensity;
 
-    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const = 0;
+    virtual Color4 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const = 0;
 
-    typedef boost::function<Color3 (const Light*, const sptr(Material), const math::vec3 &, const math::vec3 &)> ShaderFunction;
+    typedef boost::function<Color4 (const Light*, const sptr(Material), const math::vec3 &, const math::vec3 &)> ShaderFunction;
     ShaderFunction m_shader;
 
-    Light(const Color3 &intensity);
+    Light(const Color4 &intensity);
     virtual ~Light();
 
 public:
@@ -62,10 +62,10 @@ public:
 class AmbientLight : public Light
 {
 protected:
-    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
+    virtual Color4 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
 
 public:
-    AmbientLight(const Color3 &intensity);
+    AmbientLight(const Color4 &intensity);
 };
 
 //! Directional light
@@ -73,10 +73,10 @@ class DirectionalLight : public Light
 {
     math::vec3 m_dir;
 
-    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
+    virtual Color4 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
 
 public:
-    DirectionalLight(const Color3 &intensity, const math::vec3 &dir);
+    DirectionalLight(const Color4 &intensity, const math::vec3 &dir);
 };
 
 //! Point light
@@ -84,10 +84,10 @@ class PointLight : public Light
 {
     float m_kc, m_kl, m_kq;
 
-    virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
+    virtual Color4 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const;
 
 public:
-    PointLight(const Color3 &intensity, const math::vec3 &pos,
+    PointLight(const Color4 &intensity, const math::vec3 &pos,
                float kc, float kl, float kq);
 };
 /*

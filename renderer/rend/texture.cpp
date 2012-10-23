@@ -10,9 +10,9 @@
 namespace rend
 {
 
-const Color3 Texture::BLACK;
+const Color4 Texture::BLACK;
 
-Texture::Texture(const vector<Color3> &pixels, int width, int height)
+Texture::Texture(const vector<Color4> &pixels, int width, int height)
     : m_pixels(pixels),
       m_width(width),
       m_height(height)
@@ -23,9 +23,9 @@ Texture::~Texture()
 {
 }
 
-vector<Color3> Texture::getLine(int y, int xStart, int xEnd) const
+vector<Color4> Texture::getLine(int y, int xStart, int xEnd) const
 {
-    vector<Color3> retRes;
+    vector<Color4> retRes;
     if (y >= m_height || xStart >= m_width || xStart > xEnd)
         return retRes;
 
@@ -35,9 +35,9 @@ vector<Color3> Texture::getLine(int y, int xStart, int xEnd) const
     return retRes;
 }
 
-vector<Color3> Texture::getBlock(int x, int y, int width, int height) const
+vector<Color4> Texture::getBlock(int x, int y, int width, int height) const
 {
-    vector<Color3> retRes;
+    vector<Color4> retRes;
     if (x >= m_width || y >= m_height)
         return retRes;
     if (((x + width) >= m_width) || ((y + height) >= m_height))

@@ -18,16 +18,16 @@ DECLARE_EXCEPTION(TextureException)
 
 class Texture : public base::Resource
 {
-    vector<Color3> m_pixels;
-    static const Color3 BLACK;
+    vector<Color4> m_pixels;
+    static const Color4 BLACK;
 
     int m_width, m_height;
 
 public:
-    Texture(const vector<Color3> &pixels, int width, int height);
+    Texture(const vector<Color4> &pixels, int width, int height);
     ~Texture();
 
-    const Color3 &at(int x, int y) const
+    const Color4 &at(int x, int y) const
     {
         if (x >= m_width || y >= m_height || x < 0 || y < 0)
             return BLACK;//throw TextureException("Out of range while getting texel.");
@@ -35,7 +35,7 @@ public:
         return m_pixels[y * m_width + x];
     }
 
-    const Color3 &at(int pos) const
+    const Color4 &at(int pos) const
     {
         if (pos < 0 || pos >= (m_width * m_height))
             return BLACK;
@@ -44,10 +44,10 @@ public:
     }
 
     // Getting pixels
-    vector<Color3> getLine(int y, int xStart = 0, int xEnd = 0) const;
-    vector<Color3> getBlock(int x, int y, int width, int height) const;
+    vector<Color4> getLine(int y, int xStart = 0, int xEnd = 0) const;
+    vector<Color4> getBlock(int x, int y, int width, int height) const;
 
-    const Color3 *raw() const
+    const Color4 *raw() const
     {
         return &m_pixels[0];
     }

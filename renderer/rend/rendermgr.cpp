@@ -126,7 +126,7 @@ void RenderMgr::update()
     m_renderer->endFrame(m_viewport);
 }
 
-sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)
+sptr(AmbientLight) RenderMgr::addAmbientLight(Color4 intensity)
 {
     sptr(Light) newLight;
     try
@@ -143,7 +143,7 @@ sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)
     return dynamic_pointer_cast<AmbientLight>(newLight);
 }
 
-sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
+sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color4 intensity, math::vec3 direction)
 {
     sptr(Light) newLight;
     try
@@ -160,7 +160,7 @@ sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, ma
     return dynamic_pointer_cast<DirectionalLight>(newLight);
 }
 
-sptr(PointLight) RenderMgr::addPointLight(Color3 intensity, math::vec3 position,
+sptr(PointLight) RenderMgr::addPointLight(Color4 intensity, math::vec3 position,
                                           float kc, float kl, float kq)
 {
     sptr(Light) newLight;
