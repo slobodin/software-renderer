@@ -61,57 +61,76 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
     leftInt.dr = (float)v2.color[RED] - (float)v0.color[RED];
     leftInt.dg = (float)v2.color[GREEN] - (float)v0.color[GREEN];
     leftInt.db = (float)v2.color[BLUE] - (float)v0.color[BLUE];
+    float dzl = v2.p.z - v0.p.z;
 
     rightInt.dx = v1.p.x - v0.p.x;
     rightInt.dr = (float)v1.color[RED] - (float)v0.color[RED];
     rightInt.dg = (float)v1.color[GREEN] - (float)v0.color[GREEN];
     rightInt.db = (float)v1.color[BLUE] - (float)v0.color[BLUE];
+    float dzr = v1.p.z - v0.p.z;
 
     float dy1 = v2.p.y - v0.p.y;
     float dy2 = v1.p.y - v0.p.y;
 
     leftInt.v = _mm_div_ps(leftInt.v, _mm_set_ps1(dy1));
     rightInt.v = _mm_div_ps(rightInt.v, _mm_set_ps1(dy2));
+    dzl /= dy1;
+    dzr /= dy2;
 
     Interpolant leftIntC;
     Interpolant rightIntC;
+    float dzlc, dzrc;
 
     if (leftInt.dx < rightInt.dx)
     {
         leftIntC = leftInt;
         rightIntC = rightInt;
+        dzlc = dzl;
+        dzrc = dzr;
     }
     else
     {
         leftIntC = rightInt;
         rightIntC = leftInt;
+        dzlc = dzr;
+        dzrc = dzl;
     }
 
     Interpolant start, end;
     start.dx = v0.p.x; start.dr = v0.color[RED]; start.dg = v0.color[GREEN]; start.db = v0.color[BLUE];
     end = start;
+    float startz = v0.p.z;
+    float endz = v0.p.z;
 
     Interpolant p, pdelta;
+    float z, zdelta;
 
     int x, y;
     for (y = (int)v0.p.y; y < (int)v2.p.y; y++)
     {
         pdelta.v = _mm_sub_ps(end.v, start.v);
+        zdelta = endz - startz;
         pdelta.dx = 0;
 
         pdelta.v = _mm_div_ps(pdelta.v, _mm_set_ps1(end.dx - start.dx));
+        if (!math::DCMP((end.dx - start.dx), 0))
+            zdelta /= end.dx - start.dx;
 
         p = start;
+        z = startz;
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db));
+            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db), z);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
+            z += zdelta;
             p.dx = 0;
         }
 
         start.v = _mm_add_ps(start.v, leftIntC.v);
         end.v = _mm_add_ps(end.v, rightIntC.v);
+        startz += dzlc;
+        endz += dzrc;
     }
 
     // Now for the bottom of the triangle
@@ -121,10 +140,13 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
         leftIntC.dr = (float)v1.color[RED] - (float)v2.color[RED];
         leftIntC.dg = (float)v1.color[GREEN] - (float)v2.color[GREEN];
         leftIntC.db = (float)v1.color[BLUE] - (float)v2.color[BLUE];
+        dzlc = v1.p.z - v2.p.z;
 
         leftIntC.v = _mm_div_ps(leftIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
+        dzlc /= v1.p.y - v2.p.y;
 
         start.dx = v2.p.x; start.dr = v2.color[RED]; start.dg = v2.color[GREEN]; start.db = v2.color[BLUE];
+        startz = v2.p.z;
     }
     else
     {
@@ -132,30 +154,40 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
         rightIntC.dr = (float)v1.color[RED] - (float)v2.color[RED];
         rightIntC.dg = (float)v1.color[GREEN] - (float)v2.color[GREEN];
         rightIntC.db = (float)v1.color[BLUE] - (float)v2.color[BLUE];
+        dzrc = v1.p.z - v2.p.z;
 
         rightIntC.v = _mm_div_ps(rightIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
+        dzrc /= v1.p.y - v2.p.y;
 
         end.dx = v2.p.x; end.dr = v2.color[RED]; end.dg = v2.color[GREEN]; end.db = v2.color[BLUE];
+        endz = v2.p.z;
     }
 
     for (y = (int)v2.p.y; y< (int)v1.p.y; y++)
     {
         pdelta.v = _mm_sub_ps(end.v, start.v);
+        zdelta = endz - startz;
         pdelta.dx = 0;
 
         pdelta.v = _mm_div_ps(pdelta.v, _mm_set_ps1(end.dx - start.dx));
+        if (!math::DCMP((end.dx - start.dx), 0))
+            zdelta /= end.dx - start.dx;
 
         p = start;
+        z = startz;
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db));
+            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db), z);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
             p.dx = 0;
+            z += zdelta;
         }
 
         start.v = _mm_add_ps(start.v, leftIntC.v);
         end.v = _mm_add_ps(end.v, rightIntC.v);
+        startz += dzlc;
+        endz += dzrc;
     }
 }
 

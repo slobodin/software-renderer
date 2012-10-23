@@ -18,7 +18,7 @@ namespace rend
 
 void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M44 &transform)
 {
-    math::Triangle triangle;
+    static math::Triangle triangle;
     // all mesh vertices
     const VertexBuffer::VertexArray &vertices = vertexBuffer.getVertices();
     // mesh indices
@@ -41,7 +41,7 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
                 break;
 
             // form the triangle
-            triangle.v(0) = vertices[indices[ind]];
+            triangle.v(0) = vertices[indices[ind + 0]];
             triangle.v(1) = vertices[indices[ind + 1]];
             triangle.v(2) = vertices[indices[ind + 2]];
 
@@ -51,7 +51,7 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
 
             if (!uvs.empty() && !uvind.empty())
             {
-                triangle.v(0).t = uvs[uvind[ind]];
+                triangle.v(0).t = uvs[uvind[ind + 0]];
                 triangle.v(1).t = uvs[uvind[ind + 1]];
                 triangle.v(2).t = uvs[uvind[ind + 2]];
             }
@@ -63,7 +63,8 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.computeNormal();
 
             // save it
-            m_triangles.push_back(triangle);
+//            m_triangles.push_back(triangle);
+            m_triangles[t] = triangle;
         }
 
         m_lastTriangleIndex += t;
@@ -90,7 +91,8 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.computeNormal();                                   // bottleneck
 
             // save it
-            m_triangles.push_back(triangle);                            // bottleneck
+//            m_triangles.push_back(triangle);                            // bottleneck
+            m_triangles[t] = triangle;
         }
 
         m_lastTriangleIndex += t;
@@ -106,13 +108,12 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
 
 void RenderList::prepare(int trianglesCount)
 {
-    m_triangles.clear();
+//    m_triangles.clear();
     m_lastTriangleIndex = 0;
-    /*m_lastTriangleIndex = 0;
     if (m_triangles.size() < trianglesCount)
     {
         m_triangles.resize(trianglesCount);
-    }*/
+    }
 }
 
 void RenderList::append(const SceneObject &obj)
@@ -132,7 +133,7 @@ void RenderList::append(const SceneObject &obj)
 
 void RenderList::zsort()
 {
-    m_triangles.sort(math::ZCompareAvg);
+//    m_triangles.sort(math::ZCompareAvg);
 }
 
 void RenderList::removeBackfaces(const sptr(Camera) cam)

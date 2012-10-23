@@ -44,6 +44,8 @@ void Light::illuminate(RenderList &renderlist) const
             continue;
 
         auto material = t.getMaterial();
+        if (!material)
+            continue;
 
         switch (material->shadeMode)
         {

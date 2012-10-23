@@ -27,7 +27,7 @@ class Camera;
 class RenderList : boost::noncopyable
 {
 public:
-    typedef list<math::Triangle> Triangles;
+    typedef vector<math::Triangle> Triangles;
 
 private:
     Triangles m_triangles;

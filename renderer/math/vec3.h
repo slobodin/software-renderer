@@ -20,15 +20,20 @@ namespace math
 /*!
   * v = (x, y, z)
   */
-struct vec3
+struct __attribute__((aligned(16))) vec3
 {
     //! X Y Z coordinates of this vector
     union
     {
-        struct { float x, y, z, w; } __attribute__((aligned(16))) ;      // w unused
-        __m128 v __attribute__((aligned(16))) ;
+        __m128 v;
+        struct { float x, y, z, w; };     // w unused
     };
 
+private:
+    vec3(const __m128 &vv)
+        : v(vv) { w = 1.0f; }
+
+public:
     //! Default ctor.
     /*! Default zero vector. */
     vec3(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f)
@@ -104,6 +109,10 @@ inline vec3 &vec3::operator+= (const vec3 &other)
     y += other.y;
     z += other.z;
 
+//    w = 1.0f;
+//    v = _mm_add_ps(v, other.v);
+//    w = 1.0f;
+
     return *this;
 }
 
@@ -112,6 +121,10 @@ inline vec3 &vec3::operator-= (const vec3 &other)
     x -= other.x;
     y -= other.y;
     z -= other.z;
+
+//    w = 1.0f;
+//    v = _mm_sub_ps(v, other.v);
+//    w = 1.0f;
 
     return *this;
 }
@@ -122,6 +135,10 @@ inline vec3 &vec3::operator*= (float s)
     y *= s;
     z *= s;
 
+//    w = 1.0f;
+//    v = _mm_mul_ps(v, _mm_set1_ps(s));
+//    w = 1.0f;
+
     return *this;
 }
 
@@ -131,6 +148,10 @@ inline vec3 &vec3::operator/= (float s)
     x /= s;
     y /= s;
     z /= s;
+
+//    w = 1.0f;
+//    v = _mm_div_ps(v, _mm_set1_ps(s));
+//    w = 1.0f;
 
     return *this;
 }
@@ -182,7 +203,9 @@ inline vec3 &vec3::normalize()
         (fabs(z - 0.0f) < EPSILON_E6))
         return (*this);
 
-    return (*this) /= length();
+    *this /= length();
+    w = 1.0f;
+    return *this;
 }
 
 inline void vec3::set(float x, float y, float z)
@@ -190,6 +213,7 @@ inline void vec3::set(float x, float y, float z)
     this->x = x;
     this->y = y;
     this->z = z;
+    w = 1.0f;
 }
 
 inline void vec3::set(const vec3 &other)
@@ -197,6 +221,7 @@ inline void vec3::set(const vec3 &other)
     x = other.x;
     y = other.y;
     z = other.z;
+    w = 1.0f;
 }
 
 inline void vec3::zero()
@@ -204,6 +229,7 @@ inline void vec3::zero()
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
+    w = 1.0f;
 }
 
 inline bool vec3::isZero() const
@@ -225,21 +251,25 @@ inline vec3 vec3::crossProduct(const vec3 &other) const
 
 inline vec3 operator+ (const vec3 &a, const vec3 &b)
 {
+//    return vec3(_mm_add_ps(a.v, b.v));
     return vec3(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
 inline vec3 operator- (const vec3 &a, const vec3 &b)
 {
+//    return vec3(_mm_sub_ps(a.v, b.v));
     return vec3(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
 inline vec3 operator* (const vec3 &a, float b)
 {
+//    return vec3(_mm_mul_ps(a.v, _mm_set1_ps(b)));
     return vec3(a.x * b, a.y * b, a.z * b);
 }
 
 inline vec3 operator* (float a, const vec3 &b)
 {
+//    return vec3(_mm_mul_ps(b.v, _mm_set1_ps(a)));
     return vec3(b.x * a, b.y * a, b.z * a);
 }
 
@@ -247,6 +277,7 @@ inline vec3 operator/ (const vec3 &a, float b)
 {
     assert(!DCMP(b, 0.0));
     return vec3(a.x / b, a.y / b, a.z / b);
+//    return vec3(_mm_div_ps(a.v, _mm_set1_ps(b)));
 }
 
 inline std::ostream &operator<< (std::ostream &os, const vec3 &v)

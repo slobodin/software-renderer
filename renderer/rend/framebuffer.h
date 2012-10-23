@@ -15,6 +15,8 @@
 namespace rend
 {
 
+void memset32(void *dest, uint32_t data, int count);
+
 class FrameBuffer : boost::noncopyable
 {
 public:
@@ -29,6 +31,7 @@ public:
 
 private:
     rgb *m_pixels;
+    int *m_zbuffer;
 
     int m_width;
     int m_height;
@@ -43,9 +46,9 @@ public:
 
     void wscanline(const int x1, const int x2,
                    const int y, const Color3 &color);
-    void wpixel(const int x, const int y,
-                const Color3 &color);
+    void wpixel(const int x, const int y, const Color3 &color);
     void wpixel(const int pos, const Color3 &color);
+    void wpixel(const int x, const int y, const Color3 &color, float z);
 
     void setWidth(int width) { m_width = width; }
     void setHeight(int height) { m_height = height; }
@@ -60,16 +63,6 @@ public:
 
     operator unsigned char *() { return reinterpret_cast<unsigned char *>(m_pixels); }
 };
-
-inline void memset32(void *dest, uint32_t data, int count)
-{
-    asm ("cld\n\t"
-         "rep\n\t"
-         "stosl"
-         :
-         : "c" (count), "a" (data), "D" (dest)
-         );
-}
 
 inline void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color3 &color)
 {
@@ -88,9 +81,27 @@ inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
         return;         // do not need this condition
 
-    m_pixels[m_width * y + x].r = color[RED];
-    m_pixels[m_width * y + x].g = color[GREEN];
-    m_pixels[m_width * y + x].b = color[BLUE];
+    int pos = m_width * y + x;
+
+    m_pixels[pos].r = color[RED];
+    m_pixels[pos].g = color[GREEN];
+    m_pixels[pos].b = color[BLUE];
+}
+
+inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, float z)
+{
+    if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
+        return;         // do not need this condition
+
+    int pos = m_width * y + x;
+
+    if (z < m_zbuffer[pos])
+    {
+        m_pixels[pos].r = color[RED];
+        m_pixels[pos].g = color[GREEN];
+        m_pixels[pos].b = color[BLUE];
+        m_zbuffer[pos] = z;
+    }
 }
 
 inline void FrameBuffer::wpixel(const int pos, const Color3 &color)
