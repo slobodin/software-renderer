@@ -46,6 +46,7 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     int texWidth = texture->width();
     int texHeight = texture->height();
 
+    // CW order
     if (v1.p.y < v0.p.y)
         std::swap(v1, v0);
     if (v2.p.y < v0.p.y)
