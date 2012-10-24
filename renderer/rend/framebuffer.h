@@ -32,7 +32,8 @@ public:
 
 private:
     rgb *m_pixels;
-    int *m_zbuffer;
+//    int *m_zbuffer;           // z
+    float *m_zbuffer;           // 1/z
 
     int m_width;
     int m_height;
@@ -107,7 +108,8 @@ inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, f
 
     int pos = m_width * y + x;
 
-    if (z < m_zbuffer[pos])
+//    if (z < m_zbuffer[pos])       // for z buffer
+    if (z > m_zbuffer[pos])         // for 1/z buffer
     {
         m_pixels[pos].r = color[RED];
         m_pixels[pos].g = color[GREEN];

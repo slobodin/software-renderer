@@ -31,7 +31,7 @@ FrameBuffer::FrameBuffer(int w, int h)
 {
     m_size = m_width * m_height;
     m_pixels = new rgb[m_size];
-    m_zbuffer = new int[m_size];
+    m_zbuffer = new float[m_size];
 }
 
 FrameBuffer::~FrameBuffer()
@@ -45,7 +45,8 @@ FrameBuffer::~FrameBuffer()
 void FrameBuffer::clear()
 {
     memset(m_pixels, 0x00, sizeof(rgb) * m_width * m_height);
-    memset32(m_zbuffer, std::numeric_limits<int>::max(), m_width * m_height);
+    memset(m_zbuffer, 0x00, sizeof(float) * m_width * m_height);                      // for 1/z buffer
+//    memset32(m_zbuffer, std::numeric_limits<int>::max(), m_width * m_height);         // for z buffer
 }
 
 void FrameBuffer::resize(int w, int h)
@@ -60,7 +61,7 @@ void FrameBuffer::resize(int w, int h)
         delete [] m_zbuffer;
 
     m_pixels = new rgb[m_size];
-    m_zbuffer = new int[m_size];
+    m_zbuffer = new float[m_size];
 
     clear();
 }

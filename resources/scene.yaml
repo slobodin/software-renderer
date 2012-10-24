@@ -39,5 +39,5 @@ Lights:
     - position: [0, 100, 1000]		# note: id = 2
       intensity: [255, 255, 50]
       kc: 0
-      kl: 0.001
+      kl: 0.01
       kq: 0

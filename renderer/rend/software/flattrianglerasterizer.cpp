@@ -12,7 +12,6 @@
 #include "vertex.h"
 #include "vec3.h"
 #include "color.h"
-#include <smmintrin.h>
 
 namespace rend
 {
@@ -42,10 +41,10 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
         std::swap(v1, v2);
 
     float dxleft = v2.p.x - v0.p.x;
-    float dzleft = v2.p.z - v0.p.z;
+    float dzleft = 1.0f / v2.p.z - 1.0f / v0.p.z;
 
     float dxright = v1.p.x - v0.p.x;
-    float dzright = v1.p.z - v0.p.z;
+    float dzright = 1.0f / v1.p.z - 1.0f / v0.p.z;
 
     float dy1 = v2.p.y - v0.p.y;
     float dy2 = v1.p.y - v0.p.y;
@@ -71,7 +70,7 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
     }
 
     float startx, startz, endx, endz;           // start end values
-    startx = v0.p.x; startz = v0.p.z;
+    startx = v0.p.x; startz = 1.0f / v0.p.z;
     endx = startx; endz = startz;
 
     int x, y;
@@ -99,22 +98,22 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
     if (dxleft < dxright)
     {
         dxl = v1.p.x - v2.p.x;
-        dzl = v1.p.z - v2.p.z;
+        dzl = 1.0f / v1.p.z - 1.0f / v2.p.z;
 
         dxl /= v1.p.y - v2.p.y;
         dzl /= v1.p.y - v2.p.y;
 
-        startx = v2.p.x; startz = v2.p.z;
+        startx = v2.p.x; startz = 1.0f / v2.p.z;
     }
     else
     {
         dxr = v1.p.x - v2.p.x;
-        dzr = v1.p.z - v2.p.z;
+        dzr = 1.0f / v1.p.z - 1.0f / v2.p.z;
 
         dxr /= v1.p.y - v2.p.y;
         dzr /= v1.p.y - v2.p.y;
 
-        endx = v2.p.x; endz = v2.p.z;
+        endx = v2.p.x; endz = 1.0f / v2.p.z;
     }
 
     for (y = (int)v2.p.y; y < (int)v1.p.y; y++)
