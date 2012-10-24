@@ -26,7 +26,7 @@ sptr(Resource) DecoderImage::decode(const string &path)
     int w = image.TellWidth();
     int h = image.TellHeight();
 
-    vector<rend::Color4> pixels;
+    vector<rend::Color3> pixels;
     pixels.reserve(w * h * bpp);
 
     for(int j = 0; j < h; j++)
@@ -37,7 +37,7 @@ sptr(Resource) DecoderImage::decode(const string &path)
             auto g = image.GetPixel(i, j).Green;
             auto b = image.GetPixel(i, j).Blue;
 
-            pixels.push_back(rend::Color4(r, g, b));
+            pixels.push_back(rend::Color3(r, g, b));
         }
     }
 

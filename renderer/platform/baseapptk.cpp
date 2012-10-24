@@ -10,13 +10,8 @@
 #include "camera.h"
 #include "controller.h"
 
-#ifdef __linux__
-#include <tcl/tk.h>
-#include <tcl/tcl.h>
-#elif WIN32
 #include <tcl8.5/tk.h>
 #include <tcl8.5/tcl.h>
-#endif
 
 #include <cpptk-1.0.2/cpptk.h>
 #include <cpptk-1.0.2/base/cpptkbase.h>

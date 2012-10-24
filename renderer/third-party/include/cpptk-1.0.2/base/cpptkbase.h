@@ -958,8 +958,8 @@ details_cpptk::Expr eval(std::string const &str);
 void init(char *argv0);
 
 #ifdef __linux__
-#include <tcl/tk.h>
-#include <tcl/tcl.h>
+#include <tcl8.5/tk.h>
+#include <tcl8.5/tcl.h>
 #elif WIN32
 #include <tcl8.5/tk.h>
 #include <tcl8.5/tcl.h>

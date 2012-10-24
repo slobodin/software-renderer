@@ -47,10 +47,10 @@ public:
     void clear();
 
     void wscanline(const int x1, const int x2,
-                   const int y, const Color4 &color);
-    void wpixel(const int x, const int y, const Color4 &color);
-    void wpixel(const int pos, const Color4 &color);
-    void wpixel(const int x, const int y, const Color4 &color, float z);
+                   const int y, const Color3 &color);
+    void wpixel(const int x, const int y, const Color3 &color);
+    void wpixel(const int pos, const Color3 &color);
+    void wpixel(const int x, const int y, const Color3 &color, float z);
 
     void setWidth(int width) { m_width = width; }
     void setHeight(int height) { m_height = height; }
@@ -66,41 +66,41 @@ public:
     operator unsigned char *() { return reinterpret_cast<unsigned char *>(m_pixels); }
 };
 
-inline void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color4 &color)
+inline void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color3 &color)
 {
     if (x1 > x2)
         return;
 
-   /* memset32(m_pixels + m_width * y + x1,
-             RgbaToInt1(color[BLUE], color[GREEN], color[RED], color[ALPHA]),
-             x2 - x1 + 1);*/
-    for (int x = x1; x <= x2; x++)
-        wpixel(x, y, color);
+    memset32(m_pixels + m_width * y + x1,
+             RgbToInt(color[BLUE], color[GREEN], color[RED]),
+             x2 - x1 + 1);
+    /*for (int x = x1; x <= x2; x++)
+        wpixel(x, y, color);*/
 }
 
-inline void FrameBuffer::wpixel(const int x, const int y, const Color4 &color)
+inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)
 {
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
         return;         // do not need this condition
 
     int pos = m_width * y + x;
 
-    rgb &currPix = m_pixels[pos];
+//    rgb &currPix = m_pixels[pos];
 
-    static float alpha, oneMinusAlpha;
-    alpha = color[ALPHA] / 255.0f;
-    oneMinusAlpha = (255 - color[ALPHA]) / 255.0f;
+//    static float alpha, oneMinusAlpha;
+//    alpha = color[ALPHA] / 255.0f;
+//    oneMinusAlpha = (255 - color[ALPHA]) / 255.0f;
 
-    m_pixels[pos].r = alpha * color[RED] + oneMinusAlpha * currPix.r;
-    m_pixels[pos].g = alpha * color[GREEN] + oneMinusAlpha * currPix.g;
-    m_pixels[pos].b = alpha * color[BLUE] + oneMinusAlpha * currPix.b;
+//    m_pixels[pos].r = alpha * color[RED] + oneMinusAlpha * currPix.r;
+//    m_pixels[pos].g = alpha * color[GREEN] + oneMinusAlpha * currPix.g;
+//    m_pixels[pos].b = alpha * color[BLUE] + oneMinusAlpha * currPix.b;
 
-//    m_pixels[pos].r = color[RED];
-//    m_pixels[pos].g = color[GREEN];
-//    m_pixels[pos].b = color[BLUE];
+    m_pixels[pos].r = color[RED];
+    m_pixels[pos].g = color[GREEN];
+    m_pixels[pos].b = color[BLUE];
 }
 
-inline void FrameBuffer::wpixel(const int x, const int y, const Color4 &color, float z)
+inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, float z)
 {
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
         return;         // do not need this condition
@@ -116,7 +116,7 @@ inline void FrameBuffer::wpixel(const int x, const int y, const Color4 &color, f
     }
 }
 
-inline void FrameBuffer::wpixel(const int pos, const Color4 &color)
+inline void FrameBuffer::wpixel(const int pos, const Color3 &color)
 {
     if (pos < 0 || pos >= m_size)
         return;

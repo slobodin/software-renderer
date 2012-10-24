@@ -120,7 +120,7 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
         z = startz;
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            fb->wpixel(x, y, Color4(p.dr, p.dg, p.db), z);
+            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db), z);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
             z += zdelta;
@@ -177,7 +177,7 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
         z = startz;
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            fb->wpixel(x, y, Color4(p.dr, p.dg, p.db), z);
+            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db), z);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
             p.dx = 0;

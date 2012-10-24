@@ -63,8 +63,9 @@ class DecoderCOB : public ResourceDecoder
 
         ShaderMode shaderMode;
         int matIndex;
-        rend::Color4 color;
+        rend::Color3 color;
         string texturePath;
+        float alphaValue;
 
         MaterialInfo(int ind = -1) : shaderMode(CONSTANT), matIndex(ind) { }
 

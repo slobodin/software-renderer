@@ -107,7 +107,6 @@ void DecoderASC::parseMaterialLine(string &line)
     faces.at(currPolyIndex).color[rend::RED] = boost::lexical_cast<uint32_t>(r_str);
     faces.at(currPolyIndex).color[rend::GREEN] = boost::lexical_cast<uint32_t>(g_str);
     faces.at(currPolyIndex).color[rend::BLUE] = boost::lexical_cast<uint32_t>(b_str);
-    faces.at(currPolyIndex).color[rend::ALPHA] = 128;               /// !!!!!!!!!!TEST
 
     currPolyIndex++;
 }

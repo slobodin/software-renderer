@@ -141,7 +141,7 @@ void DecoderCOB::parseMaterials(string &line)
         is >> g; is.ignore(1, ',');
         is >> b; is.ignore(1, ',');
 
-        rend::Color4 matColor;
+        rend::Color3 matColor;
         matColor[rend::RED] = r * 255.0;
         matColor[rend::GREEN] = g * 255.0;
         matColor[rend::BLUE] = b * 255.0;
@@ -159,7 +159,7 @@ void DecoderCOB::parseMaterials(string &line)
         double alpha;
         is >> alpha;
 
-        materials.at(currMaterial).color[rend::ALPHA] = alpha * 255.0;
+        materials.at(currMaterial).alphaValue = alpha;
 
         return;
     }

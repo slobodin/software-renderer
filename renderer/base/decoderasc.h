@@ -33,7 +33,7 @@ class DecoderASC : public ResourceDecoder
     struct AscPolyData
     {
         int indices[3];
-        rend::Color4 color;
+        rend::Color3 color;
         string colorString;
 
         // we need to sort all polygon data and create particular vertex buffers (with same material)

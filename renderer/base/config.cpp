@@ -34,7 +34,7 @@ static void operator>> (const YAML::Node &node, math::vec3 &v)
     node[2] >> v.z;
 }
 
-static void operator>> (const YAML::Node &node, rend::Color4 &col)
+static void operator>> (const YAML::Node &node, rend::Color3 &col)
 {
     node[0] >> col[rend::RED];
     node[1] >> col[rend::GREEN];

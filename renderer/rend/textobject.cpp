@@ -17,7 +17,7 @@ TextObject::TextObject(sptr(Texture) texturedFont, int cols, int rows)
       m_cols(cols),
       m_rows(rows)
 {
-    m_textPic = make_shared<Texture>(vector<Color4>(), 0, 0);
+    m_textPic = make_shared<Texture>(vector<Color3>(), 0, 0);
     if (m_texture)
     {
         m_symbWidth = m_texture->width() / cols;
@@ -43,7 +43,7 @@ void TextObject::setText(const string &str)
     if (!m_texture)
         return;
 
-    vector<Color4> resultPixmap;
+    vector<Color3> resultPixmap;
     // scanlining
     for (int ln = 0; ln < m_symbHeight; ln++)
     {

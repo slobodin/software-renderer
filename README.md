@@ -36,9 +36,9 @@ Otherwise you'll get nothing.
 Compile
 =======
 This renderer works well on Linux and Windows systems because it uses qmake build system. It has .pro files with qt creator project description.
-Also you need boost (at least 1.51) and tk/tcl (ActiveTcl for Windows).
+Also you need boost (at least 1.51), tk/tcl (ActiveTcl for Windows) ang Google test library (gtest).
 Another libraries (cpptk, yamlcpp and easybmp) included in the project.
-On Windows you also should set BOOST_ROOT and TCL_ROOT environment variables (for example, in Qt creator "build environment" tab)
+On Windows you also should set BOOST_ROOT and TCL_ROOT environment variables (for example, via Qt creator "build environment" tab)
 
 Package structure
 ===========
@@ -49,7 +49,7 @@ The main directory is organized as follows:
 * example-2/ - example of affine texture mapping, flat shading and movable point light.
 * example-3/ - example of terrain rendering.
 * renderer/ - main part: renderer code, that compiles into static library.
-* resources/ - some mesh data and renderer config files (.yaml extention).
+* resources/ - some mesh data and renderer config files (with .yaml extention).
 * www/ - images for future wiki.
 * README.md - this file.
 * software-renderer.pro - qt creator project.

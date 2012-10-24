@@ -34,9 +34,9 @@ void TkApplication::createTestTriangle()
     vb.appendVertices(vertexList, indices);
 
     auto material = make_shared<rend::Material>();
-    material->plainColor = rend::Color4(255, 255, 255);
-    material->ambientColor = rend::Color4(255, 255, 255);
-    material->diffuseColor = rend::Color4(255, 255, 255);
+    material->plainColor = rend::Color3(255, 255, 255);
+    material->ambientColor = rend::Color3(255, 255, 255);
+    material->diffuseColor = rend::Color3(255, 255, 255);
     material->shadeMode = rend::Material::SM_GOURAUD;
     material->sideType = rend::Material::TWO_SIDE;
 
@@ -105,19 +105,20 @@ TkApplication::TkApplication(int argc, const char *argv[])
     auto texture = rmgr->getObject<rend::Texture>("texture_water_track_color_03");
     auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 600, heightMapTexture, texture);
 
+    rendmgr->addSceneObject(terrain);
+
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
         m_sphere->getMesh()->setShadingMode(rend::Material::SM_FLAT);
 
-//    rendmgr->addSceneObject(terrain);
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
     auto cube = rendmgr->getSceneObject("Cube");
     if (cube)
     {
         auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
-//        cube->getMesh()->setTexture(texture);
-        cube->getMesh()->setShadingMode(rend::Material::SM_FLAT);
+        cube->getMesh()->setTexture(texture);
+//        cube->getMesh()->setShadingMode(rend::Material::SM_FLAT);
     }
 
     auto cessna = rendmgr->getSceneObject("statue2.obj");

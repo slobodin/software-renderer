@@ -112,9 +112,9 @@ sptr(Resource) DecoderBSPQ3::decode(const string &path)
     vb.appendVertices(vertexList);
 
     auto material = make_shared<rend::Material>();
-    material->plainColor = rend::Color4(255, 50, 50);
-    material->ambientColor = rend::Color4(255, 50, 50);
-    material->diffuseColor = rend::Color4(255, 50, 50);
+    material->plainColor = rend::Color3(255, 50, 50);
+    material->ambientColor = rend::Color3(255, 50, 50);
+    material->diffuseColor = rend::Color3(255, 50, 50);
 
     material->shadeMode = rend::Material::SM_FLAT;
     material->sideType = rend::Material::ONE_SIDE;

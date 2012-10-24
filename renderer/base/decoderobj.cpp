@@ -165,9 +165,9 @@ sptr(Resource) DecoderOBJ::decode(const string &path)
 
     auto material = make_shared<rend::Material>();
 
-    material->plainColor = rend::Color4(255, 255, 255);
-    material->ambientColor = rend::Color4(255, 255, 255);
-    material->diffuseColor = rend::Color4(255, 255, 255);
+    material->plainColor = rend::Color3(255, 255, 255);
+    material->ambientColor = rend::Color3(255, 255, 255);
+    material->diffuseColor = rend::Color3(255, 255, 255);
 
     material->shadeMode = rend::Material::SM_FLAT;
     material->sideType = rend::Material::ONE_SIDE;

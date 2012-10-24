@@ -13,7 +13,7 @@ namespace rend
 const size_t Light::MAX_LIGHTS = 8;
 size_t Light::NumLights = 0;
 
-Light::Light(const Color4 &intensity)
+Light::Light(const Color3 &intensity)
     : m_isEnabled(true),
       m_intensity(intensity)
 {
@@ -79,26 +79,26 @@ void Light::illuminate(RenderList &renderlist) const
     }
 }
 
-Color4 AmbientLight::shader(const sptr(Material) material, const math::vec3 &/*normal*/, const math::vec3 &/*pt*/) const
+Color3 AmbientLight::shader(const sptr(Material) material, const math::vec3 &/*normal*/, const math::vec3 &/*pt*/) const
 {
-    Color4 shadedColor;
+    Color3 shadedColor;
     shadedColor = m_intensity * material->ambientColor;
     shadedColor *= (1 / 256.0);     // no /= operator in Color3
 
     return shadedColor;
 }
 
-AmbientLight::AmbientLight(const Color4 &intensity)
+AmbientLight::AmbientLight(const Color3 &intensity)
     : Light(intensity)
 {
 }
 
-Color4 DirectionalLight::shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &/*pt*/) const
+Color3 DirectionalLight::shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &/*pt*/) const
 {
-    Color4 shadedColor;
+    Color3 shadedColor;
 
     if (normal.isZero())
-        return Color4(0, 0, 0);
+        return Color3(0, 0, 0);
 
     float dp = normal.dotProduct(m_dir);
     if (dp > 0)
@@ -107,24 +107,24 @@ Color4 DirectionalLight::shader(const sptr(Material) material, const math::vec3 
         shadedColor *= (dp / 256.0);
     }
     else
-        return Color4(0, 0, 0);/*matColor*/;
+        return Color3(0, 0, 0);/*matColor*/;
 
     return shadedColor;
 }
 
-DirectionalLight::DirectionalLight(const Color4 &intensity, const math::vec3 &dir)
+DirectionalLight::DirectionalLight(const Color3 &intensity, const math::vec3 &dir)
     : Light(intensity),
       m_dir(dir)
 {
     m_dir.normalize();
 }
 
-Color4 PointLight::shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const
+Color3 PointLight::shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const
 {
-    Color4 shadedColor;
+    Color3 shadedColor;
 
     if (normal.isZero())
-        return Color4(0, 0, 0);
+        return Color3(0, 0, 0);
 
     math::vec3 l = getPosition() - pt;
     float dist = l.length();
@@ -139,12 +139,12 @@ Color4 PointLight::shader(const sptr(Material) material, const math::vec3 &norma
         shadedColor *= (i / 256.0);
     }
     else
-        return Color4(0, 0, 0);
+        return Color3(0, 0, 0);
 
     return shadedColor;
 }
 
-PointLight::PointLight(const Color4 &intensity, const math::vec3 &pos,
+PointLight::PointLight(const Color3 &intensity, const math::vec3 &pos,
                        float kc, float kl, float kq)
     : Light(intensity),
       m_kc(kc),

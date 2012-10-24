@@ -29,7 +29,7 @@ struct vertex
     //! Vertex texture coordinates.
     vec2 t;
     //! Vertex color.
-    rend::Color4 color;
+    rend::Color3 color;
     // TODO: maybe diffuse color and specular color?
 
     //! Default ctor.

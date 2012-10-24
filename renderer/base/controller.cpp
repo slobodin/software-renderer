@@ -17,8 +17,8 @@
 
 
 #ifdef __linux__
-#include <tcl/tk.h>
-#include <tcl/tcl.h>
+#include <tcl8.5/tk.h>
+#include <tcl8.5/tcl.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
 #elif WIN32
