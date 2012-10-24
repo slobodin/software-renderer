@@ -109,16 +109,16 @@ TkApplication::TkApplication(int argc, const char *argv[])
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
-        m_sphere->getMesh()->setShadingMode(rend::Material::SM_FLAT);
+        m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
 //    rendmgr->addGuiObject(make_shared<rend::GuiObject>(texture));
 
     auto cube = rendmgr->getSceneObject("Cube");
     if (cube)
     {
-//        auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
-//        cube->getMesh()->setTexture(texture);
-        cube->getMesh()->setShadingMode(rend::Material::SM_FLAT);
+        auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
+        cube->getMesh()->setTexture(texture);
+//        cube->getMesh()->setShadingMode(rend::Material::SM_FLAT);
     }
 
     auto cessna = rendmgr->getSceneObject("statue2.obj");
