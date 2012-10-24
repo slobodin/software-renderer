@@ -45,7 +45,7 @@ FrameBuffer::~FrameBuffer()
 void FrameBuffer::clear()
 {
     memset(m_pixels, 0x00, sizeof(rgb) * m_width * m_height);
-    memset(m_zbuffer, 0x00, sizeof(float) * m_width * m_height);                      // for 1/z buffer
+    memset(m_zbuffer, 0x00, sizeof(float) * m_width * m_height);         // NOTE: this is 1/z buffer
 //    memset32(m_zbuffer, std::numeric_limits<int>::max(), m_width * m_height);         // for z buffer
 }
 

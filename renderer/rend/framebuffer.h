@@ -15,8 +15,13 @@
 namespace rend
 {
 
+//! Fills memory with 32bit values.
 void memset32(void *dest, uint32_t data, int count);
 
+//! Wrapper under pixel and z buffers.
+/*!
+  *
+  */
 class FrameBuffer : boost::noncopyable
 {
 public:
@@ -31,9 +36,10 @@ public:
     } __attribute__((packed));
 
 private:
+    //! Pixels array.
     rgb *m_pixels;
-//    int *m_zbuffer;           // z
-    float *m_zbuffer;           // 1/z
+    //! Z Buffer contains 1/z values (in order to perform perspective correct rasterization).
+    float *m_zbuffer;
 
     int m_width;
     int m_height;
@@ -82,7 +88,7 @@ inline void FrameBuffer::wscanline(const int x1, const int x2, const int y, cons
 inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)
 {
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
-        return;         // do not need this condition
+        return;
 
     int pos = m_width * y + x;
 
@@ -104,12 +110,11 @@ inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)
 inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, float z)
 {
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
-        return;         // do not need this condition
+        return;
 
     int pos = m_width * y + x;
 
-//    if (z < m_zbuffer[pos])       // for z buffer
-    if (z > m_zbuffer[pos])         // for 1/z buffer
+    if (z > m_zbuffer[pos])         // NOTE: this is 1/z buffer
     {
         m_pixels[pos].r = color[RED];
         m_pixels[pos].g = color[GREEN];

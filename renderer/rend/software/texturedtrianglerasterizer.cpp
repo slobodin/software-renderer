@@ -57,6 +57,7 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     Interpolant leftInt;
     Interpolant rightInt;
 
+    // Interpolating 1/z values.
     leftInt.dx = v2.p.x - v0.p.x;
     leftInt.du = v2.t.x - v0.t.x;
     leftInt.dv = v2.t.y - v0.t.y;

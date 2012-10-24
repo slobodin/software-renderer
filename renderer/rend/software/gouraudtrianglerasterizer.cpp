@@ -57,6 +57,7 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
     Interpolant leftInt;
     Interpolant rightInt;
 
+    // Interpolating 1/z values.
     leftInt.dx = v2.p.x - v0.p.x;
     leftInt.dr = (float)v2.color[RED] - (float)v0.color[RED];
     leftInt.dg = (float)v2.color[GREEN] - (float)v0.color[GREEN];

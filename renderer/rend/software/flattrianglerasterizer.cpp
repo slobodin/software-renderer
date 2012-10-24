@@ -41,6 +41,7 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
         std::swap(v1, v2);
 
     float dxleft = v2.p.x - v0.p.x;
+    // Interpolating 1/z values.
     float dzleft = 1.0f / v2.p.z - 1.0f / v0.p.z;
 
     float dxright = v1.p.x - v0.p.x;
