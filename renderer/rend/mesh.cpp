@@ -96,19 +96,22 @@ int Mesh::numTriangles() const
 
 void Mesh::setShadingMode(Material::ShadeMode shMode)
 {
-    for (auto vb : m_submeshes)
+    for (auto &vb : m_submeshes)
         vb.getMaterial()->shadeMode = shMode;      // ?
 }
 
 void Mesh::setTexture(sptr(Texture) texture)
 {
-    for (auto vb : m_submeshes)
+    for (auto &vb : m_submeshes)
+    {
         vb.getMaterial()->texture = texture;      // ?
+        vb.getMaterial()->shadeMode = Material::SM_TEXTURE;
+    }
 }
 
 void Mesh::setSideType(Material::SideType side)
 {
-    for (auto vb : m_submeshes)
+    for (auto &vb : m_submeshes)
         vb.getMaterial()->sideType = side;      // ?
 }
 
@@ -123,6 +126,8 @@ sptr(Mesh) Mesh::clone() const
         vb.m_material = submesh.m_material->clone();
         vb.m_vertices = submesh.m_vertices;
         vb.m_indices = submesh.m_indices;
+        vb.m_uvs = submesh.m_uvs;
+        vb.m_uvsIndices = submesh.m_uvsIndices;
 
         objMesh->appendSubmesh(vb);
     }

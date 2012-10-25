@@ -116,14 +116,14 @@ TkApplication::TkApplication(int argc, const char *argv[])
     auto cube = rendmgr->getSceneObject("Cube");
     if (cube)
     {
-//        auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
-//        cube->getMesh()->setTexture(texture);
         cube->getMesh()->setShadingMode(rend::Material::SM_FLAT);
-    }
 
-    auto cube2 = cube->clone();
-    cube2->setPosition({0, 100, 100});
-    rendmgr->addSceneObject(cube2);
+        auto cube2 = cube->clone();
+        cube2->setPosition({0, 100, 100});
+        auto texture = rmgr->getObject<rend::Texture>("texture_chessboard");
+        cube2->getMesh()->setTexture(texture);
+        rendmgr->addSceneObject(cube2);
+    }
 
 //    auto cessna = rendmgr->getSceneObject("statue2.obj");
 //    cessna->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
