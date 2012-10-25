@@ -36,7 +36,7 @@ public:
     OpenGLRenderer(const shared_ptr<Viewport> viewport);
     ~OpenGLRenderer();
 
-    virtual void renderWorld(const RenderList &rendlist);
+    virtual void renderWorld(const RenderList *rendlist);
     virtual void renderGui(const list<sptr(GuiObject)> &guiObjects);
 
     virtual void beginFrame(sptr(Viewport) viewport);

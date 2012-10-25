@@ -42,6 +42,7 @@ size_t RenderMgr::sceneSize() const
 RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode)
     : m_camera(cam),
       m_viewport(viewport),
+      m_sceneTrianglesCount(0),
       m_renderList(0)
 {
     m_camera->setEulerAnglesRotation(0, 0, 0);
@@ -87,7 +88,7 @@ void RenderMgr::update()
     m_renderer->beginFrame(m_viewport);
 
     // allocate mem for the render list
-    m_renderList->prepare(sceneSize());
+    m_renderList->prepare(m_sceneTrianglesCount);
 
     // 2. Cull full meshes and form triangles render list.
     // Also applies world transformation.
@@ -96,8 +97,8 @@ void RenderMgr::update()
         if (!obj)
             continue;
 
-        if (!m_camera->culled(*obj))
-            m_renderList->append(*obj);
+        if (!m_camera->culled(obj))
+            m_renderList->append(obj);
     }
 
     // collect debug information
@@ -108,24 +109,24 @@ void RenderMgr::update()
 
     // 4. Lighting.
     for (auto light : m_lights)
-        light->illuminate(*m_renderList);
+        light->illuminate(m_renderList);
 
     // 5. World -> Camera transformation. Also cull triangles with negative Z.
-    m_camera->toCamera(*m_renderList);
+    m_camera->toCamera(m_renderList);
 
     // 6. Frustum culling.
-    m_camera->frustumCull(*m_renderList);
+    m_camera->frustumCull(m_renderList);
 
     // 7. Sort triangles by painter algorithm.
     /* m_renderList->zsort(); do not need this (using z buffer) */
 
     // 8. Camera -> Perspective -> Screen transformation.
-    m_camera->toScreen(*m_renderList, *m_viewport);
+    m_camera->toScreen(m_renderList, *m_viewport);
 
     m_frameInfo.trianglesForRaster = m_renderList->getCountOfNotClippedTriangles();
 
     // 9. Rasterize world triangles.
-    m_renderer->renderWorld(*m_renderList);
+    m_renderer->renderWorld(m_renderList);
 
     // 10. Render post effects.
     m_renderer->renderGui(m_guiObjects);
@@ -201,6 +202,7 @@ void RenderMgr::addSceneObject(sptr(SceneObject) node)
     }
 
     m_sceneObjects.push_back(node);
+    m_sceneTrianglesCount = sceneSize();
 //    m_sceneObjects.sort();
 
     // TODO: check names

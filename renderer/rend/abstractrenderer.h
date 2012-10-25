@@ -37,7 +37,7 @@ public:
     AbstractRenderer() { }
     virtual ~AbstractRenderer() { }
 
-    virtual void renderWorld(const RenderList &rendlist) = 0;
+    virtual void renderWorld(const RenderList *rendlist) = 0;
     virtual void renderGui(const list<sptr(GuiObject)> &guiObjects) = 0;
 
     virtual void beginFrame(sptr(Viewport) viewport) = 0;

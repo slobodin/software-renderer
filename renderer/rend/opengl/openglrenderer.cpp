@@ -143,7 +143,7 @@ OpenGLRenderer::~OpenGLRenderer()
 {
 }
 
-void OpenGLRenderer::renderWorld(const RenderList &rendlist)
+void OpenGLRenderer::renderWorld(const RenderList *rendlist)
 {
 }
 

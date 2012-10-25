@@ -99,9 +99,9 @@ void Camera::buildCamMatrix()
     m_worldToCamera *= mrot;
 }
 
-void Camera::toCamera(RenderList &rendList) const
+void Camera::toCamera(RenderList *rendList) const
 {
-    RenderList::Triangles &trias = rendList.triangles();
+    RenderList::Triangles &trias = rendList->triangles();
 
     for (auto &t : trias)
     {
@@ -120,9 +120,9 @@ void Camera::toCamera(RenderList &rendList) const
     }
 }
 
-void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
+void Camera::toScreen(RenderList *rendList, const Viewport &viewport) const
 {
-    RenderList::Triangles &trias = rendList.triangles();
+    RenderList::Triangles &trias = rendList->triangles();
 
     for (auto &t : trias)
     {
@@ -139,9 +139,9 @@ void Camera::toScreen(RenderList &rendList, const Viewport &viewport) const
     }
 }
 
-void Camera::frustumCull(RenderList &rendList) const
+void Camera::frustumCull(RenderList *rendList) const
 {
-    RenderList::Triangles &trias = rendList.triangles();
+    RenderList::Triangles &trias = rendList->triangles();
 
     auto testFn = [](float coord, float plane) -> bool { return coord > plane || coord < -plane; };
 
@@ -173,13 +173,13 @@ void Camera::frustumCull(RenderList &rendList) const
     }
 }
 
-bool Camera::culled(const SceneObject &obj) const
+bool Camera::culled(const sptr(SceneObject) obj) const
 {
-    math::vec3 spherePos = obj.getPosition();
-    if (!obj.bsphere().valid())
+    math::vec3 spherePos = obj->getPosition();
+    if (!obj->bsphere().valid())
         return false;
 
-    float radius = obj.bsphere().radius();
+    float radius = obj->bsphere().radius();
     spherePos = spherePos * m_worldToCamera;
 
     // check Z plane

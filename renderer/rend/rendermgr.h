@@ -59,6 +59,8 @@ class RenderMgr : boost::noncopyable
     list<sptr(GuiObject)> m_guiObjects;
     list<sptr(Light)> m_lights;
 
+    size_t m_sceneTrianglesCount;
+
     FrameInfo m_frameInfo;
     RenderList *m_renderList;
 

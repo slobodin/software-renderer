@@ -93,7 +93,7 @@ public:
 
     void resize(int w, int h);
 
-    operator unsigned char *() { return reinterpret_cast<unsigned char *>(m_pixels); }
+    operator unsigned char *() { return (unsigned char *)m_pixels; }
 };
 
 inline void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color3 &color)

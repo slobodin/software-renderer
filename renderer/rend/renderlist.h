@@ -27,7 +27,7 @@ class Camera;
 class RenderList : boost::noncopyable
 {
 public:
-    typedef list<math::Triangle> Triangles;
+    typedef vector<math::Triangle> Triangles;
 
 private:
     Triangles m_triangles;
@@ -43,7 +43,7 @@ public:
     ~RenderList() { }
 
     void prepare(int trianglesCount);
-    void append(const SceneObject &mesh);
+    void append(const sptr(SceneObject) obj);
 
     const Triangles &triangles() const { return m_triangles; }
     Triangles       &triangles() { return m_triangles; }

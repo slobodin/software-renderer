@@ -83,11 +83,11 @@ public:
 
     void setEulerAnglesRotation(float yaw, float pitch, float roll);
 
-    void toCamera(RenderList &rendList) const;
-    void toScreen(RenderList &rendList, const Viewport &viewport) const;
+    void toCamera(RenderList *rendList) const;
+    void toScreen(RenderList *rendList, const Viewport &viewport) const;
 
-    void frustumCull(RenderList &rendList) const;
-    bool culled(const SceneObject &obj) const;
+    void frustumCull(RenderList *rendList) const;
+    bool culled(const sptr(SceneObject) obj) const;
 };
 
 }

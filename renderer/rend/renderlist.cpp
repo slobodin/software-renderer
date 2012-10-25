@@ -63,8 +63,8 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.computeNormal();
 
             // save it
-            m_triangles.push_back(triangle);
-//            m_triangles[t] = triangle;
+//            m_triangles.push_back(triangle);
+            m_triangles[t] = triangle;
         }
 
         m_lastTriangleIndex += t;
@@ -91,8 +91,8 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
             triangle.computeNormal();                                   // bottleneck
 
             // save it
-            m_triangles.push_back(triangle);                            // bottleneck
-//            m_triangles[t] = triangle;
+//            m_triangles.push_back(triangle);                            // bottleneck
+            m_triangles[t] = triangle;
         }
 
         m_lastTriangleIndex += t;
@@ -108,21 +108,21 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
 
 void RenderList::prepare(int trianglesCount)
 {
-    m_triangles.clear();
+//    m_triangles.clear();
     m_lastTriangleIndex = 0;
-//    if (m_triangles.size() < trianglesCount)
-//    {
-//        m_triangles.resize(trianglesCount);
-//    }
+    if (m_triangles.size() < trianglesCount)
+    {
+        m_triangles.resize(trianglesCount);
+    }
 }
 
-void RenderList::append(const SceneObject &obj)
+void RenderList::append(const sptr(SceneObject) obj)
 {
-    if (!obj.getMesh())
+    if (!obj->getMesh())
         return;
 
-    const list<VertexBuffer> &subMeshes = obj.getMesh()->getSubmeshes();
-    math::M44 worldTransform = obj.getTransformation();
+    const list<VertexBuffer> &subMeshes = obj->getMesh()->getSubmeshes();
+    const math::M44 &worldTransform = obj->getTransformation();
 
     for (const auto &vb : subMeshes)
     {

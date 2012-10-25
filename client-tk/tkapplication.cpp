@@ -85,7 +85,7 @@ void TkApplication::update(float dt)
 
         transl = transl * rotM;
 
-//        ptL->setPosition(transl);
+        ptL->setPosition(transl);
 //        m_lightPoint->setPosition(transl);
     }
 
@@ -125,8 +125,8 @@ TkApplication::TkApplication(int argc, const char *argv[])
         rendmgr->addSceneObject(cube2);
     }
 
-//    auto cessna = rendmgr->getSceneObject("statue2.obj");
-//    cessna->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+    auto cessna = rendmgr->getSceneObject("statue2.obj");
+    cessna->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
     m_debugStats1 = make_shared<rend::TextObject>(textureFont, 16, 16);

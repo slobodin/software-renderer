@@ -55,7 +55,7 @@ public:
 
     int getId() const { return m_lightId; }
 
-    virtual void illuminate(RenderList &renderlist) const;
+    virtual void illuminate(RenderList *renderlist) const;
 };
 
 //! Ambient light

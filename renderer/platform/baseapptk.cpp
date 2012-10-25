@@ -160,15 +160,9 @@ void TkViewport::setFrameName(const std::string &name)
 
 void TkViewport::flush(const unsigned char *const pixels)
 {
-    Tk_PhotoHandle fbphoto;
-    Tk_PhotoImageBlock block;
-    Tcl_Interp *fbinterp = Tk::globalTclInterpret;
-
-    if ((fbphoto = Tk_FindPhoto(fbinterp, m_frameName.c_str())) == NULL)
-    {
-        std::cerr << "Image creation unsuccessful. Can't find" << m_frameName.c_str() << std::endl;
-        return;
-    }
+    static Tcl_Interp *fbinterp = Tk::globalTclInterpret;
+    static Tk_PhotoHandle fbphoto = Tk_FindPhoto(fbinterp, m_frameName.c_str());
+    static Tk_PhotoImageBlock block;
 
     block.pixelPtr = (unsigned char *)pixels;
     block.width = m_width;

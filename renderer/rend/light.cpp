@@ -31,12 +31,12 @@ Light::~Light()
     NumLights--;
 }
 
-void Light::illuminate(RenderList &renderlist) const
+void Light::illuminate(RenderList *renderlist) const
 {
     if (!m_isEnabled)
         return;
 
-    auto &trias = renderlist.triangles();
+    auto &trias = renderlist->triangles();
 
     for (auto &t : trias)
     {

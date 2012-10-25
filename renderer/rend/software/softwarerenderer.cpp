@@ -44,9 +44,9 @@ SoftwareRenderer::~SoftwareRenderer()
         delete m_text;
 }
 
-void SoftwareRenderer::renderWorld(const RenderList &rendlist)
+void SoftwareRenderer::renderWorld(const RenderList *rendlist)
 {
-    auto &trias = rendlist.triangles();
+    auto &trias = rendlist->triangles();
     TriangleRasterizer *rasterizer = 0;
 
     // painter's algorithm
