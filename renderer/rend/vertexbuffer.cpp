@@ -141,4 +141,9 @@ void VertexBuffer::computeVertexNormals()
     }
 }
 
+bool VertexBuffer::operator< (const VertexBuffer &vb)
+{
+    return m_material->alpha > vb.m_material->alpha;
+}
+
 }

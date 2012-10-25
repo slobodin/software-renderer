@@ -100,6 +100,8 @@ public:
     const vector<math::vec2> &getUVs() const { return m_uvs; }
     //!
     const IndexArray &getUVIndices() const { return m_uvsIndices; }
+
+    bool operator< (const VertexBuffer &vb);
 };
 
 }

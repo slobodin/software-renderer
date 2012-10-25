@@ -25,6 +25,8 @@ Mesh::~Mesh()
 void Mesh::appendSubmesh(const VertexBuffer &submesh)
 {
     m_submeshes.push_back(submesh);
+
+//    m_submeshes.sort();     // sort by alpha value of material
 }
 
 void Mesh::computeBoundingSphere(const math::M44 &transform)
@@ -98,6 +100,15 @@ void Mesh::setShadingMode(Material::ShadeMode shMode)
 {
     for (auto &vb : m_submeshes)
         vb.getMaterial()->shadeMode = shMode;      // ?
+}
+
+void Mesh::setAlpha(int alpha)
+{
+    if (alpha < 0 || alpha > 255)
+        return;
+
+    for (auto &vb : m_submeshes)
+        vb.getMaterial()->alpha = alpha;
 }
 
 void Mesh::setTexture(sptr(Texture) texture)

@@ -61,13 +61,13 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
 
     // Interpolating 1/z values.
     leftInt.dx = v2.p.x - v0.p.x;
-    leftInt.du = v2.t.x - v0.t.x;
-    leftInt.dv = v2.t.y - v0.t.y;
+    leftInt.du = v2.t.x / v2.p.z - v0.t.x / v0.p.z;
+    leftInt.dv = v2.t.y / v2.p.z - v0.t.y / v0.p.z;
     leftInt.dz = 1.0f / v2.p.z - 1.0f / v0.p.z;
 
     rightInt.dx = v1.p.x - v0.p.x;
-    rightInt.du = v1.t.x - v0.t.x;
-    rightInt.dv = v1.t.y - v0.t.y;
+    rightInt.du = v1.t.x / v1.p.z - v0.t.x / v0.p.z;
+    rightInt.dv = v1.t.y / v1.p.z - v0.t.y / v0.p.z;
     rightInt.dz = 1.0f / v1.p.z - 1.0f / v0.p.z;
 
     float dy1 = v2.p.y - v0.p.y;
@@ -91,7 +91,7 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     }
 
     Interpolant start, end;
-    start.dx = v0.p.x; start.du = v0.t.x; start.dv = v0.t.y; start.dz = 1.0f / v0.p.z;
+    start.dx = v0.p.x; start.du = v0.t.x / v0.p.z; start.dv = v0.t.y / v0.p.z; start.dz = 1.0f / v0.p.z;
     end = start;
 
     Interpolant p, pdelta;
@@ -108,8 +108,10 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
 
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            int ww = p.du * (texWidth - 1);
-            int hh = p.dv * (texHeight - 1);
+            float u = p.du / 1.0 / p.dz;
+            float v = p.dv / 1.0 / p.dz;
+            int ww = u * float(texWidth - 1);
+            int hh = v * float(texHeight - 1);
 
             textel = texture->at(ww, hh);
 
@@ -131,24 +133,24 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     if (leftInt.dx < rightInt.dx)
     {
         leftIntC.dx = v1.p.x - v2.p.x;
-        leftIntC.du = v1.t.x - v2.t.x;
-        leftIntC.dv = v1.t.y - v2.t.y;
+        leftIntC.du = v1.t.x / v1.p.z - v2.t.x / v2.p.z;
+        leftIntC.dv = v1.t.y / v1.p.z - v2.t.y / v2.p.z;
         leftIntC.dz = 1.0f / v1.p.z - 1.0f / v2.p.z;
 
         leftIntC.v = _mm_div_ps(leftIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
 
-        start.dx = v2.p.x; start.du = v2.t.x; start.dv = v2.t.y; start.dz = 1.0f / v2.p.z;
+        start.dx = v2.p.x; start.du = v2.t.x / v2.p.z; start.dv = v2.t.y / v2.p.z; start.dz = 1.0f / v2.p.z;
     }
     else
     {
         rightIntC.dx = v1.p.x - v2.p.x;
-        rightIntC.du = v1.t.x - v2.t.x;
-        rightIntC.dv = v1.t.y - v2.t.y;
+        rightIntC.du = v1.t.x / v1.p.z - v2.t.x / v2.p.z;
+        rightIntC.dv = v1.t.y / v1.p.z - v2.t.y / v2.p.z;
         rightIntC.dz = 1.0f / v1.p.z - 1.0f / v2.p.z;
 
         rightIntC.v = _mm_div_ps(rightIntC.v, _mm_set_ps1(v1.p.y - v2.p.y));
 
-        end.dx = v2.p.x; end.du = v2.t.x; end.dv = v2.t.y; end.dz = 1.0f / v2.p.z;
+        end.dx = v2.p.x; end.du = v2.t.x / v2.p.z; end.dv = v2.t.y / v2.p.z; end.dz = 1.0f / v2.p.z;
     }
 
     for (y = (int)v2.p.y; y< (int)v1.p.y; y++)
@@ -161,8 +163,10 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
         p = start;
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            int ww = p.du * (texWidth - 1);
-            int hh = p.dv * (texHeight - 1);
+            float u = p.du / 1.0 / p.dz;
+            float v = p.dv / 1.0 / p.dz;
+            int ww = u * float(texWidth - 1);
+            int hh = v * float(texHeight - 1);
 
             textel = texture->at(ww, hh);
 

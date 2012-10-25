@@ -20,6 +20,11 @@
 namespace rend
 {
 
+bool cmpSceneObjects(const sptr(SceneObject) o1, const sptr(SceneObject) o2)
+{
+    return o1->getMesh()->getSubmeshes().front().getMaterial()->alpha > o2->getMesh()->getSubmeshes().front().getMaterial()->alpha;
+}
+
 size_t RenderMgr::sceneSize() const
 {
     size_t triangles = 0;
@@ -69,7 +74,6 @@ RenderMgr::~RenderMgr()
 
 // TODO:
 // multipass rendering?
-// sort objects by alpha (of material) (when adding new object)
 // render transparent objects first
 void RenderMgr::update()
 {
@@ -197,8 +201,10 @@ void RenderMgr::addSceneObject(sptr(SceneObject) node)
     }
 
     m_sceneObjects.push_back(node);
+//    m_sceneObjects.sort();
 
     // TODO: check names
+    // TODO: sort objects by alpha (of material) (when adding new object)
 }
 
 sptr(SceneObject) RenderMgr::getSceneObject(const string &name)

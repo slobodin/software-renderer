@@ -47,6 +47,7 @@ public:
     int numTriangles() const;
 
     void setShadingMode(Material::ShadeMode shMode);
+    void setAlpha(int alpha);
     void setTexture(sptr(Texture) texture);
     void setSideType(Material::SideType side);
 
