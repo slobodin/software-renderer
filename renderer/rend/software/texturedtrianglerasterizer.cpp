@@ -42,7 +42,9 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
     if (!t.getMaterial()->texture)
         return;
 
-    Texture *texture = t.getMaterial()->texture.get();    
+    auto material = t.getMaterial();
+    Texture *texture = material->texture.get();
+    int alpha = material->alpha;
     int texWidth = texture->width();
     int texHeight = texture->height();
 
@@ -115,7 +117,7 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3
 
-            fb->wpixel(x, y, textel, p.dz);
+            fb->wpixel(x, y, textel, p.dz, alpha);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
             p.dx = 0;
@@ -168,7 +170,7 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3
 
-            fb->wpixel(x, y, textel, p.dz);
+            fb->wpixel(x, y, textel, p.dz, alpha);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
             p.dx = 0;

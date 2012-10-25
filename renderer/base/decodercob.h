@@ -67,7 +67,7 @@ class DecoderCOB : public ResourceDecoder
         string texturePath;
         float alphaValue;
 
-        MaterialInfo(int ind = -1) : shaderMode(CONSTANT), matIndex(ind) { }
+        MaterialInfo(int ind = -1) : shaderMode(CONSTANT), matIndex(ind), alphaValue(1.0f) { }
 
         bool operator== (const MaterialInfo &other) const
         {

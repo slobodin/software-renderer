@@ -71,6 +71,7 @@ int Mesh::numSubMeshes() const
 
 int Mesh::numTriangles() const
 {
+    // TODO: do not compute count of triangles every time.
     int trianglesCount = 0;
 
     for (auto &vb : m_submeshes)

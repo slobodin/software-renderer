@@ -54,6 +54,9 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
     if (v1.p.y < v2.p.y)
         std::swap(v1, v2);
 
+    auto material = t.getMaterial();
+    int alpha = material->alpha;
+
     Interpolant leftInt;
     Interpolant rightInt;
 
@@ -121,7 +124,7 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
         z = startz;
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db), z);
+            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db), z, alpha);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
             z += zdelta;
@@ -178,7 +181,7 @@ void GouraudTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffe
         z = startz;
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db), z);
+            fb->wpixel(x, y, Color3(p.dr, p.dg, p.db), z, alpha);
 
             p.v = _mm_add_ps(p.v, pdelta.v);
             p.dx = 0;

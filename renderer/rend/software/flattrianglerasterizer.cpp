@@ -40,6 +40,9 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
     if (v1.p.y < v2.p.y)
         std::swap(v1, v2);
 
+    auto material = t.getMaterial();
+    int alpha = material->alpha;
+
     float dxleft = v2.p.x - v0.p.x;
     // Interpolating 1/z values.
     float dzleft = 1.0f / v2.p.z - 1.0f / v0.p.z;
@@ -86,7 +89,7 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
 
         for (x = (int)startx; x < (int)endx; x++)
         {
-            fb->wpixel(x, y, v0.color, pz);
+            fb->wpixel(x, y, v0.color, pz, alpha);
 
             pz += pdeltaz;
         }
@@ -126,7 +129,7 @@ void FlatTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *
 
         for (x = (int)startx; x < (int)endx; x++)
         {
-            fb->wpixel(x, y, v0.color, pz);
+            fb->wpixel(x, y, v0.color, pz, alpha);
 
             pz += pdeltaz;
         }

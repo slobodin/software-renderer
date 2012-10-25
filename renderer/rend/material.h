@@ -53,6 +53,9 @@ struct Material : public base::Resource
     Color3 specularColor;
     Color3 emissiveColor;
 
+    //! Alpha for material [0..255]
+    int alpha;
+
     string textureName;
     sptr(Texture) texture;
 

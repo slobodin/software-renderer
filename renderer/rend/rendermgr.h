@@ -62,6 +62,9 @@ class RenderMgr : boost::noncopyable
     FrameInfo m_frameInfo;
     RenderList *m_renderList;
 
+    //! Returns scene size in triangles.
+    size_t sceneSize() const;
+
 public:
     RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode);
     ~RenderMgr();

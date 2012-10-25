@@ -227,14 +227,16 @@ sptr(rend::Mesh) DecoderCOB::createMesh()
 
         auto mt = std::find(materials.begin(), materials.end(), MaterialInfo(materialIndex));
 
-        material->plainColor = materials.at(mt->matIndex).color;
-        material->ambientColor = materials.at(mt->matIndex).color;
-        material->diffuseColor = materials.at(mt->matIndex).color;
+        MaterialInfo &cobMaterial = materials.at(mt->matIndex);
+
+        material->plainColor = cobMaterial.color;
+        material->ambientColor = cobMaterial.color;
+        material->diffuseColor = cobMaterial.color;
 
         // setting shade mode
         rend::Material::ShadeMode shadeMode;
 
-        switch (materials.at(mt->matIndex).shaderMode)
+        switch (cobMaterial.shaderMode)
         {
         case MaterialInfo::CONSTANT:
             shadeMode = rend::Material::SM_PLAIN_COLOR;
@@ -260,15 +262,21 @@ sptr(rend::Mesh) DecoderCOB::createMesh()
 
         material->shadeMode = shadeMode;
         // having texture
-        if (!materials.at(mt->matIndex).texturePath.empty())
+        if (!cobMaterial.texturePath.empty())
         {
             material->shadeMode = rend::Material::SM_TEXTURE;
-            material->textureName = materials.at(mt->matIndex).texturePath;
+            material->textureName = cobMaterial.texturePath;
         }
+
+        // setting alpha
+        material->alpha = cobMaterial.alphaValue * 255.0f;
 
         // setting "sideness"
         rend::Material::SideType sideType;
-        sideType = rend::Material::ONE_SIDE;
+        if (material->alpha == 255)
+            sideType = rend::Material::ONE_SIDE;
+        else
+            sideType = rend::Material::TWO_SIDE;
 
         material->sideType = sideType;
 

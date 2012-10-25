@@ -47,6 +47,29 @@ private:
     int m_yOrigin;
     int m_size;
 
+    void blendAndStore(int pos, uint8_t r, uint8_t g, uint8_t b, int alpha = 255)
+    {
+        static float a, oneMinusAlpha;
+
+        rgb &currPix = m_pixels[pos];
+
+        if (alpha == 255)
+        {
+            m_pixels[pos].r = r;
+            m_pixels[pos].g = g;
+            m_pixels[pos].b = b;
+        }
+        else
+        {
+            a = alpha / 255.0f;
+            oneMinusAlpha = (255 - alpha) / 255.0f;
+
+            m_pixels[pos].r = a * r + oneMinusAlpha * currPix.r;
+            m_pixels[pos].g = a * g + oneMinusAlpha * currPix.g;
+            m_pixels[pos].b = a * b + oneMinusAlpha * currPix.b;
+        }
+    }
+
 public:
     FrameBuffer(int w, int h);
     ~FrameBuffer();
@@ -55,9 +78,9 @@ public:
 
     void wscanline(const int x1, const int x2,
                    const int y, const Color3 &color);
-    void wpixel(const int x, const int y, const Color3 &color);
-    void wpixel(const int pos, const Color3 &color);
-    void wpixel(const int x, const int y, const Color3 &color, float z);
+    void wpixel(const int x, const int y, const Color3 &color, int alpha = 255);
+    void wpixel(const int pos, const Color3 &color, int alpha = 255);
+    void wpixel(const int x, const int y, const Color3 &color, float z, int alpha = 255);
 
     void setWidth(int width) { m_width = width; }
     void setHeight(int height) { m_height = height; }
@@ -85,52 +108,54 @@ inline void FrameBuffer::wscanline(const int x1, const int x2, const int y, cons
         wpixel(x, y, color);*/
 }
 
-inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color)
+inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, int alpha)
 {
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
         return;
 
     int pos = m_width * y + x;
 
-//    rgb &currPix = m_pixels[pos];
-
-//    static float alpha, oneMinusAlpha;
-//    alpha = color[ALPHA] / 255.0f;
-//    oneMinusAlpha = (255 - color[ALPHA]) / 255.0f;
-
-//    m_pixels[pos].r = alpha * color[RED] + oneMinusAlpha * currPix.r;
-//    m_pixels[pos].g = alpha * color[GREEN] + oneMinusAlpha * currPix.g;
-//    m_pixels[pos].b = alpha * color[BLUE] + oneMinusAlpha * currPix.b;
-
-    m_pixels[pos].r = color[RED];
-    m_pixels[pos].g = color[GREEN];
-    m_pixels[pos].b = color[BLUE];
+    blendAndStore(pos, color[RED], color[GREEN], color[BLUE], alpha);
 }
 
-inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, float z)
+inline void FrameBuffer::wpixel(const int x, const int y, const Color3 &color, float z, int alpha)
 {
+    static float a, oneMinusAlpha;
+
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
         return;
 
     int pos = m_width * y + x;
 
-    if (z > m_zbuffer[pos])         // NOTE: this is 1/z buffer
+    rgb &currPix = m_pixels[pos];
+
+    if (alpha == 255)
     {
-        m_pixels[pos].r = color[RED];
-        m_pixels[pos].g = color[GREEN];
-        m_pixels[pos].b = color[BLUE];
-        m_zbuffer[pos] = z;
+        if (z > m_zbuffer[pos])         // NOTE: this is 1/z buffer
+        {
+            m_pixels[pos].r = color[RED];
+            m_pixels[pos].g = color[GREEN];
+            m_pixels[pos].b = color[BLUE];
+            m_zbuffer[pos] = z;
+        }
+    }
+    else
+    {
+        a = alpha / 255.0f;
+        oneMinusAlpha = (255 - alpha) / 255.0f;
+
+        m_pixels[pos].r = a * color[RED] + oneMinusAlpha * currPix.r;
+        m_pixels[pos].g = a * color[GREEN] + oneMinusAlpha * currPix.g;
+        m_pixels[pos].b = a * color[BLUE] + oneMinusAlpha * currPix.b;
     }
 }
 
-inline void FrameBuffer::wpixel(const int pos, const Color3 &color)
+inline void FrameBuffer::wpixel(const int pos, const Color3 &color, int alpha)
 {
     if (pos < 0 || pos >= m_size)
         return;
 
-    m_pixels[pos].r = color[RED];
-    m_pixels[pos].g = color[GREEN];
-    m_pixels[pos].b = color[BLUE];
+    blendAndStore(pos, color[RED], color[GREEN], color[BLUE], alpha);
 }
 
 }

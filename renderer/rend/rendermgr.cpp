@@ -20,6 +20,20 @@
 namespace rend
 {
 
+size_t RenderMgr::sceneSize() const
+{
+    size_t triangles = 0;
+    for (auto obj : m_sceneObjects)
+    {
+        if (!obj)
+            continue;
+
+        triangles += obj->getMesh()->numTriangles();
+    }
+
+    return triangles;
+}
+
 RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode)
     : m_camera(cam),
       m_viewport(viewport),
@@ -53,6 +67,10 @@ RenderMgr::~RenderMgr()
         delete m_renderList;
 }
 
+// TODO:
+// multipass rendering?
+// sort objects by alpha (of material) (when adding new object)
+// render transparent objects first
 void RenderMgr::update()
 {
     if (!m_viewport)
@@ -65,16 +83,7 @@ void RenderMgr::update()
     m_renderer->beginFrame(m_viewport);
 
     // allocate mem for the render list
-    int triangles = 0;
-    for (auto obj : m_sceneObjects)
-    {
-        if (!obj)
-            continue;
-
-        triangles += obj->getMesh()->numTriangles();
-    }
-
-    m_renderList->prepare(triangles);
+    m_renderList->prepare(sceneSize());
 
     // 2. Cull full meshes and form triangles render list.
     // Also applies world transformation.
