@@ -31,25 +31,27 @@ Triangle::Triangle(const vertex *arr)
     computeNormal();
 }
 
-/*const vertex &Triangle::v(const size_t ind) const
+void Triangle::applyTransformation(const M44 &transform, bool translateNormals)
 {
-    if (ind > 2)
-    {
-        throw std::out_of_range("Bad index passed to triangle->v()");
-    }
+    // translate point
+    m_verts[0].p = m_verts[0].p * transform;
+    m_verts[1].p = m_verts[1].p * transform;
+    m_verts[2].p = m_verts[2].p * transform;
 
-    return m_verts[ind];
+    if (translateNormals)
+    {
+        // FIXME: !!
+        // translate normal
+        m_verts[0].n = m_verts[0].n * transform;
+        m_verts[1].n = m_verts[1].n * transform;
+        m_verts[2].n = m_verts[2].n * transform;
+
+        // noo??
+        m_verts[0].n.normalize();
+        m_verts[1].n.normalize();
+        m_verts[2].n.normalize();
+    }
 }
-
-vertex &Triangle::v(const size_t ind)
-{
-    if (ind > 2)
-    {
-        throw std::out_of_range("Bad index passed to triangle->v()");
-    }
-
-    return m_verts[ind];
-}*/
 
 vector<vec3> Triangle::points() const
 {

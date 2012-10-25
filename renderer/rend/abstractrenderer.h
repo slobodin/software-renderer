@@ -10,6 +10,13 @@
 
 #include "comm_pch.h"
 
+namespace math
+{
+
+struct M44;
+
+}
+
 namespace rend
 {
 
@@ -37,6 +44,9 @@ public:
     virtual void endFrame(sptr(Viewport) viewport) = 0;
 
     virtual void resize(int w, int h) = 0;
+
+    virtual void setWorldViewMatrix(const math::M44 &m) = 0;
+    virtual void setProjectionMatrix(const math::M44 &m) = 0;
 };
 
 }

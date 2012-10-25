@@ -136,6 +136,12 @@ void RenderList::zsort()
 //    m_triangles.sort(math::ZCompareAvg);
 }
 
+size_t RenderList::getCountOfNotClippedTriangles() const
+{
+    return std::count_if(m_triangles.begin(), m_triangles.end(),
+                         [](const math::Triangle &t) -> bool { return !t.clipped; } );
+}
+
 void RenderList::removeBackfaces(const sptr(Camera) cam)
 {
     auto t = m_triangles.begin();

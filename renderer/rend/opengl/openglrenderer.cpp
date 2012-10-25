@@ -10,6 +10,7 @@
 #include "viewport.h"
 #include "renderlist.h"
 #include "guiobject.h"
+#include "m44.h"
 
 #ifdef __linux__
 #include <tcl8.5/tk.h>
@@ -182,7 +183,15 @@ void OpenGLRenderer::resize(int w, int h)
 //    glViewport(0, 0, w, h);
 //	glMatrixMode(GL_PROJECTION);
 //	glLoadIdentity();
-//	gluPerspective(camera->GetFovy(), camera->GetAspectRatio(), camera->GetZNear(), camera->GetZFar());
+    //	gluPerspective(camera->GetFovy(), camera->GetAspectRatio(), camera->GetZNear(), camera->GetZFar());
+}
+
+void OpenGLRenderer::setWorldViewMatrix(const math::M44 &m)
+{
+}
+
+void OpenGLRenderer::setProjectionMatrix(const math::M44 &m)
+{
 }
 
 }

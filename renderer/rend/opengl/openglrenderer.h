@@ -43,6 +43,9 @@ public:
     virtual void endFrame(sptr(Viewport) viewport);
 
     virtual void resize(int w, int h);
+
+    virtual void setWorldViewMatrix(const math::M44 &m);
+    virtual void setProjectionMatrix(const math::M44 &m);
 };
 
 }

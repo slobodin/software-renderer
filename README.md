@@ -40,6 +40,8 @@ Also you need boost (at least 1.51), tk/tcl (ActiveTcl for Windows) ang Google t
 Another libraries (cpptk, yamlcpp and easybmp) included in the project.
 On Windows you also should set BOOST_ROOT and TCL_ROOT environment variables (for example, via Qt creator "build environment" tab)
 
+Note, that project uses C++11, thus you need appropriate compiler (I use gcc on Linux and mingw on Windows).
+
 Package structure
 ===========
 The main directory is organized as follows:

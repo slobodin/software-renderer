@@ -16,6 +16,7 @@
 #include "flattrianglerasterizer.h"
 #include "gouraudtrianglerasterizer.h"
 #include "texturedtrianglerasterizer.h"
+#include "m44.h"
 
 namespace rend
 {
@@ -118,6 +119,14 @@ void SoftwareRenderer::endFrame(sptr(Viewport) viewport)
 void SoftwareRenderer::resize(int w, int h)
 {
     m_fb->resize(w, h);
+}
+
+void SoftwareRenderer::setWorldViewMatrix(const math::M44 &m)
+{
+}
+
+void SoftwareRenderer::setProjectionMatrix(const math::M44 &m)
+{
 }
 
 }

@@ -108,16 +108,10 @@ void Camera::toCamera(RenderList &rendList) const
         if (t.clipped)
             continue;
 
-        math::vec3 &p1 = t.v(0).p;
-        math::vec3 &p2 = t.v(1).p;
-        math::vec3 &p3 = t.v(2).p;
-
-        p1 = p1 * m_worldToCamera;
-        p2 = p2 * m_worldToCamera;
-        p3 = p3 * m_worldToCamera;
+        t.applyTransformation(m_worldToCamera);
 
         // delete all triangles, that lies behind z plane
-        if (p1.z < m_distance || p2.z < m_distance || p3.z < m_distance)
+        if (t.v(0).p.z < m_distance || t.v(1).p.z < m_distance || t.v(2).p.z < m_distance)
         {
 //            t = trias.erase(t);
 //            continue;

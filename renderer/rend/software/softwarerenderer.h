@@ -26,6 +26,7 @@ class SoftwareRenderer : public AbstractRenderer
 {
     FrameBuffer *m_fb;
 
+    // rasterizers collection
     WireframeTriangleRasterizer     *m_wire;
     FlatTriangleRasterizer          *m_flat;
     GouraudTriangleRasterizer       *m_gouraud;
@@ -42,6 +43,9 @@ public:
     virtual void endFrame(sptr(Viewport) viewport);
 
     virtual void resize(int w, int h);
+
+    virtual void setWorldViewMatrix(const math::M44 &m);
+    virtual void setProjectionMatrix(const math::M44 &m);
 };
 
 }

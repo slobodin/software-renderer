@@ -88,12 +88,7 @@ void RenderMgr::update()
     }
 
     // collect debug information
-    m_frameInfo.trianglesOnFrameStart = m_renderList->getSize();
-    if (m_renderList->empty())
-    {
-        m_frameInfo.trianglesForRaster = 0;
-//        return;
-    }
+    m_frameInfo.trianglesOnFrameStart = m_renderList->getCountOfNotClippedTriangles();
 
     // 3. Cull backfaces.
     m_renderList->removeBackfaces(m_camera);
@@ -114,7 +109,7 @@ void RenderMgr::update()
     // 8. Camera -> Perspective -> Screen transformation.
     m_camera->toScreen(*m_renderList, *m_viewport);
 
-    m_frameInfo.trianglesForRaster = m_renderList->getSize();
+    m_frameInfo.trianglesForRaster = m_renderList->getCountOfNotClippedTriangles();
 
     // 9. Rasterize world triangles.
     m_renderer->renderWorld(*m_renderList);
