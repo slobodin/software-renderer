@@ -14,12 +14,12 @@ Now it supports:
 * Simple material support.
 * Z buffer.
 * Mathematical operations with scene nodes like scaling, translating and rotation.
-* Affine texture mapping.
+* Perspective correct texture mapping.
 * Customizable camera.
 * Configuration files (you can tune lights (intensity, position, etc) or add objects, that will appear in a scene). 
    Also you can setup position of objects through the scene config file.
 
-**TODO**: perspective texture mapping, animation. Also, renderer needs a lot of optimizations.
+**TODO**: animation, optimization.
 
 Usage
 =====
@@ -48,7 +48,7 @@ The main directory is organized as follows:
 
 * client-tk/ - project for library testing.
 * example-1/ - project, that shows renderer features.
-* example-2/ - example of affine texture mapping, flat shading and movable point light.
+* example-2/ - example of texture mapping, flat shading and movable point light.
 * example-3/ - example of terrain rendering.
 * renderer/ - main part: renderer code, that compiles into static library.
 * resources/ - some mesh data and renderer config files (with .yaml extention).
