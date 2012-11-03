@@ -168,6 +168,8 @@ public:
     Color3 &operator+= (const Color3 &other);
     //! Color modulation.
     friend Color3 operator* (const Color3 &a, const Color3 &b);
+    friend Color3 operator* (float s, const Color3 &a);
+    friend Color3 operator* (const Color3 &a, float s);
 
     static Color3 lerp(const Color3 &a, const Color3 &b, float t);
 
@@ -180,6 +182,24 @@ public:
 inline Color3 operator* (const Color3 &a, const Color3 &b)
 {
     return Color3(a.m_r * b.m_r, a.m_g * b.m_g, a.m_b * b.m_b);
+}
+
+inline Color3 operator* (float s, const Color3 &a)
+{
+    if (s < 0)
+        return a;
+
+//    return Color3(std::min(a.m_r * s, 255.0f), std::min(a.m_g * s, 255.0f), std::min(a.m_b * s, 255.0f));
+    return Color3(a.m_r * s, a.m_g * s, a.m_b * s);
+}
+
+inline Color3 operator* (const Color3 &a, float s)
+{
+    if (s < 0)
+        return a;
+
+//    return Color3(std::min(a.m_r * s, 255.0f), std::min(a.m_g * s, 255.0f), std::min(a.m_b * s, 255.0f));
+    return Color3(a.m_r * s, a.m_g * s, a.m_b * s);
 }
 
 inline Color3 Color3::lerp(const Color3 &a, const Color3 &b, float t)

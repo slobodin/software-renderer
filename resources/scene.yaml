@@ -21,11 +21,12 @@ Objects:
 #    scale: [20, 20, 20]
 #  - model: al.obj
 #    position: [0, 0, -200]
+#    scale: [100, 100, 100]
 #  - model: water_gouraud_01.cob
 #    position: [-200, 300, 0]
-  - model: statue2.obj
-    position: [0, 0, 0]
-    scale: [10, 10, 10]
+#  - model: statue2.obj
+#    position: [0, 0, 0]
+#    scale: [10, 10, 10]
 
 Lights:
   Ambient:				# note: id = 0

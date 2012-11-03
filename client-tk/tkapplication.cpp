@@ -105,7 +105,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     auto texture = rmgr->getObject<rend::Texture>("texture_water_track_color_03");
     auto terrain = boost::make_shared<rend::TerrainSceneObject>(3000, 3000, 600, heightMapTexture, texture);
 
-//    rendmgr->addSceneObject(terrain);
+    rendmgr->addSceneObject(terrain);
 
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
@@ -126,7 +126,7 @@ TkApplication::TkApplication(int argc, const char *argv[])
     }
 
     auto cessna = rendmgr->getSceneObject("statue2.obj");
-    cessna->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+    //cessna->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
     m_debugStats1 = make_shared<rend::TextObject>(textureFont, 16, 16);

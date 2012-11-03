@@ -14,6 +14,8 @@
 #include "color.h"
 #include "texture.h"
 
+#define BILINEAR_FILTERING 1
+
 namespace rend
 {
 
@@ -24,6 +26,24 @@ union Interpolant
 
     Interpolant() : v() { _mm_set_ps1(0.f); }
 };
+
+inline Color3 bilerpFilter(const Texture *texture, float u, float v)
+{
+    u *= texture->width() - 1.f;
+    v *= texture->height() - 1.f;
+
+    int ui = floor(u);
+    int vi = floor(v);
+    float du = u - ui;
+    float dv = v - vi;
+
+    Color3 p0 = texture->at(ui, vi) * (1.f - du) * (1.f - dv);
+    Color3 p1 = texture->at(ui + 1, vi) * du * (1.f - dv);
+    Color3 p2 = texture->at(ui, vi + 1) * (1.f - du) * dv;
+    Color3 p3 = texture->at(ui + 1, vi + 1) * du * dv;
+
+    return p0 + p1 + p2 + p3;
+}
 
 void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuffer *fb)
 {
@@ -110,11 +130,15 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
         {
             float u = p.du / 1.0 / p.dz;
             float v = p.dv / 1.0 / p.dz;
+
+#if BILINEAR_FILTERING
+            textel = bilerpFilter(texture, u, v);
+#else
             int ww = u * float(texWidth - 1);
             int hh = v * float(texHeight - 1);
 
             textel = texture->at(ww, hh);
-
+#endif
             // modulate by rgb of first vertex (flat shading)
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3
@@ -165,11 +189,15 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
         {
             float u = p.du / 1.0 / p.dz;
             float v = p.dv / 1.0 / p.dz;
+
+#if BILINEAR_FILTERING
+            textel = bilerpFilter(texture, u, v);
+#else
             int ww = u * float(texWidth - 1);
             int hh = v * float(texHeight - 1);
 
             textel = texture->at(ww, hh);
-
+#endif
             // modulate by rgb of first vertex (flat shading)
             textel = textel * v0.color;
             textel *= (1.0 / 256.0);        // no /= operator in Color3
