@@ -57,7 +57,11 @@ namespace YAML
 
 		const char * const INVALID_SCALAR         = "invalid scalar";
 		const char * const KEY_NOT_FOUND          = "key not found";
+        const char * const BAD_CONVERSION         = "bad conversion";
 		const char * const BAD_DEREFERENCE        = "bad dereference";
+        const char * const BAD_SUBSCRIPT          = "operator[] call on a scalar";
+        const char * const BAD_PUSHBACK           = "appending to a non-sequence";
+        const char * const BAD_INSERT             = "inserting in a non-convertible-to-map";
 		
 		const char * const UNMATCHED_GROUP_TAG    = "unmatched group tag";
 		const char * const UNEXPECTED_END_SEQ     = "unexpected end sequence token";
@@ -66,10 +70,7 @@ namespace YAML
 		const char * const INVALID_ANCHOR         = "invalid anchor";
 		const char * const INVALID_ALIAS          = "invalid alias";
 		const char * const INVALID_TAG            = "invalid tag";
-		const char * const EXPECTED_KEY_TOKEN     = "expected key token";
-		const char * const EXPECTED_VALUE_TOKEN   = "expected value token";
-		const char * const UNEXPECTED_KEY_TOKEN   = "unexpected key token";
-		const char * const UNEXPECTED_VALUE_TOKEN = "unexpected value token";
+        const char * const BAD_FILE               = "bad file";
 
 		template <typename T>
 		inline const std::string KEY_NOT_FOUND_WITH_KEY(const T&, typename disable_if<is_numeric<T> >::type * = 0) {
@@ -148,17 +149,53 @@ namespace YAML
 		return TypedKeyNotFound <T> (mark, key);
 	}
 
+	class BadConversion: public RepresentationException {
+	public:
+		BadConversion()
+        : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_CONVERSION) {}
+	};
+
+    template<typename T>
+	class TypedBadConversion: public BadConversion {
+	public:
+		TypedBadConversion()
+        : BadConversion() {}
+	};
+
 	class BadDereference: public RepresentationException {
 	public:
 		BadDereference()
-		: RepresentationException(Mark::null(), ErrorMsg::BAD_DEREFERENCE) {}
+		: RepresentationException(Mark::null_mark(), ErrorMsg::BAD_DEREFERENCE) {}
+	};
+
+	class BadSubscript: public RepresentationException {
+	public:
+		BadSubscript()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::BAD_SUBSCRIPT) {}
+	};
+
+	class BadPushback: public RepresentationException {
+	public:
+		BadPushback()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::BAD_PUSHBACK) {}
 	};
 	
+	class BadInsert: public RepresentationException {
+	public:
+		BadInsert()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::BAD_INSERT) {}
+	};
+
 	class EmitterException: public Exception {
 	public:
 		EmitterException(const std::string& msg_)
-		: Exception(Mark::null(), msg_) {}
+		: Exception(Mark::null_mark(), msg_) {}
 	};
+    
+    class BadFile: public Exception {
+    public:
+        BadFile(): Exception(Mark::null_mark(), ErrorMsg::BAD_FILE) {}
+    };
 }
 
 #endif // EXCEPTIONS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

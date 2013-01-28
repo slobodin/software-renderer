@@ -60,6 +60,13 @@ Logger &Logger::operator<< (unsigned num)
     return *this;
 }
 
+Logger &Logger::operator<< (size_t num)
+{
+    m_buffer << num << " ";
+
+    return *this;
+}
+
 Logger &Logger::operator<< (double num)
 {
     m_buffer << num << " ";

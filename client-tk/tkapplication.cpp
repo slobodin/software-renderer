@@ -107,6 +107,9 @@ TkApplication::TkApplication(int argc, const char *argv[])
 
 //    rendmgr->addSceneObject(terrain);
 
+    auto t = rmgr->getObject<rend::SceneObject>("teapot.obj");
+    t->setScale({ 100, 100, 100});
+    rendmgr->addSceneObject(t);
     m_sphere = rendmgr->getSceneObject("Sphere");
     if (m_sphere)
         m_sphere->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
@@ -126,7 +129,8 @@ TkApplication::TkApplication(int argc, const char *argv[])
     }
 
     auto teapot = rendmgr->getSceneObject("teapot.obj");
-    teapot->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
+    if (teapot)
+        teapot->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
 
     auto textureFont = rmgr->getObject<rend::Texture>("texture_TextureFont");
     m_debugStats1 = make_shared<rend::TextObject>(textureFont, 16, 16);

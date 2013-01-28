@@ -26,7 +26,7 @@ void RendererConfig::makeDefaults()
     pathToTheAssets = fs::canonical(fs::current_path()).string();   // executable dir
     rendererMode = "software";
 }
-
+/*
 static void operator>> (const YAML::Node &node, math::vec3 &v)
 {
     node[0] >> v.x;
@@ -63,16 +63,16 @@ static void operator>> (const YAML::Node &node, SceneConfig::PointLightInfo &poi
     node["kc"] >> pointLightInfo.kc;
     node["kl"] >> pointLightInfo.kl;
     node["kq"] >> pointLightInfo.kq;
-}
+}*/
 
 //! Finds value by the key and stores it in `value'.
 /** If can't find value - sets it to default. */
 template<typename T>
-bool FindValue(const YAML::Node &doc, T &value, string key, const T defaultValue)
+bool FindValue(const YAML::Node &node, T &value, std::string key, const T &defaultValue)
 {
-    if(const YAML::Node *pName = doc.FindValue(key))
+    if (node[key])
     {
-        *pName >> value;
+        value = node[key].as<T>();
 
         return true;
     }
@@ -87,16 +87,14 @@ bool FindValue(const YAML::Node &doc, T &value, string key, const T defaultValue
 
 void Config::parseRendererConfig() try
 {
-    YAML::Parser cfg(m_rendererConfigData);
+    YAML::Node cfg = YAML::Load(m_rendererConfigData);
 
-    YAML::Node doc;
-    cfg.GetNextDocument(doc);
-
-    FindValue(doc, m_rendererConfig.width, "width", rend::DEFAULT_WIDTH);
-    FindValue(doc, m_rendererConfig.height, "height", rend::DEFAULT_HEIGHT);
-    FindValue(doc, m_rendererConfig.camPosition, "campos", math::vec3(0, 0, 0));
-    FindValue(doc, m_rendererConfig.pathToTheAssets, "assets", string(""));
-    FindValue(doc, m_rendererConfig.rendererMode, "renderer", string("software"));
+    FindValue(cfg, m_rendererConfig.width, "width", rend::DEFAULT_WIDTH);
+    FindValue(cfg, m_rendererConfig.height, "height", rend::DEFAULT_HEIGHT);
+    m_rendererConfig.camPosition = math::vec3(0, 0, 0);
+    //FindValue(cfg, m_rendererConfig.camPosition, "campos", math::vec3(0, 0, 0));
+    FindValue(cfg, m_rendererConfig.pathToTheAssets, "assets", string(""));
+    FindValue(cfg, m_rendererConfig.rendererMode, "renderer", string("software"));
 
     common::eraseSpaces(m_rendererConfig.rendererMode);
 
@@ -120,13 +118,10 @@ catch (YAML::Exception &e)
 
 void Config::parseSceneConfig() try
 {
-    YAML::Parser cfg(m_sceneConfigData);
-
-    YAML::Node doc;
-    cfg.GetNextDocument(doc);
+    /*YAML::Node cfg = YAML::Load(m_sceneConfigData);
 
     // getting scene objects
-    const YAML::Node &objects = doc["Objects"];
+    const YAML::Node &objects = cfg["Objects"];
     for (size_t i = 0; i < objects.size(); i++)
     {
         SceneConfig::ObjInfo objInfo;
@@ -136,7 +131,7 @@ void Config::parseSceneConfig() try
     }
 
     // getting scene lights
-    parseLights(doc);
+    parseLights(cfg);*/
 }
 catch (YAML::Exception &e)
 {
@@ -147,7 +142,7 @@ catch (YAML::Exception &e)
 }
 
 void Config::parseLights(const YAML::Node &doc)
-{
+{/*
     const YAML::Node &lights = doc["Lights"];
 
     // ambient lights
@@ -189,7 +184,7 @@ void Config::parseLights(const YAML::Node &doc)
             m_sceneConfig.pointLights.push_back(light);
         }
     }
-    catch (YAML::Exception &e) { syslog << "No point lights" << logmess; }
+    catch (YAML::Exception &e) { syslog << "No point lights" << logmess; }*/
 }
 
 Config::Config(const string &cfgDir)
@@ -250,7 +245,7 @@ Config::Config(const string &cfgDir)
     if (sceneConfigFile)
     {
         m_sceneConfigData << sceneConfigFile.rdbuf();
-        parseSceneConfig();
+        //parseSceneConfig();
     }
     else
     {

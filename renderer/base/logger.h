@@ -48,10 +48,14 @@ class Logger : boost::noncopyable
 public:
     static Logger &instance();
 
+    // TODO:
+    // Template function for POD types
+    // And specialization for vectors etc
     Logger &operator<< (const char *text);
     Logger &operator<< (const string &text);
     Logger &operator<< (int num);
     Logger &operator<< (unsigned num);
+    Logger &operator<< (size_t num);
     Logger &operator<< (double num);
     Logger &operator<< (const math::vec2 &vect);
     Logger &operator<< (const math::vec3 &vect);
