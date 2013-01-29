@@ -131,7 +131,7 @@ void Controller::createRenderManager()
     if (scCfg.dirLights.empty() && scCfg.ambIntensity.isBlack())
     {
         syslog << "No lights setted in scene config." << logwarn;
-        m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
+//        m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
         return;
     }
 

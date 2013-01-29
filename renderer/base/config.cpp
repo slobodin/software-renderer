@@ -11,6 +11,84 @@
 #include "viewport.h"
 #include "string_utils.h"
 
+namespace YAML {
+
+template<>
+struct convert<math::vec3>
+{
+    static bool decode(const Node &node, math::vec3 &rhs)
+    {
+        if(!node.IsSequence() || node.size() != 3)
+            return false;
+
+        rhs.x = node[0].as<float>();
+        rhs.y = node[1].as<float>();
+        rhs.z = node[2].as<float>();
+
+        return true;
+    }
+};
+
+template<>
+struct convert<rend::Color3>
+{
+    static bool decode(const Node &node, rend::Color3 &rhs)
+    {
+        if(!node.IsSequence() || node.size() != 3)
+            return false;
+
+        rhs[rend::RED] = node[0].as<uint32_t>();
+        rhs[rend::GREEN] = node[1].as<uint32_t>();
+        rhs[rend::BLUE] = node[2].as<uint32_t>();
+
+        return true;
+    }
+};
+
+template<>
+struct convert<base::SceneConfig::ObjInfo>
+{
+    static bool decode(const Node &node, base::SceneConfig::ObjInfo &rhs)
+    {
+        rhs.pathToTheModel = node["model"].as<std::string>();
+        rhs.position = node["position"].as<math::vec3>();
+
+        try { rhs.scale = node["scale"].as<math::vec3>(); } catch (YAML::Exception &e) { }
+
+        return true;
+    }
+};
+
+template<>
+struct convert<base::SceneConfig::DirLightInfo>
+{
+    static bool decode(const Node &node, base::SceneConfig::DirLightInfo &rhs)
+    {
+        rhs.direction = node["direction"].as<math::vec3>();
+        rhs.intensity = node["intensity"].as<rend::Color3>();
+
+        return true;
+    }
+};
+
+template<>
+struct convert<base::SceneConfig::PointLightInfo>
+{
+    static bool decode(const Node &node, base::SceneConfig::PointLightInfo &rhs)
+    {
+        rhs.position = node["position"].as<math::vec3>();
+        rhs.intensity = node["intensity"].as<rend::Color3>();
+
+        rhs.kc = node["kc"].as<double>();
+        rhs.kl = node["kl"].as<double>();
+        rhs.kq = node["kq"].as<double>();
+
+        return true;
+    }
+};
+
+}
+
 namespace base
 {
 
@@ -26,43 +104,19 @@ void RendererConfig::makeDefaults()
     pathToTheAssets = fs::canonical(fs::current_path()).string();   // executable dir
     rendererMode = "software";
 }
+
 /*
-static void operator>> (const YAML::Node &node, math::vec3 &v)
+static void operator>> (const YAML::Node &node,  &dirLightInfo)
 {
-    node[0] >> v.x;
-    node[1] >> v.y;
-    node[2] >> v.z;
+    node[""] >> dirLightInfo.direction;
+    node[""] >> dirLightInfo.intensity;
 }
 
-static void operator>> (const YAML::Node &node, rend::Color3 &col)
-{
-    node[0] >> col[rend::RED];
-    node[1] >> col[rend::GREEN];
-    node[2] >> col[rend::BLUE];
-}
-
-static void operator>> (const YAML::Node &node, SceneConfig::ObjInfo &objInfo)
-{
-    node["model"] >> objInfo.pathToTheModel;
-    node["position"] >> objInfo.position;
-
-    try { node["scale"] >> objInfo.scale; } catch (YAML::Exception &e) { }
-}
-
-
-static void operator>> (const YAML::Node &node, SceneConfig::DirLightInfo &dirLightInfo)
-{
-    node["direction"] >> dirLightInfo.direction;
-    node["intensity"] >> dirLightInfo.intensity;
-}
-
-static void operator>> (const YAML::Node &node, SceneConfig::PointLightInfo &pointLightInfo)
+static void operator>> (const YAML::Node &node, SceneConfig:: &pointLightInfo)
 {
     node["position"] >> pointLightInfo.position;
     node["intensity"] >> pointLightInfo.intensity;
-    node["kc"] >> pointLightInfo.kc;
-    node["kl"] >> pointLightInfo.kl;
-    node["kq"] >> pointLightInfo.kq;
+
 }*/
 
 //! Finds value by the key and stores it in `value'.
@@ -78,7 +132,8 @@ bool FindValue(const YAML::Node &node, T &value, std::string key, const T &defau
     }
     else
     {
-        syslog << "Can't find" << key << ". Setting to default value" << defaultValue << logwarn;
+        syslog << "Can't find" << key << ". Setting to default value"
+               << defaultValue << logwarn;
         value = defaultValue;
 
         return false;
@@ -91,8 +146,7 @@ void Config::parseRendererConfig() try
 
     FindValue(cfg, m_rendererConfig.width, "width", rend::DEFAULT_WIDTH);
     FindValue(cfg, m_rendererConfig.height, "height", rend::DEFAULT_HEIGHT);
-    m_rendererConfig.camPosition = math::vec3(0, 0, 0);
-    //FindValue(cfg, m_rendererConfig.camPosition, "campos", math::vec3(0, 0, 0));
+    FindValue(cfg, m_rendererConfig.camPosition, "campos", math::vec3(0, 0, 0));
     FindValue(cfg, m_rendererConfig.pathToTheAssets, "assets", string(""));
     FindValue(cfg, m_rendererConfig.rendererMode, "renderer", string("software"));
 
@@ -118,20 +172,19 @@ catch (YAML::Exception &e)
 
 void Config::parseSceneConfig() try
 {
-    /*YAML::Node cfg = YAML::Load(m_sceneConfigData);
+    YAML::Node cfg = YAML::Load(m_sceneConfigData);
 
     // getting scene objects
     const YAML::Node &objects = cfg["Objects"];
     for (size_t i = 0; i < objects.size(); i++)
     {
-        SceneConfig::ObjInfo objInfo;
-        objects[i] >> objInfo;
+        auto objInfo = objects[i].as<SceneConfig::ObjInfo>();
 
         m_sceneConfig.objects.push_back(objInfo);
     }
 
     // getting scene lights
-    parseLights(cfg);*/
+    parseLights(cfg);
 }
 catch (YAML::Exception &e)
 {
@@ -142,7 +195,7 @@ catch (YAML::Exception &e)
 }
 
 void Config::parseLights(const YAML::Node &doc)
-{/*
+{
     const YAML::Node &lights = doc["Lights"];
 
     // ambient lights
@@ -151,7 +204,7 @@ void Config::parseLights(const YAML::Node &doc)
         const YAML::Node &ambLight = lights["Ambient"];
 
         for (size_t i = 0; i < ambLight.size(); i++)
-            ambLight[i]["intensity"] >> m_sceneConfig.ambIntensity;
+            m_sceneConfig.ambIntensity = ambLight[i]["intensity"].as<rend::Color3>();
 
         if (ambLight.size() > 1)
             syslog << "Number of ambient light sources more than one. Using the last." << logwarn;
@@ -164,8 +217,7 @@ void Config::parseLights(const YAML::Node &doc)
         const YAML::Node &dirLight = lights["Directional"];
         for (size_t i = 0; i < dirLight.size(); i++)
         {
-            SceneConfig::DirLightInfo light;
-            dirLight[i] >> light;
+            auto light = dirLight[i].as<SceneConfig::DirLightInfo>();
 
             m_sceneConfig.dirLights.push_back(light);
         }
@@ -178,13 +230,12 @@ void Config::parseLights(const YAML::Node &doc)
         const YAML::Node &pointLight = lights["Point"];
         for (size_t i = 0; i < pointLight.size(); i++)
         {
-            SceneConfig::PointLightInfo light;
-            pointLight[i] >> light;
+            auto light = pointLight[i].as<SceneConfig::PointLightInfo>();
 
             m_sceneConfig.pointLights.push_back(light);
         }
     }
-    catch (YAML::Exception &e) { syslog << "No point lights" << logmess; }*/
+    catch (YAML::Exception &e) { syslog << "No point lights" << logmess; }
 }
 
 Config::Config(const string &cfgDir)
@@ -245,7 +296,7 @@ Config::Config(const string &cfgDir)
     if (sceneConfigFile)
     {
         m_sceneConfigData << sceneConfigFile.rdbuf();
-        //parseSceneConfig();
+        parseSceneConfig();
     }
     else
     {
