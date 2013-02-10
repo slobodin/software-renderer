@@ -1,9 +1,11 @@
 /*
  * rendermgr.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "rendermgr.h"
 
@@ -15,7 +17,6 @@
 #include "sceneobject.h"
 #include "guiobject.h"
 #include "software/softwarerenderer.h"
-#include "opengl/openglrenderer.h"
 
 namespace rend
 {
@@ -39,7 +40,7 @@ size_t RenderMgr::sceneSize() const
     return triangles;
 }
 
-RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode)
+RenderMgr::RenderMgr(const sptr(Camera) cam, const sptr(Viewport) viewport, RendererMode mode)
     : m_camera(cam),
       m_viewport(viewport),
       m_sceneTrianglesCount(0),
@@ -50,11 +51,11 @@ RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> vi
     switch (mode)
     {
     case RM_SOFTWARE:
-        m_renderer = make_shared<SoftwareRenderer>(viewport->getWidth(), viewport->getHeight());
+        m_renderer = std::make_shared<SoftwareRenderer>(viewport->getWidth(), viewport->getHeight());
         break;
 
     case RM_OPENGL:
-        m_renderer = make_shared<OpenGLRenderer>(viewport);
+        throw RendererException("No OpenGL.");
         break;
 
     default:
@@ -63,7 +64,7 @@ RenderMgr::RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> vi
 
     m_renderList = new RenderList();
 
-    // add standart white ambient light
+    // add standard white ambient light
 //    addAmbientLight(Color3(255 * 0.3, 255 * 0.3, 255 * 0.3));
 }
 
@@ -76,7 +77,7 @@ RenderMgr::~RenderMgr()
 // TODO:
 // multipass rendering?
 // render transparent objects first
-void RenderMgr::update()
+void RenderMgr::runFrame()
 {
     if (!m_viewport)
     {
@@ -104,7 +105,7 @@ void RenderMgr::update()
     // collect debug information
     m_frameInfo.trianglesOnFrameStart = m_renderList->getCountOfNotClippedTriangles();
 
-    // 3. Cull backfaces.
+    // 3. Cull back faces.
     m_renderList->removeBackfaces(m_camera);
 
     // 4. Lighting.
@@ -140,16 +141,16 @@ sptr(AmbientLight) RenderMgr::addAmbientLight(Color3 intensity)
     sptr(Light) newLight;
     try
     {
-        newLight = make_shared<AmbientLight>(intensity);
+        newLight = std::make_shared<AmbientLight>(intensity);
         m_lights.push_back(newLight);
     }
     catch(LightException)
     {
         syslog << "Light limit is reached" << logerr;
-        return dynamic_pointer_cast<AmbientLight>(sptr(Light)());
+        return std::dynamic_pointer_cast<AmbientLight>(sptr(Light)());
     }
 
-    return dynamic_pointer_cast<AmbientLight>(newLight);
+    return std::dynamic_pointer_cast<AmbientLight>(newLight);
 }
 
 sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, math::vec3 direction)
@@ -157,16 +158,16 @@ sptr(DirectionalLight) RenderMgr::addDirectionalLight(rend::Color3 intensity, ma
     sptr(Light) newLight;
     try
     {
-        newLight = make_shared<DirectionalLight>(intensity, direction);
+        newLight = std::make_shared<DirectionalLight>(intensity, direction);
         m_lights.push_back(newLight);
     }
     catch(LightException)
     {
         syslog << "Light limit is reached" << logerr;
-        return dynamic_pointer_cast<DirectionalLight>(sptr(Light)());
+        return std::dynamic_pointer_cast<DirectionalLight>(sptr(Light)());
     }
 
-    return dynamic_pointer_cast<DirectionalLight>(newLight);
+    return std::dynamic_pointer_cast<DirectionalLight>(newLight);
 }
 
 sptr(PointLight) RenderMgr::addPointLight(Color3 intensity, math::vec3 position,
@@ -175,16 +176,16 @@ sptr(PointLight) RenderMgr::addPointLight(Color3 intensity, math::vec3 position,
     sptr(Light) newLight;
     try
     {
-        newLight = make_shared<PointLight>(intensity, position, kc, kl, kq);
+        newLight = std::make_shared<PointLight>(intensity, position, kc, kl, kq);
         m_lights.push_back(newLight);
     }
     catch(LightException)
     {
         syslog << "Light limit is reached" << logerr;
-        return dynamic_pointer_cast<PointLight>(sptr(Light)());
+        return std::dynamic_pointer_cast<PointLight>(sptr(Light)());
     }
 
-    return dynamic_pointer_cast<PointLight>(newLight);
+    return std::dynamic_pointer_cast<PointLight>(newLight);
 }
 
 void RenderMgr::resize(int w, int h)
@@ -209,7 +210,7 @@ void RenderMgr::addSceneObject(sptr(SceneObject) node)
     // TODO: sort objects by alpha (of material) (when adding new object)
 }
 
-sptr(SceneObject) RenderMgr::getSceneObject(const string &name)
+sptr(SceneObject) RenderMgr::getSceneObject(const std::string &name)
 {
     auto obj = std::find_if(m_sceneObjects.begin(), m_sceneObjects.end(),
                             [&](sptr(SceneObject) val)
@@ -238,17 +239,6 @@ sptr(Light) RenderMgr::getLight(int id) const
         return sptr(Light)();
 
     return *obj;
-}
-
-sptr(Light) RenderMgr::getFirstPointLight() const
-{
-    for (auto light : m_lights)
-    {
-        if (dynamic_pointer_cast<PointLight>(light))
-            return dynamic_pointer_cast<PointLight>(light);
-    }
-
-    return sptr(Light)();
 }
 
 }

@@ -8,8 +8,6 @@
 #ifndef TRIANGLERASTERIZER_H
 #define TRIANGLERASTERIZER_H
 
-#include "comm_pch.h"
-
 namespace math
 {
 

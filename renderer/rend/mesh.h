@@ -1,17 +1,15 @@
 /*
  * mesh.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef MESH_H
 #define MESH_H
 
-#include "comm_pch.h"
-
 #include "vertexbuffer.h"
-#include "m44.h"
+#include "../math/m44.h"
 #include "material.h"
 
 namespace rend
@@ -24,7 +22,7 @@ namespace rend
 class Mesh
 {
     //! Mesh consists of some submeshes, which holds vertex data and one material.
-    list<VertexBuffer> m_submeshes;
+    std::list<VertexBuffer> m_submeshes;
 
     //! Bounding sphere.
     BoundingSphere m_boundingSphere;
@@ -51,13 +49,12 @@ public:
     void setTexture(sptr(Texture) texture);
     void setSideType(Material::SideType side);
 
-    const list<VertexBuffer> &getSubmeshes() const { return m_submeshes; }
-    list<VertexBuffer>       &getSubmeshes() { return m_submeshes; }
+    const std::list<VertexBuffer> &getSubmeshes() const { return m_submeshes; }
+    std::list<VertexBuffer>       &getSubmeshes() { return m_submeshes; }
 
     sptr(Mesh) clone() const;
 
-    Mesh(const Mesh &) = delete;
-    Mesh &operator= (const Mesh &) = delete;
+    NONCOPYABLE(Mesh)
 };
 
 }

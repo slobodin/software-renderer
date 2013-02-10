@@ -1,14 +1,12 @@
 /*
  * framebuffer.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
-
-#include "comm_pch.h"
 
 #include "color.h"
 
@@ -22,9 +20,10 @@ void memset32(void *dest, uint32_t data, int count);
 /*!
   *
   */
-class FrameBuffer : boost::noncopyable
+class FrameBuffer
 {
 public:
+#pragma pack(push, 1)
     struct rgb
     {
         uint8_t r;
@@ -33,7 +32,8 @@ public:
         uint8_t a;
 
         rgb(uint8_t R = 0x00, uint8_t G = 0x00, uint8_t B = 0x00) : r(R), g(G), b(B), a(255) { }
-    } __attribute__((packed));
+    };
+#pragma pack(pop)
 
 private:
     //! Pixels array.
@@ -94,6 +94,8 @@ public:
     void resize(int w, int h);
 
     operator unsigned char *() { return (unsigned char *)m_pixels; }
+
+    NONCOPYABLE(FrameBuffer)
 };
 
 inline void FrameBuffer::wscanline(const int x1, const int x2, const int y, const Color3 &color)

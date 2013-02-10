@@ -1,14 +1,12 @@
 /*
  * controller.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-
-#include "comm_pch.h"
 
 namespace rend
 {
@@ -30,7 +28,7 @@ class ResourceMgr;
 
 DECLARE_EXCEPTION(ControllerException)
 
-class Controller : boost::noncopyable
+class Controller
 {
     friend class platform::BaseApp;
 
@@ -61,7 +59,7 @@ public:
 
     void resize(int w, int h);
 
-    void test();
+    NONCOPYABLE(Controller)
 };
 
 // because there is no `export' keyword
@@ -74,7 +72,7 @@ void Controller::createViewport()
     auto size = getViewportSize();
 
     // creating the viewport
-    m_viewport = boost::make_shared<T>(size.first, size.second, m_mainCam);
+    m_viewport = std::make_shared<T>(size.first, size.second, m_mainCam);
     // initializing the rendering manager
     createRenderManager();
 }

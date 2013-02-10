@@ -8,16 +8,14 @@
 #ifndef VERTEXBUFFER_H
 #define VERTEXBUFFER_H
 
-#include "comm_pch.h"
-
-#include "vertex.h"
+#include "../math/vertex.h"
 #include "boundingsphere.h"
-#include "m44.h"
+#include "../math/m44.h"
 
 namespace rend
 {
 
-class Material;
+struct Material;
 class Mesh;
 
 //! Container for vertices and indices with same material.
@@ -28,8 +26,8 @@ class VertexBuffer
 {
 public:
     //! Some anti-boilerplate typedefs.
-    typedef vector<math::vertex> VertexArray;
-    typedef vector<uint16_t> IndexArray;
+    typedef std::vector<math::vertex> VertexArray;
+    typedef std::vector<uint16_t> IndexArray;
 
     enum VertexBufferType
     {
@@ -52,7 +50,7 @@ private:
     IndexArray m_indices;
 
     //! UV coords of the submesh.
-    vector<math::vec2> m_uvs;
+    std::vector<math::vec2> m_uvs;
     //! Indices for uv coords.
     IndexArray m_uvsIndices;
 
@@ -73,10 +71,10 @@ public:
     VertexBufferType    getType() const { return m_type; }
 
     //! Appends vertices to this submesh. Also computes vertex normals and bounding sphere.
-    void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices,
-                        const vector<math::vec2> &uvs, const vector<int> &uvinds, bool isNormalsComputed = false);
-    void appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices, bool isNormalsComputed = false);
-    void appendVertices(const vector<math::vertex> &vertices, bool isNormalsComputed = false);
+    void appendVertices(const std::vector<math::vertex> &vertices, const std::vector<int> &indices,
+                        const std::vector<math::vec2> &uvs, const std::vector<int> &uvinds, bool isNormalsComputed = false);
+    void appendVertices(const std::vector<math::vertex> &vertices, const std::vector<int> &indices, bool isNormalsComputed = false);
+    void appendVertices(const std::vector<math::vertex> &vertices, bool isNormalsComputed = false);
 
     //! Helper to compute vertex normals.
     void computeVertexNormals();
@@ -97,7 +95,7 @@ public:
     const IndexArray&   getIndices() const { return m_indices; }
 
     //!
-    const vector<math::vec2> &getUVs() const { return m_uvs; }
+    const std::vector<math::vec2> &getUVs() const { return m_uvs; }
     //!
     const IndexArray &getUVIndices() const { return m_uvsIndices; }
 

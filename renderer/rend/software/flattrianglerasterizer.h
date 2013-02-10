@@ -8,7 +8,6 @@
 #ifndef FLATTRIANGLERASTERIZER_H
 #define FLATTRIANGLERASTERIZER_H
 
-#include "comm_pch.h"
 #include "trianglerasterizer.h"
 
 namespace rend

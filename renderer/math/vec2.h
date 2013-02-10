@@ -1,14 +1,12 @@
 /*
  * vec2.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef VEC2_H
 #define VEC2_H
-
-#include "comm_pch.h"
 
 #include "common_math.h"
 #include "vec3.h"

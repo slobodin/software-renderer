@@ -1,17 +1,18 @@
 /*
  * osfile.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "osfile.h"
-#include "string_utils.h"
 
 namespace base
 {
 
-OsFile::OsFile(const string &path, FileType ft)
+OsFile::OsFile(const std::string &path, FileType ft)
 {
     if (ft == FT_TEXT)
         m_file.open(path);
@@ -32,19 +33,19 @@ OsFile::~OsFile()
     m_file.close();
 }
 
-TextFile::TextFile(const string &path)
+TextFile::TextFile(const std::string &path)
     : OsFile(path, FT_TEXT)
 {
-    istreambuf_iterator<char> dataBegin(m_file);
-    istreambuf_iterator<char> dataEnd;
+    std::istreambuf_iterator<char> dataBegin(m_file);
+    std::istreambuf_iterator<char> dataEnd;
 
-    string fileDataStr(dataBegin, dataEnd);
+    std::string fileDataStr(dataBegin, dataEnd);
     m_fileData.str(fileDataStr);
 }
 
-string TextFile::getLine(const char delim)
+std::string TextFile::getLine(const char delim)
 {
-    string token;
+    std::string token;
 
     while(m_fileData)
     {
@@ -53,16 +54,18 @@ string TextFile::getLine(const char delim)
         if (token.empty())
             continue;
 
-        string::iterator it = std::find_if(token.begin(), token.end(), common::isNotSpacePredicat);
+        auto notSpace = [](char ch)->int { return !isspace(ch); };
+
+        std::string::iterator it = std::find_if(token.begin(), token.end(), notSpace);
         token.erase(token.begin(), it);
 
-        auto rit = std::find_if(token.rbegin(), token.rend(), common::isNotSpacePredicat);
+        auto rit = std::find_if(token.rbegin(), token.rend(), notSpace);
         token.erase(rit.base(), token.end());
 
         return token;
     }
 
-    return string("END_OF_FILE");
+    return std::string("END_OF_FILE");
 }
 
 void TextFile::resetPtr()
@@ -80,11 +83,11 @@ void TextFile::resetPtr()
 //    m_fileData.str(fileDataStr);
 }
 
-BinaryFile::BinaryFile(const string &path)
+BinaryFile::BinaryFile(const std::string &path)
     : OsFile(path, FT_BINARY)
 {
-    istreambuf_iterator<char> dataBegin(m_file);
-    istreambuf_iterator<char> dataEnd;
+    std::istreambuf_iterator<char> dataBegin(m_file);
+    std::istreambuf_iterator<char> dataEnd;
 
     std::copy(dataBegin, dataEnd, std::back_inserter(m_fileData));
 }

@@ -1,5 +1,5 @@
 /*
- * renderdevice.h
+ * viewport.h
  *
  *      Author: flamingo
  *      E-mail: epiforce57@gmail.com
@@ -7,8 +7,6 @@
 
 #ifndef VIEWPORT_H
 #define VIEWPORT_H
-
-#include "comm_pch.h"
 
 namespace rend
 {
@@ -19,7 +17,7 @@ const int DEFAULT_HEIGHT = 480;
 class Camera;
 class RenderMgr;
 
-class Viewport : boost::noncopyable
+class Viewport
 {
 protected:
     //! Screen width.
@@ -33,23 +31,25 @@ protected:
     //! Aspect ratio. Width / height.
     float m_aspect;
 
-    boost::shared_ptr<Camera> m_camera;
+    sptr(Camera) m_camera;
 
     friend class RenderMgr;
     virtual void resize(int w, int h);
 
 public:
-    Viewport(int width, int height, boost::shared_ptr<Camera> camera);
+    Viewport(int width, int height, sptr(Camera) camera);
     virtual ~Viewport();
 
     int                 getWidth() const;
     int                 getHeight() const;
-    int                 getAspect() const;
+    float               getAspect() const;
     std::pair<int, int> getCenter() const;
 
-    boost::shared_ptr<Camera> getCamera() const { return m_camera; }
+    sptr(Camera) getCamera() const { return m_camera; }
 
     virtual void flush(const unsigned char *const pixels) = 0;
+
+    NONCOPYABLE(Viewport)
 };
 
 }

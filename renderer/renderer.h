@@ -8,11 +8,10 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "comm/comm_pch.h"
-#include "comm/string_utils.h"
+#include "stdafx.h"
 
 #include "platform/baseapp.h"
-#include "platform/baseapptk.h"
+#include "platform/baseappwin.h"
 #include "platform/events.h"
 
 #include "base/controller.h"

@@ -1,14 +1,12 @@
 /*
  * resource.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef RESOURCE_H
 #define RESOURCE_H
-
-#include "comm_pch.h"
 
 namespace base
 {
@@ -19,11 +17,11 @@ class ResourceMgr;
 /*!
   *
   */
-class Resource : boost::noncopyable
+class Resource
 {
 protected:
     //! Name of the resource.
-    string m_name;
+    std::string m_name;
 
 public:
     //! Default ctor.
@@ -35,11 +33,13 @@ public:
     { }
 
     //! Sets the name.
-    void    setName(const string &name) { m_name = name; }
+    void    setName(const std::string &name) { m_name = name; }
     //! Gets the name.
-    string  getName() const { return m_name; }
+    std::string  getName() const { return m_name; }
 
     virtual void additionalLoading(ResourceMgr * const /*rm*/) { }
+
+    NONCOPYABLE(Resource)
 };
 
 }

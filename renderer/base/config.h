@@ -1,20 +1,15 @@
 /*
  * config.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "vec3.h"
-#include "color.h"
-
-namespace YAML
-{
-class Node;
-}
+#include "math/vec3.h"
+#include "rend/color.h"
 
 namespace base
 {
@@ -22,50 +17,53 @@ namespace base
 class Controller;
 class ResourceMgr;
 
+//! Renderer configuration.
 struct RendererConfig
 {
-    math::vec3  camPosition;
-    int         width;
-    int         height;
-    string      pathToTheAssets;
-    string      rendererMode;           // "software" or "opengl"
+    math::vec3      camPosition;
+    int             width;
+    int             height;
+    std::string     pathToTheAssets;
+    std::string     rendererMode;           // "software" or "opengl"
 
     void makeDefaults();
 };
 
+//! What will scene contain.
 struct SceneConfig
 {
+    //! Particular object.
     struct ObjInfo
     {
-        math::vec3 position;
-        string pathToTheModel;
-        math::vec3 scale;
+        math::vec3      position;
+        math::vec3      scale;
+        std::string     pathToTheModel;
         ObjInfo() : scale(1.0, 1.0, 1.0) { }
     };
 
     // scene objects
-    vector<ObjInfo> objects;
+    std::vector<ObjInfo> objects;
 
     // ambient light intensity
     rend::Color3 ambIntensity;
-
+    // directional light config
     struct DirLightInfo
     {
         math::vec3 direction;
         rend::Color3 intensity;
     };
-
+    // point light config
     struct PointLightInfo
     {
         math::vec3 position;
         rend::Color3 intensity;
-        double kc, kl, kq;
+        float kc, kl, kq;
     };
 
     // directional lights
-    vector<DirLightInfo> dirLights;
+    std::vector<DirLightInfo> dirLights;
     // point lights
-    vector<PointLightInfo> pointLights;
+    std::vector<PointLightInfo> pointLights;
 
     SceneConfig() { ambIntensity.reset(); }
 };
@@ -79,16 +77,15 @@ class Config
     SceneConfig m_sceneConfig;
     std::stringstream m_sceneConfigData;
     void parseSceneConfig();
-    void parseLights(const YAML::Node &doc);
+    void parseLights();
 
 public:
-    Config(const string &cfgDir = "");
+    Config(const std::string &cfgDir = "");
 
     const RendererConfig &getRendererConfig() const;
     const SceneConfig &getSceneConfig() const;
 
-    Config(const Config &) = delete;
-    Config &operator= (const Config &) = delete;
+    NONCOPYABLE(Config)
 };
 
 }

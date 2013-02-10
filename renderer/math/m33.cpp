@@ -1,13 +1,13 @@
 /*
  * m33.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
-#include "m33.h"
+#include "stdafx.h"
 
-#include <boost/foreach.hpp>
+#include "m33.h"
 
 namespace math
 {
@@ -94,8 +94,8 @@ M33 &M33::operator*= (const M33 &a)
 
 M33 &M33::operator*= (float s)
 {
-    BOOST_FOREACH (float (&row)[3], x)
-        BOOST_FOREACH (float &el, row)
+    for (auto &row : x)
+        for (auto &el : row)
             el *= s;
 
     return *this;
@@ -105,8 +105,8 @@ M33 &M33::operator/= (float s)
 {
     assert(!DCMP(s, 0.0));
 
-    BOOST_FOREACH (float (&row)[3], x)
-        BOOST_FOREACH (float &el, row)
+    for (auto &row : x)
+        for (auto &el : row)
             el /= s;
 
     return *this;

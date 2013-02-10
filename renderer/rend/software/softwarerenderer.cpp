@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "softwarerenderer.h"
 
 #include "viewport.h"
@@ -46,22 +48,22 @@ SoftwareRenderer::~SoftwareRenderer()
 
 void SoftwareRenderer::renderWorld(const RenderList *rendlist)
 {
-    auto &trias = rendlist->triangles();
+    const auto &trias = rendlist->triangles();
     TriangleRasterizer *rasterizer = 0;
 
     // painter's algorithm
-    BOOST_REVERSE_FOREACH(const math::Triangle &t, trias)
+    for (auto t = trias.rbegin(); t != trias.rend(); ++t)
     {
-        if (t.clipped)
+        if (t->clipped)
             continue;
 
-        if (!t.getMaterial())
+        if (!t->getMaterial())
         {
             syslog << "Material has not been setted for this triangle" << logdebug;
             continue;
         }
 
-        switch(t.getMaterial()->shadeMode)
+        switch(t->getMaterial()->shadeMode)
         {
         case Material::SM_WIRE:
             rasterizer = m_wire;
@@ -86,17 +88,17 @@ void SoftwareRenderer::renderWorld(const RenderList *rendlist)
         }
 
         if (rasterizer)
-            rasterizer->drawTriangle(t, m_fb);
+            rasterizer->drawTriangle(*t, m_fb);
     }
 }
 
-void SoftwareRenderer::renderGui(const list<sptr(GuiObject)> &guiObjects)
+void SoftwareRenderer::renderGui(const std::list<sptr(GuiObject)> &guiObjects)
 {
     for (auto &obj : guiObjects)
     {
         auto texture = obj->getTexture();
-        int xorig = obj->getPosition().x;
-        int yorig = obj->getPosition().y;
+        int xorig = int(obj->getPosition().x);
+        int yorig = int(obj->getPosition().y);
 
         for (int y = 0; y < texture->height(); y++)
             for (int x = 0; x < texture->width(); x++)

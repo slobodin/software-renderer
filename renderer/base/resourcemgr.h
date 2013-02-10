@@ -1,14 +1,12 @@
 /*
  * resourcemgr.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef RESOURCEMGR_H
 #define RESOURCEMGR_H
-
-#include "comm_pch.h"
 
 namespace rend
 {
@@ -27,12 +25,13 @@ DECLARE_EXCEPTION(UnsupportedResource)
 /*!
   * Contains all loaded assets.
   */
-class ResourceMgr : boost::noncopyable
+class ResourceMgr
 {
-    vector<path> m_loadablePaths;
+    typedef std::tr2::sys::path FSPath;
+    std::vector<FSPath> m_loadablePaths;
 
-    map<string, sptr(Resource) >        m_resources;
-    map<string, sptr(ResourceDecoder) > m_decoders;
+    std::map<std::string, sptr(Resource) >        m_resources;
+    std::map<std::string, sptr(ResourceDecoder) > m_decoders;
 
     //! Gets the resource.
     /*!
@@ -41,10 +40,10 @@ class ResourceMgr : boost::noncopyable
       * \return Pointer to the resource.
       * \param name Path to the asset or name of the resource.
       */
-    sptr(Resource) getResource(const string &name);
+    sptr(Resource) getResource(const std::string &name);
 
-    void loadResource(const string &resourcepath);
-    void unloadResource(const string &resourcepath);
+    void loadResource(const std::string &resourcepath);
+    void unloadResource(const std::string &resourcepath);
 
 public:
     //! Default ctor.
@@ -57,16 +56,18 @@ public:
       * For example, mesh, texture, scene object
       */
     template<typename T>
-    sptr(T) getObject(const string &name);
+    sptr(T) getObject(const std::string &name);
 
     void loadAllResources();
 
-    void addPath(const string &name);
+    void addPath(const std::string &name);
     void listPath();
+
+    NONCOPYABLE(ResourceMgr)
 };
 
 template<typename T>
-sptr(T) ResourceMgr::getObject(const string &name)
+sptr(T) ResourceMgr::getObject(const std::string &name)
 {
     sptr(T) nullobj;
 
@@ -75,8 +76,8 @@ sptr(T) ResourceMgr::getObject(const string &name)
     {
 //        if (boost::dynamic_pointer_cast<)
 
-        if (boost::dynamic_pointer_cast<T>(newResource))
-            return boost::dynamic_pointer_cast<T>(newResource);
+        if (std::tr1::dynamic_pointer_cast<T>(newResource))
+            return std::tr1::dynamic_pointer_cast<T>(newResource);
         else
             return nullobj;
     }

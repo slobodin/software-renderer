@@ -1,3 +1,5 @@
+**This file is outdate**
+
 Here is simple software renderer. It means, that it doesn't use OpenGL or DirectX to perform rendering (although, it's not a big problem to change software renderer with opengl). 
 All that it use is tk gui library functions to put image block on a screen (window).
 

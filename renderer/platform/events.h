@@ -8,8 +8,6 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
-#include "comm_pch.h"
-
 namespace platform
 {
 

@@ -8,9 +8,7 @@
 #ifndef BOUNDINGSPHERE_H
 #define BOUNDINGSPHERE_H
 
-#include "comm_pch.h"
-
-#include "vec3.h"
+#include "../math/vec3.h"
 
 namespace rend
 {
@@ -22,13 +20,13 @@ class BoundingSphere
 
 public:
     BoundingSphere();
-    BoundingSphere(const vector<math::vec3> &vertices);
+    BoundingSphere(const std::vector<math::vec3> &vertices);
     ~BoundingSphere();
 
     math::vec3  center() const { return m_centerPoint; }
     float       radius() const { return m_radius; }
 
-    void        calculate(const vector<math::vec3> &vertices);
+    void        calculate(const std::vector<math::vec3> &vertices);
 
     bool valid() const { return m_radius > 0.; }
 };

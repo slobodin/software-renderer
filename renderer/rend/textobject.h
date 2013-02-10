@@ -8,7 +8,6 @@
 #ifndef TEXTOBJECT_H
 #define TEXTOBJECT_H
 
-#include "comm_pch.h"
 #include "guiobject.h"
 
 namespace rend
@@ -26,8 +25,7 @@ public:
 
     virtual const sptr(Texture) getTexture() const;
 
-    void setText(const string &str);
-    void setText(const char *str);
+    void setText(const std::string &str);
 };
 
 }

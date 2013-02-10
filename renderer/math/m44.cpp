@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "m44.h"
 
 #include "common_math.h"
@@ -195,8 +197,8 @@ M44 &M44::operator*= (const M44 &a)
 
 M44 &M44::operator*= (float s)
 {
-    BOOST_FOREACH (float (&row)[4], x)
-        BOOST_FOREACH (float &el, row)
+    for (auto &row : x)
+        for (auto &el : row)
             el *= s;
 
     return *this;
@@ -206,8 +208,8 @@ M44 &M44::operator/= (float s)
 {
     assert(!DCMP(s, 0.0));
 
-    BOOST_FOREACH (float (&row)[4], x)
-        BOOST_FOREACH (float &el, row)
+    for (auto &row : x)
+        for (auto &el : row)
             el /= s;
 
     return *this;

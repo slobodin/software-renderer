@@ -1,9 +1,11 @@
 /*
  * logger.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "logger.h"
 
@@ -15,14 +17,9 @@ namespace base
 
 Logger::Logger()
 {
-    std::ostringstream msg;
-    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-    boost::posix_time::time_facet *f = new boost::posix_time::time_facet("Started on %H:%M:%S");
+    std::time_t result = std::time(0);
 
-    msg.imbue(std::locale(msg.getloc(), f));
-    msg << now;
-
-    cerr << msg.str() << endl;
+    std::cerr << std::asctime(std::localtime(&result)) << std::endl;
 }
 
 Logger &Logger::instance()
@@ -39,7 +36,7 @@ Logger &Logger::operator<< (const char *text)
     return *this;
 }
 
-Logger &Logger::operator<< (const string &text)
+Logger &Logger::operator<< (const std::string &text)
 {
     m_buffer << text << " ";
 
@@ -60,14 +57,16 @@ Logger &Logger::operator<< (unsigned num)
     return *this;
 }
 
+#if 0
 Logger &Logger::operator<< (size_t num)
 {
     m_buffer << num << " ";
 
     return *this;
 }
+#endif
 
-Logger &Logger::operator<< (double num)
+Logger &Logger::operator<< (float num)
 {
     m_buffer << num << " ";
 
@@ -93,23 +92,23 @@ Logger &Logger::operator<< (const LoggerManipulator &man)
     switch (man.m_type)
     {
     case MT_DEBUG:
-        cerr << "[debug]: ";
+        std::cerr << "[debug]: ";
         break;
 
     case MT_MESSAGE:
-        cerr << "[message]: ";
+        std::cerr << "[message]: ";
         break;
 
     case MT_WARNING:
-        cerr << "[warning]: ";
+        std::cerr << "[warning]: ";
         break;
 
     case MT_ERROR:
-        cerr << "[error]: ";
+        std::cerr << "[error]: ";
         break;
     }
 
-    cerr << m_buffer.str() << "\n";
+    std::cerr << m_buffer.str() << "\n";
     m_buffer.str("");
 
     return *this;

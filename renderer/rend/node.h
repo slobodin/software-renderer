@@ -1,18 +1,16 @@
 /*
  * model.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef NODE_H
 #define NODE_H
 
-#include "comm_pch.h"
-
-#include "vec3.h"
-#include "m44.h"
-#include "m33.h"
+#include "../math/vec3.h"
+#include "../math/m44.h"
+#include "../math/m33.h"
 
 //! Abstract scene object.
 /*!

@@ -1,9 +1,11 @@
 /*
  * mesh.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "mesh.h"
 
@@ -36,7 +38,7 @@ void Mesh::computeBoundingSphere(const math::M44 &transform)
     for (auto &vb : m_submeshes)
         sz += vb.numVertices();
 
-    vector<math::vec3> points(sz);
+    std::vector<math::vec3> points(sz);
 
     int j = 0;
     for (auto &vb : m_submeshes)
@@ -128,7 +130,7 @@ void Mesh::setSideType(Material::SideType side)
 
 sptr(Mesh) Mesh::clone() const
 {
-    sptr(Mesh) objMesh = make_shared<Mesh>();
+    sptr(Mesh) objMesh = std::make_shared<Mesh>();
 
     for (auto &submesh : m_submeshes)
     {

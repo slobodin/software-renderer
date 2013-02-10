@@ -1,9 +1,11 @@
 /*
  * boundingsphere.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "boundingsphere.h"
 
@@ -15,7 +17,7 @@ BoundingSphere::BoundingSphere()
 {
 }
 
-BoundingSphere::BoundingSphere(const vector<math::vec3> &vertices)
+BoundingSphere::BoundingSphere(const std::vector<math::vec3> &vertices)
     : m_radius(-1.0)
 {
     calculate(vertices);
@@ -25,7 +27,7 @@ BoundingSphere::~BoundingSphere()
 {
 }
 
-void BoundingSphere::calculate(const vector<math::vec3> &vertices)
+void BoundingSphere::calculate(const std::vector<math::vec3> &vertices)
 {
     if (vertices.empty())
         return;

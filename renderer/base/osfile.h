@@ -1,14 +1,12 @@
 /*
  * osfile.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef OSFILE_H
 #define OSFILE_H
-
-#include "comm_pch.h"
 
 namespace base
 {
@@ -30,11 +28,11 @@ protected:
     };
 
     //! File itself.
-    ifstream m_file;
+    std::ifstream m_file;
 
 public:
     //! Base ctor.
-    OsFile(const string &path, FileType ft);
+    OsFile(const std::string &path, FileType ft);
     //! Dtor.
     virtual ~OsFile();
 };
@@ -45,18 +43,18 @@ public:
   */
 class TextFile : public OsFile
 {
-    stringstream m_fileData;
+    std::stringstream m_fileData;
 
 public:
     //! Ctor with path.
-    TextFile(const string &path);
+    TextFile(const std::string &path);
 
     //! Returns next line from the file.
     /*!
-      * If file ends, returns "END_OF_FILE"-string.
+      * If file ends, returns "END_OF_FILE"-std::string.
       * \param delim Lines deliminator.
       */
-    string getLine(const char delim = '\n');
+    std::string getLine(const char delim = '\n');
 
     void resetPtr();
 };
@@ -68,11 +66,11 @@ public:
 class BinaryFile : public OsFile
 {
     //! Binary data.
-    vector<uint8_t> m_fileData;
+    std::vector<uint8_t> m_fileData;
 
 public:
     //! Ctor with path.
-    BinaryFile(const string &path);
+    BinaryFile(const std::string &path);
 
     //! Returns pointer to the file data with given offset.
     void *getBytes(size_t offset);

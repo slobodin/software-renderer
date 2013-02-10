@@ -1,9 +1,11 @@
 /*
  * poly.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "poly.h"
 
@@ -53,9 +55,9 @@ void Triangle::applyTransformation(const M44 &transform, bool translateNormals)
     }
 }
 
-vector<vec3> Triangle::points() const
+std::vector<vec3> Triangle::points() const
 {
-    vector<vec3> res(3);
+    std::vector<vec3> res(3);
     res[0] = m_verts[0].p;
     res[1] = m_verts[1].p;
     res[2] = m_verts[2].p;
@@ -63,9 +65,9 @@ vector<vec3> Triangle::points() const
     return res;
 }
 
-vector<vec3> Triangle::normals() const
+std::vector<vec3> Triangle::normals() const
 {
-    vector<vec3> res(3);
+    std::vector<vec3> res(3);
     res[0] = m_verts[0].n;
     res[1] = m_verts[1].n;
     res[2] = m_verts[2].n;
@@ -73,9 +75,9 @@ vector<vec3> Triangle::normals() const
     return res;
 }
 
-vector<vec2> Triangle::uvs() const
+std::vector<vec2> Triangle::uvs() const
 {
-    vector<vec2> res(3);
+    std::vector<vec2> res(3);
     res[0] = m_verts[0].t;
     res[1] = m_verts[1].t;
     res[2] = m_verts[2].t;
@@ -103,13 +105,13 @@ float Triangle::square() const
 
     vec3 n = p1.crossProduct(p2);
 
-    return 0.5 * n.length();
+    return 0.5f * n.length();
 }
 
 bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2)
 {
-    float avgz = 0.33333 * (t1.m_verts[0].p.z + t1.m_verts[1].p.z + t1.m_verts[2].p.z);
-    float avgotherz = 0.33333 * (t2.m_verts[0].p.z + t2.m_verts[1].p.z + t2.m_verts[2].p.z);
+    float avgz = 0.33333f * (t1.m_verts[0].p.z + t1.m_verts[1].p.z + t1.m_verts[2].p.z);
+    float avgotherz = 0.33333f * (t2.m_verts[0].p.z + t2.m_verts[1].p.z + t2.m_verts[2].p.z);
 
     if (avgz < avgotherz)
         return true;
@@ -119,7 +121,7 @@ bool ZCompareAvg(const math::Triangle &t1, const math::Triangle &t2)
 
 bool ZCompareMin(const Triangle &t1, const Triangle &t2)
 {
-    vector<vec3> points = t1.points();
+    std::vector<vec3> points = t1.points();
     float minz1 = (*std::min_element(points.begin(), points.end(), comparez)).z;
 
     points = t2.points();
@@ -133,7 +135,7 @@ bool ZCompareMin(const Triangle &t1, const Triangle &t2)
 
 bool ZCompareMax(const Triangle &t1, const Triangle &t2)
 {
-    vector<vec3> points = t1.points();
+    std::vector<vec3> points = t1.points();
     float minz1 = (*std::max_element(points.begin(), points.end(), comparez)).z;
 
     points = t2.points();
@@ -149,7 +151,7 @@ Polygon::Polygon()
 {
 }
 
-Polygon::Polygon(const vector<vertex> &vertices)
+Polygon::Polygon(const std::vector<vertex> &vertices)
 {
     if (vertices.size() < 3)
         throw std::runtime_error("Invalid poly.");
@@ -157,7 +159,7 @@ Polygon::Polygon(const vector<vertex> &vertices)
     copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
 }
 
-void Polygon::set(const vector<vertex> &vertices)
+void Polygon::set(const std::vector<vertex> &vertices)
 {
     m_vertices.clear();
     copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
@@ -165,12 +167,12 @@ void Polygon::set(const vector<vertex> &vertices)
 
 void Polygon::split(Polygon &poly1, Polygon &poly2) const
 {
-    poly1.set(vector<vertex>(m_vertices.begin(), m_vertices.begin() + 3));
-    poly2.set(vector<vertex>(m_vertices.begin() + 2, m_vertices.end()));
+    poly1.set(std::vector<vertex>(m_vertices.begin(), m_vertices.begin() + 3));
+    poly2.set(std::vector<vertex>(m_vertices.begin() + 2, m_vertices.end()));
     poly2.m_vertices.push_back(m_vertices[0]);
 }
 
-void Triangulate(const Polygon &poly, vector<Triangle> &resultList)
+void Triangulate(const Polygon &poly, std::vector<Triangle> &resultList)
 {
     if (poly.m_vertices.size() == 3)
     {
@@ -187,7 +189,7 @@ void Triangulate(const Polygon &poly, vector<Triangle> &resultList)
     }
 }
 
-void Triangulate(const vector<math::vertex> &vertices, const vector<int> &indices, vector<int> &resultIndexList)
+void Triangulate(const std::vector<math::vertex> &vertices, const std::vector<int> &indices, std::vector<int> &resultIndexList)
 {
     if (vertices.size() == 3)
     {
@@ -197,12 +199,12 @@ void Triangulate(const vector<math::vertex> &vertices, const vector<int> &indice
     else
     {
         // split
-        vector<vertex> newverts1(vertices.begin(), vertices.begin() + 3);
-        vector<vertex> newverts2(vertices.begin() + 2, vertices.end());
+        std::vector<vertex> newverts1(vertices.begin(), vertices.begin() + 3);
+        std::vector<vertex> newverts2(vertices.begin() + 2, vertices.end());
         newverts2.push_back(vertices[0]);
 
-        vector<int> newinds1(indices.begin(), indices.begin() + 3);
-        vector<int> newinds2(indices.begin() + 2, indices.end());
+        std::vector<int> newinds1(indices.begin(), indices.begin() + 3);
+        std::vector<int> newinds2(indices.begin() + 2, indices.end());
         newinds2.push_back(indices[0]);
 
         // triangulate

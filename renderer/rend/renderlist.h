@@ -1,16 +1,14 @@
 /*
  * renderlist.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef RENDERLIST_H
 #define RENDERLIST_H
 
-#include "comm_pch.h"
-
-#include "poly.h"
+#include "../math/poly.h"
 
 namespace math
 {
@@ -24,10 +22,10 @@ class VertexBuffer;
 class SceneObject;
 class Camera;
 
-class RenderList : boost::noncopyable
+class RenderList
 {
 public:
-    typedef vector<math::Triangle> Triangles;
+    typedef std::vector<math::Triangle> Triangles;
 
 private:
     Triangles m_triangles;
@@ -42,7 +40,7 @@ public:
     //! Dtor.
     ~RenderList() { }
 
-    void prepare(int trianglesCount);
+    void prepare(size_t trianglesCount);
     void append(const sptr(SceneObject) obj);
 
     const Triangles &triangles() const { return m_triangles; }
@@ -54,6 +52,8 @@ public:
     size_t getSize() const { return m_triangles.size(); }
     size_t getCountOfNotClippedTriangles() const;
     bool empty() const { return m_triangles.empty(); }
+
+    NONCOPYABLE(RenderList)
 };
 
 }

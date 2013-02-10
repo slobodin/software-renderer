@@ -1,14 +1,14 @@
 /*
  * texture.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "resource.h"
+#include "../base/resource.h"
 #include "color.h"
 
 namespace rend
@@ -18,13 +18,13 @@ DECLARE_EXCEPTION(TextureException)
 
 class Texture : public base::Resource
 {
-    vector<Color3> m_pixels;
+    std::vector<Color3> m_pixels;
     static const Color3 BLACK;
 
     int m_width, m_height;
 
 public:
-    Texture(const vector<Color3> &pixels, int width, int height);
+    Texture(const std::vector<Color3> &pixels, int width, int height);
     ~Texture();
 
     const Color3 &at(int x, int y) const
@@ -44,8 +44,8 @@ public:
     }
 
     // Getting pixels
-    vector<Color3> getLine(int y, int xStart = 0, int xEnd = 0) const;
-    vector<Color3> getBlock(int x, int y, int width, int height) const;
+    std::vector<Color3> getLine(int y, int xStart = 0, int xEnd = 0) const;
+    std::vector<Color3> getBlock(int x, int y, int width, int height) const;
 
     const Color3 *raw() const
     {

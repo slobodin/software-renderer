@@ -1,9 +1,11 @@
 /*
  * light.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "light.h"
 
@@ -23,7 +25,7 @@ Light::Light(const Color3 &intensity)
     m_lightId = NumLights;
     NumLights++;
 
-    m_shader = &Light::shader;
+    //m_shader = &Light::shader;
 }
 
 Light::~Light()
@@ -51,15 +53,15 @@ void Light::illuminate(RenderList *renderlist) const
         {
         case Material::SM_FLAT:
 //            t.v(0).color = t.v(1).color = t.v(2).color = m_shader(this, getMaterialColor(material), t.normal());
-            t.v(0).color += m_shader(this, material, t.normal(), t.v(0).p);
-            t.v(1).color += m_shader(this, material, t.normal(), t.v(0).p);
-            t.v(2).color += m_shader(this, material, t.normal(), t.v(0).p);
+            t.v(0).color += shader(material, t.normal(), t.v(0).p);
+            t.v(1).color += shader(material, t.normal(), t.v(0).p);
+            t.v(2).color += shader(material, t.normal(), t.v(0).p);
             break;
 
         case Material::SM_GOURAUD:
-            t.v(0).color += m_shader(this, material, t.v(0).n, t.v(0).p);
-            t.v(1).color += m_shader(this, material, t.v(1).n, t.v(0).p);
-            t.v(2).color += m_shader(this, material, t.v(2).n, t.v(0).p);
+            t.v(0).color += shader(material, t.v(0).n, t.v(0).p);
+            t.v(1).color += shader(material, t.v(1).n, t.v(0).p);
+            t.v(2).color += shader(material, t.v(2).n, t.v(0).p);
             break;
 
         case Material::SM_UNDEFINED:
@@ -69,9 +71,9 @@ void Light::illuminate(RenderList *renderlist) const
             break;
         case Material::SM_TEXTURE:
             // texture - performing standart flat shading. On rasterizing phaze we modulate texture texels with this color.
-            t.v(0).color += m_shader(this, material, t.normal(), t.v(0).p);
-            t.v(1).color += m_shader(this, material, t.normal(), t.v(0).p);
-            t.v(2).color += m_shader(this, material, t.normal(), t.v(0).p);
+            t.v(0).color += shader(material, t.normal(), t.v(0).p);
+            t.v(1).color += shader(material, t.normal(), t.v(0).p);
+            t.v(2).color += shader(material, t.normal(), t.v(0).p);
             break;
         default:
             break;
@@ -104,7 +106,7 @@ Color3 DirectionalLight::shader(const sptr(Material) material, const math::vec3 
     if (dp > 0)
     {
         shadedColor = m_intensity * material->diffuseColor;
-        shadedColor *= (dp / 256.0);
+        shadedColor *= (dp / 256.0f);
     }
     else
         return Color3(0, 0, 0);/*matColor*/;
@@ -136,7 +138,7 @@ Color3 PointLight::shader(const sptr(Material) material, const math::vec3 &norma
         float i = dp / (dist * atten);
 
         shadedColor = m_intensity * material->diffuseColor;
-        shadedColor *= (i / 256.0);
+        shadedColor *= (i / 256.0f);
     }
     else
         return Color3(0, 0, 0);

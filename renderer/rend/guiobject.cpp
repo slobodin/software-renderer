@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "guiobject.h"
 
 #include "texture.h"

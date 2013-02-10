@@ -1,16 +1,14 @@
 /*
  * light.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "comm_pch.h"
-
-#include "vec3.h"
+#include "../math/vec3.h"
 #include "color.h"
 #include "renderlist.h"
 #include "node.h"
@@ -42,9 +40,6 @@ protected:
     Color3 m_intensity;
 
     virtual Color3 shader(const sptr(Material) material, const math::vec3 &normal, const math::vec3 &pt) const = 0;
-
-    typedef boost::function<Color3 (const Light*, const sptr(Material), const math::vec3 &, const math::vec3 &)> ShaderFunction;
-    ShaderFunction m_shader;
 
     Light(const Color3 &intensity);
     virtual ~Light();

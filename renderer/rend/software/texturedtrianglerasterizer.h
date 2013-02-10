@@ -8,7 +8,6 @@
 #ifndef TEXTUREDTRIANGLERASTERIZER_H
 #define TEXTUREDTRIANGLERASTERIZER_H
 
-#include "comm_pch.h"
 #include "trianglerasterizer.h"
 
 namespace rend

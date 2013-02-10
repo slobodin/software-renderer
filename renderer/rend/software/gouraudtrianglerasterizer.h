@@ -8,7 +8,6 @@
 #ifndef GOURAUDTRIANGLERASTERIZER_H
 #define GOURAUDTRIANGLERASTERIZER_H
 
-#include "comm_pch.h"
 #include "trianglerasterizer.h"
 
 namespace rend

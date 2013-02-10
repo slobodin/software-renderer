@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\base">
+      <UniqueIdentifier>{76e4662c-a530-4ba8-963e-d9ef3ad92f6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\base">
+      <UniqueIdentifier>{c91f25f3-84e5-4ec2-912c-44eb8e0c25c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\comm">
+      <UniqueIdentifier>{738552e2-bc70-4b01-8e0f-365f3fc58357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{7901361a-efc7-46d6-8376-ed1b2b69f7cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{b7facece-ae5d-415e-8a21-457e64070487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rend">
+      <UniqueIdentifier>{0f6b6c2b-2781-4afc-8246-83639fab9edb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rend">
+      <UniqueIdentifier>{9296225d-5a0d-433e-8a2f-64b628b07ebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rend\software">
+      <UniqueIdentifier>{9695e8cc-2c01-47f2-ab70-cf1e92f902e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rend\software">
+      <UniqueIdentifier>{149e54fb-7c5b-41f1-988e-1643ee88a122}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\comm">
+      <UniqueIdentifier>{e9a4e3b1-6007-4e97-b8a9-1048b2cc3a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\platform">
+      <UniqueIdentifier>{0b342272-86c6-430e-bd98-da734e9b1983}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\platform">
+      <UniqueIdentifier>{69d61426-8b5b-40a6-9f03-8c4606c1c75f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\config.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\controller.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\decoderbspq3.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\decoderimage.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\decodermd2.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\decoderobj.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\logger.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\osfile.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\resource.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\resourcedecoder.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\resourcemgr.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="comm\exception.h">
+      <Filter>Header Files\comm</Filter>
+    </ClInclude>
+    <ClInclude Include="comm\comm_macro.h">
+      <Filter>Header Files\comm</Filter>
+    </ClInclude>
+    <ClInclude Include="math\common_math.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\m22.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\m33.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\m44.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\math_utils.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\plane.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\poly.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vec2.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vec3.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vertex.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\abstractrenderer.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\boundingsphere.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\camera.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\color.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\framebuffer.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\guiobject.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\light.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\material.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\mesh.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\node.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\renderlist.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\rendermgr.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\sceneobject.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\terrainsceneobject.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\textobject.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\texture.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\vertexbuffer.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\viewport.h">
+      <Filter>Header Files\rend</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\software\flattrianglerasterizer.h">
+      <Filter>Header Files\rend\software</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\software\gouraudtrianglerasterizer.h">
+      <Filter>Header Files\rend\software</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\software\softwarerenderer.h">
+      <Filter>Header Files\rend\software</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\software\texturedtrianglerasterizer.h">
+      <Filter>Header Files\rend\software</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\software\wireframetrianglerasterizer.h">
+      <Filter>Header Files\rend\software</Filter>
+    </ClInclude>
+    <ClInclude Include="rend\software\trianglerasterizer.h">
+      <Filter>Header Files\rend\software</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\events.h">
+      <Filter>Header Files\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\baseapp.h">
+      <Filter>Header Files\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\baseappwin.h">
+      <Filter>Header Files\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="comm\utils.h">
+      <Filter>Header Files\comm</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="base\config.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\controller.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\decoderbspq3.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\decoderimage.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\decodermd2.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\decoderobj.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\logger.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\osfile.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\resourcemgr.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="math\m33.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\m44.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\math_utils.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\plane.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\poly.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\vertex.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\boundingsphere.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\camera.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\color.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\framebuffer.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\guiobject.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\light.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\material.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\mesh.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\renderlist.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\rendermgr.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\sceneobject.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\terrainsceneobject.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\textobject.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\texture.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\vertexbuffer.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\viewport.cpp">
+      <Filter>Source Files\rend</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\software\flattrianglerasterizer.cpp">
+      <Filter>Source Files\rend\software</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\software\gouraudtrianglerasterizer.cpp">
+      <Filter>Source Files\rend\software</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\software\softwarerenderer.cpp">
+      <Filter>Source Files\rend\software</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\software\texturedtrianglerasterizer.cpp">
+      <Filter>Source Files\rend\software</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\software\trianglerasterizer.cpp">
+      <Filter>Source Files\rend\software</Filter>
+    </ClCompile>
+    <ClCompile Include="rend\software\wireframetrianglerasterizer.cpp">
+      <Filter>Source Files\rend\software</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\baseapp.cpp">
+      <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\events.cpp">
+      <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\baseappwin.cpp">
+      <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="comm\utils.cpp">
+      <Filter>Source Files\comm</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

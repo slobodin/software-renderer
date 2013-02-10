@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "vertexbuffer.h"
 
 #include "material.h"
@@ -22,7 +24,7 @@ VertexBuffer::~VertexBuffer()
 {
 }
 
-void VertexBuffer::setMaterial(boost::shared_ptr<Material> material)
+void VertexBuffer::setMaterial(sptr(Material) material)
 {
     if (!material)
         return;
@@ -30,8 +32,8 @@ void VertexBuffer::setMaterial(boost::shared_ptr<Material> material)
     m_material = material;
 }
 
-void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices,
-                                  const vector<math::vec2> &uvs, const vector<int> &uvinds,
+void VertexBuffer::appendVertices(const std::vector<math::vertex> &vertices, const std::vector<int> &indices,
+                                  const std::vector<math::vec2> &uvs, const std::vector<int> &uvinds,
                                   bool isNormalsComputed)
 {
     std::copy(uvs.begin(), uvs.end(), std::back_inserter(m_uvs));
@@ -40,7 +42,7 @@ void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const ve
     appendVertices(vertices, indices, isNormalsComputed);
 }
 
-void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const vector<int> &indices,
+void VertexBuffer::appendVertices(const std::vector<math::vertex> &vertices, const std::vector<int> &indices,
                                   bool isNormalsComputed)
 {
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
@@ -50,7 +52,7 @@ void VertexBuffer::appendVertices(const vector<math::vertex> &vertices, const ve
         computeVertexNormals();
 }
 
-void VertexBuffer::appendVertices(const vector<math::vertex> &vertices,
+void VertexBuffer::appendVertices(const std::vector<math::vertex> &vertices,
                                   bool isNormalsComputed)
 {
     std::copy(vertices.begin(), vertices.end(), std::back_inserter(m_vertices));
@@ -61,7 +63,7 @@ void VertexBuffer::appendVertices(const vector<math::vertex> &vertices,
 
 void VertexBuffer::computeVertexNormals()
 {
-    vector<int> polysTouchVertex(m_vertices.size());
+    std::vector<int> polysTouchVertex(m_vertices.size());
 
     // clear normals for all vertices
     std::for_each(m_vertices.begin(), m_vertices.end(), [](math::vertex &v) { v.n.zero(); } );

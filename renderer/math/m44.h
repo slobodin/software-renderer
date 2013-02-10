@@ -8,8 +8,6 @@
 #ifndef M44_H
 #define M44_H
 
-#include "comm_pch.h"
-
 namespace math
 {
 

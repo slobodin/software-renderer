@@ -1,17 +1,14 @@
 /*
  * vector3.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef vector3_H
 #define vector3_H
 
-#include "comm_pch.h"
-
 #include "common_math.h"
-#include <smmintrin.h>
 
 namespace math
 {
@@ -20,18 +17,18 @@ namespace math
 /*!
   * v = (x, y, z)
   */
-struct __attribute__((aligned(16))) vec3
+struct vec3
 {
     //! X Y Z coordinates of this vector
     union
     {
-        __m128 v;
+        //__m128 v;
         struct { float x, y, z, w; };     // w unused
     };
 
-private:
+/*private:
     vec3(const __m128 &vv)
-        : v(vv) { w = 1.0f; }
+        : v(vv) { w = 1.0f; }*/
 
 public:
     //! Default ctor.

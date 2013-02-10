@@ -1,28 +1,27 @@
 /*
  * common_math.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef COMMON_MATH_H
 #define COMMON_MATH_H
 
-#include "comm_pch.h"
-
-#include <cmath>
-#include <climits>
+#ifndef M_PI
+#define M_PI 3.1415926535897932f
+#endif
 
 namespace math
 {
 
 //! Some kind of machine epsilons.
-const float EPSILON_E1 = 1E-1;
-const float EPSILON_E3 = 1E-3;
-const float EPSILON_E4 = 1E-4;
-const float EPSILON_E5 = 1E-5;
-const float EPSILON_E6 = 1E-6;
-const float EPSILON_E12 = 1E-12;
+const float EPSILON_E1 = 1E-1f;
+const float EPSILON_E3 = 1E-3f;
+const float EPSILON_E4 = 1E-4f;
+const float EPSILON_E5 = 1E-5f;
+const float EPSILON_E6 = 1E-6f;
+const float EPSILON_E12 = 1E-12f;
 
 //! Float point comparsion of two values.
 /*!
@@ -34,9 +33,9 @@ inline bool DCMP(float x, float y, float pres = EPSILON_E12)
 }
 
 //! Degrees to radians conversion function.
-inline float DegToRad(float ang) { return ang * (M_PI / 180.0); }
+inline float DegToRad(float ang) { return ang * (M_PI / 180.0f); }
 //! Radians to degrees conversion function.
-inline float RadToDeg(float rad) { return rad * (180.0 / M_PI); }
+inline float RadToDeg(float rad) { return rad * (180.0f / M_PI); }
 
 }
 

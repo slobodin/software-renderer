@@ -8,8 +8,6 @@
 #ifndef ABSTRACTRENDERER_H
 #define ABSTRACTRENDERER_H
 
-#include "comm_pch.h"
-
 namespace math
 {
 
@@ -38,7 +36,7 @@ public:
     virtual ~AbstractRenderer() { }
 
     virtual void renderWorld(const RenderList *rendlist) = 0;
-    virtual void renderGui(const list<sptr(GuiObject)> &guiObjects) = 0;
+    virtual void renderGui(const std::list<sptr(GuiObject)> &guiObjects) = 0;
 
     virtual void beginFrame(sptr(Viewport) viewport) = 0;
     virtual void endFrame(sptr(Viewport) viewport) = 0;

@@ -1,14 +1,12 @@
 /*
  * poly.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef POLY_H
 #define POLY_H
-
-#include "comm_pch.h"
 
 #include "vertex.h"
 #include "material.h"
@@ -46,11 +44,11 @@ public:
     void applyTransformation(const math::M44 &transform, bool translateNormals = false);
 
     //! Returns copy of the triangle points.
-    vector<vec3> points() const;
+    std::vector<vec3> points() const;
     //! Returns copy of the triangle normals.
-    vector<vec3> normals() const;
+    std::vector<vec3> normals() const;
     //! Returns copy of the triangle texture coordinates.
-    vector<vec2> uvs() const;
+    std::vector<vec2> uvs() const;
 
     sptr(rend::Material) getMaterial() const { return m_material; }
     void setMaterial(sptr(rend::Material) material) { m_material = material; }
@@ -75,28 +73,29 @@ bool ZCompareMax(const math::Triangle &t1, const math::Triangle &t2);
   */
 class Polygon
 {
-    vector<vertex> m_vertices;
+    std::vector<vertex> m_vertices;
 
 public:
     Polygon();
-    Polygon(const vector<vertex> &vertices);
+    Polygon(const std::vector<vertex> &vertices);
 
     //! Set poly with new data.
-    void set(const vector<vertex> &vertices);
+    void set(const std::vector<vertex> &vertices);
 
-    const vector<vertex> &vertices() const { return m_vertices; }
+    const std::vector<vertex> &vertices() const { return m_vertices; }
 
     //! Splits this poly into two polys.
     void split(Polygon &poly1, Polygon &poly2) const;
 
     //! Performs triangulation of poly into resultList.
-    friend void Triangulate(const Polygon &poly, vector<Triangle> &resultList);
+    friend void Triangulate(const Polygon &poly, std::vector<Triangle> &resultList);
 };
 
 //! Performs triangulation of poly into resultList.
-void Triangulate(const Polygon &poly, vector<Triangle> &resultList);
+void Triangulate(const Polygon &poly, std::vector<Triangle> &resultList);
 //! Performs triangulation of poly defined by index and vertex list.
-void Triangulate(const vector<math::vertex> &vertices, const vector<int> &indices, vector<int> &resultIndexList);
+void Triangulate(const std::vector<math::vertex> &vertices, const std::vector<int> &indices,
+                 std::vector<int> &resultIndexList);
 
 }
 

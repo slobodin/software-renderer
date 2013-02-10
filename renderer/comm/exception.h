@@ -1,14 +1,13 @@
 /*
  * exception.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-//#include <exception>
 #include <stdexcept>
 #include <string>
 

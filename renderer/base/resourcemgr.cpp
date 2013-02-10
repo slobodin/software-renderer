@@ -1,19 +1,18 @@
 /*
  * resourcemgr.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "resourcemgr.h"
 
 #include "resource.h"
 #include "resourcedecoder.h"
 #include "osfile.h"
-#include "decoderplg.h"
 #include "decoderbspq3.h"
-#include "decoderasc.h"
-#include "decodercob.h"
 #include "decoderobj.h"
 #include "decoderimage.h"
 #include "mesh.h"
@@ -24,34 +23,26 @@ namespace base
 
 ResourceMgr::ResourceMgr()
 {
-    sptr(ResourceDecoder) plgDecoder(new DecoderPLG);
-    sptr(ResourceDecoder) ascDecoder(new DecoderASC);
-    sptr(ResourceDecoder) cobDecoder(new DecoderCOB);
     sptr(ResourceDecoder) objDecoder(new DecoderOBJ);
     sptr(ResourceDecoder) imgDecoder(new DecoderImage);
-    sptr(ResourceDecoder) bspDecoder(new DecoderBSPQ3);
     // other decoders
 
     // add all
-    m_decoders[plgDecoder->extension()] = plgDecoder;
-    m_decoders[ascDecoder->extension()] = ascDecoder;
-    m_decoders[cobDecoder->extension()] = cobDecoder;
     m_decoders[objDecoder->extension()] = objDecoder;
     m_decoders[imgDecoder->extension()] = imgDecoder;
-    m_decoders[bspDecoder->extension()] = bspDecoder;
 }
 
 ResourceMgr::~ResourceMgr()
 {
 }
 
-sptr(Resource) ResourceMgr::getResource(const string &name)
+sptr(Resource) ResourceMgr::getResource(const std::string &name)
 {
     fs::path p(name);
-    string fullpath;
+    std::string fullpath;
 
     if (fs::is_directory(p))
-        fullpath = fs::canonical(p).string();
+        fullpath = fs::system_complete(p).string();
     else
         fullpath = name;
 
@@ -74,7 +65,7 @@ sptr(Resource) ResourceMgr::getResource(const string &name)
                 p /= name;
 
                 try {
-                    rit = m_resources.find(fs::canonical(p).string());
+                    rit = m_resources.find(fs::system_complete(p).string());
                     if (rit != m_resources.end())
                     {
                         return rit->second;
@@ -85,7 +76,7 @@ sptr(Resource) ResourceMgr::getResource(const string &name)
 
             // else -> find by name
             rit = std::find_if(m_resources.begin(), m_resources.end(),
-                               [&](map<string, sptr(Resource) >::value_type &val)
+                               [&](std::map<std::string, sptr(Resource) >::value_type &val)
                                { return val.second->getName() == name; } );     // do you like C++ too??
 
             // no such resource
@@ -106,48 +97,32 @@ sptr(Resource) ResourceMgr::getResource(const string &name)
         return m_resources[fullpath];
 }
 
-void ResourceMgr::loadResource(const string &resourcepath) try
+void ResourceMgr::loadResource(const std::string &resourcepath) try
 {
     const char *error = "Loading resource:";
 
     fs::path p(resourcepath);
-    if (is_directory(p))
+    if (fs::is_directory(p))
     {
         syslog << error << resourcepath << "isn't a regular file" << logerr;
         return;
     }
-
-    if (!p.has_extension())
-    {
-//        syslog << error << resourcepath << "without extension" << logerr;
+    
+    if (p.extension() == std::string())
         return;
-    }
 
     // ensure that we have decoder for this resource
-    string extension = p.extension().string();
+    std::string extension = p.extension();
     if (extension.at(0) == '.')
-    {
         extension.erase(extension.begin());
-    }
-
-    // skip config files
-    if (extension == "yaml")
-        return;
 
     auto dit = m_decoders.find(extension);
-
+    // unsupported
     if (dit == m_decoders.end())
-    {
-        syslog << error << resourcepath << "has unsupported file format." << logerr;
         return;
-    }
 
     // if we already have the resource
-    string fullpath;
-    if (is_directory(p))
-        fullpath = fs::canonical(p).string();
-    else
-        fullpath = p.string();
+    std::string fullpath = fs::system_complete(p);
 
     auto rit = m_resources.find(fullpath);
     if (rit != m_resources.end())
@@ -156,7 +131,7 @@ void ResourceMgr::loadResource(const string &resourcepath) try
         return;
     }
 
-    if (!fs::exists(fullpath))
+    if (!fs::exists(fs::system_complete(p)))
         return;
 
     sptr(Resource) newResource;
@@ -174,12 +149,12 @@ void ResourceMgr::loadResource(const string &resourcepath) try
         return;
     }
 }
-catch (fs::filesystem_error &e)
+catch (std::tr2::sys::filesystem_error &e)
 {
     syslog << "Boost filesystem exception occurred:" << e.what() << logerr;
 }
 
-void ResourceMgr::unloadResource(const string &/*resourcepath*/)
+void ResourceMgr::unloadResource(const std::string &/*resourcepath*/)
 {
     // TODO:
 }
@@ -188,7 +163,7 @@ void ResourceMgr::loadAllResources() try
 {
     for (auto loadablePath : m_loadablePaths)
     {
-        vector<fs::path> dirEntries;
+        std::vector<fs::path> dirEntries;
 
         if (fs::is_directory(loadablePath))
         {
@@ -196,7 +171,7 @@ void ResourceMgr::loadAllResources() try
                       std::back_inserter(dirEntries));
 
             for (auto p : dirEntries)
-                loadResource(p.string());
+                loadResource(loadablePath / p);
         }
     }
 
@@ -207,12 +182,12 @@ void ResourceMgr::loadAllResources() try
     }
     syslog << logmess;
 }
-catch (fs::filesystem_error &e)
+catch (std::tr2::sys::filesystem_error &e)
 {
     syslog << "Boost filesystem exception occurred:" << e.what() << logerr;
 }
 
-void ResourceMgr::addPath(const string &name) try
+void ResourceMgr::addPath(const std::string &name) try
 {
     if (name.empty())
     {
@@ -220,9 +195,7 @@ void ResourceMgr::addPath(const string &name) try
         return;
     }
 
-    using namespace fs;
-
-    path p(name);
+    fs::path p(name);
 
     if (exists(p))
     {
@@ -232,7 +205,7 @@ void ResourceMgr::addPath(const string &name) try
 
             auto it = std::find_if(m_loadablePaths.begin(),
                                    m_loadablePaths.end(),
-                                   [&](path &it){ return canonical(p).string() == canonical(it).string(); } );
+                                   [&](fs::path &it){ return fs::system_complete(p).string() == fs::system_complete(it).string(); } );
 
             if (it == m_loadablePaths.end())
                 m_loadablePaths.push_back(p);
@@ -248,7 +221,7 @@ void ResourceMgr::addPath(const string &name) try
     else
         syslog << "Adding new path to resource manager:" << name << "doesn't exist" <<logwarn;
 }
-catch (fs::filesystem_error &e)
+catch (std::tr2::sys::filesystem_error &e)
 {
     syslog << "Boost filesystem exception occurred:" << e.what() << logerr;
 }
@@ -257,7 +230,7 @@ void ResourceMgr::listPath()
 {
     syslog << "Path list:\n";
     for (auto p : m_loadablePaths)
-        syslog << fs::canonical(p).string() << "\n";
+        syslog << fs::system_complete(p).string() << "\n";
 
     syslog << logdebug;
 }

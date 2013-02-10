@@ -1,9 +1,11 @@
 /*
  * framebuffer.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "framebuffer.h"
 
@@ -12,12 +14,16 @@ namespace rend
 
 void memset32(void *dest, uint32_t data, int count)
 {
+#ifdef _MSC_VER
+    throw std::exception("memset32 not implemented on this platform.");
+#else
     asm ("cld\n\t"
          "rep\n\t"
          "stosl"
          :
          : "c" (count), "a" (data), "D" (dest)
          );
+#endif
 }
 
 FrameBuffer::FrameBuffer(int w, int h)

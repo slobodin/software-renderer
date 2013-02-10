@@ -5,19 +5,21 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "decoderobj.h"
+
 #include "vertexbuffer.h"
 #include "mesh.h"
 #include "sceneobject.h"
 #include "color.h"
 #include "material.h"
 #include "poly.h"
-#include "string_utils.h"
 
 namespace base
 {
 
-void DecoderOBJ::appendVertex(string &line)
+void DecoderOBJ::appendVertex(std::string &line)
 {
     line = line.substr(line.find(' ') + 1);
 
@@ -29,19 +31,19 @@ void DecoderOBJ::appendVertex(string &line)
     vertexList.push_back(v);
 }
 
-void DecoderOBJ::appendFace(string &line)
+void DecoderOBJ::appendFace(std::string &line)
 {
     line = line.substr(line.find(' ') + 1);
 
     std::istringstream is(line);
     FaceInfo face;
 
-    if (line.find("//") != string::npos)
+    if (line.find("//") != std::string::npos)
     {
-        boost::char_separator<char> sep("// ");
-        boost::tokenizer<boost::char_separator<char> > tokens(line, sep);
+        std::vector<std::string> tokens;
+        common::tokenize(tokens, line, "// ");
+        
         int i = 0;
-
         for (auto tokIter = tokens.begin(); tokIter != tokens.end(); ++tokIter, ++i)
         {
             if (i % 2 == 0)
@@ -50,7 +52,7 @@ void DecoderOBJ::appendFace(string &line)
                 face.normalIndices.push_back(common::fromString<int>(*tokIter));
         }
     }
-    else if (line.find("/") != string::npos)
+    else if (line.find("/") != std::string::npos)
     {
         // Vertex/texture-coordinate format
         throw std::runtime_error("Unsupported obj file");
@@ -63,7 +65,7 @@ void DecoderOBJ::appendFace(string &line)
     faces.push_back(face);
 }
 
-void DecoderOBJ::appendNormal(string &line)
+void DecoderOBJ::appendNormal(std::string &line)
 {
     line = line.substr(line.find(' ') + 1);
 
@@ -79,8 +81,8 @@ void DecoderOBJ::triangulateModel()
 {
     for (auto f : faces)
     {
-        vector<math::vertex> polyVerts;
-        vector<int> polyInds;
+        std::vector<math::vertex> polyVerts;
+        std::vector<int> polyInds;
 
         // create polygon
         std::for_each(f.indices.begin(), f.indices.end(), [&polyVerts, &polyInds, this](int ind)
@@ -101,7 +103,7 @@ void DecoderOBJ::triangulateModel()
         }
 
         // triangulate a polygon
-        vector<int> polyIndsTriangulated;
+        std::vector<int> polyIndsTriangulated;
         math::Triangulate(polyVerts, polyInds, polyIndsTriangulated);
 
         resultTrianglesIndices.insert(resultTrianglesIndices.end(), polyIndsTriangulated.begin(), polyIndsTriangulated.end());
@@ -116,13 +118,13 @@ void DecoderOBJ::clear()
     normalsList.clear();
 }
 
-sptr(Resource) DecoderOBJ::decode(const string &path)
+sptr(Resource) DecoderOBJ::decode(const std::string &path)
 {
     clear();
 
     TextFile objFile(path);
 
-    string line;
+    std::string line;
     do
     {
         line = objFile.getLine();
@@ -130,13 +132,13 @@ sptr(Resource) DecoderOBJ::decode(const string &path)
         if (line == "END_OF_FILE")
             break;
 
-        if (line.find("vt") != string::npos)
+        if (line.find("vt") != std::string::npos)
         { }
 
-        if (line.find("vn") != string::npos)
+        if (line.find("vn") != std::string::npos)
             appendNormal(line);
 
-        if (line.find("vp") != string::npos)
+        if (line.find("vp") != std::string::npos)
         { }
 
         if (line.at(0) == 'v')
@@ -155,7 +157,7 @@ sptr(Resource) DecoderOBJ::decode(const string &path)
         return sptr(Resource)();
     }
 
-    auto newMesh = make_shared<rend::Mesh>();
+    auto newMesh = std::make_shared<rend::Mesh>();
 
     triangulateModel();
 
@@ -163,7 +165,7 @@ sptr(Resource) DecoderOBJ::decode(const string &path)
     vb.setType(rend::VertexBuffer::INDEXEDTRIANGLELIST);
     vb.appendVertices(vertexList, resultTrianglesIndices, !normalsList.empty());
 
-    auto material = make_shared<rend::Material>();
+    auto material = std::make_shared<rend::Material>();
 
     material->plainColor = rend::Color3(255, 255, 255);
     material->ambientColor = rend::Color3(255, 255, 255);
@@ -176,10 +178,10 @@ sptr(Resource) DecoderOBJ::decode(const string &path)
 
     newMesh->appendSubmesh(vb);
 
-    auto newObject = make_shared<rend::SceneObject>(newMesh);
+    auto newObject = std::make_shared<rend::SceneObject>(newMesh);
 
-    boost::filesystem::path p(path);
-    newObject->setName(p.filename().string());
+    std::tr2::sys::path p(path);
+    newObject->setName(p.filename());
 
     syslog << "Decoded obj-model \"" << newObject->getName()
             << "\". Number of vertices:" << newMesh->numVertices()
@@ -188,7 +190,7 @@ sptr(Resource) DecoderOBJ::decode(const string &path)
     return newObject;
 }
 
-string DecoderOBJ::extension() const
+std::string DecoderOBJ::extension() const
 {
     return "obj";
 }

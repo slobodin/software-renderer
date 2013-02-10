@@ -5,6 +5,8 @@
  *      Author: flamingo
  */
 
+#include "stdafx.h"
+
 #include "color.h"
 
 namespace rend

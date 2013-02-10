@@ -1,5 +1,5 @@
 /*
- * BaseApp.h
+ * baseapp.h
  *
  *      Author: flamingo
  *      E-mail: epiforce57@gmail.com
@@ -7,8 +7,6 @@
 
 #ifndef BASEAPP_H
 #define BASEAPP_H
-
-#include "comm_pch.h"
 
 namespace base
 {
@@ -21,11 +19,11 @@ namespace platform
 struct MouseEvent;
 struct KeyboardEvent;
 
-// TODO: make it singletone. Cause we need to call static functions, that will call member functions.
-
 class BaseApp
 {
 protected:
+    static BaseApp *m_this;
+
     sptr(base::Controller) m_clientController;
 
     static void exit() { ::exit(0); }
@@ -35,6 +33,8 @@ protected:
     virtual void update(float dt) = 0;
 
 public:
+    static BaseApp *instance() { return m_this; }
+
     BaseApp();
     virtual ~BaseApp();
 
@@ -50,6 +50,8 @@ public:
 
     // TODO: rename to run frame
     virtual int run();
+
+    NONCOPYABLE(BaseApp)
 };
 
 }

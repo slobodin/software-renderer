@@ -8,7 +8,6 @@
 #ifndef WIREFRAMETRIANGLERASTERIZER_H
 #define WIREFRAMETRIANGLERASTERIZER_H
 
-#include "comm_pch.h"
 #include "trianglerasterizer.h"
 
 namespace rend

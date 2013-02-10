@@ -1,14 +1,12 @@
 /*
  * color.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
-#ifndef Color3_H
-#define Color3_H
-
-#include "comm_pch.h"
+#ifndef COLOR3_H
+#define COLOR3_H
 
 namespace rend
 {
@@ -128,9 +126,14 @@ public:
         : stub(0), m_r(0), m_g(0), m_b(0)
     { }
     //! Component ctor.
-    Color3(uint32_t red, uint32_t green, uint32_t blue)
-        : stub(0), m_r(red), m_g(green), m_b(blue)
-    { }
+	template<typename T>
+    Color3(T red, T green, T blue)
+    {
+        stub = 0;
+	    m_r = static_cast<uint32_t>(red);
+        m_g = static_cast<uint32_t>(green);
+        m_b = static_cast<uint32_t>(blue);
+	}
 
     //! Constructs color from the 32bit integer (R8G8B8).
     Color3(uint32_t color)
@@ -216,9 +219,9 @@ inline Color3 &Color3::operator*= (float s)
     if (s < 0)
         return *this;
 
-    m_r = std::min(m_r * s, 255.0f);
-    m_g = std::min(m_g * s, 255.0f);
-    m_b = std::min(m_b * s, 255.0f);
+    m_r = (uint32_t)std::min(m_r * s, 255.0f);
+    m_g = (uint32_t)std::min(m_g * s, 255.0f);
+    m_b = (uint32_t)std::min(m_b * s, 255.0f);
 
     return *this;
 }
@@ -246,4 +249,4 @@ inline Color3 &Color3::operator+= (const Color3 &other)
 
 }
 
-#endif // Color3_H
+#endif // COLOR3_H

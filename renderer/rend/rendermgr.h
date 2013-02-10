@@ -1,17 +1,15 @@
 /*
  * rendermgr.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef RENDERMGR_H
 #define RENDERMGR_H
 
-#include "comm_pch.h"
-
-#include "color.h"
-#include "vec3.h"
+#include "rend/color.h"
+#include "math/vec3.h"
 
 namespace base
 {
@@ -49,15 +47,15 @@ struct FrameInfo
     int trianglesForRaster;
 };
 
-class RenderMgr : boost::noncopyable
+class RenderMgr
 {
     sptr(AbstractRenderer) m_renderer;
     sptr(Camera) m_camera;
     sptr(Viewport) m_viewport;
 
-    list<sptr(SceneObject)> m_sceneObjects;
-    list<sptr(GuiObject)> m_guiObjects;
-    list<sptr(Light)> m_lights;
+    std::list<sptr(SceneObject)> m_sceneObjects;
+    std::list<sptr(GuiObject)> m_guiObjects;
+    std::list<sptr(Light)> m_lights;
 
     size_t m_sceneTrianglesCount;
 
@@ -68,21 +66,18 @@ class RenderMgr : boost::noncopyable
     size_t sceneSize() const;
 
 public:
-    RenderMgr(const shared_ptr<Camera> cam, const shared_ptr<Viewport> viewport, RendererMode mode);
+    RenderMgr(const sptr(Camera) cam, const sptr(Viewport) viewport, RendererMode mode);
     ~RenderMgr();
 
-    void update();
+    void runFrame();
 
     void                addSceneObject(sptr(SceneObject) node);
-    sptr(SceneObject)   getSceneObject(const string &name);
+    sptr(SceneObject)   getSceneObject(const std::string &name);
     void                addGuiObject(sptr(GuiObject) obj);
 
     const FrameInfo    &getLastFrameStats() const { return m_frameInfo; }
 
     sptr(Light) getLight(int id) const;
-
-    // test function
-    sptr(Light) getFirstPointLight() const;
 
     sptr(AmbientLight)      addAmbientLight(Color3 intensity);
     sptr(DirectionalLight)  addDirectionalLight(Color3 intensity, math::vec3 direction);
@@ -90,6 +85,8 @@ public:
                                           float kc, float kl, float kq);
 
     void resize(int w, int h);
+
+    NONCOPYABLE(RenderMgr)
 };
 
 }

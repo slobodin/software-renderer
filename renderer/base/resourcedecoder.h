@@ -1,14 +1,13 @@
 /*
  * resourcedecoder.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef RESOURCEDECODER_H
 #define RESOURCEDECODER_H
 
-#include "comm_pch.h"
 #include "osfile.h"
 
 namespace base
@@ -34,7 +33,7 @@ protected:
       * and, if this line contains stopper, parseWhile ends.
       */
     template<typename T>
-    void parseWhile(void (T::*lambda)(string &line), const string &stopper, TextFile &file);
+    void parseWhile(void (T::*callback)(std::string &line), const std::string &stopper, TextFile &file);
 
 public:
     //! Default ctor.
@@ -43,17 +42,17 @@ public:
     virtual ~ResourceDecoder() { }
 
     //! Need to be implemented in derived classes. Creates engine representation of the asset.
-    virtual sptr(Resource)  decode(const string &path) = 0;
+    virtual sptr(Resource)  decode(const std::string &path) = 0;
 
     //! Returns asset extension.
     // TODO: return something like container. One decoder may load more than one files.
-    virtual string          extension() const = 0;
+    virtual std::string     extension() const = 0;
 };
 
 template<typename T>
-void ResourceDecoder::parseWhile(void (T::*lambda)(string &line), const string &stopper, TextFile &file)
+void ResourceDecoder::parseWhile(void (T::*callback)(std::string &line), const std::string &stopper, TextFile &file)
 {
-    string line;
+    std::string line;
     do
     {
         line = file.getLine();
@@ -63,9 +62,9 @@ void ResourceDecoder::parseWhile(void (T::*lambda)(string &line), const string &
 
         T *ptr = static_cast<T *>(this);
 
-        (ptr->*lambda)(line);
+        (ptr->*callback)(line);
 
-        if (line.find(stopper) != string::npos)
+        if (line.find(stopper) != std::string::npos)
             break;
 
         line.clear();

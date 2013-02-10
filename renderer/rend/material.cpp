@@ -1,9 +1,11 @@
 /*
  * material.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "material.h"
 
@@ -23,7 +25,7 @@ Material::Material()
 
 sptr(Material) Material::clone() const
 {
-    sptr(Material) newMat = make_shared<Material>();
+    sptr(Material) newMat = std::make_shared<Material>();
 
     newMat->shadeMode = shadeMode;
     newMat->sideType = sideType;

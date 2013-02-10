@@ -1,8 +1,8 @@
-resources/*.bsp
-resources/statue2.obj
-resources/*.*~
-*.*~
-*.pro.user
-renderer/tests/math-tester/*.pro.user
-renderer/tests/math-tester/*.*~
+*.sdf
+*.suo
+*.opensdf
+ipch/
+build/
 bin/
+renderer/*.user
+client/*.user

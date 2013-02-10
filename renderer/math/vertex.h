@@ -1,8 +1,8 @@
 /*
  * vertex.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef VERTEX_H

@@ -1,14 +1,12 @@
 /*
  * m22.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef M22_H
 #define M22_H
-
-#include "comm_pch.h"
 
 #include "vec2.h"
 

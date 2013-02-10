@@ -1,11 +1,14 @@
 /*
  * renderlist.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "renderlist.h"
+
 #include "m44.h"
 #include "camera.h"
 #include "vertex.h"
@@ -24,7 +27,7 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
     // mesh indices
     const VertexBuffer::IndexArray &indices = vertexBuffer.getIndices();
 
-    const vector<math::vec2> &uvs = vertexBuffer.getUVs();
+    const std::vector<math::vec2> &uvs = vertexBuffer.getUVs();
     const VertexBuffer::IndexArray &uvind = vertexBuffer.getUVIndices();
 
     size_t verticesSize = vertices.size();
@@ -106,7 +109,7 @@ void RenderList::createTriangles(const VertexBuffer &vertexBuffer, const math::M
     }
 }
 
-void RenderList::prepare(int trianglesCount)
+void RenderList::prepare(size_t trianglesCount)
 {
 //    m_triangles.clear();
     m_lastTriangleIndex = 0;
@@ -121,7 +124,7 @@ void RenderList::append(const sptr(SceneObject) obj)
     if (!obj->getMesh())
         return;
 
-    const list<VertexBuffer> &subMeshes = obj->getMesh()->getSubmeshes();
+    const std::list<VertexBuffer> &subMeshes = obj->getMesh()->getSubmeshes();
     const math::M44 &worldTransform = obj->getTransformation();
 
     for (const auto &vb : subMeshes)

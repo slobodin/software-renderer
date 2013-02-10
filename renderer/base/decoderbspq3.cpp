@@ -1,10 +1,12 @@
 /*
  * decoderbspq3.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+/*
 #include "decoderbspq3.h"
 
 #include "resource.h"
@@ -145,3 +147,4 @@ string DecoderBSPQ3::extension() const
 }
 
 }
+*/

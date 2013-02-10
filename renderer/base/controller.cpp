@@ -1,9 +1,11 @@
 /*
  * controller.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "controller.h"
 
@@ -15,19 +17,6 @@
 #include "camera.h"
 #include "sceneobject.h"
 
-
-#ifdef __linux__
-#include <tcl8.5/tk.h>
-#include <tcl8.5/tcl.h>
-#include <GL/gl.h>
-#include <GL/glx.h>
-#elif WIN32
-#include <tcl8.5/tk.h>
-#include <tcl8.5/tcl.h>
-#endif
-#include <cpptk-1.0.2/cpptk.h>
-#include <cpptk-1.0.2/base/cpptkbase.h>
-
 namespace base
 {
 
@@ -37,30 +26,12 @@ void Controller::resize(int w, int h)
         m_rendmgr->resize(w, h);
 }
 
-void Controller::test()
-{
-
-//    Display *display = XOpenDisplay(getenv("DISPLAY"));
-//    Window m_xWindowId;
-
-//    string windowId = Tk::winfo(Tk::id, ".c");
-//    stringstream ss(windowId);
-//    ss >> std::hex >> m_xWindowId;
-////    m_xWindowId = windowId;
-
-//    XWindowAttributes wndAttrib;
-//    XGetWindowAttributes(display, m_xWindowId, &wndAttrib);
-
-//    int a;
-//    a = 5;
-}
-
 Controller::Controller(int argc, const char *argv[])
     : m_resourceMgr(new ResourceMgr),
       m_controllerConfig(0)
 {
     // load config file
-    string workingDir = argc > 1 ? argv[1] : "";
+    std::string workingDir = argc > 1 ? argv[1] : "";
     m_controllerConfig = new Config(workingDir);
 
     // get cam position from the file (or set default)
@@ -68,10 +39,10 @@ Controller::Controller(int argc, const char *argv[])
     syslog << "Initial camera position :" << camPosition << logmess;
 
     // create main camera
-    m_mainCam = make_shared<rend::Camera>(camPosition);
+    m_mainCam = std::make_shared<rend::Camera>(camPosition);
 
     // notify rmgr about resource path. Thus it will can load resources from this path
-    string resourcesPath = m_controllerConfig->getRendererConfig().pathToTheAssets;
+    std::string resourcesPath = m_controllerConfig->getRendererConfig().pathToTheAssets;
     m_resourceMgr->addPath(resourcesPath);
 
     // load all loadable from assets path
@@ -93,7 +64,7 @@ void Controller::update()
     }
 
     // m_inputManager->capture() ???
-    m_rendmgr->update();
+    m_rendmgr->runFrame();
 }
 
 std::pair<int, int> Controller::getViewportSize()
@@ -104,14 +75,14 @@ std::pair<int, int> Controller::getViewportSize()
 
 void Controller::createRenderManager()
 {
-    string rendererMode = m_controllerConfig->getRendererConfig().rendererMode;
+    std::string rendererMode = m_controllerConfig->getRendererConfig().rendererMode;
 
     if (rendererMode == "software")
-        m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam, m_viewport, rend::RM_SOFTWARE);
+        m_rendmgr = std::make_shared<rend::RenderMgr>(m_mainCam, m_viewport, rend::RM_SOFTWARE);
     else if (rendererMode == "opengl")
-        m_rendmgr = make_shared<rend::RenderMgr>(m_mainCam, m_viewport, rend::RM_OPENGL);
+        m_rendmgr = std::make_shared<rend::RenderMgr>(m_mainCam, m_viewport, rend::RM_OPENGL);
     else
-        throw ControllerException(string(string("Invalid renderer ") + rendererMode).c_str());
+        throw ControllerException(std::string(std::string("Invalid renderer ") + rendererMode).c_str());
 
     // now add to the scene all scene objects, getted from the config file
     const SceneConfig &scCfg = m_controllerConfig->getSceneConfig();
@@ -131,7 +102,7 @@ void Controller::createRenderManager()
     if (scCfg.dirLights.empty() && scCfg.ambIntensity.isBlack())
     {
         syslog << "No lights setted in scene config." << logwarn;
-//        m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
+        m_rendmgr->addAmbientLight(rend::Color3(255, 255, 255));
         return;
     }
 

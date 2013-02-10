@@ -8,8 +8,6 @@
 #ifndef DECODERIMAGE_H
 #define DECODERIMAGE_H
 
-#include "comm_pch.h"
-
 #include "resourcedecoder.h"
 
 namespace base
@@ -21,8 +19,8 @@ public:
     DecoderImage() { }
     ~DecoderImage() { }
 
-    sptr(Resource)  decode(const string &path);
-    string          extension() const;
+    sptr(Resource)  decode(const std::string &path);
+    std::string     extension() const;
 };
 
 }

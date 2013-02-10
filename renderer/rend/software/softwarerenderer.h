@@ -8,7 +8,6 @@
 #ifndef SOFTWARERENDERER_H
 #define SOFTWARERENDERER_H
 
-#include "comm_pch.h"
 #include "abstractrenderer.h"
 
 namespace rend
@@ -37,7 +36,7 @@ public:
     ~SoftwareRenderer();
 
     virtual void renderWorld(const RenderList *rendlist);
-    virtual void renderGui(const list<sptr(GuiObject)> &guiObjects);
+    virtual void renderGui(const std::list<sptr(GuiObject)> &guiObjects);
 
     virtual void beginFrame(sptr(Viewport) viewport);
     virtual void endFrame(sptr(Viewport) viewport);

@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "texturedtrianglerasterizer.h"
 
 #include "poly.h"
@@ -21,8 +23,8 @@ namespace rend
 
 union Interpolant
 {
-    struct { float du, dv, dx, dz; } __attribute__((aligned(16)));
-    __m128 v __attribute__((aligned(16)));
+    __declspec(align(16)) struct { float du, dv, dx, dz; };
+    __declspec(align(16)) __m128 v;
 
     Interpolant() : v() { _mm_set_ps1(0.f); }
 };
@@ -32,8 +34,8 @@ inline Color3 bilerpFilter(const Texture *texture, float u, float v)
     u *= texture->width() - 1.f;
     v *= texture->height() - 1.f;
 
-    int ui = floor(u);
-    int vi = floor(v);
+    int ui = (int)floor(u);
+    int vi = (int)floor(v);
     float du = u - ui;
     float dv = v - vi;
 
@@ -128,8 +130,8 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
 
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            float u = p.du / 1.0 / p.dz;
-            float v = p.dv / 1.0 / p.dz;
+            float u = p.du / 1.0f / p.dz;
+            float v = p.dv / 1.0f / p.dz;
 
 #if BILINEAR_FILTERING
             textel = bilerpFilter(texture, u, v);
@@ -187,8 +189,8 @@ void TexturedTriangleRasterizer::drawTriangle(const math::Triangle &t, FrameBuff
         p = start;
         for (x = (int)start.dx; x < (int)end.dx; x++)
         {
-            float u = p.du / 1.0 / p.dz;
-            float v = p.dv / 1.0 / p.dz;
+            float u = p.du / 1.0f / p.dz;
+            float v = p.dv / 1.0f / p.dz;
 
 #if BILINEAR_FILTERING
             textel = bilerpFilter(texture, u, v);

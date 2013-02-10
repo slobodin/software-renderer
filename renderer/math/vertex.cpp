@@ -1,9 +1,11 @@
 /*
  * vertex.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "vertex.h"
 

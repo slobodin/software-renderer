@@ -8,7 +8,6 @@
 #ifndef GUIOBJECT_H
 #define GUIOBJECT_H
 
-#include "comm_pch.h"
 #include "node.h"
 
 namespace rend

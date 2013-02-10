@@ -1,9 +1,11 @@
 /*
  * camera.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "camera.h"
 
@@ -145,7 +147,7 @@ void Camera::frustumCull(RenderList *rendList) const
 
     auto testFn = [](float coord, float plane) -> bool { return coord > plane || coord < -plane; };
 
-    float zfactor = 0.5 * m_viewPlaneWidth / m_distance;
+    float zfactor = 0.5f * m_viewPlaneWidth / m_distance;
     bool cull1_x = false, cull2_x = false, cull3_x = false;
     bool cull1_y = false, cull2_y = false, cull3_y = false;
     for (auto &t : trias)
@@ -207,14 +209,14 @@ void Camera::toScreen(math::vec3 &v, const Viewport &viewport) const
     // perspective transformation
     float z = v.z;
 
-    assert(z != 0.0);
+    assert(z != 0.0f);
 
     v.x = m_distance * v.x / z;
     v.y = m_distance * v.y * viewport.getAspect() / z;
 
     // screen transformation
-    float alpha = 0.5 * viewport.getWidth() - 0.5;
-    float beta = 0.5 * viewport.getHeight() - 0.5;
+    float alpha = 0.5f * viewport.getWidth() - 0.5f;
+    float beta = 0.5f * viewport.getHeight() - 0.5f;
 
     v.x = alpha + alpha * v.x;
     v.y = beta - beta * v.y;

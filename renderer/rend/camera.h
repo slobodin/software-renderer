@@ -8,10 +8,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "comm_pch.h"
-
-#include "vec3.h"
-#include "m44.h"
+#include "math/vec3.h"
+#include "math/m44.h"
 
 namespace rend
 {

@@ -8,10 +8,8 @@
 #ifndef SCENEOBJECT_H
 #define SCENEOBJECT_H
 
-#include "comm_pch.h"
-
 #include "node.h"
-#include "resource.h"
+#include "../base/resource.h"
 #include "boundingsphere.h"
 
 namespace base { class ResourceMgr; }

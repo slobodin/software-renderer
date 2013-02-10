@@ -8,8 +8,6 @@
 #ifndef DECODERMD2_H
 #define DECODERMD2_H
 
-#include "comm_pch.h"
-
 #include "resourcedecoder.h"
 
 namespace base
@@ -21,8 +19,8 @@ public:
     DecoderMD2();
     ~DecoderMD2();
 
-    sptr(Resource)  decode(const string &path);
-    string          extension() const;
+    sptr(Resource)  decode(const std::string &path);
+    std::string     extension() const;
 };
 
 }

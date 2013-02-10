@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "gouraudtrianglerasterizer.h"
 
 #include "poly.h"
@@ -30,8 +32,8 @@ inline bool testClip(const math::vertex &v, FrameBuffer *fb)
 
 union Interpolant
 {
-    struct { float dr, dg, db, dx; } __attribute__((aligned(16)));
-    __m128 v __attribute__((aligned(16)));
+    __declspec(align(16)) struct { float dr, dg, db, dx; };
+    __declspec(align(16)) __m128 v;
 };
 
 // TODO: SSE stuff for interpolating

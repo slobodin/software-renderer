@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "sceneobject.h"
 
 #include "mesh.h"
@@ -45,7 +47,7 @@ const sptr(Mesh) SceneObject::getMesh() const
 sptr(SceneObject) SceneObject::clone() const
 {
     sptr(Mesh) newmesh = m_mesh->clone();
-    sptr(SceneObject) newObj = make_shared<SceneObject>(newmesh);
+    sptr(SceneObject) newObj = std::make_shared<SceneObject>(newmesh);
 
     newObj->m_name = m_name + "_clone";
     newObj->m_worldTransformation = m_worldTransformation;

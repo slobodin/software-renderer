@@ -8,8 +8,6 @@
 #ifndef MATH_UTILS_H
 #define MATH_UTILS_H
 
-#include "comm_pch.h"
-
 #include "vec2.h"
 #include "vec3.h"
 #include "plane.h"

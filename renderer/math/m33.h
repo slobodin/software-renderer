@@ -1,14 +1,12 @@
 /*
  * m33.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef M33_H
 #define M33_H
-
-#include "comm_pch.h"
 
 #include "vec3.h"
 

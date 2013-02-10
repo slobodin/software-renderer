@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7A4EFEFC-5BCB-4139-85AD-556C6469A0BD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>renderer</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>./comm;./math;./base;.;./rend;./third-party/include;$(BOOST_ROOT);$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>..\build\renderer-$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>./comm;./math;./base;.;./rend;./third-party/include;$(BOOST_ROOT);$(IncludePath)</IncludePath>
+    <IntDir>..\build\renderer-$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;RENDERER_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;RENDERER_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="base\config.h" />
+    <ClInclude Include="base\controller.h" />
+    <ClInclude Include="base\decoderbspq3.h" />
+    <ClInclude Include="base\decoderimage.h" />
+    <ClInclude Include="base\decodermd2.h" />
+    <ClInclude Include="base\decoderobj.h" />
+    <ClInclude Include="base\logger.h" />
+    <ClInclude Include="base\osfile.h" />
+    <ClInclude Include="base\resource.h" />
+    <ClInclude Include="base\resourcedecoder.h" />
+    <ClInclude Include="base\resourcemgr.h" />
+    <ClInclude Include="comm\comm_macro.h" />
+    <ClInclude Include="comm\exception.h" />
+    <ClInclude Include="comm\utils.h" />
+    <ClInclude Include="math\common_math.h" />
+    <ClInclude Include="math\m22.h" />
+    <ClInclude Include="math\m33.h" />
+    <ClInclude Include="math\m44.h" />
+    <ClInclude Include="math\math_utils.h" />
+    <ClInclude Include="math\plane.h" />
+    <ClInclude Include="math\poly.h" />
+    <ClInclude Include="math\vec2.h" />
+    <ClInclude Include="math\vec3.h" />
+    <ClInclude Include="math\vertex.h" />
+    <ClInclude Include="platform\baseapp.h" />
+    <ClInclude Include="platform\baseappwin.h" />
+    <ClInclude Include="platform\events.h" />
+    <ClInclude Include="renderer.h" />
+    <ClInclude Include="rend\abstractrenderer.h" />
+    <ClInclude Include="rend\boundingsphere.h" />
+    <ClInclude Include="rend\camera.h" />
+    <ClInclude Include="rend\color.h" />
+    <ClInclude Include="rend\framebuffer.h" />
+    <ClInclude Include="rend\guiobject.h" />
+    <ClInclude Include="rend\light.h" />
+    <ClInclude Include="rend\material.h" />
+    <ClInclude Include="rend\mesh.h" />
+    <ClInclude Include="rend\node.h" />
+    <ClInclude Include="rend\renderlist.h" />
+    <ClInclude Include="rend\rendermgr.h" />
+    <ClInclude Include="rend\sceneobject.h" />
+    <ClInclude Include="rend\software\flattrianglerasterizer.h" />
+    <ClInclude Include="rend\software\gouraudtrianglerasterizer.h" />
+    <ClInclude Include="rend\software\softwarerenderer.h" />
+    <ClInclude Include="rend\software\texturedtrianglerasterizer.h" />
+    <ClInclude Include="rend\software\trianglerasterizer.h" />
+    <ClInclude Include="rend\software\wireframetrianglerasterizer.h" />
+    <ClInclude Include="rend\terrainsceneobject.h" />
+    <ClInclude Include="rend\textobject.h" />
+    <ClInclude Include="rend\texture.h" />
+    <ClInclude Include="rend\vertexbuffer.h" />
+    <ClInclude Include="rend\viewport.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="base\config.cpp" />
+    <ClCompile Include="base\controller.cpp" />
+    <ClCompile Include="base\decoderbspq3.cpp" />
+    <ClCompile Include="base\decoderimage.cpp" />
+    <ClCompile Include="base\decodermd2.cpp" />
+    <ClCompile Include="base\decoderobj.cpp" />
+    <ClCompile Include="base\logger.cpp" />
+    <ClCompile Include="base\osfile.cpp" />
+    <ClCompile Include="base\resourcemgr.cpp" />
+    <ClCompile Include="comm\utils.cpp" />
+    <ClCompile Include="math\m33.cpp" />
+    <ClCompile Include="math\m44.cpp" />
+    <ClCompile Include="math\math_utils.cpp" />
+    <ClCompile Include="math\plane.cpp" />
+    <ClCompile Include="math\poly.cpp" />
+    <ClCompile Include="math\vertex.cpp" />
+    <ClCompile Include="platform\baseapp.cpp" />
+    <ClCompile Include="platform\baseappwin.cpp" />
+    <ClCompile Include="platform\events.cpp" />
+    <ClCompile Include="rend\boundingsphere.cpp" />
+    <ClCompile Include="rend\camera.cpp" />
+    <ClCompile Include="rend\color.cpp" />
+    <ClCompile Include="rend\framebuffer.cpp" />
+    <ClCompile Include="rend\guiobject.cpp" />
+    <ClCompile Include="rend\light.cpp" />
+    <ClCompile Include="rend\material.cpp" />
+    <ClCompile Include="rend\mesh.cpp" />
+    <ClCompile Include="rend\renderlist.cpp" />
+    <ClCompile Include="rend\rendermgr.cpp" />
+    <ClCompile Include="rend\sceneobject.cpp" />
+    <ClCompile Include="rend\software\flattrianglerasterizer.cpp" />
+    <ClCompile Include="rend\software\gouraudtrianglerasterizer.cpp" />
+    <ClCompile Include="rend\software\softwarerenderer.cpp" />
+    <ClCompile Include="rend\software\texturedtrianglerasterizer.cpp" />
+    <ClCompile Include="rend\software\trianglerasterizer.cpp" />
+    <ClCompile Include="rend\software\wireframetrianglerasterizer.cpp" />
+    <ClCompile Include="rend\terrainsceneobject.cpp" />
+    <ClCompile Include="rend\textobject.cpp" />
+    <ClCompile Include="rend\texture.cpp" />
+    <ClCompile Include="rend\vertexbuffer.cpp" />
+    <ClCompile Include="rend\viewport.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

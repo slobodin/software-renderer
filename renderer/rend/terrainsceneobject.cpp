@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "terrainsceneobject.h"
 #include "texture.h"
 #include "mesh.h"
@@ -13,43 +15,43 @@
 namespace rend
 {
 
-TerrainSceneObject::TerrainSceneObject(double width, double height, double vertScale,
-                                       const shared_ptr<Texture> heightMap,
-                                       const shared_ptr<Texture> texture)
+TerrainSceneObject::TerrainSceneObject(float width, float height, float vertScale,
+                                       const sptr(Texture) heightMap,
+                                       const sptr(Texture) texture)
 {
     if (!heightMap)
         return;
 
     // set name
-    setName(string("terrain_") + heightMap->getName());
+    setName(std::string("terrain_") + heightMap->getName());
 
     int columns = heightMap->width();
     int rows = heightMap->height();
 
-    double colStep = width / (double)(columns - 1);
-    double rowStep = height / (double)(rows - 1);
+    float colStep = width / (float)(columns - 1);
+    float rowStep = height / (float)(rows - 1);
 
-    double colStepText = 0.0, rowStepText = 0.0;
+    float colStepText = 0.0, rowStepText = 0.0;
     if (texture)
     {
-        colStepText = ((double)texture->width() - 1) / (columns - 1.0);
-        rowStepText = ((double)texture->height() - 1) / (rows - 1.0);
+        colStepText = ((float)texture->width() - 1) / (columns - 1.0);
+        rowStepText = ((float)texture->height() - 1) / (rows - 1.0);
     }
 
     // store all vertices
-    vector<math::vertex> vertices;      // FIXME: allocate mem before
-    vector<math::vec2> uvs;
+    std::vector<math::vertex> vertices;      // FIXME: allocate mem before
+    std::vector<math::vec2> uvs;
     for (int currRow = 0; currRow < rows; currRow++)
     {
         for (int currCol = 0; currCol < columns; currCol++)
         {
             math::vertex v;
 
-            v.p.x = currCol * colStep - (width / 2.0);      // (0;0) point is the center of the map
-            v.p.z = currRow * rowStep - (height / 2.0);
+            v.p.x = currCol * colStep - (width / 2.0f);      // (0;0) point is the center of the map
+            v.p.z = currRow * rowStep - (height / 2.0f);
 
             // XYNTA:
-            v.p.y = (double)heightMap->at(currCol, currRow)[RED] / 255.0;
+            v.p.y = (float)heightMap->at(currCol, currRow)[RED] / 255.0f;
             v.p.y *= vertScale;
 
             if (texture)
@@ -58,8 +60,8 @@ TerrainSceneObject::TerrainSceneObject(double width, double height, double vertS
                 uv.x = currCol * colStepText;
                 uv.y = currRow * rowStepText;
 
-                uv.x /= double(texture->width() - 1.);   // normalize
-                uv.y /= double(texture->height() - 1.);   // normalize
+                uv.x /= float(texture->width() - 1.);   // normalize
+                uv.y /= float(texture->height() - 1.);   // normalize
 
                 uvs.push_back(uv);
             }
@@ -69,8 +71,8 @@ TerrainSceneObject::TerrainSceneObject(double width, double height, double vertS
     }
 
     // create triangles
-    vector<int> indices;
-    vector<int> uvInds;
+    std::vector<int> indices;
+    std::vector<int> uvInds;
     for (int poly = 0; poly < ((columns - 1) * (rows - 1)); poly++)
     {
         int basePolyInd = (poly % (columns - 1)) + (columns * (poly / (columns - 1)));
@@ -103,7 +105,7 @@ TerrainSceneObject::TerrainSceneObject(double width, double height, double vertS
     else
         vb.appendVertices(vertices, indices);
 
-    auto material = make_shared<rend::Material>();
+    auto material = std::make_shared<rend::Material>();
     material->plainColor = rend::Color3(255, 255, 255);
     material->ambientColor = rend::Color3(255, 255, 255);
     material->diffuseColor = rend::Color3(255, 255, 255);
@@ -120,7 +122,7 @@ TerrainSceneObject::TerrainSceneObject(double width, double height, double vertS
 
     vb.setMaterial(material);
 
-    auto mesh = make_shared<rend::Mesh>();
+    auto mesh = std::make_shared<rend::Mesh>();
     mesh->appendSubmesh(vb);
 
     setMesh(mesh);

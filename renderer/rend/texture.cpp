@@ -1,9 +1,11 @@
 /*
  * texture.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "texture.h"
 
@@ -12,7 +14,7 @@ namespace rend
 
 const Color3 Texture::BLACK;
 
-Texture::Texture(const vector<Color3> &pixels, int width, int height)
+Texture::Texture(const std::vector<Color3> &pixels, int width, int height)
     : m_pixels(pixels),
       m_width(width),
       m_height(height)
@@ -23,9 +25,9 @@ Texture::~Texture()
 {
 }
 
-vector<Color3> Texture::getLine(int y, int xStart, int xEnd) const
+std::vector<Color3> Texture::getLine(int y, int xStart, int xEnd) const
 {
-    vector<Color3> retRes;
+    std::vector<Color3> retRes;
     if (y >= m_height || xStart >= m_width || xStart > xEnd)
         return retRes;
 
@@ -35,9 +37,9 @@ vector<Color3> Texture::getLine(int y, int xStart, int xEnd) const
     return retRes;
 }
 
-vector<Color3> Texture::getBlock(int x, int y, int width, int height) const
+std::vector<Color3> Texture::getBlock(int x, int y, int width, int height) const
 {
-    vector<Color3> retRes;
+    std::vector<Color3> retRes;
     if (x >= m_width || y >= m_height)
         return retRes;
     if (((x + width) >= m_width) || ((y + height) >= m_height))
@@ -56,7 +58,7 @@ vector<Color3> Texture::getBlock(int x, int y, int width, int height) const
 
 sptr(Texture) Texture::clone() const
 {
-    return make_shared<Texture>(m_pixels, m_width, m_height);
+    return std::make_shared<Texture>(m_pixels, m_width, m_height);
 }
 
 }

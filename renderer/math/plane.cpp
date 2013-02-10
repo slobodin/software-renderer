@@ -1,18 +1,16 @@
 /*
  * plane.cpp
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
+
+#include "stdafx.h"
 
 #include "plane.h"
 
-#include <boost/numeric/interval.hpp>
-
 namespace math
 {
-
-static const boost::numeric::interval<float> ZERO_ONE_INTERVAL(0.0, 1.0);
 
 Plane::Plane(const vec3 &n, float d)
     : m_normal(n),
@@ -82,7 +80,7 @@ LinePlaneIntersectionType Plane::checkLine(const vec3 &p0, const vec3 &p1,
     resultPoint.y = p0.y + linedir.y * t;
     resultPoint.z = p0.z + linedir.z * t;
 
-    if (boost::numeric::in(t, ZERO_ONE_INTERVAL))
+    if (t >= 0.0 && t <= 1.0)
         return LINE_PLANE_INTERSECT_IN_SEGMENT;
     else
         return LINE_PLANE_INTERSECT_OUT_SEGMENT;

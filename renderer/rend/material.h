@@ -1,17 +1,15 @@
 /*
  * material.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "comm_pch.h"
-
 #include "color.h"
-#include "resource.h"
+#include "../base/resource.h"
 
 namespace rend
 {
@@ -56,7 +54,7 @@ struct Material : public base::Resource
     //! Alpha for material [0..255]
     int alpha;
 
-    string textureName;
+    std::string textureName;
     sptr(Texture) texture;
 
     //! Default ctor.

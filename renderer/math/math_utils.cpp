@@ -5,13 +5,12 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "math_utils.h"
-#include <boost/numeric/interval.hpp>
 
 namespace math
 {
-
-static const boost::numeric::interval<float> ZERO_ONE_INTERVAL(0.0, 1.0);
 
 float AngleBetween(const vec2 &a, const vec2 &b)
 {
@@ -47,8 +46,7 @@ LinesIntersectionType CheckLinesIntersection(const vec2 &p1_1, const vec2 &p1_2,
     resultPoint.x = p1_1.x + line1dir.x * t1;
     resultPoint.y = p1_1.y + line1dir.y * t1;
 
-    if (boost::numeric::in(t1, ZERO_ONE_INTERVAL) &&
-            boost::numeric::in(t2, ZERO_ONE_INTERVAL))
+    if (t1 >= 0.0 && t1 <= 1.0 && t2 >= 0.0 && t2 <= 1.0)
         return LINES_INTERSECT_IN_SEGMENT;
     else
         return LINES_INTERSECT_OUT_SEGMENT;

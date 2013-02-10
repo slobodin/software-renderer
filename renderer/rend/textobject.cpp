@@ -5,6 +5,8 @@
  *      E-mail: epiforce57@gmail.com
  */
 
+#include "stdafx.h"
+
 #include "textobject.h"
 
 #include "texture.h"
@@ -17,7 +19,7 @@ TextObject::TextObject(sptr(Texture) texturedFont, int cols, int rows)
       m_cols(cols),
       m_rows(rows)
 {
-    m_textPic = make_shared<Texture>(vector<Color3>(), 0, 0);
+    m_textPic = std::make_shared<Texture>(std::vector<Color3>(), 0, 0);
     if (m_texture)
     {
         m_symbWidth = m_texture->width() / cols;
@@ -35,7 +37,7 @@ const sptr(Texture) TextObject::getTexture() const
     return m_textPic;
 }
 
-void TextObject::setText(const string &str)
+void TextObject::setText(const std::string &str)
 {
     if (str.empty())
         return;
@@ -43,7 +45,7 @@ void TextObject::setText(const string &str)
     if (!m_texture)
         return;
 
-    vector<Color3> resultPixmap;
+    std::vector<Color3> resultPixmap;
     // scanlining
     for (int ln = 0; ln < m_symbHeight; ln++)
     {
@@ -57,12 +59,7 @@ void TextObject::setText(const string &str)
         }
     }
 
-    m_textPic = make_shared<Texture>(resultPixmap, m_symbWidth * str.size(), m_symbHeight);
-}
-
-void TextObject::setText(const char *str)
-{
-    setText(string(str));
+    m_textPic = std::make_shared<Texture>(resultPixmap, m_symbWidth * str.size(), m_symbHeight);
 }
 
 }

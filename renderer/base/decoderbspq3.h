@@ -1,20 +1,19 @@
 /*
  * decoderbspq3.h
  *
- *  Created on: Mar 10, 2012
  *      Author: flamingo
+ *      E-mail: epiforce57@gmail.com
  */
 
 #ifndef DECODERBSPQ3_H
 #define DECODERBSPQ3_H
-
-#include "comm_pch.h"
 
 #include "resourcedecoder.h"
 
 namespace base
 {
 
+/*
 class DecoderBSPQ3 : public ResourceDecoder
 {
     enum Lumps
@@ -184,10 +183,10 @@ public:
     DecoderBSPQ3();
     ~DecoderBSPQ3();
 
-    sptr(Resource)  decode(const string &path);
-    string          extension() const;
+    sptr(Resource)  decode(const std::string &path);
+    std::string     extension() const;
 };
-
+*/
 }
 
 #endif // DECODERBSPQ3_H
