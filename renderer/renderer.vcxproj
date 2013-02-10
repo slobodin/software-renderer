@@ -40,12 +40,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>./comm;./math;./base;.;./rend;./third-party/include;$(BOOST_ROOT);$(IncludePath)</IncludePath>
+    <IncludePath>./comm;./math;./base;.;./rend;./third-party/include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>..\build\renderer-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>./comm;./math;./base;.;./rend;./third-party/include;$(BOOST_ROOT);$(IncludePath)</IncludePath>
+    <IncludePath>./comm;./math;./base;.;./rend;./third-party/include;$(IncludePath)</IncludePath>
     <IntDir>..\build\renderer-$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
   </PropertyGroup>
