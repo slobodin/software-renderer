@@ -26,7 +26,7 @@ Now it supports:
 
 Usage
 =====
-Check out [this](https://github.com/downloads/flaming0/software-renderer/soft-rend-win.zip) to get compiled example.
+Check out [this](https://github.com/flaming0/software-renderer/blob/master/www/example/soft-rend-win.zip?raw=true) to get compiled example.
 Use wasd to perform camera movement, mouse + left mouse button - cam control.
 
 Compile
