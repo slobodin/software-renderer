@@ -11,6 +11,13 @@
 #include "math/vec3.h"
 #include "rend/color.h"
 
+namespace Json
+{
+
+class Value;
+
+}
+
 namespace base
 {
 
@@ -77,7 +84,8 @@ class Config
     SceneConfig m_sceneConfig;
     std::stringstream m_sceneConfigData;
     void parseSceneConfig();
-    void parseLights();
+    void parseObjects(const Json::Value &root);
+    void parseLights(const Json::Value &root);
 
 public:
     Config(const std::string &cfgDir = "");

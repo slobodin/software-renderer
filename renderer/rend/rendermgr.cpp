@@ -34,7 +34,9 @@ size_t RenderMgr::sceneSize() const
         if (!obj)
             continue;
 
-        triangles += obj->getMesh()->numTriangles();
+        auto mesh = obj->getMesh();
+        if (mesh)
+            triangles += mesh->numTriangles();
     }
 
     return triangles;

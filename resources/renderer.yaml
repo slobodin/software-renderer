@@ -1,5 +1,0 @@
-campos: [0, 200, -450]
-width: 1024
-height: 768
-assets: ../../resources/
-renderer: software		# opengl software

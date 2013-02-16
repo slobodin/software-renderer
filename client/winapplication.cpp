@@ -30,10 +30,9 @@ WinApplication::WinApplication(int argc, const char *argv[])
 //    rendmgr->addGuiObject(std::make_shared<rend::GuiObject>(texture));
 
     auto teapot = rmgr->getObject<rend::SceneObject>("teapot.obj");
-//    rendmgr->addSceneObject(teapot);
     if (teapot)
     {
-        teapot->setScale(math::vec3(50, 50, 50));
+        //teapot->setScale(math::vec3(50, 50, 50));
         teapot->getMesh()->setShadingMode(rend::Material::SM_GOURAUD);
     }
 }
@@ -72,7 +71,7 @@ void WinApplication::onMouseEvent(const platform::MouseEvent &ev)
 
 void WinApplication::onKeyPressed(const platform::KeyboardEvent &ev)
 {
-    static const float velocity = 10.f;
+    static const float velocity = 100.f;
     static math::vec3 ds;
     static math::vec3 position;
 

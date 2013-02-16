@@ -1,0 +1,6 @@
+// Configuration options
+{
+    "campos" : [ 0, 200, -450 ],
+	"width"  : 640,
+	"height" : 480
+}
