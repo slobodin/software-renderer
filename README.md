@@ -39,7 +39,7 @@ The main directory is organized as follows:
 
 * client/ - project for library testing.
 * renderer/ - main part: renderer code, that compiles into static library.
-* resources/ - some mesh data and renderer config files (with .yaml extention).
+* resources/ - some mesh data and renderer config files (with .json extention).
 * www/ - images for future wiki.
 * README.md - this file.
 * df3d.sln - MSVS2012 solution file.
