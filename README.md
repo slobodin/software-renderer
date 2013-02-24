@@ -1,5 +1,3 @@
-**This file is outdate**
-
 Here is simple software renderer. It means, that it doesn't use OpenGL or DirectX to perform rendering. 
 All that it use is WinAPI functions to put image block on a screen.
 
